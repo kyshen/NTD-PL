@@ -1,0 +1,58 @@
+/data
+/outputs
+/multirun/*
+!/multirun/*/
+/multirun/*/*
+!/multirun/*/runs.parquet
+!/multirun/*/curves.parquet
+figs
+*.asv
+/latex-zh/out
+tmp/
+/experiment/outputs/
+/latex-zh/inputs/cave-random-completion/advantage_maps
+/latex-zh/main.aux
+/latex-zh/main.bbl
+/latex-zh/main.bcf
+/latex-zh/main.blg
+/latex-zh/main.fdb_latexmk
+/latex-zh/main.fls
+/latex-zh/main.log
+/latex-zh/main.run.xml
+/latex-zh/main.synctex.gz
+/latex-zh/main.toc
+
+# Python cache and artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Test and tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# IDE/editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db

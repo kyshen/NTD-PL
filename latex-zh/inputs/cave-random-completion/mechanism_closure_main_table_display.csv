@@ -1,0 +1,7 @@
+﻿setting,method,params,rmse_metric,rmse,sam_metric,sam
+Recon.,Tucker,"38,272",RMSE,0.02606 +- 0.01718,SAM,16.4329 +- 7.2207
+,PolyCal,"38,277",RMSE,0.02557 +- 0.01661,SAM,15.4054 +- 6.3013
+,NTD-PL,"38,279",RMSE,0.02234 +- 0.01497,SAM,14.4082 +- 6.3010
+Compl.,Tucker,"38,272",RMSE*,0.02637 +- 0.01791,SAM*,15.5569 +- 6.8502
+,PolyCal,"38,277",RMSE*,0.02587 +- 0.01731,SAM*,14.3420 +- 5.7617
+,NTD-PL,"38,277",RMSE*,0.02299 +- 0.01582,SAM*,13.4841 +- 5.7459

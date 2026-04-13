@@ -1,0 +1,834 @@
+%==================== 附录正文 ====================
+\appendix
+
+% 本附录与正文第 4 章一一对应：A 节给出模型性质证明，B 节给出表达性分析，C 节给出优化子问题证明，D 节收集实验补图。
+
+\section{NTD-PL 的基本模型性质}
+\label{app:model_properties}
+
+本节对应正文第~4.3 节，集中给出 NTD-PL 在模型族关系、参数复杂度与尺度不定性方面的补充证明。正文中只保留结论与含义，详细推导统一放在本附录。
+
+\subsection{退化到 Tucker 与嵌套模型族}
+
+\begin{proposition}[退化到 Tucker]
+\label{prop:tucker_special_case_app}
+若 $\beta_1=1$，且对所有 $p\neq 1$ 有 $\beta_p=0$，则式~\eqref{eq:ntdpl_model} 退化为标准 Tucker 模型，即
+\begin{equation}
+\widehat{\cY}
+=
+\cS
+=
+\llbracket \cX;\mathbf A^{(1)},\dots,\mathbf A^{(N)}\rrbracket.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+由 NTD-PL 的定义
+\begin{equation}
+\widehat{\cY}
+=
+\sum_{p=0}^{P}\beta_p \cS^{\odot p},
+\end{equation}
+当 $\beta_1=1$ 且 $\beta_p=0$（$p\neq 1$）时，上式化简为
+\begin{equation}
+\widehat{\cY}
+=
+\cS.
+\end{equation}
+又由 $\cS=\llbracket \cX;\mathbf A^{(1)},\dots,\mathbf A^{(N)}\rrbracket$，故得到标准 Tucker 分解形式。
+\end{proof}
+
+\begin{proposition}[次数嵌套性]
+\label{prop:nested_model_family_app}
+对任意 $P_1<P_2$，degree-$P_1$ 的 NTD-PL 模型类是 degree-$P_2$ 模型类的子集。
+\end{proposition}
+
+\begin{proof}
+任取一个 degree-$P_1$ 的 NTD-PL 模型
+\begin{equation}
+\widehat{\cY}
+=
+\sum_{p=0}^{P_1}\beta_p \cS^{\odot p}.
+\end{equation}
+将其视为 degree-$P_2$ 模型时，只需令
+\begin{equation}
+\beta_p=0,\qquad p=P_1+1,\dots,P_2,
+\end{equation}
+即可得到完全相同的输出。因此，任意 degree-$P_1$ 模型都属于 degree-$P_2$ 模型类。
+\end{proof}
+
+\subsection{参数复杂度}
+
+\begin{proposition}[参数复杂度]
+\label{prop:param_complexity_app}
+设 Tucker 多线性秩为 $(R_1,\dots,R_N)$，则 NTD-PL 的参数总数为
+\begin{equation}
+\#\mathrm{param}
+=
+\prod_{n=1}^{N}R_n
++
+\sum_{n=1}^{N}I_nR_n
++
+(P+1).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+NTD-PL 的参数由三部分组成：
+
+\begin{enumerate}
+    \item 核心张量 $\cX\in\mathbb{R}^{R_1\times\cdots\times R_N}$，参数量为
+    \begin{equation}
+    \prod_{n=1}^{N}R_n;
+    \end{equation}
+
+    \item 各模因子矩阵 $\mathbf A^{(n)}\in\mathbb{R}^{I_n\times R_n}$，总参数量为
+    \begin{equation}
+    \sum_{n=1}^{N}I_nR_n;
+    \end{equation}
+
+    \item 多项式链接系数 $\boldsymbol\beta=(\beta_0,\beta_1,\dots,\beta_P)^\top$，参数量为
+    \begin{equation}
+    P+1.
+    \end{equation}
+\end{enumerate}
+
+三部分相加即得
+\begin{equation}
+\#\mathrm{param}
+=
+\prod_{n=1}^{N}R_n
++
+\sum_{n=1}^{N}I_nR_n
++
+(P+1).
+\end{equation}
+\end{proof}
+
+\subsection{尺度不定性与归一化机制}
+
+下面说明 NTD-PL 继承了 Tucker 分解的尺度不定性，因此正文中的归一化步骤可以理解为一种规范化机制，而非改变模型能力的额外约束。
+
+\begin{proposition}[尺度不变性]
+\label{prop:scale_invariance_app}
+设
+\begin{equation}
+\cS
+=
+\llbracket \cX;\mathbf A^{(1)},\dots,\mathbf A^{(N)}\rrbracket.
+\end{equation}
+对某一模 $n$，取任意可逆对角矩阵 $D^{(n)}\in\mathbb{R}^{R_n\times R_n}$，并定义
+\begin{equation}
+\widetilde{\mathbf A}^{(n)} = \mathbf A^{(n)}D^{(n)},\qquad
+\widetilde{\cX} = \cX \times_n (D^{(n)})^{-1}.
+\end{equation}
+则有
+\begin{equation}
+\llbracket \widetilde{\cX};\mathbf A^{(1)},\dots,\mathbf A^{(n-1)},\widetilde{\mathbf A}^{(n)},\mathbf A^{(n+1)},\dots,\mathbf A^{(N)}\rrbracket
+=
+\cS.
+\end{equation}
+因此，对任意多项式系数 $\boldsymbol\beta$，NTD-PL 输出
+\begin{equation}
+\widehat{\cY}=f_{\boldsymbol\beta}(\cS)
+\end{equation}
+保持不变。
+\end{proposition}
+
+\begin{proof}
+由 Tucker 重构的模乘结合律，
+\[
+(\cX\times_n B)\times_n A = \cX\times_n (AB),
+\]
+可得
+\begin{align}
+\llbracket \widetilde{\cX};\mathbf A^{(1)},\dots,\widetilde{\mathbf A}^{(n)},\dots,\mathbf A^{(N)}\rrbracket
+&=
+\widetilde{\cX}\times_1 \mathbf A^{(1)}\times\cdots\times_n \widetilde{\mathbf A}^{(n)}\times\cdots\times_N \mathbf A^{(N)} \\
+&=
+\bigl(\cX\times_n (D^{(n)})^{-1}\bigr)\times_n \bigl(\mathbf A^{(n)}D^{(n)}\bigr)\times_{m\neq n}\mathbf A^{(m)} \\
+&=
+\cX\times_n \Bigl(\bigl(\mathbf A^{(n)}D^{(n)}\bigr)(D^{(n)})^{-1}\Bigr)\times_{m\neq n}\mathbf A^{(m)} \\
+&=
+\cX\times_n \mathbf A^{(n)}\times_{m\neq n}\mathbf A^{(m)} \\
+&=
+\llbracket \cX;\mathbf A^{(1)},\dots,\mathbf A^{(N)}\rrbracket
+=
+\cS.
+\end{align}
+因此，共线缩放与核心吸收不会改变潜在张量 $\cS$。由于 NTD-PL 的输出仅依赖于 $\cS$，
+\begin{equation}
+\widehat{\cY}
+=
+f_{\boldsymbol\beta}(\cS)
+=
+\sum_{p=0}^{P}\beta_p \cS^{\odot p},
+\end{equation}
+故当 $\cS$ 不变时，$\widehat{\cY}$ 也保持不变。
+\end{proof}
+
+\begin{remark}
+命题~\ref{prop:scale_invariance_app} 说明，因子列归一化并将尺度吸收到核心张量中，不会改变 NTD-PL 的输出，只是从参数等价类中选取了一个更稳定的表示。由于高阶项 $\cS^{\odot p}$ 对尺度更加敏感，这种归一化在多项式链接模型中尤为重要。
+\end{remark}
+
+\section{逐元素非线性生成下的表达性分析}
+\label{app:expressivity}
+
+本节对应正文第~4.3.2 节，给出 NTD-PL 在逐元素非线性生成模型下的基本表达性结论。为与正文一致，
+设真实潜在 Tucker 张量为
+\begin{equation}
+\cS^\star
+=
+\llbracket
+\cX^\star;\,
+\mathbf A^{(1)\star},\dots,\mathbf A^{(N)\star}
+\rrbracket
+\in \R^{I_1\times\cdots\times I_N},
+\end{equation}
+并记总元素个数为
+\begin{equation}
+N_e=\prod_{n=1}^N I_n.
+\end{equation}
+设观测张量由某个标量函数 $g:\R\to\R$ 逐元素作用生成，即
+\begin{equation}
+\cY = g(\cS^\star), \qquad
+\cY_{i_1,\dots,i_N}
+=
+g\!\left(\cS^\star_{i_1,\dots,i_N}\right).
+\end{equation}
+
+NTD-PL 的模型类写为
+\begin{equation}
+\widehat{\cY}
+=
+f_{\boldsymbol\beta}(\cS)
+=
+\sum_{p=0}^{P}\beta_p \cS^{\odot p},
+\qquad
+\cS=
+\llbracket
+\cX;\,
+\mathbf A^{(1)},\dots,\mathbf A^{(N)}
+\rrbracket,
+\label{eq:ntdpl_appendix_model}
+\end{equation}
+其中 $\cS^{\odot p}$ 表示 $\cS$ 的逐元素 $p$ 次幂，$\boldsymbol\beta=(\beta_0,\dots,\beta_P)$ 为多项式链接系数。
+
+\begin{assumption}[有界性假设]
+\label{ass:bounded_S}
+存在常数 $B>0$，使得
+\begin{equation}
+\norm{\cS^\star}_{\infty}\le B.
+\end{equation}
+\end{assumption}
+
+假设~\ref{ass:bounded_S} 在实际中是自然的，因为数据预处理与模型中的尺度规范化通常会将潜在 Tucker 张量控制在某个有界区间内。
+
+\subsection{多项式生成下的精确表达}
+
+\begin{theorem}[多项式链接下的精确表达]
+\label{thm:poly_exact}
+设真实生成函数 $g$ 是次数不超过 $P$ 的实系数多项式，即
+\begin{equation}
+g(x)=\sum_{p=0}^{P} c_p x^p.
+\end{equation}
+若真实观测张量满足
+\begin{equation}
+\cY = g(\cS^\star),
+\qquad
+\cS^\star
+=
+\llbracket
+\cX^\star;\,
+\mathbf A^{(1)\star},\dots,\mathbf A^{(N)\star}
+\rrbracket,
+\end{equation}
+则 NTD-PL 在次数 $P$ 下可以精确表示 $\cY$。更具体地，只需取
+\begin{equation}
+\cX=\cX^\star,\qquad
+\mathbf A^{(n)}=\mathbf A^{(n)\star}\ \ (n=1,\dots,N),\qquad
+\beta_p=c_p\ \ (p=0,\dots,P),
+\end{equation}
+便有
+\begin{equation}
+\widehat{\cY}
+=
+\sum_{p=0}^{P}\beta_p (\cS^\star)^{\odot p}
+=
+g(\cS^\star)
+=
+\cY.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+对任意索引 $(i_1,\dots,i_N)$，有
+\begin{equation}
+\widehat{\cY}_{i_1,\dots,i_N}
+=
+\sum_{p=0}^{P} c_p
+\bigl(\cS^\star_{i_1,\dots,i_N}\bigr)^p
+=
+g\!\left(\cS^\star_{i_1,\dots,i_N}\right)
+=
+\cY_{i_1,\dots,i_N}.
+\end{equation}
+由于上述等式对所有元素均成立，故 $\widehat{\cY}=\cY$。
+\end{proof}
+
+\begin{corollary}[多项式非线性下的精确恢复]
+\label{cor:poly_recovery}
+若真实生成满足
+\begin{equation}
+\cY=\cS^\star + \alpha\, h(\cS^\star),
+\end{equation}
+其中 $h$ 是次数不超过 $d$ 的多项式函数，则当 $P\ge d$ 时，存在一组 NTD-PL 参数使得
+\begin{equation}
+\widehat{\cY}=\cY.
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+将函数
+\begin{equation}
+g(x)=x+\alpha h(x)
+\end{equation}
+视为次数不超过 $\max\{1,d\}$ 的多项式。若 $P\ge d$，则 $g$ 的次数不超过 $P$，由定理~\ref{thm:poly_exact} 即得结论。
+\end{proof}
+
+\subsection{一般逐元素非线性下的逼近界}
+
+下面说明，当真实非线性函数不是多项式时，NTD-PL 的逼近误差可以由一维标量函数逼近误差来控制。
+
+\begin{theorem}[由标量函数逼近诱导的张量逼近界]
+\label{thm:scalar_to_tensor}
+设假设~\ref{ass:bounded_S} 成立，并令
+\begin{equation}
+q_P(x)=\sum_{p=0}^{P}\beta_p x^p
+\end{equation}
+为任意一个次数不超过 $P$ 的多项式。若取 NTD-PL 的潜变量为真实潜变量，即 $\cS=\cS^\star$，则有
+\begin{equation}
+\norm{
+g(\cS^\star)-q_P(\cS^\star)
+}_F
+\le
+\sqrt{N_e}\,
+\sup_{|x|\le B}\,
+|g(x)-q_P(x)|.
+\label{eq:scalar_to_tensor_bound}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+对任意元素 $(i_1,\dots,i_N)$，由 $\norm{\cS^\star}_\infty\le B$ 可知
+\begin{equation}
+\left|
+g\!\left(\cS^\star_{i_1,\dots,i_N}\right)
+-
+q_P\!\left(\cS^\star_{i_1,\dots,i_N}\right)
+\right|
+\le
+\sup_{|x|\le B}|g(x)-q_P(x)|.
+\end{equation}
+两边平方后对全部 $N_e$ 个元素求和，得
+\begin{equation}
+\norm{
+g(\cS^\star)-q_P(\cS^\star)
+}_F^2
+\le
+N_e\,
+\left(
+\sup_{|x|\le B}|g(x)-q_P(x)|
+\right)^2.
+\end{equation}
+两边开方即可得到~\eqref{eq:scalar_to_tensor_bound}。
+\end{proof}
+
+\begin{remark}
+定理~\ref{thm:scalar_to_tensor} 表明，NTD-PL 在固定真实潜变量 $\cS^\star$ 时的张量近似问题，
+可以归结为区间 $[-B,B]$ 上的一维函数逼近问题。
+因此，当真实非线性为 $\sin(\cdot)$、$\tanh(\cdot)$ 等解析函数时，其效果取决于相应多项式截断在该区间上的逼近质量。
+\end{remark}
+
+\subsection{解析函数下的显式截断误差界}
+
+\begin{theorem}[解析链接函数下的显式截断界]
+\label{thm:analytic_bound}
+设 $g$ 在复圆盘
+\begin{equation}
+D(0,\rho)=\{z\in\mathbb{C}: |z|<\rho\}
+\end{equation}
+内解析，并满足
+\begin{equation}
+0<B<\rho,
+\qquad
+\norm{\cS^\star}_\infty\le B.
+\end{equation}
+设 $g$ 在 $0$ 点的 Taylor 展开为
+\begin{equation}
+g(x)=\sum_{p=0}^{\infty} a_p x^p,
+\end{equation}
+取其 $P$ 阶截断多项式
+\begin{equation}
+q_P(x)=\sum_{p=0}^{P} a_p x^p,
+\end{equation}
+并定义
+\begin{equation}
+M_\rho=\sup_{|z|=\rho}|g(z)|.
+\end{equation}
+则有
+\begin{equation}
+\norm{
+g(\cS^\star)-q_P(\cS^\star)
+}_F
+\le
+\sqrt{N_e}\,M_\rho
+\frac{(B/\rho)^{P+1}}{1-B/\rho}.
+\label{eq:analytic_truncation_bound}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+由 Cauchy 估计知
+\begin{equation}
+|a_p|\le \frac{M_\rho}{\rho^p},\qquad p=0,1,2,\dots
+\end{equation}
+于是对任意 $|x|\le B$ 有
+\begin{align}
+|g(x)-q_P(x)|
+&=
+\left|
+\sum_{p=P+1}^{\infty} a_p x^p
+\right|
+\le
+\sum_{p=P+1}^{\infty}|a_p||x|^p \\
+&\le
+M_\rho
+\sum_{p=P+1}^{\infty}(B/\rho)^p
+=
+M_\rho \frac{(B/\rho)^{P+1}}{1-B/\rho}.
+\end{align}
+再由定理~\ref{thm:scalar_to_tensor} 即得
+\begin{equation}
+\norm{
+g(\cS^\star)-q_P(\cS^\star)
+}_F
+\le
+\sqrt{N_e}\,M_\rho
+\frac{(B/\rho)^{P+1}}{1-B/\rho}.
+\end{equation}
+证毕。
+\end{proof}
+
+\begin{remark}
+定理~\ref{thm:analytic_bound} 给出了一个显式误差界。它说明：
+\begin{enumerate}
+    \item 当 $P$ 增大时，若 $B<\rho$，则截断误差随 $P$ 以几何速度衰减；
+    \item 在相同次数 $P$ 下，潜变量的幅值范围 $B$ 越大，逼近越困难；
+    \item 这为实验中不同非线性函数、不同非线性强度以及不同归一化策略下的性能差异提供了理论解释。
+\end{enumerate}
+\end{remark}
+
+\subsection{与非线性能量占比参数 $\alpha$ 的关系}
+\label{app:alpha_energy_ratio}
+
+本文合成数据中的非线性强度参数 $\alpha$ 采用的是\emph{能量占比}定义，而非直接的非线性项系数。
+设线性基底张量为
+\begin{equation}
+\cS^\star \in \mathbb{R}^{I_1\times\cdots\times I_N},
+\end{equation}
+并令
+\begin{equation}
+\cX^\star = g(\cS^\star)
+\end{equation}
+表示某个逐元素非线性变换后的张量。为避免将 $\cX^\star$ 中沿 $\cS^\star$ 的线性分量重复计入非线性部分，先定义其正交化残差为
+\begin{equation}
+\cR^\star
+=
+\cX^\star
+-
+\frac{\langle \cX^\star,\cS^\star\rangle}{\|\cS^\star\|_F^2}\,\cS^\star.
+\label{eq:orthogonal_residual_app}
+\end{equation}
+若 $\|\cR^\star\|_F>0$，再定义归一化残差
+\begin{equation}
+\widetilde{\cR}^\star
+=
+\frac{\|\cS^\star\|_F}{\|\cR^\star\|_F}\,\cR^\star.
+\label{eq:normalized_residual_app}
+\end{equation}
+于是观测张量构造为
+\begin{equation}
+\cY_\alpha
+=
+\sqrt{1-\alpha}\,\cS^\star
++
+\sqrt{\alpha}\,\widetilde{\cR}^\star,
+\qquad
+0\le \alpha\le 1.
+\label{eq:alpha_energy_model_app}
+\end{equation}
+
+上述构造与实现中采用的生成方式一致：先从非线性变换中去掉沿线性基底的投影，再将残差缩放到与原张量相同的目标能量，最后按 $\sqrt{1-\alpha}$ 与 $\sqrt{\alpha}$ 做能量混合。
+
+\begin{proposition}[能量占比解释]
+\label{prop:alpha_energy_ratio_app}
+设 $\cY_\alpha$ 由式~\eqref{eq:alpha_energy_model_app} 定义，且 $\|\cR^\star\|_F>0$。则有
+\begin{equation}
+\langle \cS^\star,\widetilde{\cR}^\star\rangle = 0,
+\qquad
+\|\widetilde{\cR}^\star\|_F = \|\cS^\star\|_F,
+\end{equation}
+从而
+\begin{equation}
+\|\cY_\alpha\|_F^2=\|\cS^\star\|_F^2,
+\label{eq:energy_preserved_app}
+\end{equation}
+且线性部分与非线性部分的能量占比分别满足
+\begin{equation}
+\frac{\|\sqrt{1-\alpha}\,\cS^\star\|_F^2}{\|\cY_\alpha\|_F^2}=1-\alpha,
+\qquad
+\frac{\|\sqrt{\alpha}\,\widetilde{\cR}^\star\|_F^2}{\|\cY_\alpha\|_F^2}=\alpha.
+\label{eq:energy_ratio_exact_app}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+由式~\eqref{eq:orthogonal_residual_app} 可知
+\begin{equation}
+\langle \cS^\star,\cR^\star\rangle=0,
+\end{equation}
+故
+\begin{equation}
+\langle \cS^\star,\widetilde{\cR}^\star\rangle=0.
+\end{equation}
+又由式~\eqref{eq:normalized_residual_app} 有
+\begin{equation}
+\|\widetilde{\cR}^\star\|_F=\|\cS^\star\|_F.
+\end{equation}
+于是
+\begin{align}
+\|\cY_\alpha\|_F^2
+&=
+\left\|
+\sqrt{1-\alpha}\,\cS^\star+\sqrt{\alpha}\,\widetilde{\cR}^\star
+\right\|_F^2 \\
+&=
+(1-\alpha)\|\cS^\star\|_F^2
++
+\alpha\|\widetilde{\cR}^\star\|_F^2
++
+2\sqrt{\alpha(1-\alpha)}
+\langle \cS^\star,\widetilde{\cR}^\star\rangle \\
+&=
+(1-\alpha)\|\cS^\star\|_F^2+\alpha\|\cS^\star\|_F^2 \\
+&=
+\|\cS^\star\|_F^2,
+\end{align}
+即得式~\eqref{eq:energy_preserved_app}。再分别计算两部分能量占总能量的比例，即得式~\eqref{eq:energy_ratio_exact_app}。
+\end{proof}
+
+下面分析在这种能量占比定义下，NTD-PL 的截断误差如何随 $\alpha$ 变化。
+
+\begin{corollary}[截断误差与 $\alpha$ 的关系]
+\label{cor:alpha_truncation_app}
+设
+\begin{equation}
+\cX^\star = g(\cS^\star),
+\qquad
+\|\cS^\star\|_\infty \le B,
+\end{equation}
+并令
+\begin{equation}
+c_g
+=
+\frac{\langle \cX^\star,\cS^\star\rangle}{\|\cS^\star\|_F^2},
+\qquad
+\eta_g
+=
+\frac{\|\cS^\star\|_F}{\|\cR^\star\|_F},
+\end{equation}
+其中 $\cR^\star$ 由式~\eqref{eq:orthogonal_residual_app} 定义。
+若 $q_P$ 是 $g$ 在区间 $[-B,B]$ 上的一个次数不超过 $P$ 的多项式逼近，满足
+\begin{equation}
+\varepsilon_P(B)
+:=
+\sup_{|s|\le B}|g(s)-q_P(s)|,
+\end{equation}
+并定义
+\begin{equation}
+a_\alpha=\sqrt{1-\alpha}-\sqrt{\alpha}\,\eta_g c_g,
+\qquad
+b_\alpha=\sqrt{\alpha}\,\eta_g,
+\end{equation}
+则存在一个对应的 degree-$P$ 表示
+\begin{equation}
+\widehat{\cY}_{\alpha,P}
+=
+a_\alpha \cS^\star + b_\alpha q_P(\cS^\star),
+\end{equation}
+满足
+\begin{equation}
+\|\cY_\alpha-\widehat{\cY}_{\alpha,P}\|_F
+\le
+\sqrt{\alpha}\,\eta_g\,\sqrt{N_e}\,\varepsilon_P(B),
+\label{eq:alpha_truncation_bound_app}
+\end{equation}
+其中
+\begin{equation}
+N_e=\prod_{n=1}^N I_n.
+\end{equation}
+进一步地，
+\begin{equation}
+\|\cY_\alpha-\widehat{\cY}_{\alpha,P}\|_F^2
+\le
+\alpha\,\eta_g^2\,N_e\,\varepsilon_P(B)^2.
+\label{eq:alpha_truncation_bound_sq_app}
+\end{equation}
+\end{corollary}
+
+\begin{proof}
+由式~\eqref{eq:orthogonal_residual_app}--\eqref{eq:normalized_residual_app} 有
+\begin{equation}
+\widetilde{\cR}^\star
+=
+\eta_g\bigl(\cX^\star-c_g\cS^\star\bigr)
+=
+\eta_g\bigl(g(\cS^\star)-c_g\cS^\star\bigr).
+\end{equation}
+代入式~\eqref{eq:alpha_energy_model_app}，得
+\begin{align}
+\cY_\alpha
+&=
+\sqrt{1-\alpha}\,\cS^\star
++
+\sqrt{\alpha}\,\eta_g\bigl(g(\cS^\star)-c_g\cS^\star\bigr) \\
+&=
+\bigl(\sqrt{1-\alpha}-\sqrt{\alpha}\,\eta_g c_g\bigr)\cS^\star
++
+\sqrt{\alpha}\,\eta_g\,g(\cS^\star) \\
+&=
+a_\alpha \cS^\star + b_\alpha g(\cS^\star).
+\end{align}
+因此
+\begin{equation}
+\cY_\alpha-\widehat{\cY}_{\alpha,P}
+=
+b_\alpha\bigl(g(\cS^\star)-q_P(\cS^\star)\bigr).
+\end{equation}
+由 $|b_\alpha|=\sqrt{\alpha}\,\eta_g$ 以及
+\begin{equation}
+\|g(\cS^\star)-q_P(\cS^\star)\|_F
+\le
+\sqrt{N_e}\,\varepsilon_P(B)
+\end{equation}
+可得
+\begin{equation}
+\|\cY_\alpha-\widehat{\cY}_{\alpha,P}\|_F
+\le
+\sqrt{\alpha}\,\eta_g\,\sqrt{N_e}\,\varepsilon_P(B).
+\end{equation}
+两边平方即得式~\eqref{eq:alpha_truncation_bound_sq_app}。
+\end{proof}
+
+\begin{remark}
+推论~\ref{cor:alpha_truncation_app} 表明，在本文采用的能量占比生成机制下：
+
+\begin{enumerate}
+    \item Frobenius 范数意义下的截断误差上界随 $\sqrt{\alpha}$ 缩放；
+    \item 平方误差以及 NMSE 型指标的上界随 $\alpha$ 缩放；
+    \item 若 $g$ 本身就是次数不超过 $P$ 的多项式，则 $\varepsilon_P(B)=0$，此时对任意 $\alpha\in[0,1]$ 都有精确表示；
+    \item 若 $g$ 为解析函数，则截断误差除了受 $\alpha$ 影响外，还受多项式次数 $P$、输入幅值范围 $B$ 以及解析半径共同影响。
+\end{enumerate}
+
+其中，系数
+\begin{equation}
+\eta_g=\frac{\|\cS^\star\|_F}{\|\cR^\star\|_F}
+\end{equation}
+还反映了真实非线性中“正交非线性残差”的有效强度：当非线性残差较弱时，为达到同样的能量占比 $\alpha$，相应残差方向需要被放大更多，因此有限阶多项式近似也会更加困难。
+\end{remark}
+
+\begin{remark}
+当 $\|\cR^\star\|_F=0$ 时，说明所选非线性变换在当前输入上未产生有效的非线性残差，此时生成过程退化为纯线性情形，$\alpha$ 不再改变观测张量的方向结构。
+\end{remark}
+
+
+\section{优化补充}
+
+\subsection{$\boldsymbol\beta$ 子问题的唯一解}
+\label{app:beta_unique}
+
+本节对应正文第~4.4 节，证明在 $\lambda_\beta>0$ 时，NTD-PL 中的多项式链接系数 $\boldsymbol\beta$ 子问题存在唯一解。
+
+固定潜在张量
+\begin{equation}
+\cS=\llbracket \cX;\mathbf A^{(1)},\dots,\mathbf A^{(N)}\rrbracket,
+\end{equation}
+当前多项式次数 $P$ 以及观测集合 $\Omega$，考虑如下优化问题：
+\begin{equation}
+\min_{\boldsymbol\beta\in\mathbb R^{P+1}}
+\left\|
+\Omega\odot
+\left(
+\cY-\sum_{p=0}^{P}\beta_p \cS^{\odot p}
+\right)
+\right\|_F^2
++
+\lambda_\beta\|\boldsymbol\beta\|_2^2,
+\qquad \lambda_\beta>0.
+\label{eq:beta_subproblem_app}
+\end{equation}
+
+记 $M_\Omega=|\Omega|$，将观测条目拉平后，可得观测向量
+\begin{equation}
+\mathbf y_\Omega\in\mathbb R^{M_\Omega},
+\end{equation}
+以及对应的潜在张量取值
+\begin{equation}
+\mathbf s_\Omega=(s_1,\dots,s_{M_\Omega})^\top\in\mathbb R^{M_\Omega}.
+\end{equation}
+据此构造设计矩阵
+\begin{equation}
+\Phi_\Omega=
+\begin{bmatrix}
+1 & s_1 & s_1^2 & \cdots & s_1^P\\
+1 & s_2 & s_2^2 & \cdots & s_2^P\\
+\vdots & \vdots & \vdots & & \vdots\\
+1 & s_{M_\Omega} & s_{M_\Omega}^2 & \cdots & s_{M_\Omega}^P
+\end{bmatrix}
+\in\mathbb R^{M_\Omega\times(P+1)}.
+\label{eq:PhiOmega_app_def}
+\end{equation}
+于是式~\eqref{eq:beta_subproblem_app} 可改写为标准 ridge regression：
+\begin{equation}
+\min_{\boldsymbol\beta\in\mathbb R^{P+1}}
+\|\mathbf y_\Omega - \Phi_\Omega \boldsymbol\beta\|_2^2
++
+\lambda_\beta \|\boldsymbol\beta\|_2^2.
+\label{eq:beta_ridge_app}
+\end{equation}
+
+\begin{proposition}[正则化 $\boldsymbol\beta$ 子问题的唯一解]
+\label{prop:beta_unique_app}
+当 $\lambda_\beta>0$ 时，问题~\eqref{eq:beta_ridge_app} 存在唯一最优解，且
+\begin{equation}
+\boldsymbol\beta^\star
+=
+\left(\Phi_\Omega^\top \Phi_\Omega+\lambda_\beta I\right)^{-1}
+\Phi_\Omega^\top \mathbf y_\Omega.
+\label{eq:beta_closed_form_app}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+定义目标函数
+\begin{equation}
+f(\boldsymbol\beta)
+=
+\|\mathbf y_\Omega - \Phi_\Omega \boldsymbol\beta\|_2^2
++
+\lambda_\beta \|\boldsymbol\beta\|_2^2.
+\end{equation}
+将其展开，可得
+\begin{equation}
+f(\boldsymbol\beta)
+=
+\mathbf y_\Omega^\top \mathbf y_\Omega
+-2\mathbf y_\Omega^\top \Phi_\Omega \boldsymbol\beta
++\boldsymbol\beta^\top \Phi_\Omega^\top \Phi_\Omega \boldsymbol\beta
++\lambda_\beta \boldsymbol\beta^\top \boldsymbol\beta.
+\end{equation}
+因此其梯度为
+\begin{equation}
+\nabla f(\boldsymbol\beta)
+=
+2\left(\Phi_\Omega^\top \Phi_\Omega+\lambda_\beta I\right)\boldsymbol\beta
+-
+2\Phi_\Omega^\top \mathbf y_\Omega,
+\end{equation}
+Hessian 为
+\begin{equation}
+\nabla^2 f(\boldsymbol\beta)
+=
+2\left(\Phi_\Omega^\top \Phi_\Omega+\lambda_\beta I\right).
+\end{equation}
+
+由于 $\Phi_\Omega^\top \Phi_\Omega$ 半正定，而 $\lambda_\beta I$ 在 $\lambda_\beta>0$ 时正定，所以
+\begin{equation}
+\Phi_\Omega^\top \Phi_\Omega+\lambda_\beta I
+\succ 0.
+\end{equation}
+从而 $f(\boldsymbol\beta)$ 是严格凸函数，因此存在唯一极小点。令梯度为零，得到正规方程
+\begin{equation}
+\left(\Phi_\Omega^\top \Phi_\Omega+\lambda_\beta I\right)\boldsymbol\beta
+=
+\Phi_\Omega^\top \mathbf y_\Omega.
+\end{equation}
+由于系数矩阵正定可逆，故唯一解为
+\begin{equation}
+\boldsymbol\beta^\star
+=
+\left(\Phi_\Omega^\top \Phi_\Omega+\lambda_\beta I\right)^{-1}
+\Phi_\Omega^\top \mathbf y_\Omega.
+\end{equation}
+证毕。
+\end{proof}
+
+\begin{remark}
+命题~\ref{prop:beta_unique_app} 表明，在固定潜在张量 $\cS$ 时，$\boldsymbol\beta$ 更新是一个低维、强凸且有闭式解的子问题。特别地，唯一性不再依赖于观测值是否足够丰富，也不要求设计矩阵 $\Phi_\Omega$ 满列秩；正则项 $\lambda_\beta I$ 直接保证了系统矩阵的可逆性。这也是正则化在缺失观测和高阶多项式情形下尤为重要的原因。
+\end{remark}
+
+% \clearpage
+% \section{实验补充图表}
+% \label{app:exp_supp}
+
+% 本节汇总正文第 5 章引用的补充图表，包括残差统计、实现细节和代表性可视化。它们与正文采用相同协议，用于补充数值与现象说明。
+
+% \subsection{合成实验补充}
+
+% \begin{figure}[htbp]
+%     \centering
+%     \includegraphics[width=\textwidth]{./inputs/figures/appendix/geometry_link_evolution.pdf}
+%     \caption{该图使用 $\alpha=0.3$ 的真实训练结果，直接展示 多项式链接 随 $P$ 升阶时如何从近线性的 $p=1$ 基线逐步偏离。左上给出共享坐标范围下的链接函数 $f_{\beta^{(p)}}(s)$，右上给出相对 $p=1$ 的偏差 $\Delta_p(s)$，下排用两个简单统计量量化这种偏离在 1D 链接空间和固定局部响应 patch 上的增强。}
+%     \label{fig:geometry-link}
+% \end{figure}
+
+% \begin{figure}[htbp]
+%     \centering
+%     \includegraphics[width=\textwidth]{./inputs/figures/appendix/geometry_response_maps.pdf}
+%     \caption{该图在同一组学习得到的 $\beta$ 系数下，固定一个二维 Tucker 局部 patch，并比较不同 $P$ 对局部观测响应的影响。第一行给出共享色轴下的局部响应等值图，并叠加 $p=1$ 的虚线等值线作为线性参考；第二行给出相对 $p=1$ 的偏差热图。}
+%     \label{fig:geometry-response}
+% \end{figure}
+
+% \subsection{真实高光谱实验补充}
+
+% \begin{table}[htbp]
+%     \centering
+%     \caption{该表汇总外部鲁棒性验证所用四个补充高光谱数据集的原始尺寸、保留波段与统一协议。补充数据集选自与 Jasper Ridge 更接近的经典 scene benchmark，均直接使用 full scene，采用 global max normalization，并在与 CAVE 主文中预算近似匹配的统一规则下自动确定 rank；completion 统一使用 $\rho=0.5$ 的随机逐元素缺失。}
+%     \label{tab:real_hsi_protocol}
+%     \small
+%     \setlength{\tabcolsep}{3.8pt}
+%     \resizebox{\linewidth}{!}{%
+%     \input{inputs/real-hsi-robustness/real_hsi_robustness_protocol.tex}}
+% \end{table}
+
+% \begin{table}[htbp]
+%     \centering
+%     \caption{该表给出外部鲁棒性验证的完整数值版本。Recon. 行报告 RMSE / NMSE(dB) / SAM；Compl. 行报告 RMSE* / NMSE(dB)* / SAM*，其中 completion 数值为三个随机缺失种子的均值 $\pm$ 标准差，Rank 列为按统一压缩率匹配规则自动确定的 multilinear rank。}
+%     \label{tab:real_hsi_robustness_appendix}
+%     \small
+%     \setlength{\tabcolsep}{3.8pt}
+%     \resizebox{\linewidth}{!}{%
+%     \input{inputs/real-hsi-robustness/real_hsi_robustness_appendix_table.tex}}
+% \end{table}
+
+% \begin{table}[htbp]
+%     \centering
+%     \caption{该表给出随机缺失补全的完整结果版本。与正文主表相比，这里额外保留 all-entry 指标，用于说明 missing-only 主结论与整体误差趋势一致。}
+%     \label{tab:cave-random-completion-full}
+%     \small
+%     \setlength{\tabcolsep}{3.8pt}
+%     \resizebox{\textwidth}{!}{%
+%     \input{inputs/cave-random-completion/random_completion_full_table.tex}}
+% \end{table}
+

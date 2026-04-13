@@ -1,0 +1,285 @@
+\section{记号和预备}
+
+本章给出全文使用的主要记号、基本张量运算以及后续构造 NTD-PL 所需的预备定义。除特别说明外，所有张量、矩阵与向量均取值于实数域 $\mathbb{R}$。本章内容的目的是统一第四章中将反复使用的符号系统与基础运算形式。
+
+\subsection{记号约定}
+
+对于变量，$N\ge 3$ 阶张量记为书法体字母，如 $\mathcal{X},\mathcal{Y},\mathcal{G}$；矩阵记为大写粗体字母，如 $\mathbf{A},\mathbf{X}$；向量记为小写粗体字母，如 $\mathbf{x},\mathbf{a}$；标量记为小写斜体字母，如 $x,a$。对于维度、秩、次数等非变量量，通常以大写字母表示其取值，以对应的小写字母表示索引，例如 $I_n$ 表示第 $n$ 模维度，$i_n\in[I_n]$ 表示对应索引，其中
+\[
+[I_n] := \{1,2,\dots,I_n\}.
+\]
+类似地，$R_n$ 表示第 $n$ 模的多线性秩，$r_n\in[R_n]$ 表示对应的潜在索引。
+
+给定 $N$ 阶张量
+\[
+\mathcal{X}\in\mathbb{R}^{I_1\times\cdots\times I_N},
+\]
+其元素记为
+\[
+x_{i_1\cdots i_N}
+\quad \text{或} \quad
+\mathcal{X}[i_1,\dots,i_N].
+\]
+当需要压缩书写时，记多指标为
+\[
+\mathbf{i}=(i_1,\dots,i_N), \qquad x_{\mathbf{i}}:=x_{i_1\cdots i_N}.
+\]
+
+对于逐元素运算，记 Hadamard 乘积为 $\odot$。若 $\mathcal{X}$ 与 $\mathcal{Y}$ 形状相同，则
+\[
+(\mathcal{X}\odot \mathcal{Y})_{\mathbf{i}} = x_{\mathbf{i}} y_{\mathbf{i}}.
+\]
+进一步地，定义张量的逐元素幂为
+\[
+\mathcal{X}^{\odot p},
+\qquad
+(\mathcal{X}^{\odot p})_{\mathbf{i}} = x_{\mathbf{i}}^p,
+\]
+其中 $p\in\mathbb{N}$。特别地，约定
+\[
+\mathcal{X}^{\odot 0} = \mathbf{1},
+\]
+其中 $\mathbf{1}$ 表示与 $\mathcal{X}$ 同形状的全 $1$ 张量。
+
+对于观测不完整情形，记观测集合为
+\[
+\Omega \subseteq [I_1]\times\cdots\times[I_N],
+\]
+对应的掩码张量记为
+\[
+\mathcal{M}\in\{0,1\}^{I_1\times\cdots\times I_N},
+\qquad
+m_{\mathbf{i}}=
+\begin{cases}
+1, & \mathbf{i}\in\Omega,\\
+0, & \mathbf{i}\notin\Omega.
+\end{cases}
+\]
+
+\subsection{张量基本运算}
+
+\paragraph{模 $n$ 展开与向量化.}
+给定张量 $\mathcal{X}\in\mathbb{R}^{I_1\times\cdots\times I_N}$，其模 $n$ 展开记为
+\[
+\mathbf{X}_{(n)} \in \mathbb{R}^{I_n\times K_n},
+\qquad
+K_n := \prod_{m\neq n} I_m.
+\]
+本文统一采用固定的索引排列顺序来定义展开与向量化；一旦顺序固定，所有由展开诱导的矩阵表达式均相应唯一。张量 $\mathcal{X}$ 的向量化记为
+\[
+\mathrm{vec}(\mathcal{X})\in\mathbb{R}^{\prod_{n=1}^N I_n}.
+\]
+
+\paragraph{Frobenius 范数.}
+张量 $\mathcal{X}$ 的 Frobenius 范数定义为
+\[
+\|\mathcal{X}\|_F
+:=
+\left(
+\sum_{i_1,\dots,i_N} x_{i_1\cdots i_N}^2
+\right)^{1/2},
+\]
+它与任意模展开的矩阵 Frobenius 范数一致，即
+\[
+\|\mathcal{X}\|_F = \|\mathbf{X}_{(n)}\|_F.
+\]
+
+\paragraph{模 $n$ 乘积.}
+设
+\[
+\mathcal{X}\in\mathbb{R}^{I_1\times\cdots\times I_n\times\cdots\times I_N},
+\qquad
+\mathbf{A}\in\mathbb{R}^{J\times I_n},
+\]
+则 $\mathcal{X}$ 与 $\mathbf{A}$ 的模 $n$ 乘积记为 $\mathcal{X}\times_n \mathbf{A}$，其结果属于
+\[
+\mathbb{R}^{I_1\times\cdots\times I_{n-1}\times J\times I_{n+1}\times\cdots\times I_N},
+\]
+并按元素定义为
+\[
+(\mathcal{X}\times_n \mathbf{A})_{i_1\cdots i_{n-1} j i_{n+1}\cdots i_N}
+=
+\sum_{i_n=1}^{I_n}
+x_{i_1\cdots i_n\cdots i_N} a_{j i_n}.
+\]
+
+模 $n$ 展开下，该运算满足
+\[
+(\mathcal{X}\times_n \mathbf{A})_{(n)} = \mathbf{A}\mathbf{X}_{(n)}.
+\]
+
+\paragraph{Kronecker 积.}
+对矩阵 $\mathbf{A}\in\mathbb{R}^{I\times R}$ 与 $\mathbf{B}\in\mathbb{R}^{J\times S}$，其 Kronecker 积记为
+\[
+\mathbf{A}\otimes \mathbf{B}\in\mathbb{R}^{IJ\times RS}.
+\]
+后文在展开 Tucker 模型与写出向量化表达时将频繁使用该记号。
+
+\subsection{Tucker 分解与带掩码观测}
+
+\paragraph{Tucker 分解.}
+给定观测张量
+\[
+\mathcal{Y}\in\mathbb{R}^{I_1\times\cdots\times I_N},
+\]
+Tucker 分解将其近似为
+\[
+\widehat{\mathcal{Y}}
+=
+\llbracket
+\mathcal{G};
+\mathbf{A}^{(1)},\dots,\mathbf{A}^{(N)}
+\rrbracket
+:=
+\mathcal{G}
+\times_1 \mathbf{A}^{(1)}
+\times_2 \cdots
+\times_N \mathbf{A}^{(N)},
+\]
+其中
+\[
+\mathcal{G}\in\mathbb{R}^{R_1\times\cdots\times R_N},
+\qquad
+\mathbf{A}^{(n)}\in\mathbb{R}^{I_n\times R_n},\quad n=1,\dots,N.
+\]
+向量
+\[
+(R_1,\dots,R_N)
+\]
+称为 Tucker 分解的多线性秩。为简洁起见，后文记
+\[
+\mathcal{T}(\mathcal{G},\{\mathbf{A}^{(n)}\})
+:=
+\llbracket
+\mathcal{G};
+\mathbf{A}^{(1)},\dots,\mathbf{A}^{(N)}
+\rrbracket .
+\]
+
+\paragraph{展开形式.}
+Tucker 模型在模 $n$ 展开下可写为
+\[
+\widehat{\mathbf{Y}}_{(n)}
+=
+\mathbf{A}^{(n)}
+\mathbf{G}_{(n)}
+\left(
+\mathbf{A}^{(N)}\otimes\cdots\otimes
+\mathbf{A}^{(n+1)}\otimes
+\mathbf{A}^{(n-1)}\otimes\cdots\otimes
+\mathbf{A}^{(1)}
+\right)^\top.
+\]
+相应地，其向量化形式为
+\[
+\mathrm{vec}(\widehat{\mathcal{Y}})
+=
+\left(
+\mathbf{A}^{(N)}\otimes\cdots\otimes\mathbf{A}^{(1)}
+\right)
+\mathrm{vec}(\mathcal{G}).
+\]
+上述等价表达在后文的复杂度分析、子问题推导与实现中都将用到。
+
+\paragraph{全观测与带掩码观测.}
+在全观测情形下，标准 Tucker 拟合可写为
+\[
+\min_{\mathcal{G},\{\mathbf{A}^{(n)}\}}
+\frac{1}{2}
+\left\|
+\mathcal{Y}
+-
+\mathcal{T}(\mathcal{G},\{\mathbf{A}^{(n)}\})
+\right\|_F^2.
+\]
+在带掩码观测情形下，相应目标写为
+\[
+\min_{\mathcal{G},\{\mathbf{A}^{(n)}\}}
+\frac{1}{2}
+\left\|
+\mathcal{M}\odot
+\left(
+\mathcal{Y}
+-
+\mathcal{T}(\mathcal{G},\{\mathbf{A}^{(n)}\})
+\right)
+\right\|_F^2.
+\]
+因此，掩码张量 $\mathcal{M}$ 仅决定哪些条目参与损失计算，而不改变 Tucker 骨架本身。本文后续的 NTD-PL 也将沿用这一统一形式来同时处理完整张量分解与张量补全。
+
+\paragraph{尺度不定性说明.}
+与标准 Tucker 一样，上述分解具有固有的尺度不定性：某一模因子中的缩放可通过核心张量中的反向缩放被抵消，而不改变最终重构结果。本文在第四章中将进一步说明 NTD-PL 在此基础上的尺度问题及其归一化处理。
+
+\subsection{逐元素多项式链接}
+
+为后续定义 NTD-PL，先给出逐元素多项式链接的基本形式。设
+\[
+P\in\mathbb{N}
+\]
+为最大多项式次数，$\boldsymbol{\beta}=(\beta_0,\beta_1,\dots,\beta_P)^\top\in\mathbb{R}^{P+1}$ 为链接系数。对任意标量 $t\in\mathbb{R}$，定义多项式链接函数
+\[
+f_{\boldsymbol{\beta}}(t)
+=
+\sum_{p=0}^P \beta_p t^p.
+\]
+将其逐元素作用到张量
+\[
+\mathcal{S}\in\mathbb{R}^{I_1\times\cdots\times I_N}
+\]
+上，定义
+\[
+f_{\boldsymbol{\beta}}(\mathcal{S})
+:=
+\sum_{p=0}^P \beta_p \mathcal{S}^{\odot p}.
+\]
+按元素写为
+\[
+\bigl(f_{\boldsymbol{\beta}}(\mathcal{S})\bigr)_{\mathbf{i}}
+=
+\sum_{p=0}^P \beta_p s_{\mathbf{i}}^p.
+\]
+
+这一构造保留了输入张量 $\mathcal{S}$ 的形状不变，仅改变每个条目的生成方式，因此适合与 Tucker 潜在张量组合使用。特别地，当
+\[
+\beta_1 = 1,\qquad
+\beta_p = 0\ \ (p\neq 1)
+\]
+时，
+\[
+f_{\boldsymbol{\beta}}(\mathcal{S})=\mathcal{S},
+\]
+此时逐元素多项式链接退化为恒等映射；因此，标准 Tucker 可被视为后续 NTD-PL 的线性特例。
+
+为便于后续写出系数子问题，还可对任一标量 $s$ 定义其多项式特征向量
+\[
+\boldsymbol{\phi}(s)
+=
+[1,s,s^2,\dots,s^P]^\top \in \mathbb{R}^{P+1}.
+\]
+若将 $\mathcal{S}$ 的全部条目按固定顺序排成向量
+\[
+\mathbf{s}=\mathrm{vec}(\mathcal{S}),
+\]
+则相应可定义设计矩阵
+\[
+\mathbf{\Phi}(\mathcal{S})
+=
+\begin{bmatrix}
+\boldsymbol{\phi}(s_1)^\top\\
+\boldsymbol{\phi}(s_2)^\top\\
+\vdots\\
+\boldsymbol{\phi}(s_M)^\top
+\end{bmatrix}
+\in \mathbb{R}^{M\times (P+1)},
+\qquad
+M:=\prod_{n=1}^N I_n,
+\]
+从而有
+\[
+\mathrm{vec}\bigl(f_{\boldsymbol{\beta}}(\mathcal{S})\bigr)
+=
+\mathbf{\Phi}(\mathcal{S})\boldsymbol{\beta}.
+\]
+在带掩码观测情形下，只需保留对应于 $\Omega$ 中观测条目的行，即可得到后续用于系数估计的观测设计矩阵。
+
+至此，后文构造 NTD-PL 所需的基本对象已经齐备：一方面，$\mathcal{T}(\mathcal{G},\{\mathbf{A}^{(n)}\})$ 给出共享的 Tucker 潜在张量；另一方面，$f_{\boldsymbol{\beta}}(\cdot)$ 给出逐元素的参数化非线性链接。第四章将在此基础上正式给出 NTD-PL 的模型定义、性质与优化方法。

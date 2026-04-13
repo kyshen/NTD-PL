@@ -1,0 +1,9 @@
+pytest src/tests/test_KodakData.py -s
+pytest src/tests/test_CPDecomposition.py -s
+python run.py
+
+python run.py -m method.rank=8,16,32 exp_name=hahaha
+python run.py exp_name=xixi
+
+pip3 install pipreqs
+pipreqs . --force

@@ -1,0 +1,463 @@
+\section{提出的方法}
+
+在保持 Tucker 低秩骨架的前提下，如何以受控方式引入高阶交互，并同时保持参数规模、可解释性与优化可实现性？为此，本章先给出 NTD-PL 的结构动机，再正式定义模型，随后概括其基本性质，并给出与当前实现一致的统一学习目标和优化框架。
+
+\subsection{设计动机：从显式高阶交互到结构化压缩}
+
+标准 Tucker 分解以共享核心张量和各模因子矩阵构成多线性生成机制。若记
+\begin{equation}
+\cS = \llbracket \cX;\mathbf A^{(1)},\dots,\mathbf A^{(N)}\rrbracket,
+\end{equation}
+则其本质是在低秩潜在空间中通过连续模乘生成观测张量。该结构在压缩、恢复与表示学习中具有良好的参数效率与结构透明性，但它默认观测条目可以由多线性机制充分刻画。对于存在饱和响应、非线性观测、复杂高阶耦合或曲面结构的数据，仅依赖多线性假设往往会带来系统性失配。
+
+在矩阵情形中，一个自然的增强思路是从线性映射
+\begin{equation}
+\mathbf y = \mathbf A\mathbf x
+\end{equation}
+推广到带有二次交互的映射
+\begin{equation}
+\label{eq:qmf_motivation}
+\mathbf y = \mathbf A\mathbf x + \mathcal A(\mathbf x,\mathbf x).
+\end{equation}
+QMF \cite{zhai2024quadratic} 的核心启发正是：二次项的意义不在于单纯增参，而在于它提供了从局部平坦表示走向局部曲面表示的最基本一步。沿着同样的思路，对于张量情形，一个自然问题是：既然 Tucker 已经是线性低秩模型在多模数据上的推广，能否进一步将显式高阶交互引入 Tucker 的生成机制？
+
+为此本文把 $p$ 阶交互写入 Tucker，一个自然的显式原型可写为
+\begin{equation}
+\label{eq:explicit_p_tucker_prototype}
+\widehat y^{(p)}_{i_1\cdots i_N}
+=
+\sum_{\mathbf r^{(1)},\dots,\mathbf r^{(p)}}
+\Bigl(\prod_{q=1}^{p} x_{\mathbf r^{(q)}}\Bigr)
+\prod_{n=1}^{N}
+ a^{(n)}_{i_n,\,r_n^{(1)},\dots,r_n^{(p)}},
+\end{equation}
+其中每个模因子在第 $n$ 模上同时依赖 $p$ 个潜在索引。式~\eqref{eq:explicit_p_tucker_prototype} 说明了“高阶交互如何进入 Tucker”：它保留了逐模生成的 Tucker 外形，但把每一模的线性映射替换成了显式的 $p$ 阶局部耦合。对于 $p=2$，它对应二次 Tucker；一般 $p$ 时，可视为一个显式 $p$-Tucker 原型。下图用张量网络更直观地展示这种 Tucker 的高次扩展。
+\begin{center}
+\resizebox{\linewidth}{!}{\input{./artifacts/p-tucker.tex}}
+\end{center}
+
+这一原型虽然在概念上自然，却不适合作为最终模型。随着次数 $p$ 增大，模因子需要提升为更高阶张量，核心张量在生成过程中也会诱导出 Kronecker 型高阶扩展，参数量、存储与收缩计算都会迅速膨胀。更重要的是，优化难度也会随之显著增加。因此，显式 $p$-Tucker 更适合作为结构动机：它解释了高阶交互进入 Tucker 的方式，却没有直接给出一个可扩展的实现。
+
+基于这一观察，本文不直接训练式~\eqref{eq:explicit_p_tucker_prototype} 所对应的显式高阶模型，而是寻找一种结构化压缩：既保留“共享低秩 骨架 上存在高阶交互”的语义，又把参数规模重新压回 Tucker 级别。NTD-PL 正是这一设计目标下得到的模型。
+
+\subsection{NTD-PL 模型定义与结构解释}
+
+\subsubsection{最终模型定义}
+
+本文提出多项式链接的非线性 Tucker 分解 NTD-PL。其核心思想是：先用 Tucker 分解生成一个共享的低秩潜在张量，再在该潜在张量上施加显式的逐元素多项式链接。具体而言，记
+\begin{equation}
+\label{eq:ntdpl_latent_tensor}
+\cS
+=
+\llbracket \cX;\mathbf A^{(1)},\dots,\mathbf A^{(N)}\rrbracket,
+\end{equation}
+其中 $\cX\in\mathbb R^{R_1\times\cdots\times R_N}$ 为核心张量，$\mathbf A^{(n)}\in\mathbb R^{I_n\times R_n}$ 为第 $n$ 模因子矩阵。NTD-PL 定义为
+\begin{equation}
+\label{eq:ntdpl_model}
+\widehat{\cY}
+=
+ f_{\boldsymbol\beta}(\cS)
+=
+\sum_{p=0}^{P} \beta_p \cS^{\odot p},
+\end{equation}
+其中 $\boldsymbol\beta=(\beta_0,\beta_1,\dots,\beta_P)^\top$ 为多项式链接系数，$\cS^{\odot p}$ 表示 $\cS$ 的逐元素 $p$ 次幂。
+
+式~\eqref{eq:ntdpl_model} 中，$\beta_0$ 对应常数偏置项，$\beta_1$ 对应标准 Tucker 线性项，而 $\beta_p$（$p\ge 2$）则对应在共享低秩 骨架 上激活的高阶交互项。特别地，当
+\begin{equation}
+\beta_1=1,\qquad \beta_p=0\ (p\neq 1)
+\end{equation}
+时，模型精确退化为标准 Tucker。因此，NTD-PL 不是替代 Tucker 的另一类新骨架，而是以 Tucker 潜在张量为中心的受控非线性扩展。
+
+\subsubsection{为什么这不是后处理}
+
+NTD-PL 不能简单理解为先做一次 Tucker 重构，再对输出做逐元素校正。关键区别在于：式~\eqref{eq:ntdpl_model} 中的非线性作用对象不是一个与低秩结构无关的外部信号，而是共享 Tucker 潜在张量 $\cS$ 本身。由于 $\cS$ 的每个条目已经由核心张量与各模因子的多线性耦合生成，因此 $\cS^{\odot p}$ 对应的是同一 骨架 上交互模式的重组，而不是对一个已经完成的线性重构施加独立校准。后文第 5.4.4 节将专门通过 Tucker 的多项式后处理 与 NTD-PL 的对比，区分这两种机制。
+
+\subsubsection{作为显式高阶 Tucker 的结构化压缩}
+
+虽然 NTD-PL 的主角是式~\eqref{eq:ntdpl_model}，但它可以被理解为从显式高阶 Tucker 原型出发得到的一种结构化压缩。以二次情形为例，若将式~\eqref{eq:explicit_p_tucker_prototype} 中的模因子写成
+\begin{equation}
+ a^{(n)}_{i_n,r_n,r_n'} \approx b^{(n)}_{i_n,r_n}c^{(n)}_{i_n,r_n'},
+\end{equation}
+则二次项可近似重写为两个 Tucker 张量的逐元素乘积：
+\begin{equation}
+\label{eq:separable_quadratic_factorization}
+\widehat{\cY}_2 \approx \cS_B \odot \cS_C,
+\end{equation}
+其中
+\begin{equation}
+\cS_B = \llbracket \cX;\mathbf B^{(1)},\dots,\mathbf B^{(N)}\rrbracket,
+\qquad
+\cS_C = \llbracket \cX;\mathbf C^{(1)},\dots,\mathbf C^{(N)}\rrbracket.
+\end{equation}
+进一步施加共享投影约束 $\mathbf B^{(n)}=\mathbf C^{(n)}$，便得到
+\begin{equation}
+\label{eq:shared_quadratic_term}
+\widehat{\cY}_2 \approx \cS^{\odot 2}.
+\end{equation}
+按同样思路推广到更高阶，就得到共享 骨架 上的 $\cS^{\odot p}$。于是，NTD-PL 可被理解为将这些共享投影的 $p$ 阶交互项按系数线性组合，从而把显式高阶 Tucker 的复杂性压缩到少量链接系数中。
+\begin{center}
+\resizebox{\linewidth}{!}{\input{./artifacts/p-tucker-hadamard.tex}}
+\end{center}
+
+\subsection{NTD-PL 的基本性质}
+
+本节概括 NTD-PL 的三个最基本性质：模型族关系与参数效率、逐元素非线性生成下的表达能力，以及尺度不定性与归一化机制。详细证明见附录~\ref{app:model_properties}--\ref{app:expressivity}。这些性质分别对应后文的线性一致性验证、有限次多项式链路匹配实验与平滑非多项式逼近实验。
+
+\subsubsection{模型族关系与参数效率}
+
+\begin{proposition}[退化到 Tucker]
+\label{prop:tucker_special_case}
+若 $\beta_1=1$，且对所有 $p\neq 1$ 有 $\beta_p=0$，则式~\eqref{eq:ntdpl_model} 退化为标准 Tucker 模型，即
+\begin{equation}
+\widehat{\cY}
+=
+\cS
+=
+\llbracket \cX;\mathbf A^{(1)},\dots,\mathbf A^{(N)}\rrbracket.
+\end{equation}
+\end{proposition}
+
+\begin{proposition}[次数嵌套性]
+\label{prop:nested_model_family}
+对任意 $P_1<P_2$，degree-$P_1$ 的 NTD-PL 模型类是 degree-$P_2$ 模型类的子集。
+\end{proposition}
+
+这两个命题说明，NTD-PL 构成了一族关于多项式次数 $P$ 的嵌套模型：当高阶项关闭时，它精确回到 Tucker；随着 $P$ 增加，模型表达力按次数受控扩张。这也是后文采用 degree continuation 的理论基础。
+
+\begin{proposition}[参数复杂度]
+\label{prop:param_complexity}
+设多线性秩为 $(R_1,\dots,R_N)$，则 NTD-PL 的参数总数为
+\begin{equation}
+\#\mathrm{param}
+=
+\prod_{n=1}^{N}R_n
++
+\sum_{n=1}^{N}I_nR_n
++
+(P+1),
+\label{eq:ntdpl_param_count_main}
+\end{equation}
+其中前两项对应标准 Tucker 分解的核心与因子参数量，最后一项对应多项式链接系数。
+\end{proposition}
+
+命题~\ref{prop:param_complexity} 表明，NTD-PL 的额外自由度只体现为 $P+1$ 个标量系数，而不是新的高阶因子张量或高阶核心。因而，相比显式 $p$-Tucker，NTD-PL 不是通过增加另一套高阶参数化来增强表达力，而是在基本保持 Tucker 级别参数规模的前提下引入受控非线性。这一点将在第 5.2 节和第 5.4 节的实验中得到直接体现。
+
+\subsubsection{非线性生成下的表达能力}
+
+NTD-PL 的表达能力可以从逐元素非线性生成模型的角度理解。设存在某个真实 Tucker 潜在张量
+\begin{equation}
+\cS^\star
+=
+\llbracket \cX^\star;\mathbf A^{(1)\star},\dots,\mathbf A^{(N)\star}\rrbracket,
+\end{equation}
+并设观测张量由某个标量函数 $g:\mathbb R\to\mathbb R$ 逐元素作用生成，即
+\begin{equation}
+\cY = g(\cS^\star).
+\end{equation}
+
+\begin{proposition}[多项式生成下的精确表达]
+\label{prop:poly_exact_main}
+若观测张量满足 $\cY = g(\cS^\star)$，其中 $g(s)=\sum_{p=0}^{P} a_p s^p$ 为次数不超过 $P$ 的多项式，则取潜在张量 $\cS=\cS^\star$ 且 $\beta_p=a_p$ 时，NTD-PL 可精确表示该生成过程。详细证明见附录定理~\ref{thm:poly_exact}。
+\end{proposition}
+
+\begin{theorem}[解析函数下的显式截断误差界]
+\label{thm:analytic_bound_main}
+设 $g$ 在复圆盘
+\begin{equation}
+D(0,\rho)=\{z\in\mathbb C:|z|<\rho\}
+\end{equation}
+内解析，且存在常数 $B$ 满足
+\begin{equation}
+\|\cS^\star\|_\infty \le B < \rho.
+\end{equation}
+记 $g$ 在 $0$ 点的 Taylor 展开为
+\begin{equation}
+g(s)=\sum_{p=0}^{\infty} a_p s^p,
+\end{equation}
+并记其 $P$ 阶截断多项式为
+\begin{equation}
+q_P(s)=\sum_{p=0}^{P} a_p s^p.
+\end{equation}
+若取 NTD-PL 的潜在张量为 $\cS^\star$，并令链接系数满足 $\beta_p=a_p$，则其逼近误差满足
+\begin{equation}
+\|g(\cS^\star)-q_P(\cS^\star)\|_F
+\le
+\sqrt{N_e}\,M_\rho
+\frac{(B/\rho)^{P+1}}{1-B/\rho},
+\label{eq:analytic_bound_main}
+\end{equation}
+其中
+\begin{equation}
+N_e=\prod_{n=1}^N I_n,
+\qquad
+M_\rho=\sup_{|z|=\rho}|g(z)|.
+\end{equation}
+\end{theorem}
+
+命题~\ref{prop:poly_exact_main} 对应第 5.2.2 节的有限次多项式链路匹配实验；定理~\ref{thm:analytic_bound_main} 则解释了第 5.2.3 节中“随着 $P$ 增加，平滑非多项式数据可被系统逼近”的现象。两者共同表明，NTD-PL 的表达力并不是来自模糊的“增参”，而是来自共享 骨架 上可分析的逐元素非线性展开。
+
+\subsubsection{尺度不定性与归一化机制}
+
+与标准 Tucker 一样，NTD-PL 继承了核心张量与因子矩阵之间的尺度不定性。由于 NTD-PL 同时组合 $\cS,\cS^{\odot 2},\dots,\cS^{\odot P}$，这一尺度问题在多项式链接中更加敏感：若 $\cS$ 的尺度漂移，不同阶次项会按不同速率放大或缩小，进而直接影响 $\boldsymbol\beta$ 的数值稳定性。
+
+\begin{proposition}[尺度不变性]
+\label{prop:scale_invariance_main}
+设对某一模 $n$ 的因子矩阵施加可逆对角缩放 $D^{(n)}$，并同时将对应逆缩放吸收到核心张量中，则潜在张量 $\cS$ 保持不变，从而 NTD-PL 的输出 $\widehat{\cY}=f_{\boldsymbol\beta}(\cS)$ 也保持不变。
+\end{proposition}
+
+命题~\ref{prop:scale_invariance_main} 说明，因子列归一化并将尺度吸收到核心张量中，可以理解为一种 \emph{gauge fixing}：它不改变模型能力，只从等价参数化中选取更稳定的表示。在高阶项参与建模时，这一步对 $\boldsymbol\beta$ 的估计尤为重要，因此后文优化算法中将其作为固定步骤。
+
+\subsection{统一学习目标与优化算法}
+
+\subsubsection{统一学习目标}
+
+为了在同一框架下同时处理完整张量分解与缺失观测补全，记二值观测掩码张量仍为 $\Omega\in\{0,1\}^{I_1\times\cdots\times I_N}$。考虑如下目标函数：
+\begin{equation}
+\label{eq:ntdpl_masked_objective}
+\min_{\cX,\{\mathbf A^{(n)}\},\boldsymbol\beta}
+\;
+\frac{1}{2Z_\Omega}
+\left\|
+\Omega \odot
+\left(
+\cY - f_{\boldsymbol\beta}(\cS)
+\right)
+\right\|_F^2
++
+\mathcal R(\cX,\{\mathbf A^{(n)}\},\boldsymbol\beta),
+\end{equation}
+其中 $\cS=\llbracket \cX;\mathbf A^{(1)},\dots,\mathbf A^{(N)}\rrbracket$，且
+\begin{equation}
+Z_\Omega =
+\begin{cases}
+\prod_{n=1}^{N} I_n, & \Omega \equiv \mathbf 1,\\[2mm]
+\sum\limits_{i_1,\dots,i_N} \Omega_{i_1\cdots i_N}, & \text{否则}.
+\end{cases}
+\end{equation}
+这里的 $Z_\Omega$ 用于按有效条目数归一化数据拟合项，使完整观测与缺失观测两种情形下的梯度量级保持可比；这也与当前实现中的残差缩放方式一致。正则项取为
+\begin{equation}
+\label{eq:ntdpl_reg_obj}
+\mathcal R(\cX,\{\mathbf A^{(n)}\},\boldsymbol\beta)
+=
+\frac{\lambda_X}{2}\|\cX\|_F^2
++
+\sum_{n=1}^{N}\frac{\lambda_n}{2}\|\mathbf A^{(n)}\|_F^2
++
+\frac{\lambda_\beta}{2}\|\boldsymbol\beta\|_2^2.
+\end{equation}
+
+当 $\Omega\equiv \mathbf 1$ 时，式~\eqref{eq:ntdpl_masked_objective} 就是完整张量上的 NTD-PL 分解；当 $\Omega$ 为一般掩码时，它对应仅在观测位置上训练的补全目标。由此，分解与补全不再需要两套不同模型，只是同一学习目标下的不同观测设置。
+
+\subsubsection{初始化}
+
+对完整观测使用标准 Tucker 初始化，对缺失观测使用 masked Tucker 初始化 \cite{yang2016iterative, liu2012tensor}。对多项式系数，采用线性 warm start：
+\begin{equation}
+\beta_0=0,\qquad \beta_1=1,\qquad \beta_p=0\quad (p\ge 2).
+\label{eq:beta_warm_start}
+\end{equation}
+本文采用逐次延续的方式，训练从 $p=1$ 的线性情形开始，随着优化推进再逐步激活更高阶项，意味着模型总是从标准 Tucker 解附近出发，而不是从一个高阶非线性模型直接起步。
+
+\subsubsection{核心与因子的更新}
+
+固定 $\boldsymbol\beta$ 后，首先构造潜在张量
+\begin{equation}
+\cS = \llbracket \cX;\mathbf A^{(1)},\dots,\mathbf A^{(N)}\rrbracket,
+\end{equation}
+并计算预测张量
+\begin{equation}
+\widehat{\cY}=f_{\boldsymbol\beta}(\cS),
+\qquad
+f_{\boldsymbol\beta}'(\cS)=\sum_{p=1}^{P} p\beta_p\cS^{\odot(p-1)}.
+\label{eq:poly_derivative_tensor}
+\end{equation}
+在当前实现中，$f_{\boldsymbol\beta}(\cS)$ 与 $f_{\boldsymbol\beta}'(\cS)$ 通过一次融合的 Horner 递推同时求值，以减少重复的幂次计算与内存访问；这只改变常数开销，不改变模型本身。
+
+记归一化后的掩码残差为
+\begin{equation}
+\mathbf E = \frac{1}{Z_\Omega}\,\Omega\odot(\widehat{\cY}-\cY),
+\end{equation}
+并记
+\begin{equation}
+\mathbf T = \mathbf E \odot f_{\boldsymbol\beta}'(\cS).
+\label{eq:T_tensor}
+\end{equation}
+则根据链式法则，目标函数对潜在张量 $\cS$ 的梯度正比于 $\mathbf T$。进一步通过 Tucker 重构关系反向传播，可得核心张量梯度
+\begin{equation}
+\label{eq:grad_core_main}
+\nabla_{\cX}\mathcal L
+=
+\mathbf T
+\times_1 \mathbf A^{(1)\top}
+\times_2 \cdots
+\times_N \mathbf A^{(N)\top}
++
+\lambda_X\cX.
+\end{equation}
+对于第 $n$ 模因子矩阵，记
+\begin{equation}
+\label{eq:Zn_def}
+\mathbf Z^{(n)}
+=
+\Bigl[\cX\times_{m\neq n}\mathbf A^{(m)}\Bigr]_{(n)},
+\end{equation}
+其中 $[\cdot]_{(n)}$ 表示模 $n$ 展开，则相应梯度可写为
+\begin{equation}
+\label{eq:grad_factor_main}
+\nabla_{\mathbf A^{(n)}}\mathcal L
+=
+\mathbf T_{(n)}\,\mathbf Z^{(n)\top}
++
+\lambda_n\mathbf A^{(n)}.
+\end{equation}
+
+由于逐元素多项式链接打破了经典 Tucker 中最小二乘子问题的闭式结构，本文不采用 ALS，而是使用 Adam \cite{kingma2014adam} 对 $\cX$ 与各模因子做梯度更新。换言之，NTD-PL 在优化层面与标准 Tucker 的最本质区别之一就在于：低秩骨架被保留，但 entry model 的非线性使得经典 ALS 闭式子问题不再存在。
+
+\subsubsection{多项式系数的 ridge 更新}
+
+固定 $\cX$ 与 $\{\mathbf A^{(n)}\}_{n=1}^{N}$ 时，潜在张量 $\cS$ 也随之固定，此时 $\boldsymbol\beta$ 的更新可归结为一个低维 ridge 回归问题 \cite{hoerl1970ridge}。记观测向量为 $\mathbf y_\Omega$，并定义设计矩阵
+\begin{equation}
+\label{eq:PhiOmega_main}
+\Phi_\Omega
+=
+\left[
+\mathbf 1,
+\mathrm{vec}(\cS)_\Omega,
+\mathrm{vec}(\cS^{\odot 2})_\Omega,
+\dots,
+\mathrm{vec}(\cS^{\odot P})_\Omega
+\right]
+\in \mathbb R^{|\Omega|\times(P+1)}.
+\end{equation}
+则 $\boldsymbol\beta$ 子问题为
+\begin{equation}
+\label{eq:beta_ridge}
+\min_{\boldsymbol\beta}
+\frac12\|\mathbf y_\Omega-\Phi_\Omega\boldsymbol\beta\|_2^2
++
+\frac{\lambda_\beta}{2}\|\boldsymbol\beta\|_2^2.
+\end{equation}
+若允许常数项参与拟合，则直接求解式~\eqref{eq:beta_ridge}；若不允许常数项，则固定 $\beta_0=0$，仅对 $p\ge 1$ 的系数做相同的 ridge 更新。由于 $\lambda_\beta>0$，系统矩阵 $\Phi_\Omega^\top\Phi_\Omega+\lambda_\beta I$ 始终正定，因此该子问题强凸且存在唯一解。其严格证明见附录~\ref{app:beta_unique}。
+
+尽管整体问题对 $(\cX,\{\mathbf A^{(n)}\},\boldsymbol\beta)$ 联合来看是非凸的，但在固定 Tucker 潜变量 $\cS$ 后，对 $\boldsymbol\beta$ 的更新始终是一个规模仅为 $P+1$ 的强凸 ridge 回归。这也是本文能够在保持高阶非线性表达的同时，仍使用稳定交替优化框架的关键原因。
+
+\paragraph{实现注记：标准化幂基上的稳定 $\boldsymbol\beta$ 更新.}
+高阶幂基在数值上可能病态，尤其当 $\cS$ 的取值范围较大时更为明显。为改善这一问题，优化实现中可先在标准化变量
+\begin{equation}
+\mathbf Z = \frac{\cS-\mu}{\sigma}
+\end{equation}
+的幂基上求解系数 $\boldsymbol\gamma$，再通过基变换将其映回原始幂基系数 $\boldsymbol\beta$。这一过程只改变子问题求解的数值条件，并不改变外层模型的形式。
+
+\subsubsection{因子归一化与核心吸收}
+
+在每轮梯度更新后，本文对每个因子矩阵的列向量做单位 $\ell_2$ 范数归一化，并将对应尺度吸收到核心张量中。根据命题~\ref{prop:scale_invariance_main}，该步骤不会改变潜在张量 $\cS$，因此也不会改变 NTD-PL 的输出。其作用在于减少等价参数化引入的尺度漂移，特别是降低 $\cS$ 的尺度变化对高阶项 $\cS^{\odot p}$ 和 $\boldsymbol\beta$ 估计带来的耦合影响。
+
+\subsubsection{次数延续策略}
+
+直接从零开始优化高阶多项式模型通常不够稳定。为此，本文采用次数延续（degree continuation）策略：训练从 $p=1$ 的线性 Tucker 情形开始，并在预设里程碑 $\tau_2<\cdots<\tau_P$ 处逐步激活更高阶项。每当第 $p$ 阶项被激活时，对应的新系数初始化为零，即
+\begin{equation}
+\boldsymbol\beta^{\mathrm{new}}
+=
+(\beta_0,\dots,\beta_{p-1},0)^\top.
+\end{equation}
+这样，模型便可从稳定的线性解逐步过渡到更丰富的非线性解，而不是一开始就在高阶搜索空间中联合优化全部系数。命题~\ref{prop:nested_model_family} 已说明，这样的 continuation 不是经验性“技巧”，而是顺应模型族嵌套结构的自然优化路径。
+
+\begin{algorithm}[t]
+\caption{基于交替优化与次数延续的 NTD-PL}
+\label{alg:ntdpl}
+\begin{algorithmic}[1]
+\State 输入：观测张量 $\cY$、掩码 $\Omega$、多线性秩 $\{R_n\}$、最大多项式次数 $P$
+\State 通过 Tucker / masked Tucker 初始化 $(\cX,\{\mathbf A^{(n)}\})$
+\State 初始化 $\beta_0=0,\beta_1=1,\beta_p=0\ (p\ge 2)$
+\State 若启用 continuation，则当前次数置为 $p\leftarrow 1$；否则置为 $p\leftarrow P$
+\For{$t=1,2,\dots,T$}
+    \State 若到达新的次数里程碑，则激活下一阶项并将新系数置零
+    \State 构造潜在张量 $\cS=\llbracket \cX;\mathbf A^{(1)},\dots,\mathbf A^{(N)}\rrbracket$
+    \State 计算 $f_{\boldsymbol\beta}(\cS)$ 与 $f'_{\boldsymbol\beta}(\cS)$，得到残差张量与中间量 $\mathbf T$
+    \State 用 Adam 更新核心张量 $\cX$ 与各模因子 $\{\mathbf A^{(n)}\}$
+    \State 对因子列归一化，并将尺度吸收到核心张量中
+    \If{$t$ 满足 $\boldsymbol\beta$ 更新间隔}
+        \State 固定当前 $\cS$，通过 ridge 回归更新 $\boldsymbol\beta$
+    \EndIf
+\EndFor
+\State 输出：$\cX$、$\{\mathbf A^{(n)}\}$ 与 $\boldsymbol\beta$
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{算法复杂度分析}
+
+记观测张量总元素个数为
+\begin{equation}
+M = \prod_{n=1}^{N} I_n,
+\qquad
+M_\Omega = |\Omega|,
+\qquad
+R=\prod_{n=1}^{N}R_n.
+\end{equation}
+这里 $M$ 表示完整张量的条目总数，$M_\Omega$ 表示观测条目数。需要强调的是，\textbf{当前实现采用的是稠密 Tucker 重构与稠密多项式前向/反向计算}：即便在补全任务中，潜在张量 $\cS$、预测张量 $\widehat{\cY}$ 以及 $f'_{\boldsymbol\beta}(\cS)$ 仍是在完整张量上构造，只是在残差处通过掩码筛选观测项。因此，单轮外迭代的主导成本依然主要随 $M$ 缩放；只有 $\boldsymbol\beta$ 的 ridge 子问题明确只依赖 $M_\Omega$。
+
+\paragraph{Tucker 潜在张量构造.}
+做一次标准 Tucker 重构时，若按逐模乘法顺序实现，其前向复杂度可写为
+\begin{equation}
+\mathcal C_{\mathrm{rec}}
+=
+\sum_{n=1}^{N}
+I_nR_n
+\left(\prod_{m<n} I_m\right)
+\left(\prod_{m>n} R_m\right).
+\label{eq:tucker_reconstruction_complexity}
+\end{equation}
+该项给出潜在张量 $\cS$ 的主要构造代价，也是后续梯度传播的基础。
+
+\paragraph{多项式链接与导数计算.}
+给定 $\cS$ 后，计算 $f_{\boldsymbol\beta}(\cS)$ 与 $f'_{\boldsymbol\beta}(\cS)$ 的代价均为逐元素多项式求值。若采用融合的 Horner 递推，则它们可在一次遍历中同时完成，渐近复杂度为
+\begin{equation}
+\mathcal O(PM).
+\end{equation}
+相较于分别计算前向值与导数，这一融合实现仅降低常数因子，不改变关于 $P$ 与 $M$ 的阶数。
+
+\paragraph{核心与因子梯度更新.}
+核心梯度的计算可视为把张量 $\mathbf T$ 重新投影回核心空间，其复杂度与一次 Tucker 压缩同阶。因子梯度的计算则具有 MTTKRP 型结构：对每个模 $n$，需要先构造式~\eqref{eq:Zn_def} 中的 $\mathbf Z^{(n)}$，再计算 $\mathbf T_{(n)}\mathbf Z^{(n)\top}$。因此，若每轮外迭代对 $(\cX,\{\mathbf A^{(n)}\})$ 执行 $K$ 步 Adam 更新，则其主导成本可近似写为
+\begin{equation}
+\mathcal O\!\left(
+K\bigl(\mathcal C_{\mathrm{rec}} + PM + \mathcal C_{\mathrm{bwd}}\bigr)
+\right),
+\label{eq:grad_update_complexity}
+\end{equation}
+其中 $\mathcal C_{\mathrm{bwd}}$ 代表由核心反投影与各模因子 MTTKRP 型乘法构成的反向传播成本，通常与 Tucker 骨架本身的收缩/展开复杂度同阶。
+
+\paragraph{$\boldsymbol\beta$ 的 ridge 更新.}
+在固定 $\cS$ 时，$\boldsymbol\beta$ 子问题只依赖观测条目。构造观测设计矩阵 $\Phi_\Omega\in\mathbb R^{M_\Omega\times(P+1)}$ 的代价为
+\begin{equation}
+\mathcal O(PM_\Omega),
+\end{equation}
+求解正规方程
+\begin{equation}
+(\Phi_\Omega^\top\Phi_\Omega+\lambda_\beta I)\boldsymbol\beta
+=
+\Phi_\Omega^\top\mathbf y_\Omega
+\end{equation}
+的代价为
+\begin{equation}
+\mathcal O(M_\Omega P^2 + P^3).
+\label{eq:beta_update_complexity}
+\end{equation}
+由于 $P$ 在本文设置中通常很小（如 $2,3,4$），因此 $\boldsymbol\beta$ 更新虽然理论上是额外步骤，但在总体时间中通常并非主导项。
+
+\paragraph{归一化、延续与优化实现.}
+因子归一化与核心吸收的代价为
+\begin{equation}
+\mathcal O\!\left(\sum_{n=1}^{N} I_nR_n + R\right),
+\end{equation}
+相较于式~\eqref{eq:grad_update_complexity} 通常可以忽略。次数延续不会改变单轮迭代的渐近复杂度，只会通过逐步激活高阶项影响总迭代轮数。优化实现中，避免重复 Tucker 重构、融合多项式/导数求值、以及在标准化幂基上稳定求解 $\boldsymbol\beta$，都只降低常数开销或改善数值条件，不改变上述渐近阶数。
+
+\paragraph{总复杂度总结.}
+综合上述各项，当前稠密实现下 NTD-PL 的单轮外迭代复杂度可概括为
+\begin{equation}
+\mathcal O\!\left(
+K\bigl(\mathcal C_{\mathrm{rec}} + PM + \mathcal C_{\mathrm{bwd}}\bigr)
++
+PM_\Omega + M_\Omega P^2 + P^3
+\right).
+\label{eq:total_complexity_main}
+\end{equation}
+因此，NTD-PL 相比标准 Tucker 的额外计算主要来自两部分：其一是逐元素多项式链接及其导数的计算，其代价为低阶、可并行的 $\mathcal O(PM)$；其二是 $\boldsymbol\beta$ 的小规模 ridge 更新，其代价为 $\mathcal O(PM_\Omega + M_\Omega P^2 + P^3)$。换言之，当前实现下的主导成本仍然来自 Tucker 骨架本身的前向/反向传播，而不是多项式链接系数的求解。这也解释了后文第 5.3 节中观察到的现象：NTD-PL 的 wall-clock 增量是可量化的，但其主要来源并非 $\boldsymbol\beta$ 子问题，而是围绕共享 骨架 的非线性前向/反向计算。

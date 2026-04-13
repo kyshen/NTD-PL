@@ -1,0 +1,195 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{kolda2009tensor}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=a17e10e04fa2d01fdb9bfc9a669b4182}{%
+           family={Kolda},
+           familyi={K\bibinitperiod},
+           given={Tamara\bibnamedelima G.},
+           giveni={T\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=e452c0602af86438cb78062b7bac80bb}{%
+           family={Bader},
+           familyi={B\bibinitperiod},
+           given={Brett\bibnamedelima W.},
+           giveni={B\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \name{namea}{2}{}{%
+        {{hash=a17e10e04fa2d01fdb9bfc9a669b4182}{%
+           family={Kolda},
+           familyi={K\bibinitperiod},
+           given={Tamara\bibnamedelima G.},
+           giveni={T\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=e452c0602af86438cb78062b7bac80bb}{%
+           family={Bader},
+           familyi={B\bibinitperiod},
+           given={Brett\bibnamedelima W.},
+           giveni={B\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{f1526ff603630fcfa03e6ca808ff4f56}
+      \strng{fullhash}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{fullhashraw}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{bibnamehash}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{authorbibnamehash}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{authornamehash}{f1526ff603630fcfa03e6ca808ff4f56}
+      \strng{authorfullhash}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{authorfullhashraw}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{nameabibnamehash}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{nameanamehash}{f1526ff603630fcfa03e6ca808ff4f56}
+      \strng{nameafullhash}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{nameafullhashraw}{782cc4ad2fea7afb684072cddcaf4d10}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{SIAM Review}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{3}
+      \field{title}{Tensor Decompositions and Applications}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{51}
+      \field{year}{2009}
+      \field{dateera}{ce}
+      \field{pages}{455\bibrangedash 500}
+      \range{pages}{46}
+      \keyw{kolda2009tensor}
+    \endentry
+    \entry{oseledets2011}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=5d2040a109787d73e1d4cbec5e574f80}{%
+           family={Oseledets},
+           familyi={O\bibinitperiod},
+           given={Ivan\bibnamedelima V.},
+           giveni={I\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+      }
+      \name{namea}{1}{}{%
+        {{hash=5d2040a109787d73e1d4cbec5e574f80}{%
+           family={Oseledets},
+           familyi={O\bibinitperiod},
+           given={Ivan\bibnamedelima V.},
+           giveni={I\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{fullhash}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{fullhashraw}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{bibnamehash}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{authorbibnamehash}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{authornamehash}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{authorfullhash}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{authorfullhashraw}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{nameabibnamehash}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{nameanamehash}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{nameafullhash}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{nameafullhashraw}{5d2040a109787d73e1d4cbec5e574f80}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{SIAM Journal on Scientific Computing}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{5}
+      \field{title}{Tensor-Train Decomposition}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{33}
+      \field{year}{2011}
+      \field{dateera}{ce}
+      \field{pages}{2295\bibrangedash 2317}
+      \range{pages}{23}
+      \keyw{oseledets2011}
+    \endentry
+    \entry{zhao2016tr}{inproceedings}{}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{1}{}{%
+        {{hash=8a239bd07f908087a20dfcf87572e035}{%
+           family={Zhao},
+           familyi={Z\bibinitperiod},
+           given={Qibin},
+           giveni={Q\bibinitperiod}}}%
+      }
+      \true{morenamea}
+      \name{namea}{1}{}{%
+        {{hash=8a239bd07f908087a20dfcf87572e035}{%
+           family={Zhao},
+           familyi={Z\bibinitperiod},
+           given={Qibin},
+           giveni={Q\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{2e4bc13df356d33dfefd13e3bcd76015}
+      \strng{fullhash}{2e4bc13df356d33dfefd13e3bcd76015}
+      \strng{fullhashraw}{2e4bc13df356d33dfefd13e3bcd76015}
+      \strng{bibnamehash}{2e4bc13df356d33dfefd13e3bcd76015}
+      \strng{authorbibnamehash}{2e4bc13df356d33dfefd13e3bcd76015}
+      \strng{authornamehash}{2e4bc13df356d33dfefd13e3bcd76015}
+      \strng{authorfullhash}{2e4bc13df356d33dfefd13e3bcd76015}
+      \strng{authorfullhashraw}{2e4bc13df356d33dfefd13e3bcd76015}
+      \strng{nameabibnamehash}{2e4bc13df356d33dfefd13e3bcd76015}
+      \strng{nameanamehash}{2e4bc13df356d33dfefd13e3bcd76015}
+      \strng{nameafullhash}{2e4bc13df356d33dfefd13e3bcd76015}
+      \strng{nameafullhashraw}{2e4bc13df356d33dfefd13e3bcd76015}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{AAAI}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{title}{Tensor Ring Decomposition}
+      \field{usera}{C}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{year}{2016}
+      \field{dateera}{ce}
+      \keyw{zhao2016tr}
+    \endentry
+  \enddatalist
+  \missing{ahn2024neural}
+  \missing{de2000multilinear}
+  \missing{hong2020generalized}
+  \missing{pan2020streaming}
+  \missing{saragadam2024deeptensor}
+  \missing{schein2016bayesian}
+  \missing{tucker1966some}
+  \missing{varolgunes2023nmtucker}
+  \missing{xu2011infinite}
+  \missing{zhai2024quadratic}
+  \missing{zhe2016distributed}
+\endrefsection
+\endinput
+
