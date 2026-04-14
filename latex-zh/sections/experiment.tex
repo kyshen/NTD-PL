@@ -7,8 +7,7 @@
 
 本节给出后续实验共享的数据生成原则、比较口径与评价指标。除各小节特有的实现细节外，所有结果均遵循同一套可复现实验协议。
 
-\paragraph{合成数据生成原则.}
-为避免不同非线性映射下“非线性强度”的定义不一致，本文将 $\alpha$ 定义为\textbf{正交非线性残差的能量占比}，而不是直接乘在非线性函数前的幅值系数。设线性低秩骨架为
+为统一定义不同非线性映射下的非线性强度，本文将 $\alpha$ 定义为正交非线性残差的能量占比，而不是直接乘在非线性函数前的幅值系数。设线性低秩骨架为
 \begin{equation}
 \mathcal S^\star \in \mathbb R^{I_1\times \cdots \times I_N},
 \end{equation}
@@ -38,7 +37,6 @@ g(\mathcal S^\star)
 \end{equation}
 因此，$\alpha$ 表示的是观测中分配给正交非线性残差的能量比例。随着 $\alpha$ 增大，观测会逐步偏离线性低秩骨架，而不是仅仅放大观测幅值。对于线性一致性小节中出现的 \texttt{仿射偏移控制}，其本质是在线性 Tucker 源数据上加入常数偏置后再归一化。
 
-\paragraph{非线性类型、比较方法与主指标.}
 可控合成实验考虑两类多项式残差族和两类平滑残差族：
 \begin{equation}
 g_{\mathrm{poly2}}(s)=s^2,\qquad
@@ -50,7 +48,7 @@ g_{\tanh}(s)=\tanh(\kappa_{\tanh}s).
 \end{equation}
 其中 $\kappa_{\sin}$ 与 $\kappa_{\tanh}$ 根据输入尺度自适应设定，以避免函数长期停留在线性区间或过早饱和。
 
-实验以 NMSE(dB) 和RMSE 作为主指标。真实高光谱实验中，全观测重构统一报告 RMSE、NMSE(dB) 与 SAM；随机缺失补全优先报告 RMSE*、NMSE(dB)*、SAM*。其中带 $*$ 的指标表示仅在 missing entries 上计算，是补全质量的主判断依据。
+实验以 NMSE 和RMSE 作为主指标。真实高光谱实验中，全观测重构统一报告 RMSE、NMSE 与 SAM；随机缺失补全优先报告 RMSE*、NMSE*、SAM*。其中带 $*$ 的指标表示仅在确实观测上计算，是补全质量的主判断依据。
 
 对于后文涉及的 $\beta_p$ 项贡献百分比，本文统一采用
 \begin{equation}
@@ -61,22 +59,19 @@ c_p
 \end{equation}
 该定义刻画的是各阶项在整体展开中的相对强度分配， $\{c_p\}$ 对 $p$ 求和后恰好等于 $100\%$。
 
-\paragraph{基线方法.}
-本文比较的线性低秩基线包括 Tucker、CP、TT 和 TR。Tucker 分解是本文最直接的线性参照。CP 分解将张量表示为若干秩一张量之和，具有更紧凑的参数化形式，也是低秩张量建模中最经典的基线之一 \cite{kolda2009tensor}. TT 分解采用链式核分解高阶张量，可显著降低高阶场景中的存储与计算复杂度 \cite{oseledets2011}. TR 分解进一步将链式结构闭合为环形，在秩分配上比 TT 更灵活 \cite{zhao2016tr}. 这些方法都不显式引入条目层非线性，因此可用于检验 NTD-PL 的收益是否确实来自共享低秩骨架上的多项式链接，而不是单纯的参数规模变化。
-
-在上述共享协议下，下面先报告可控合成数据实验。该部分分别考察严格线性源数据下的线性一致性，以及统一非线性残差生成协议下的匹配与逼近表现。
+本文比较的线性低秩基线包括 Tucker、CP、TT 和 TR。Tucker 分解是本文最直接的线性参照。CP 分解将张量表示为若干秩一张量之和，具有更紧凑的参数化形式，也是低秩张量建模中最经典的基线之一 \cite{kolda2009tensor}. TT 分解采用链式核分解高阶张量，可显著降低高阶场景中的存储与计算复杂度 \cite{oseledets2011}. TR 分解进一步将链式结构闭合为环形，在秩分配上比 TT 更灵活 \cite{zhao2016tr}. 注意，各种分解的结构不同，秩的定义也不同，因此参数量无法做到完全一致，本文实验对比时选择的秩尽可能使参数量相近。
 
 \subsection{可控合成数据实验}
 \label{sec:exp-syn}
 
-本节在可控机制下比较 Tucker 系线性基线与 NTD-PL。实验包含两部分：一是在线性源数据下比较 Tucker 与线性受限 NTD-PL 的配对误差，二是在统一非线性残差协议下比较不同方法随 $\alpha$ 和 $P$ 的误差变化。
+本节在可控机制下比较线性基线与 NTD-PL。实验包含两部分：一是在线性源数据下比较 Tucker 与线性受限 NTD-PL 的配对误差，二是在统一非线性残差协议下比较不同方法随 $\alpha$ 和 $P$ 的误差变化。
 
 \subsubsection{线性一致性验证}
 \label{sec:linear-consistency}
 
 在线性源数据下，我们比较 Tucker 与NTD-PL 的配对误差，以检验后者是否精确退化到 Tucker。具体地，数据为多个随机种子下生成的 Tucker 张量，秩为 $[4,4,4]$，加上仿射偏置\texttt{bias}，然后进行能量归一化与 $30$ dB 噪声叠加；NTD-PL 取$P=6$，可选$\beta_0$是否引入。
 
-表~\ref{tab:linear-consistency} 显示，在\texttt{bias=0}时，Tucker 与不引入常数项的 NTD-PL 的拟合误差几乎完全重合，高次项贡献占比很低，证明 NTD-PL 线性一致；在\texttt{bias=0.5}时，NTD-PL依然能较好地拟合，而Tucker和$\beta_0$受限的NTD-PL则出现系统性偏差。有趣的是，可以看到 NTD-PL 在$\beta_0$受限时自动通过高次项来拟合偏置，结果仍然略优于Tucker。
+表~\ref{tab:linear-consistency} 显示，在\texttt{bias=0}时，Tucker 与不引入常数项的 NTD-PL 的拟合误差几乎完全重合，高次项贡献占比很低，证明 NTD-PL 线性一致；在\texttt{bias=0.5}时，NTD-PL依然能较好地拟合，而Tucker和$\beta_0$受限的NTD-PL则出现系统性偏差。有趣的是，可以看到 NTD-PL 在$\beta_0$受限时自动通过高次项来拟合偏置，结果仍然略优于Tucker。进一步地，配对差值分布图见附录图~\ref{fig:linear-consistency-paired-gap}，其中也可以更直观地看到：当不存在仿射偏置时，Tucker 与 NTD-PL 的差异集中在零附近；而在存在偏置时，受限模型与 Tucker 之间会出现更明显的系统性配对间隙。
 
 \begin{table}[htbp]
     \centering
@@ -89,10 +84,11 @@ c_p
 \end{table}
 
 \subsubsection{非线性映射匹配与逼近实验}
+\label{sec:nonlinearapprox}
 
-在统一的非线性生成协议下 (见 \ref{sec:exp-setup})，我们考虑多项式残差和广义非线性残差两种情形。具体地，数据由多个随机种子下生成的 Tucker 张量出发，分别施加 \texttt{poly2}、\texttt{poly3}、\texttt{sin} 与 \texttt{tanh} 四类逐元素非线性残差，并按式~\eqref{eq:exp-alpha-energy} 控制非线性能量占比 $\alpha$。实验统一扫描 $\alpha\in\{0.10,0.15,0.20,0.25,0.30,0.35,0.40\}$ 与 $P\in\{1,2,3,4,5,6\}$，并在 $10$ 个随机种子上比较相近参数量下， Tucker、CP、TT、TR 与 NTD-PL 的 NMSE(dB) 表现。
+在统一的非线性生成协议下 (见 \ref{sec:exp-setup})，我们考虑多项式和广义非线性两种情形。具体地，数据由多个随机种子下生成的 Tucker 张量出发，分别施加 \texttt{poly2}、\texttt{poly3}、\texttt{sin} 与 \texttt{tanh} 四类逐元素非线性残差，并按式~\eqref{eq:exp-alpha-energy} 控制非线性能量占比 $\alpha$。实验统一扫描 $\alpha\in\{0.10,0.15,0.20,0.25,0.30,0.35,0.40\}$ 与 $P\in\{1,2,3,4,5,6\}$，并在 $10$ 个随机种子上比较相近参数量下， Tucker、CP、TT、TR 与 NTD-PL 的 NMSE 表现。
 
-图~\ref{fig:nonlinear-alpha-grid} 表明，在各类非线性残差下，NTD-PL 在整个非线性强度区间内保持稳定领先，说明 NTD-PL 在处理非线性残差时具有优势。另外，可以看到NTD-PL的逼近误差随$\alpha$缩放，结果趋势与推论\ref{cor:alpha_truncation_app}（见附录）相符合。表~\ref{tab:beta-contrib-nonlinear} 给出 NTD-PL 各 $\beta_p$ 项下的平均贡献及其标准差，可以看出，在数据对应的主导阶次上，相应项贡献突出。
+图~\ref{fig:nonlinear-alpha-grid} 表明，在各类非线性残差下，NTD-PL 在整个非线性强度区间内保持稳定领先，说明 NTD-PL 在处理非线性残差时具有优势。另外，可以看到NTD-PL的逼近误差随$\alpha$缩放，结果趋势与推论\ref{cor:alpha_truncation_app}（见附录）相符合：在本文的生成协议下，非线性残差的能量占比越高，有限阶多项式链接需要吸收的正交残差也越大，因此误差曲线会随 $\alpha$ 增大而整体抬升，但 NTD-PL 相对线性基线的优势仍能保持。
 
 \begin{figure}[htbp]
     \centering
@@ -111,7 +107,7 @@ c_p
     \input{inputs/nonlinear-approx/beta_contribution_table.tex}}
 \end{table}
 
-图~\ref{fig:nonlinear-pmax-grid} 清晰地展示了不同次数$P$下的NTD-PL的拟合效果。可以看到，$P=1$时的性能与Tucker相近，又一次说明了NTD-PL的线性一致性，随着多项式次数$P$的增加，NTD-PL 的性能逐渐优于Tucker基线。该结果表明，NTD-PL 确实能够逐步吸收非线性残差。进一步地，性能提升主要集中在较低到中等阶数范围内，而在更高阶时增益趋于饱和，说明对这类平滑链路而言，有限阶多项式链接已经能够提供较充分的近似。对于 \texttt{poly2} 和 \texttt{poly3} ，NTD-PL 均在对应次数（$P=2$和$P=3$）时出现系统性匹配。一个有意思的现象是，性能提升并非随次数增加而均匀出现。对于 \texttt{sin} 和 \texttt{tanh}，明显的改进主要发生在奇数阶提升处，而相邻偶数阶带来的额外收益较弱。考虑到这两类链路都具有奇对称性，这一现象说明，在当前近似零中心的实验协议下，新增的有效表达能力更可能集中在奇次项上。
+图~\ref{fig:nonlinear-pmax-grid} 清晰地展示了不同次数$P$下的NTD-PL的拟合效果。可以看到，$P=1$时的性能与Tucker相近，又一次说明了NTD-PL的线性一致性，随着多项式次数$P$的增加，NTD-PL 的性能逐渐优于Tucker基线。该结果表明，NTD-PL 确实能够逐步吸收非线性残差。进一步地，性能提升主要集中在较低到中等阶数范围内，而在更高阶时增益趋于饱和，这与定理~\ref{thm:analytic_bound_main} 的结论一致：当真实链接函数为解析函数时，有限阶截断误差主要由 $(B/\rho)^{P+1}$ 控制，因此低阶到中阶时往往已经获得主要收益，而继续提高 $P$ 只会带来递减的边际改进。对于 \texttt{poly2} 和 \texttt{poly3} ，NTD-PL 均在对应次数（$P=2$和$P=3$）时出现系统性匹配，这正是命题~\ref{prop:poly_exact_main} 在实验中的直接体现。一个有意思的现象是，性能提升并非随次数增加而均匀出现。对于 \texttt{sin} 和 \texttt{tanh}，明显的改进主要发生在奇数阶提升处，而相邻偶数阶带来的额外收益较弱。考虑到这两类链路都具有奇对称性，这一现象说明，在当前近似零中心的实验协议下，新增的有效表达能力更可能集中在奇次项上，也说明理论上的“逐阶逼近”在具体实验中会受到真实函数主导项结构的影响。图~\ref{fig:rmse_step_grid}进一步展示了 NTD-PL 逐次增加的策略下的训练损失曲线，可以看到次数增加的时刻往往伴随阶跃式的增益；若从局部响应几何的角度理解这一过程，附录图~\ref{fig:geometry-response} 给出了固定局部 Tucker patch 下不同 $P$ 所诱导的响应图与偏差图，可以更直观地看到新增阶次如何逐步改变局部非线性响应形状。
 
 \begin{figure}[htbp]
     \centering
@@ -119,8 +115,6 @@ c_p
     \caption{NTD-PL的逼近误差随次数 $P$ 的变化}
     \label{fig:nonlinear-pmax-grid}
 \end{figure}
-
-图~\ref{fig:rmse_step_grid}展示了 NTD-PL 逐次增加的策略下的训练损失曲线，可以看到次数增加的时刻往往伴随阶跃式的增益。
 
 \begin{figure}[htbp]
     \centering
@@ -221,14 +215,7 @@ c_p
     \input{inputs/cave-random-completion/random_completion_significance_summary.tex}
 \end{table}
 
-为了进一步说明这种收益确实发生在缺失位置的恢复上，而不是整体平滑带来的表面改善，图~\ref{fig:cave_completion_visual} 给出了两个代表性场景的可视化结果。综合来看，随机缺失补全实验进一步强化了前一小节的结论：第一，NTD-PL 的优势不仅体现在全观测重构中，也体现在真正的缺失恢复任务上；第二，这种优势在多个缺失率下都保持稳定，并且在 scene-wise 与 rate-wise 两个层面同时成立；第三，空间可视化表明收益确实发生在 missing 区域本身，而不是由 all-entry 指标中的已观测位置掩盖或放大。换言之，CAVE 上的补全实验说明，显式条目层多项式链接不仅能够改进低秩近似，还能够在观测不完整时更有效地恢复真实高光谱结构。
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{./inputs/figures/main/cave_completion_visual_grid.pdf}
-    \caption{CAVE 随机缺失补全的代表性空间可视化。各列依次为原图、带掩膜的观测输入、Tucker 补全、NTD-PL 补全、Tucker 的 missing-only 误差、NTD-PL 的 missing-only 误差，以及 missing-only 误差下降图。最后一列按 Tucker $-$ NTD-PL 定义，正值表示 NTD-PL 在缺失位置上进一步降低了补全误差。}
-    \label{fig:cave_completion_visual}
-\end{figure}
+为了进一步说明这种收益确实发生在缺失位置的恢复上，而不是整体平滑带来的表面改善，附录图~\ref{fig:cave-completion-visual-app} 给出了两个代表性场景的补全可视化结果。综合来看，随机缺失补全实验进一步强化了前一小节的结论：第一，NTD-PL 的优势不仅体现在全观测重构中，也体现在真正的缺失恢复任务上；第二，这种优势在多个缺失率下都保持稳定，并且在 scene-wise 与 rate-wise 两个层面同时成立；第三，附录中的空间可视化表明收益确实发生在 missing 区域本身，而不是由 all-entry 指标中的已观测位置掩盖或放大。换言之，CAVE 上的补全实验说明，显式条目层多项式链接不仅能够改进低秩近似，还能够在观测不完整时更有效地恢复真实高光谱结构。
 
 \subsubsection{多项式后处理的机制区分}
 
@@ -258,9 +245,9 @@ c_p
 
 \subsubsection{优势出现的位置}
 
-本节考虑的问题是额外收益究竟出现的位置。如果 NTD-PL 只是对整幅图像做更平滑的全局修正，那么其增益应当近似均匀分布；相反，如果它主要在修正线性低秩模型最难拟合的局部结构，那么收益应当更集中地出现在高难度位置以及结构边界附近。为回答这一问题，我们从困难度与边界两个维度对恢复误差的改进进行分组统计。
+本节关注一个更具体的问题：NTD-PL 的额外收益究竟出现在图像的哪些位置。若其作用只是“全局平滑修正”，收益应近似均匀；若其作用是修正线性低秩模型最难拟合的局部结构，收益应集中在高难度区域和结构边界附近。
 
-具体地，我们将每个空间位置处的完整光谱视为一个向量，并以 Tucker 在该位置上 RMSE 作为困难分数，即分数越大，表示该像素对线性低秩补全越困难。与此同时，以空间梯度幅值在光谱维上的平均作为边界分数，用于刻画该位置是否处于边界、纹理或局部过渡区域。随后，在每个场景内部，分别按困难分数和边界分数将像素划分为四个 quartiles，再对不同场景上的统计量进行汇总。图~\ref{fig:cave_completion_advantage_heatmap} 清楚地表明，NTD-PL 的收益并不是均匀分布的。沿困难度方向看，增益随难度升高而显著增强：从最简单 quartile 到最困难 quartile，平均 $\Delta$RMSE* 由接近零甚至略为负值，逐步上升到明显正值；对应的 $\Delta$SAM* 也表现出相同趋势。说明 NTD-PL 的主要作用，并不是在 Tucker 已经足够好的容易区域上继续细修，而是在 Tucker 最难拟合的位置上提供更有效的补偿。沿边界度方向看，趋势同样存在。随着边界分数增大，NTD-PL 相对 Tucker 的平均增益整体上升，说明空间边界、局部纹理和材料过渡区域更容易从显式条目层非线性中获益。
+我们先为每个像素定义两个分数：困难分数（Tucker 在该像素缺失位置上的 RMSE*）与边界分数（空间梯度幅值在光谱维上的平均）。然后在每个场景内分别按这两个分数分成四个 quartiles，并在场景间汇总。图~\ref{fig:cave_completion_advantage_heatmap} 的每个网格值均按 Tucker $-$ NTD-PL 定义，故正值表示 NTD-PL 更优。可以直接看到：无论沿困难度方向还是沿边界度方向，平均增益都随分位上升而增强，说明收益并非均匀分布，而是更集中在“更难、边界更强”的区域。
 
 \begin{figure}[htbp]
     \centering
@@ -269,20 +256,18 @@ c_p
     \label{fig:cave_completion_advantage_heatmap}
 \end{figure}
 
-为了把图~\ref{fig:cave_completion_advantage_heatmap} 中的分组统计进一步落实到具体空间位置，图~\ref{fig:cave_completion_advantage_spatial} 给出了一个按相同协议选出的代表性场景。四个 panel 从左到右分别展示 pseudo-RGB 原图、Tucker 的 difficulty map、boundary score map，以及 NTD-PL 相对 Tucker 的 missing-only error reduction map。这里，difficulty 由 Tucker 在缺失位置上的 RMSE* 定义，用来刻画线性低秩补全在该位置的恢复难度；boundary score 则由空间梯度幅值在光谱维上的平均得到，用来表征该位置是否处于边界、纹理或局部过渡区域。图中的黄轮廓、青轮廓和白轮廓分别表示 top difficulty 区域、top boundary 区域以及两者的交叉区域。
+为了把图~\ref{fig:cave_completion_advantage_heatmap} 的统计结果落实到具体空间位置，图~\ref{fig:cave_completion_advantage_spatial} 固定展示 \texttt{cd} 场景。四个 panel 从左到右依次为：原图、difficulty map、boundary map、missing-only error reduction map。difficulty map 橙色越亮表示越难；boundary map 蓝色越亮表示边界/纹理越强；第四列红色表示 NTD-PL 更优、蓝色表示 Tucker 更优。图中的白色轮廓表示 top difficulty 与 top boundary 的交集区域。从空间分布看，红色和橙色增益区域并非在整幅图像上均匀铺开，最显著的误差下降发生在“既难又靠近边界”的像素位置，即材料交界、细纹理和过渡带等线性低秩假设更易失配的区域。由此可以更直观地理解：NTD-PL 的优势不是全局平滑，而是对关键局部残差的定点修正。
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{./inputs/figures/main/cave_completion_advantage_spatial_case.pdf}
-    \caption{代表性场景上的局部收益定位。四列依次为 pseudo-RGB 原图、Tucker 的 difficulty map（以缺失位置上的 RMSE* 定义）、boundary score map，以及 NTD-PL 相对 Tucker 的 missing-only error reduction map。黄轮廓表示 top difficulty 区域，青轮廓表示 top boundary 区域，白轮廓表示两者的交叉区域。图中可以看到，正增益主要集中在高难度与强边界同时出现的位置，说明 NTD-PL 的补全优势具有明确的空间定位。}
+    \caption{代表性 \texttt{cd} 场景上的局部收益定位。四列依次为 pseudo-RGB 原图、difficulty map（橙色越亮表示越难）、boundary map（蓝色越亮表示边界越强）以及 missing-only error reduction map（红色表示 NTD-PL 更优，蓝色表示 Tucker 更优）。白色轮廓表示 top difficulty 与 top boundary 的交集。可以看到正增益主要集中在高难度与强边界同时出现的位置。}
     \label{fig:cave_completion_advantage_spatial}
 \end{figure}
 
-从空间分布上看，NTD-PL 的正增益并不是在整幅图像上近似均匀地铺开，而是明显集中在白色轮廓附近。换句话说，最显著的误差下降主要出现在两类条件同时满足的位置：一类是 Tucker 本身恢复较困难的位置，另一类是局部空间变化较剧烈的位置。这样的区域通常对应材料交界、细粒纹理、边缘过渡或局部混合更复杂的部位，因此也是线性低秩假设更容易产生系统残差的地方。相较之下，NTD-PL 在保持共享低秩骨架不变的前提下，通过显式条目层多项式链接对这些局部残差进行了进一步修正。因此，这张图给出一个空间层面的机制解释：NTD-PL 的收益具有明确的空间定位，主要集中在 hardest pixels 与 boundary regions 的交叠区域，而不是来自整幅图像上的均匀平滑式改进。
-
 \subsubsection{多项式次数考察}
 
-为考察 NTD-PL 的收益主要由哪些阶次提供，我们在与前文相同的 CAVE 随机缺失补全设置下扫描多项式最高阶数 $P$，并记录 missing-only 指标及各阶项的有效贡献。图~\ref{fig:parameter_mechanism} 左图表明，随着 $P$ 从 $1$ 提升到 $4$，补全性能持续改善；但主要收益集中在低到中阶范围内，继续提高阶数后增益已明显减弱。右图进一步显示，模型贡献主要由二阶和三阶项承担：当 $P\ge 3$ 时，这两项始终占主导，而四阶项仅提供较小的边际修正。这说明，真实高光谱补全中的主要失配并不需要很高阶的自由度来刻画。对 NTD-PL 而言，低到中阶的显式非线性已经足以在共享 Tucker 骨架上吸收大部分条目层残差，这也说明其额外复杂度是受控的。
+为考察 NTD-PL 的收益主要由哪些阶次提供，我们在与前文相同的 CAVE 随机缺失补全设置下扫描多项式最高阶数 $P$，并记录 missing-only 指标及各阶项的有效贡献。图~\ref{fig:parameter_mechanism} 左图表明，随着 $P$ 从 $1$ 提升到 $4$，补全性能持续改善；但主要收益集中在低到中阶范围内，继续提高阶数后增益已明显减弱。右图进一步显示，模型贡献主要由二阶和三阶项承担：当 $P\ge 3$ 时，这两项始终占主导，而四阶项仅提供较小的边际修正。这说明，真实高光谱补全中的主要失配并不需要很高阶的自由度来刻画，低到中阶的显式非线性已经足以吸收大部分非线性残差。
 
 \begin{figure}[htbp]
     \centering

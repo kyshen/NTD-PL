@@ -59,7 +59,7 @@ def _order_style(order: int) -> dict[str, object]:
 def render_paired_boxplot(data, spec: PairedBoxplotSpec):
     apply_style(spec.export.role)
     panel_order = list(dict.fromkeys(data["panel_key"].tolist()))
-    fig, axes = plt.subplots(1, len(panel_order), figsize=_figure_size(spec, 2.7), sharey=True, constrained_layout=False)
+    fig, axes = plt.subplots(1, len(panel_order), figsize=_figure_size(spec, 2.2), sharey=True, constrained_layout=False)
     axes = np.atleast_1d(axes)
     palette = {"strict": PALETTE.neutral, "affine": PALETTE.ntdpl}
     y_values = data["gap"].to_numpy(dtype=float)
@@ -92,13 +92,13 @@ def render_paired_boxplot(data, spec: PairedBoxplotSpec):
             ax.scatter(xpos + jitter, values, s=16, color=palette[key], alpha=0.85, edgecolors="none", zorder=3)
         ax.axhline(0.0, color=PALETTE.border, linestyle="--", linewidth=0.9, alpha=0.8)
         ax.set_xticks(np.arange(len(variant_order)))
-        ax.set_xticklabels([r"Restricted $\beta_0=0$", r"Free $\beta_0$"])
+        ax.set_xticklabels([r"Restricted" "\n" r"$\beta_0=0$", r"Free" "\n" r"$\beta_0$"])
         ax.set_title(str(panel["panel_title"].iloc[0]))
         ax.set_ylabel(r"RMSE gap (Tucker - NTD-PL)" if ax is axes[0] else "")
         ax.set_ylim(float(y_values.min()) - pad, float(y_values.max()) + pad)
         style_axes(ax, grid=True)
 
-    fig.subplots_adjust(top=0.86, bottom=0.20, left=0.08, right=0.99, wspace=0.18)
+    fig.subplots_adjust(top=0.84, bottom=0.24, left=0.08, right=0.995, wspace=0.14)
     return fig
 
 
@@ -237,6 +237,9 @@ def render_line_grid(data, spec: LineGridSpec, *, step_mode: bool = False):
             if sub.empty:
                 continue
             style = method_style(method)
+            if spec.figure_id == "nonlinear_pmax_grid" and method == "Tucker":
+                style["marker"] = None
+                style["markersize"] = 0.0
             if step_mode:
                 style["marker"] = None
                 style["markersize"] = 0.0
@@ -697,8 +700,22 @@ def render_spatial_case_grid(data, spec: SpatialCaseGridSpec):
     fig, axes = plt.subplots(1, len(panel_order), figsize=_figure_size(spec, 3.0), constrained_layout=False)
     axes = np.atleast_1d(axes)
 
+    difficulty_values = np.asarray(data.loc[data["panel"] == "difficulty", "image"].iloc[0], dtype=float)
+    boundary_values = np.asarray(data.loc[data["panel"] == "boundary", "image"].iloc[0], dtype=float)
     gain_values = np.asarray(data.loc[data["panel"] == "gain", "image"].iloc[0], dtype=float)
-    gain_bound = max(float(np.nanmax(np.abs(gain_values))), 1e-6)
+    difficulty_vmin = float(np.nanquantile(difficulty_values, 0.02))
+    difficulty_vmax = float(np.nanquantile(difficulty_values, 0.98))
+    if not np.isfinite(difficulty_vmin) or not np.isfinite(difficulty_vmax) or np.isclose(difficulty_vmin, difficulty_vmax):
+        difficulty_vmin = float(np.nanmin(difficulty_values))
+        difficulty_vmax = float(np.nanmax(difficulty_values))
+
+    boundary_vmin = float(np.nanquantile(boundary_values, 0.02))
+    boundary_vmax = float(np.nanquantile(boundary_values, 0.98))
+    if not np.isfinite(boundary_vmin) or not np.isfinite(boundary_vmax) or np.isclose(boundary_vmin, boundary_vmax):
+        boundary_vmin = float(np.nanmin(boundary_values))
+        boundary_vmax = float(np.nanmax(boundary_values))
+
+    gain_bound = max(float(np.nanquantile(np.abs(gain_values), 0.98)), 1e-6)
     gain_norm = TwoSlopeNorm(vcenter=0.0, vmin=-gain_bound, vmax=gain_bound)
     difficulty_im = None
     boundary_im = None
@@ -712,22 +729,43 @@ def render_spatial_case_grid(data, spec: SpatialCaseGridSpec):
         if panel_type == "rgb":
             ax.imshow(np.clip(np.asarray(image, dtype=float), 0.0, 1.0))
         elif panel_type == "difficulty":
-            difficulty_im = ax.imshow(np.asarray(image, dtype=float), cmap="magma")
+            difficulty_im = ax.imshow(np.asarray(image, dtype=float), cmap="Oranges", vmin=difficulty_vmin, vmax=difficulty_vmax)
         elif panel_type == "boundary":
-            boundary_im = ax.imshow(np.asarray(image, dtype=float), cmap="viridis")
+            boundary_im = ax.imshow(np.asarray(image, dtype=float), cmap="Blues", vmin=boundary_vmin, vmax=boundary_vmax)
         else:
             gain_im = ax.imshow(np.asarray(image, dtype=float), cmap="RdBu_r", norm=gain_norm)
 
-        top_difficulty = np.asarray(panel["top_difficulty_mask"], dtype=float)
-        top_boundary = np.asarray(panel["top_boundary_mask"], dtype=float)
         overlap = np.asarray(panel["overlap_mask"], dtype=float)
-        ax.contour(top_difficulty, levels=[0.5], colors=["#F3C623"], linewidths=1.0, alpha=0.95)
-        ax.contour(top_boundary, levels=[0.5], colors=["#19B5FE"], linewidths=1.0, alpha=0.95)
-        ax.contour(overlap, levels=[0.5], colors=[PALETTE.white], linewidths=1.2, alpha=0.98)
+        # Use a single overlap contour to avoid clashing with the heatmap colormap.
+        ax.contour(overlap, levels=[0.5], colors=[PALETTE.border], linewidths=1.9, alpha=0.62)
+        ax.contour(overlap, levels=[0.5], colors=[PALETTE.white], linewidths=1.1, alpha=0.97)
 
         ax.set_title(panel_titles[idx] if idx < len(panel_titles) else panel_key, fontsize=8.2, pad=3.0)
         ax.set_xticks([])
         ax.set_yticks([])
+        if panel_type == "gain":
+            ax.text(
+                0.03,
+                0.06,
+                "Blue: Tucker better",
+                transform=ax.transAxes,
+                ha="left",
+                va="bottom",
+                fontsize=6.6,
+                color="#2166AC",
+                bbox={"boxstyle": "round,pad=0.12", "facecolor": PALETTE.white, "edgecolor": PALETTE.grid, "alpha": 0.92},
+            )
+            ax.text(
+                0.97,
+                0.06,
+                "Red: NTD-PL better",
+                transform=ax.transAxes,
+                ha="right",
+                va="bottom",
+                fontsize=6.6,
+                color="#B2182B",
+                bbox={"boxstyle": "round,pad=0.12", "facecolor": PALETTE.white, "edgecolor": PALETTE.grid, "alpha": 0.92},
+            )
         style_axes(ax, grid=False)
 
     axes[0].text(
@@ -946,7 +984,7 @@ def render_geometry_response_maps(data, spec: GeometryResponseMapsSpec):
     apply_style(spec.export.role)
     order_values = [int(order) for order in spec.order_values]
     fig = plt.figure(figsize=_figure_size(spec, 4.95))
-    grid = GridSpec(2, len(order_values), figure=fig, hspace=0.18, wspace=0.08)
+    grid = GridSpec(2, len(order_values), figure=fig, hspace=0.08, wspace=0.04)
     response_rows = data.loc[:, ["order", "u", "v", "response"]].copy()
     deviation_rows = data.loc[:, ["order", "u", "v", "deviation"]].copy()
     response_values = response_rows["response"].to_numpy(dtype=float)
@@ -994,7 +1032,6 @@ def render_geometry_response_maps(data, spec: GeometryResponseMapsSpec):
             alpha=0.58,
         )
         response_ax.set_aspect("equal")
-        response_ax.set_title(f"p={order}")
         response_ax.set_xticks([])
         if col_idx == 0:
             response_ax.set_ylabel("Response\n" + r"local coord. $v$")
@@ -1031,21 +1068,7 @@ def render_geometry_response_maps(data, spec: GeometryResponseMapsSpec):
             deviation_ax.set_yticks([])
         style_axes(deviation_ax, grid=False)
 
-    fig.subplots_adjust(top=0.89, bottom=0.11, left=0.08, right=0.875)
-    top_ref = fig.axes[0].get_position()
-    bottom_ref = fig.axes[len(order_values)].get_position()
-    cax_top = fig.add_axes([0.895, top_ref.y0, 0.017, top_ref.height])
-    cax_bottom = fig.add_axes([0.895, bottom_ref.y0, 0.017, bottom_ref.height])
-    if response_artist is not None:
-        colorbar = fig.colorbar(response_artist, cax=cax_top)
-        style_colorbar(colorbar, label=None)
-    if deviation_artist is not None:
-        colorbar = fig.colorbar(deviation_artist, cax=cax_bottom)
-        style_colorbar(colorbar, label=None)
-    fig.suptitle(
-        rf"Fixed Tucker patch under the learned $\beta$ schedule ($\alpha={spec.alpha:g}$)",
-        y=0.98,
-    )
+    fig.subplots_adjust(top=0.99, bottom=0.10, left=0.07, right=0.995)
     return fig
 
 

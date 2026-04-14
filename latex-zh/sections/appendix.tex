@@ -778,6 +778,36 @@ Hessian 为
 命题~\ref{prop:beta_unique_app} 表明，在固定潜在张量 $\cS$ 时，$\boldsymbol\beta$ 更新是一个低维、强凸且有闭式解的子问题。特别地，唯一性不再依赖于观测值是否足够丰富，也不要求设计矩阵 $\Phi_\Omega$ 满列秩；正则项 $\lambda_\beta I$ 直接保证了系统矩阵的可逆性。这也是正则化在缺失观测和高阶多项式情形下尤为重要的原因。
 \end{remark}
 
+\section{实验补充图表}
+\label{app:exp_supp}
+
+本节补充正文第 5 章中用于辅助说明实验现象的图表。
+
+\subsection{合成实验补充}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{./inputs/figures/main/linear_consistency_paired_gap.pdf}
+    \caption{线性一致性实验中的配对差值分布。图中比较不同设置下 Tucker 与 NTD-PL 的逐随机种子配对误差间隙，用于补充正文表~\ref{tab:linear-consistency} 的场景均值结论。可以看到，在 \texttt{bias=0} 时，不引入常数项的 NTD-PL 与 Tucker 的配对差值基本集中在零附近；而在存在仿射偏置时，$\beta_0$ 受限的模型与 Tucker 之间出现更明显的系统性间隙。}
+    \label{fig:linear-consistency-paired-gap}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{./inputs/figures/appendix/geometry_response_maps.pdf}
+    \caption{固定二维 Tucker 局部 patch 时，不同多项式最高阶数 $P$ 下学习到的局部响应图与相对 $P=1$ 的偏差图。上排展示局部响应，下排展示相对线性基线的偏差。该图用于补充正文第~5.2.2 节关于“新增表达能力如何随阶数逐步进入局部响应结构”的讨论。}
+    \label{fig:geometry-response}
+\end{figure}
+
+\subsection{真实高光谱实验补充}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{./inputs/figures/main/cave_completion_visual_grid.pdf}
+    \caption{CAVE 随机缺失补全的代表性空间可视化。各列依次为原图、带掩膜的观测输入、Tucker 补全、NTD-PL 补全、Tucker 的 missing-only 误差、NTD-PL 的 missing-only 误差，以及 missing-only 误差下降图。最后一列按 Tucker $-$ NTD-PL 定义，正值表示 NTD-PL 在缺失位置上进一步降低了补全误差。该图用于补充正文第~5.3.3 节关于“收益主要发生在缺失区域本身”的讨论。}
+    \label{fig:cave-completion-visual-app}
+\end{figure}
+
 % \clearpage
 % \section{实验补充图表}
 % \label{app:exp_supp}

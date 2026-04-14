@@ -2,13 +2,9 @@
 
 在保持 Tucker 低秩骨架的前提下，如何以受控方式引入高阶交互，并同时保持参数规模、可解释性与优化可实现性？为此，本章先给出 NTD-PL 的结构动机，再正式定义模型，随后概括其基本性质，并给出与当前实现一致的统一学习目标和优化框架。
 
-\subsection{设计动机：从显式高阶交互到结构化压缩}
+\subsection{设计动机：显式高阶交互}
 
-标准 Tucker 分解以共享核心张量和各模因子矩阵构成多线性生成机制。若记
-\begin{equation}
-\cS = \llbracket \cX;\mathbf A^{(1)},\dots,\mathbf A^{(N)}\rrbracket,
-\end{equation}
-则其本质是在低秩潜在空间中通过连续模乘生成观测张量。该结构在压缩、恢复与表示学习中具有良好的参数效率与结构透明性，但它默认观测条目可以由多线性机制充分刻画。对于存在饱和响应、非线性观测、复杂高阶耦合或曲面结构的数据，仅依赖多线性假设往往会带来系统性失配。
+标准 Tucker 分解 $\mathcal{T}(\mathcal{X},\{\mathbf{A}^{(n)}\})$ 以共享核心张量和各模因子矩阵构成多线性生成机制，其本质是在低秩潜在空间中通过连续模乘生成观测张量。该结构在压缩、恢复与表示学习中具有良好的参数效率与结构透明性，但它默认观测条目可以由多线性机制充分刻画。对于存在饱和响应、非线性观测、复杂高阶耦合或曲面结构的数据，仅依赖多线性假设往往会带来系统性失配。
 
 在矩阵情形中，一个自然的增强思路是从线性映射
 \begin{equation}
@@ -31,25 +27,25 @@ QMF \cite{zhai2024quadratic} 的核心启发正是：二次项的意义不在于
 \prod_{n=1}^{N}
  a^{(n)}_{i_n,\,r_n^{(1)},\dots,r_n^{(p)}},
 \end{equation}
-其中每个模因子在第 $n$ 模上同时依赖 $p$ 个潜在索引。式~\eqref{eq:explicit_p_tucker_prototype} 说明了“高阶交互如何进入 Tucker”：它保留了逐模生成的 Tucker 外形，但把每一模的线性映射替换成了显式的 $p$ 阶局部耦合。对于 $p=2$，它对应二次 Tucker；一般 $p$ 时，可视为一个显式 $p$-Tucker 原型。下图用张量网络更直观地展示这种 Tucker 的高次扩展。
+其中每个模因子在第 $n$ 模上同时依赖 $p$ 个潜在索引。式~\eqref{eq:explicit_p_tucker_prototype} 定义了一种高次 Tucker 分解：它保留了逐模生成的 Tucker 外形，但把每一模的线性映射替换成了显式的 $p$ 阶局部耦合。对于 $p=2$，它对应二次 Tucker；一般 $p$ 时，可视为一个显式 $p$ 次 Tucker 原型，我们记为 $p$-Tucker。下图用张量网络更直观地展示这种 Tucker 的高次扩展。
 \begin{center}
 \resizebox{\linewidth}{!}{\input{./artifacts/p-tucker.tex}}
 \end{center}
 
 这一原型虽然在概念上自然，却不适合作为最终模型。随着次数 $p$ 增大，模因子需要提升为更高阶张量，核心张量在生成过程中也会诱导出 Kronecker 型高阶扩展，参数量、存储与收缩计算都会迅速膨胀。更重要的是，优化难度也会随之显著增加。因此，显式 $p$-Tucker 更适合作为结构动机：它解释了高阶交互进入 Tucker 的方式，却没有直接给出一个可扩展的实现。
 
-基于这一观察，本文不直接训练式~\eqref{eq:explicit_p_tucker_prototype} 所对应的显式高阶模型，而是寻找一种结构化压缩：既保留“共享低秩 骨架 上存在高阶交互”的语义，又把参数规模重新压回 Tucker 级别。NTD-PL 正是这一设计目标下得到的模型。
+基于这一观察，本文不直接训练式~\eqref{eq:explicit_p_tucker_prototype} 所对应的显式高阶模型，而是寻找一种结构化压缩：既保留 $p$-Tucker 高阶交互的语义，又保持 Tucker 的参数量。NTD-PL 正是这一设计目标下得到的模型。
 
 \subsection{NTD-PL 模型定义与结构解释}
 
-\subsubsection{最终模型定义}
+\subsubsection{模型定义}
 
 本文提出多项式链接的非线性 Tucker 分解 NTD-PL。其核心思想是：先用 Tucker 分解生成一个共享的低秩潜在张量，再在该潜在张量上施加显式的逐元素多项式链接。具体而言，记
 \begin{equation}
 \label{eq:ntdpl_latent_tensor}
 \cS
 =
-\llbracket \cX;\mathbf A^{(1)},\dots,\mathbf A^{(N)}\rrbracket,
+\mathcal{T}(\mathcal{X},\{\mathbf{A}^{(n)}\}),
 \end{equation}
 其中 $\cX\in\mathbb R^{R_1\times\cdots\times R_N}$ 为核心张量，$\mathbf A^{(n)}\in\mathbb R^{I_n\times R_n}$ 为第 $n$ 模因子矩阵。NTD-PL 定义为
 \begin{equation}
@@ -68,40 +64,38 @@ QMF \cite{zhai2024quadratic} 的核心启发正是：二次项的意义不在于
 \end{equation}
 时，模型精确退化为标准 Tucker。因此，NTD-PL 不是替代 Tucker 的另一类新骨架，而是以 Tucker 潜在张量为中心的受控非线性扩展。
 
-\subsubsection{为什么这不是后处理}
+NTD-PL 不能简单理解为先做一次 Tucker 重构，再对输出做逐元素校正。关键区别在于：式~\eqref{eq:ntdpl_model} 中的非线性作用对象不是一个与低秩结构无关的外部信号，而是共享 Tucker 潜在张量 $\cS$ 本身。由于 $\cS$ 的每个条目已经由核心张量与各模因子的多线性耦合生成，因此 $\cS^{\odot p}$ 对应的是同一 骨架 上交互模式的重组，而不是对一个已经完成的线性重构施加独立校准。后文将专门通过 Tucker 的多项式后处理 与 NTD-PL 的对比，区分这两种机制。
 
-NTD-PL 不能简单理解为先做一次 Tucker 重构，再对输出做逐元素校正。关键区别在于：式~\eqref{eq:ntdpl_model} 中的非线性作用对象不是一个与低秩结构无关的外部信号，而是共享 Tucker 潜在张量 $\cS$ 本身。由于 $\cS$ 的每个条目已经由核心张量与各模因子的多线性耦合生成，因此 $\cS^{\odot p}$ 对应的是同一 骨架 上交互模式的重组，而不是对一个已经完成的线性重构施加独立校准。后文第 5.4.4 节将专门通过 Tucker 的多项式后处理 与 NTD-PL 的对比，区分这两种机制。
+\subsubsection{作为 $p$-Tucker 的结构化压缩}
 
-\subsubsection{作为显式高阶 Tucker 的结构化压缩}
-
-虽然 NTD-PL 的主角是式~\eqref{eq:ntdpl_model}，但它可以被理解为从显式高阶 Tucker 原型出发得到的一种结构化压缩。以二次情形为例，若将式~\eqref{eq:explicit_p_tucker_prototype} 中的模因子写成
+NTD-PL 的定义来源于对 $p$-Tucker的一种结构化压缩。以二次情形为例，若将式~\eqref{eq:explicit_p_tucker_prototype} 中的模因子写成
 \begin{equation}
  a^{(n)}_{i_n,r_n,r_n'} \approx b^{(n)}_{i_n,r_n}c^{(n)}_{i_n,r_n'},
 \end{equation}
-则二次项可近似重写为两个 Tucker 张量的逐元素乘积：
+则二次项可重写为两个 Tucker 张量的逐元素乘积：
 \begin{equation}
 \label{eq:separable_quadratic_factorization}
 \widehat{\cY}_2 \approx \cS_B \odot \cS_C,
 \end{equation}
 其中
 \begin{equation}
-\cS_B = \llbracket \cX;\mathbf B^{(1)},\dots,\mathbf B^{(N)}\rrbracket,
+\mathcal{T}(\mathcal{X},\{\mathbf{B}^{(n)}\}),
 \qquad
-\cS_C = \llbracket \cX;\mathbf C^{(1)},\dots,\mathbf C^{(N)}\rrbracket.
+\mathcal{T}(\mathcal{X},\{\mathbf{C}^{(n)}\}).
 \end{equation}
 进一步施加共享投影约束 $\mathbf B^{(n)}=\mathbf C^{(n)}$，便得到
 \begin{equation}
 \label{eq:shared_quadratic_term}
 \widehat{\cY}_2 \approx \cS^{\odot 2}.
 \end{equation}
-按同样思路推广到更高阶，就得到共享 骨架 上的 $\cS^{\odot p}$。于是，NTD-PL 可被理解为将这些共享投影的 $p$ 阶交互项按系数线性组合，从而把显式高阶 Tucker 的复杂性压缩到少量链接系数中。
+按同样思路推广到更高阶，就得到共享 骨架 上的 $\cS^{\odot p}$。于是，NTD-PL 可被理解为将这些共享投影的 $p$ 阶交互项按系数线性组合，从而把显式 $p$-Tucker 的复杂性压缩到少量链接系数中，下图用张量网络图直观地表示了这一行为。
 \begin{center}
 \resizebox{\linewidth}{!}{\input{./artifacts/p-tucker-hadamard.tex}}
 \end{center}
 
 \subsection{NTD-PL 的基本性质}
 
-本节概括 NTD-PL 的三个最基本性质：模型族关系与参数效率、逐元素非线性生成下的表达能力，以及尺度不定性与归一化机制。详细证明见附录~\ref{app:model_properties}--\ref{app:expressivity}。这些性质分别对应后文的线性一致性验证、有限次多项式链路匹配实验与平滑非多项式逼近实验。
+本节概括 NTD-PL 的三个最基本性质：模型族关系与参数效率、非线性生成下的表达能力，以及尺度不定性与归一化机制。详细证明见附录~\ref{app:model_properties}--\ref{app:expressivity}。之后我们会看到，这些性质在可控合成数据实验中得到验证。
 
 \subsubsection{模型族关系与参数效率}
 
@@ -113,7 +107,7 @@ NTD-PL 不能简单理解为先做一次 Tucker 重构，再对输出做逐元�
 =
 \cS
 =
-\llbracket \cX;\mathbf A^{(1)},\dots,\mathbf A^{(N)}\rrbracket.
+\mathcal{T}(\mathcal{X},\{\mathbf{A}^{(n)}\}).
 \end{equation}
 \end{proposition}
 
@@ -122,7 +116,7 @@ NTD-PL 不能简单理解为先做一次 Tucker 重构，再对输出做逐元�
 对任意 $P_1<P_2$，degree-$P_1$ 的 NTD-PL 模型类是 degree-$P_2$ 模型类的子集。
 \end{proposition}
 
-这两个命题说明，NTD-PL 构成了一族关于多项式次数 $P$ 的嵌套模型：当高阶项关闭时，它精确回到 Tucker；随着 $P$ 增加，模型表达力按次数受控扩张。这也是后文采用 degree continuation 的理论基础。
+这两个命题说明，NTD-PL 构成了一族关于多项式次数 $P$ 的嵌套模型：当高阶项关闭时，它精确回到 Tucker；随着 $P$ 增加，模型表达力按次数受控扩张。这也是后文采用逐次延续优化的理论基础。
 
 \begin{proposition}[参数复杂度]
 \label{prop:param_complexity}
@@ -140,7 +134,7 @@ NTD-PL 不能简单理解为先做一次 Tucker 重构，再对输出做逐元�
 其中前两项对应标准 Tucker 分解的核心与因子参数量，最后一项对应多项式链接系数。
 \end{proposition}
 
-命题~\ref{prop:param_complexity} 表明，NTD-PL 的额外自由度只体现为 $P+1$ 个标量系数，而不是新的高阶因子张量或高阶核心。因而，相比显式 $p$-Tucker，NTD-PL 不是通过增加另一套高阶参数化来增强表达力，而是在基本保持 Tucker 级别参数规模的前提下引入受控非线性。这一点将在第 5.2 节和第 5.4 节的实验中得到直接体现。
+命题~\ref{prop:param_complexity} 表明，NTD-PL 的额外自由度只体现为 $P+1$ 个标量系数，而不是新的高阶因子张量或高阶核心。因而，相比显式 $p$-Tucker，NTD-PL 不是通过增加另一套高阶参数化来增强表达力，而是在基本保持 Tucker 参数规模一致的前提下引入受控非线性。
 
 \subsubsection{非线性生成下的表达能力}
 
@@ -148,7 +142,7 @@ NTD-PL 的表达能力可以从逐元素非线性生成模型的角度理解。�
 \begin{equation}
 \cS^\star
 =
-\llbracket \cX^\star;\mathbf A^{(1)\star},\dots,\mathbf A^{(N)\star}\rrbracket,
+\mathcal{T}(\mathcal{X^\star},\{\mathbf{A}^{(n)\star}\})
 \end{equation}
 并设观测张量由某个标量函数 $g:\mathbb R\to\mathbb R$ 逐元素作用生成，即
 \begin{equation}
@@ -194,7 +188,7 @@ M_\rho=\sup_{|z|=\rho}|g(z)|.
 \end{equation}
 \end{theorem}
 
-命题~\ref{prop:poly_exact_main} 对应第 5.2.2 节的有限次多项式链路匹配实验；定理~\ref{thm:analytic_bound_main} 则解释了第 5.2.3 节中“随着 $P$ 增加，平滑非多项式数据可被系统逼近”的现象。两者共同表明，NTD-PL 的表达力并不是来自模糊的“增参”，而是来自共享 骨架 上可分析的逐元素非线性展开。
+式~\eqref{eq:analytic_bound_main} 给出了一个具有明确解释性的误差分解。首先，主导项 $(B/\rho)^{P+1}$ 表明，当 $B/\rho<1$ 固定时，截断误差会随多项式阶数 $P$ 以几何速度衰减，因此只要真实潜在张量的幅值范围没有逼近解析半径边界，有限阶 NTD-PL 就能够快速逼近解析生成函数。其次，分母项 $1-B/\rho$ 刻画了“距离奇点的裕量”：当 $B$ 相对 $\rho$ 更小时，说明真实信号活动区间位于更稳定的解析区域内部，此时余项界更紧；反之，当 $B$ 逐渐接近 $\rho$ 时，逼近难度会显著上升。最后，$\sqrt{N_e}$ 只反映从标量一致逼近推广到整张量 Frobenius 误差时的规模放大，而不改变误差关于 $P$ 的收敛阶。因而，该定理说明 NTD-PL 的逼近能力主要由链接函数在有效输入区间上的解析性以及 $B/\rho$ 的相对大小决定，而不是由额外高阶张量参数的引入所驱动。这些将会解释第 \ref{sec:nonlinearapprox} 节中的逼近的现象。
 
 \subsubsection{尺度不定性与归一化机制}
 
@@ -211,7 +205,7 @@ M_\rho=\sup_{|z|=\rho}|g(z)|.
 
 \subsubsection{统一学习目标}
 
-为了在同一框架下同时处理完整张量分解与缺失观测补全，记二值观测掩码张量仍为 $\Omega\in\{0,1\}^{I_1\times\cdots\times I_N}$。考虑如下目标函数：
+为在同一优化框架下同时处理分解与缺失补全，记二值观测掩码张量为 $\Omega\in\{0,1\}^{I_1\times\cdots\times I_N}$。考虑如下目标函数：
 \begin{equation}
 \label{eq:ntdpl_masked_objective}
 \min_{\cX,\{\mathbf A^{(n)}\},\boldsymbol\beta}
@@ -226,7 +220,7 @@ M_\rho=\sup_{|z|=\rho}|g(z)|.
 +
 \mathcal R(\cX,\{\mathbf A^{(n)}\},\boldsymbol\beta),
 \end{equation}
-其中 $\cS=\llbracket \cX;\mathbf A^{(1)},\dots,\mathbf A^{(N)}\rrbracket$，且
+其中 $\cS=\mathcal{T}(\mathcal{X},\{\mathbf{A}^{(n)}\})$，且
 \begin{equation}
 Z_\Omega =
 \begin{cases}
@@ -250,12 +244,12 @@ Z_\Omega =
 
 \subsubsection{初始化}
 
-对完整观测使用标准 Tucker 初始化，对缺失观测使用 masked Tucker 初始化 \cite{yang2016iterative, liu2012tensor}。对多项式系数，采用线性 warm start：
+NTD-PL 是 Tucker 的多项式推广，自然可以利用Tucker分解作为优化起点。对完整观测使用标准 Tucker 初始化，对缺失观测使用 masked Tucker 初始化 \cite{yang2016iterative, liu2012tensor}。对多项式系数，采用线性 warm start：
 \begin{equation}
 \beta_0=0,\qquad \beta_1=1,\qquad \beta_p=0\quad (p\ge 2).
 \label{eq:beta_warm_start}
 \end{equation}
-本文采用逐次延续的方式，训练从 $p=1$ 的线性情形开始，随着优化推进再逐步激活更高阶项，意味着模型总是从标准 Tucker 解附近出发，而不是从一个高阶非线性模型直接起步。
+本文采用逐次延续的优化方式，从 $p=1$ 的线性情形开始，随着优化推进再逐步激活更高阶项，意味着模型总是从标准 Tucker 解附近出发，而不是从一个高阶非线性模型直接起步。
 
 \subsubsection{核心与因子的更新}
 
@@ -310,9 +304,9 @@ f_{\boldsymbol\beta}'(\cS)=\sum_{p=1}^{P} p\beta_p\cS^{\odot(p-1)}.
 \lambda_n\mathbf A^{(n)}.
 \end{equation}
 
-由于逐元素多项式链接打破了经典 Tucker 中最小二乘子问题的闭式结构，本文不采用 ALS，而是使用 Adam \cite{kingma2014adam} 对 $\cX$ 与各模因子做梯度更新。换言之，NTD-PL 在优化层面与标准 Tucker 的最本质区别之一就在于：低秩骨架被保留，但 entry model 的非线性使得经典 ALS 闭式子问题不再存在。
+由于逐元素多项式链接打破了经典 Tucker 中最小二乘子问题的闭式结构，本文不采用交替最小二乘法，而是使用 Adam \cite{kingma2014adam} 对 $\cX$ 与各模因子做梯度更新。
 
-\subsubsection{多项式系数的 ridge 更新}
+\subsubsection{多项式系数的更新}
 
 固定 $\cX$ 与 $\{\mathbf A^{(n)}\}_{n=1}^{N}$ 时，潜在张量 $\cS$ 也随之固定，此时 $\boldsymbol\beta$ 的更新可归结为一个低维 ridge 回归问题 \cite{hoerl1970ridge}。记观测向量为 $\mathbf y_\Omega$，并定义设计矩阵
 \begin{equation}
@@ -340,7 +334,6 @@ f_{\boldsymbol\beta}'(\cS)=\sum_{p=1}^{P} p\beta_p\cS^{\odot(p-1)}.
 
 尽管整体问题对 $(\cX,\{\mathbf A^{(n)}\},\boldsymbol\beta)$ 联合来看是非凸的，但在固定 Tucker 潜变量 $\cS$ 后，对 $\boldsymbol\beta$ 的更新始终是一个规模仅为 $P+1$ 的强凸 ridge 回归。这也是本文能够在保持高阶非线性表达的同时，仍使用稳定交替优化框架的关键原因。
 
-\paragraph{实现注记：标准化幂基上的稳定 $\boldsymbol\beta$ 更新.}
 高阶幂基在数值上可能病态，尤其当 $\cS$ 的取值范围较大时更为明显。为改善这一问题，优化实现中可先在标准化变量
 \begin{equation}
 \mathbf Z = \frac{\cS-\mu}{\sigma}
@@ -393,9 +386,8 @@ M_\Omega = |\Omega|,
 \qquad
 R=\prod_{n=1}^{N}R_n.
 \end{equation}
-这里 $M$ 表示完整张量的条目总数，$M_\Omega$ 表示观测条目数。需要强调的是，\textbf{当前实现采用的是稠密 Tucker 重构与稠密多项式前向/反向计算}：即便在补全任务中，潜在张量 $\cS$、预测张量 $\widehat{\cY}$ 以及 $f'_{\boldsymbol\beta}(\cS)$ 仍是在完整张量上构造，只是在残差处通过掩码筛选观测项。因此，单轮外迭代的主导成本依然主要随 $M$ 缩放；只有 $\boldsymbol\beta$ 的 ridge 子问题明确只依赖 $M_\Omega$。
+这里 $M$ 表示完整张量的条目总数，$M_\Omega$ 表示观测条目数。
 
-\paragraph{Tucker 潜在张量构造.}
 做一次标准 Tucker 重构时，若按逐模乘法顺序实现，其前向复杂度可写为
 \begin{equation}
 \mathcal C_{\mathrm{rec}}
@@ -408,14 +400,12 @@ I_nR_n
 \end{equation}
 该项给出潜在张量 $\cS$ 的主要构造代价，也是后续梯度传播的基础。
 
-\paragraph{多项式链接与导数计算.}
 给定 $\cS$ 后，计算 $f_{\boldsymbol\beta}(\cS)$ 与 $f'_{\boldsymbol\beta}(\cS)$ 的代价均为逐元素多项式求值。若采用融合的 Horner 递推，则它们可在一次遍历中同时完成，渐近复杂度为
 \begin{equation}
 \mathcal O(PM).
 \end{equation}
 相较于分别计算前向值与导数，这一融合实现仅降低常数因子，不改变关于 $P$ 与 $M$ 的阶数。
 
-\paragraph{核心与因子梯度更新.}
 核心梯度的计算可视为把张量 $\mathbf T$ 重新投影回核心空间，其复杂度与一次 Tucker 压缩同阶。因子梯度的计算则具有 MTTKRP 型结构：对每个模 $n$，需要先构造式~\eqref{eq:Zn_def} 中的 $\mathbf Z^{(n)}$，再计算 $\mathbf T_{(n)}\mathbf Z^{(n)\top}$。因此，若每轮外迭代对 $(\cX,\{\mathbf A^{(n)}\})$ 执行 $K$ 步 Adam 更新，则其主导成本可近似写为
 \begin{equation}
 \mathcal O\!\left(
@@ -425,7 +415,6 @@ K\bigl(\mathcal C_{\mathrm{rec}} + PM + \mathcal C_{\mathrm{bwd}}\bigr)
 \end{equation}
 其中 $\mathcal C_{\mathrm{bwd}}$ 代表由核心反投影与各模因子 MTTKRP 型乘法构成的反向传播成本，通常与 Tucker 骨架本身的收缩/展开复杂度同阶。
 
-\paragraph{$\boldsymbol\beta$ 的 ridge 更新.}
 在固定 $\cS$ 时，$\boldsymbol\beta$ 子问题只依赖观测条目。构造观测设计矩阵 $\Phi_\Omega\in\mathbb R^{M_\Omega\times(P+1)}$ 的代价为
 \begin{equation}
 \mathcal O(PM_\Omega),
@@ -443,14 +432,12 @@ K\bigl(\mathcal C_{\mathrm{rec}} + PM + \mathcal C_{\mathrm{bwd}}\bigr)
 \end{equation}
 由于 $P$ 在本文设置中通常很小（如 $2,3,4$），因此 $\boldsymbol\beta$ 更新虽然理论上是额外步骤，但在总体时间中通常并非主导项。
 
-\paragraph{归一化、延续与优化实现.}
 因子归一化与核心吸收的代价为
 \begin{equation}
 \mathcal O\!\left(\sum_{n=1}^{N} I_nR_n + R\right),
 \end{equation}
 相较于式~\eqref{eq:grad_update_complexity} 通常可以忽略。次数延续不会改变单轮迭代的渐近复杂度，只会通过逐步激活高阶项影响总迭代轮数。优化实现中，避免重复 Tucker 重构、融合多项式/导数求值、以及在标准化幂基上稳定求解 $\boldsymbol\beta$，都只降低常数开销或改善数值条件，不改变上述渐近阶数。
 
-\paragraph{总复杂度总结.}
 综合上述各项，当前稠密实现下 NTD-PL 的单轮外迭代复杂度可概括为
 \begin{equation}
 \mathcal O\!\left(
@@ -460,4 +447,4 @@ PM_\Omega + M_\Omega P^2 + P^3
 \right).
 \label{eq:total_complexity_main}
 \end{equation}
-因此，NTD-PL 相比标准 Tucker 的额外计算主要来自两部分：其一是逐元素多项式链接及其导数的计算，其代价为低阶、可并行的 $\mathcal O(PM)$；其二是 $\boldsymbol\beta$ 的小规模 ridge 更新，其代价为 $\mathcal O(PM_\Omega + M_\Omega P^2 + P^3)$。换言之，当前实现下的主导成本仍然来自 Tucker 骨架本身的前向/反向传播，而不是多项式链接系数的求解。这也解释了后文第 5.3 节中观察到的现象：NTD-PL 的 wall-clock 增量是可量化的，但其主要来源并非 $\boldsymbol\beta$ 子问题，而是围绕共享 骨架 的非线性前向/反向计算。
+因此，NTD-PL 相比标准 Tucker 的额外计算主要来自两部分：其一是逐元素多项式链接及其导数的计算，其代价为低阶、可并行的 $\mathcal O(PM)$；其二是 $\boldsymbol\beta$ 的小规模 ridge 更新，其代价为 $\mathcal O(PM_\Omega + M_\Omega P^2 + P^3)$。换言之，当前实现下的主导成本仍然来自 Tucker 骨架本身的前向/反向传播，而不是多项式链接系数的求解。

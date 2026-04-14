@@ -42,6 +42,7 @@ METHOD_LABELS = {"tucker": "Tucker", "cp": "CP", "tt": "TT", "tr": "TR", "ntdpl"
 CAVE_COMPLETION_MAIN_MISSING_RATE = 0.5
 CAVE_COMPLETION_VISUAL_SCENES = 3
 CAVE_COMPLETION_FOCUS_SCENES = (2, 3, 8)  # beads, cd, feathers
+ADVANTAGE_SPATIAL_CASE_SCENE_ID = 3  # cd
 ADVANTAGE_QUARTILE_COUNT = 4
 
 
@@ -827,7 +828,10 @@ def aggregate_cave_random_completion_advantage_spatial_case() -> pd.DataFrame:
     scene_df, summary_df, _, _, maps_by_scene = _build_advantage_quartile_tables(
         missing_rate=CAVE_COMPLETION_MAIN_MISSING_RATE
     )
-    representative_scene = _select_representative_advantage_scene(scene_df)
+    if ADVANTAGE_SPATIAL_CASE_SCENE_ID in maps_by_scene:
+        representative_scene = int(ADVANTAGE_SPATIAL_CASE_SCENE_ID)
+    else:
+        representative_scene = _select_representative_advantage_scene(scene_df)
     maps = maps_by_scene[int(representative_scene)]
     top_difficulty = maps["difficulty_bins"] == (ADVANTAGE_QUARTILE_COUNT - 1)
     top_boundary = maps["boundary_bins"] == (ADVANTAGE_QUARTILE_COUNT - 1)

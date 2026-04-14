@@ -4,7 +4,7 @@
 
 \subsection{记号约定}
 
-对于变量，$N\ge 3$ 阶张量记为书法体字母，如 $\mathcal{X},\mathcal{Y},\mathcal{G}$；矩阵记为大写粗体字母，如 $\mathbf{A},\mathbf{X}$；向量记为小写粗体字母，如 $\mathbf{x},\mathbf{a}$；标量记为小写斜体字母，如 $x,a$。对于维度、秩、次数等非变量量，通常以大写字母表示其取值，以对应的小写字母表示索引，例如 $I_n$ 表示第 $n$ 模维度，$i_n\in[I_n]$ 表示对应索引，其中
+对于变量，$N\ge 3$ 阶张量记为书法体字母，如 $\mathcal{X},\mathcal{Y}$；矩阵记为大写粗体字母，如 $\mathbf{A},\mathbf{X}$；向量记为小写粗体字母，如 $\mathbf{x},\mathbf{a}$；标量记为小写斜体字母，如 $x,a$。对于维度、秩、次数等非变量量，通常以大写字母表示其取值，以对应的小写字母表示索引，例如 $I_n$ 表示第 $n$ 模维度，$i_n\in[I_n]$ 表示对应索引，其中
 \[
 [I_n] := \{1,2,\dots,I_n\}.
 \]
@@ -127,18 +127,18 @@ Tucker 分解将其近似为
 \widehat{\mathcal{Y}}
 =
 \llbracket
-\mathcal{G};
+\mathcal{X};
 \mathbf{A}^{(1)},\dots,\mathbf{A}^{(N)}
 \rrbracket
 :=
-\mathcal{G}
+\mathcal{X}
 \times_1 \mathbf{A}^{(1)}
 \times_2 \cdots
 \times_N \mathbf{A}^{(N)},
 \]
 其中
 \[
-\mathcal{G}\in\mathbb{R}^{R_1\times\cdots\times R_N},
+\mathcal{X}\in\mathbb{R}^{R_1\times\cdots\times R_N},
 \qquad
 \mathbf{A}^{(n)}\in\mathbb{R}^{I_n\times R_n},\quad n=1,\dots,N.
 \]
@@ -148,10 +148,10 @@ Tucker 分解将其近似为
 \]
 称为 Tucker 分解的多线性秩。为简洁起见，后文记
 \[
-\mathcal{T}(\mathcal{G},\{\mathbf{A}^{(n)}\})
+\mathcal{T}(\mathcal{X},\{\mathbf{A}^{(n)}\})
 :=
 \llbracket
-\mathcal{G};
+\mathcal{X};
 \mathbf{A}^{(1)},\dots,\mathbf{A}^{(N)}
 \rrbracket .
 \]
@@ -162,7 +162,7 @@ Tucker 模型在模 $n$ 展开下可写为
 \widehat{\mathbf{Y}}_{(n)}
 =
 \mathbf{A}^{(n)}
-\mathbf{G}_{(n)}
+\mathbf{X}_{(n)}
 \left(
 \mathbf{A}^{(N)}\otimes\cdots\otimes
 \mathbf{A}^{(n+1)}\otimes
@@ -177,31 +177,31 @@ Tucker 模型在模 $n$ 展开下可写为
 \left(
 \mathbf{A}^{(N)}\otimes\cdots\otimes\mathbf{A}^{(1)}
 \right)
-\mathrm{vec}(\mathcal{G}).
+\mathrm{vec}(\mathcal{X}).
 \]
 上述等价表达在后文的复杂度分析、子问题推导与实现中都将用到。
 
 \paragraph{全观测与带掩码观测.}
 在全观测情形下，标准 Tucker 拟合可写为
 \[
-\min_{\mathcal{G},\{\mathbf{A}^{(n)}\}}
+\min_{\mathcal{X},\{\mathbf{A}^{(n)}\}}
 \frac{1}{2}
 \left\|
 \mathcal{Y}
 -
-\mathcal{T}(\mathcal{G},\{\mathbf{A}^{(n)}\})
+\mathcal{T}(\mathcal{X},\{\mathbf{A}^{(n)}\})
 \right\|_F^2.
 \]
 在带掩码观测情形下，相应目标写为
 \[
-\min_{\mathcal{G},\{\mathbf{A}^{(n)}\}}
+\min_{\mathcal{X},\{\mathbf{A}^{(n)}\}}
 \frac{1}{2}
 \left\|
 \mathcal{M}\odot
 \left(
 \mathcal{Y}
 -
-\mathcal{T}(\mathcal{G},\{\mathbf{A}^{(n)}\})
+\mathcal{T}(\mathcal{X},\{\mathbf{A}^{(n)}\})
 \right)
 \right\|_F^2.
 \]
@@ -282,4 +282,4 @@ M:=\prod_{n=1}^N I_n,
 \]
 在带掩码观测情形下，只需保留对应于 $\Omega$ 中观测条目的行，即可得到后续用于系数估计的观测设计矩阵。
 
-至此，后文构造 NTD-PL 所需的基本对象已经齐备：一方面，$\mathcal{T}(\mathcal{G},\{\mathbf{A}^{(n)}\})$ 给出共享的 Tucker 潜在张量；另一方面，$f_{\boldsymbol{\beta}}(\cdot)$ 给出逐元素的参数化非线性链接。第四章将在此基础上正式给出 NTD-PL 的模型定义、性质与优化方法。
+至此，后文构造 NTD-PL 所需的基本对象已经齐备：一方面，$\mathcal{T}(\mathcal{X},\{\mathbf{A}^{(n)}\})$ 给出共享的 Tucker 潜在张量；另一方面，$f_{\boldsymbol{\beta}}(\cdot)$ 给出逐元素的参数化非线性链接。第四章将在此基础上正式给出 NTD-PL 的模型定义、性质与优化方法。
