@@ -1,0 +1,257 @@
+\begin{thebibliography}{36}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Ahn et~al.(2024)Ahn, Saini, Papalexakis, and Payani]{ahn2024neural}
+Dawon Ahn, Uday~Singh Saini, Evangelos~E Papalexakis, and Ali Payani.
+\newblock Neural additive tensor decomposition for sparse tensors.
+\newblock In \emph{Proceedings of the 33rd ACM International Conference on
+  Information and Knowledge Management}, pages 14--23, 2024.
+
+\bibitem[Cichocki et~al.(2015)Cichocki, Mandic, Phan, Caiafa, Zhou, Zhao, and
+  De~Lathauwer]{Cichocki2015SignalProcessing}
+Andrzej Cichocki, Danilo~P. Mandic, Anh-Huy Phan, Cesar~F. Caiafa, Guoxu Zhou,
+  Qibin Zhao, and Lieven De~Lathauwer.
+\newblock Tensor decompositions for signal processing applications: From
+  two-way to multiway component analysis.
+\newblock \emph{IEEE Signal Processing Magazine}, 32\penalty0 (2):\penalty0
+  145--163, 2015.
+\newblock \doi{10.1109/MSP.2013.2297439}.
+
+\bibitem[{Columbia CAVE Laboratory}()]{cave_multispectral_database}
+{Columbia CAVE Laboratory}.
+\newblock Multispectral image database.
+\newblock \url{https://cave.cs.columbia.edu/repository/Multispectral}.
+\newblock Accessed: 2026-04-13.
+
+\bibitem[Davis et~al.(2007)Davis, Kavanaugh, Letelier, Bissett, and
+  Kohler]{davis2007samson}
+Curtiss~O. Davis, Maria Kavanaugh, Ricardo Letelier, W.~Paul Bissett, and David
+  Kohler.
+\newblock Spatial and spectral resolution considerations for imaging coastal
+  waters.
+\newblock In \emph{Coastal Ocean Remote Sensing}, volume 6680 of
+  \emph{Proceedings of SPIE}, page 66800P, 2007.
+\newblock \doi{10.1117/12.734288}.
+
+\bibitem[De~Lathauwer et~al.(2000{\natexlab{a}})De~Lathauwer, De~Moor, and
+  Vandewalle]{DeLathauwer2000MLSVD}
+Lieven De~Lathauwer, Bart De~Moor, and Joos Vandewalle.
+\newblock A multilinear singular value decomposition.
+\newblock \emph{SIAM Journal on Matrix Analysis and Applications}, 21\penalty0
+  (4):\penalty0 1253--1278, 2000{\natexlab{a}}.
+\newblock \doi{10.1137/S0895479896305696}.
+
+\bibitem[De~Lathauwer et~al.(2000{\natexlab{b}})De~Lathauwer, De~Moor, and
+  Vandewalle]{de2000multilinear}
+Lieven De~Lathauwer, Bart De~Moor, and Joos Vandewalle.
+\newblock A multilinear singular value decomposition.
+\newblock \emph{SIAM journal on Matrix Analysis and Applications}, 21\penalty0
+  (4):\penalty0 1253--1278, 2000{\natexlab{b}}.
+
+\bibitem[Deng et~al.(2016)Deng, Liu, Batselier, Kwok, and Wong]{deng2016storm}
+Jian Deng, Haotian Liu, Kim Batselier, Yu-Kwong Kwok, and Ngai Wong.
+\newblock Storm: a nonlinear model order reduction method via symmetric tensor
+  decomposition.
+\newblock In \emph{2016 21st Asia and South Pacific design automation
+  conference (ASP-DAC)}, pages 557--562. IEEE, 2016.
+
+\bibitem[Derkach et~al.(2019)Derkach, Ruiz, and Sukno]{derkach2019tensor}
+Dmytro Derkach, Adria Ruiz, and Federico~M Sukno.
+\newblock Tensor decomposition and non-linear manifold modeling for 3d head
+  pose estimation.
+\newblock \emph{International Journal of Computer Vision}, 127\penalty0
+  (10):\penalty0 1565--1585, 2019.
+
+\bibitem[{Geospatial Research Laboratory
+  (U.S.)}(2015)]{urban_hypercube_dataset}
+{Geospatial Research Laboratory (U.S.)}.
+\newblock Hypercube sample data set: Hydice sensor imagery urban.
+\newblock \url{https://hdl.handle.net/11681/2925}, 2015.
+\newblock Dataset.
+
+\bibitem[Hoerl and Kennard(1970)]{hoerl1970ridge}
+Arthur~E Hoerl and Robert~W Kennard.
+\newblock Ridge regression: Biased estimation for nonorthogonal problems.
+\newblock \emph{Technometrics}, 12\penalty0 (1):\penalty0 55--67, 1970.
+
+\bibitem[Hong et~al.(2020)Hong, Kolda, and Duersch]{hong2020generalized}
+David Hong, Tamara~G Kolda, and Jed~A Duersch.
+\newblock Generalized canonical polyadic tensor decomposition.
+\newblock \emph{SIAM review}, 62\penalty0 (1):\penalty0 133--163, 2020.
+
+\bibitem[Kingma and Ba(2014)]{kingma2014adam}
+Diederik~P Kingma and Jimmy Ba.
+\newblock Adam: A method for stochastic optimization.
+\newblock \emph{arXiv preprint arXiv:1412.6980}, 2014.
+
+\bibitem[Kolda and Bader(2009)]{Kolda2009Tensor}
+Tamara~G. Kolda and Brett~W. Bader.
+\newblock Tensor decompositions and applications.
+\newblock \emph{SIAM Review}, 51\penalty0 (3):\penalty0 455--500, 2009.
+\newblock \doi{10.1137/07070111X}.
+
+\bibitem[Liu et~al.(2017)Liu, He, Zhe, Li, and Xu]{liu2017deepcp}
+Bin Liu, Lirong He, Shandian Zhe, Yingmin Li, and Zenglin Xu.
+\newblock Deepcp: Flexible nonlinear tensor decomposition.
+\newblock In \emph{NeurIPS Workshops}, volume~3, 2017.
+
+\bibitem[Liu et~al.(2015)Liu, Daniel, and Wong]{liu2015model}
+Haotian Liu, Luca Daniel, and Ngai Wong.
+\newblock Model reduction and simulation of nonlinear circuits via tensor
+  decomposition.
+\newblock \emph{IEEE Transactions on Computer-Aided Design of Integrated
+  Circuits and Systems}, 34\penalty0 (7):\penalty0 1059--1069, 2015.
+
+\bibitem[Liu et~al.(2012)Liu, Musialski, Wonka, and Ye]{liu2012tensor}
+Ji~Liu, Przemyslaw Musialski, Peter Wonka, and Jieping Ye.
+\newblock Tensor completion for estimating missing values in visual data.
+\newblock \emph{IEEE transactions on pattern analysis and machine
+  intelligence}, 35\penalty0 (1):\penalty0 208--220, 2012.
+
+\bibitem[Liu et~al.(2013)Liu, Musialski, Wonka, and
+  Ye]{Liu2013TensorCompletion}
+Ji~Liu, Przemyslaw Musialski, Peter Wonka, and Jieping Ye.
+\newblock Tensor completion for estimating missing values in visual data.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
+  Intelligence}, 35\penalty0 (1):\penalty0 208--220, 2013.
+\newblock \doi{10.1109/TPAMI.2012.39}.
+
+\bibitem[Oseledets(2011)]{oseledets2011}
+Ivan~V. Oseledets.
+\newblock Tensor-train decomposition.
+\newblock \emph{SIAM Journal on Scientific Computing}, 33\penalty0
+  (5):\penalty0 2295--2317, 2011.
+
+\bibitem[Pan et~al.(2020)Pan, Wang, and Zhe]{pan2020streaming}
+Zhimeng Pan, Zheng Wang, and Shandian Zhe.
+\newblock Streaming nonlinear bayesian tensor decomposition.
+\newblock In \emph{Conference on Uncertainty in Artificial Intelligence}, pages
+  490--499. PMLR, 2020.
+
+\bibitem[Resmini et~al.(1997)Resmini, Kappus, Aldrich, Harsanyi, and
+  Anderson]{resmini1997cuprite}
+Ronald~G. Resmini, Mary~E. Kappus, W.~S. Aldrich, John~C. Harsanyi, and
+  M.~Anderson.
+\newblock Mineral mapping with hyperspectral digital imagery collection
+  experiment (hydice) sensor data at cuprite, nevada, u.s.a.
+\newblock \emph{International Journal of Remote Sensing}, 18\penalty0
+  (7):\penalty0 1553--1570, 1997.
+\newblock \doi{10.1080/014311697218278}.
+
+\bibitem[Roberts et~al.(1993)Roberts, Smith, and Adams]{roberts1993jasperridge}
+D.~A. Roberts, M.~O. Smith, and J.~B. Adams.
+\newblock Green vegetation, nonphotosynthetic vegetation, and soils in aviris
+  data.
+\newblock \emph{Remote Sensing of Environment}, 44\penalty0 (2--3):\penalty0
+  255--269, 1993.
+\newblock \doi{10.1016/0034-4257(93)90020-X}.
+
+\bibitem[Saragadam et~al.(2024)Saragadam, Balestriero, Veeraraghavan, and
+  Baraniuk]{saragadam2024deeptensor}
+Vishwanath Saragadam, Randall Balestriero, Ashok Veeraraghavan, and Richard~G
+  Baraniuk.
+\newblock Deeptensor: Low-rank tensor decomposition with deep network priors.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
+  Intelligence}, 46\penalty0 (12):\penalty0 10337--10348, 2024.
+
+\bibitem[Schein et~al.(2016)Schein, Zhou, Blei, and
+  Wallach]{schein2016bayesian}
+Aaron Schein, Mingyuan Zhou, David Blei, and Hanna Wallach.
+\newblock Bayesian poisson tucker decomposition for learning the structure of
+  international relations.
+\newblock In \emph{International Conference on Machine Learning}, pages
+  2810--2819. PMLR, 2016.
+
+\bibitem[Shi et~al.(2025)Shi, Zheng, Zhang, and Li]{shi2025multidimensional}
+Zhi-Wei Shi, Yu-Bang Zheng, Yi~Zhang, and Heng-Chao Li.
+\newblock Multidimensional nonlinear transform-based tensor representation for
+  high-dimensional image reconstruction.
+\newblock \emph{Pattern Recognition}, 168:\penalty0 111734, 2025.
+
+\bibitem[Sidiropoulos et~al.(2017)Sidiropoulos, De~Lathauwer, Fu, Huang,
+  Papalexakis, and Faloutsos]{Sidiropoulos2017TSP}
+Nicholas~D. Sidiropoulos, Lieven De~Lathauwer, Xiao Fu, Kejun Huang,
+  Evangelos~E. Papalexakis, and Christos Faloutsos.
+\newblock Tensor decomposition for signal processing and machine learning.
+\newblock \emph{IEEE Transactions on Signal Processing}, 65\penalty0
+  (13):\penalty0 3551--3582, 2017.
+\newblock \doi{10.1109/TSP.2017.2690524}.
+
+\bibitem[Tucker(1966)]{tucker1966some}
+Ledyard~R Tucker.
+\newblock Some mathematical notes on three-mode factor analysis.
+\newblock \emph{Psychometrika}, 31\penalty0 (3):\penalty0 279--311, 1966.
+
+\bibitem[Varolgunes et~al.(2023)Varolgunes, Zhou, Yu, and
+  Uddin]{varolgunes2023nmtucker}
+Uras Varolgunes, Dan Zhou, Dantong Yu, and Ajim Uddin.
+\newblock Nmtucker: Non-linear matryoshka tucker decomposition for financial
+  time series imputation.
+\newblock In \emph{Proceedings of the Fourth ACM International Conference on AI
+  in Finance}, pages 516--523, 2023.
+
+\bibitem[Wang et~al.(2021)Wang, Zhao, Chen, Liu, Deng, and
+  Li]{wang2021nonlinear}
+Dingheng Wang, Guangshe Zhao, Hengnu Chen, Zhexian Liu, Lei Deng, and Guoqi Li.
+\newblock Nonlinear tensor train format for deep neural network compression.
+\newblock \emph{Neural Networks}, 144:\penalty0 320--333, 2021.
+
+\bibitem[Wu et~al.(2019)Wu, Shi, Dong, Huang, and Chawla]{wu2019neural}
+Xian Wu, Baoxu Shi, Yuxiao Dong, Chao Huang, and Nitesh~V Chawla.
+\newblock Neural tensor factorization for temporal interaction learning.
+\newblock In \emph{Proceedings of the Twelfth ACM international conference on
+  web search and data mining}, pages 537--545, 2019.
+
+\bibitem[Xu et~al.(2024)Xu, Peng, Ji, Cao, Sun, Fei, and Meng]{xu2024stacked}
+Shuang Xu, Jiangjun Peng, Teng-Yu Ji, Xiangyong Cao, Kai Sun, Rongrong Fei, and
+  Deyu Meng.
+\newblock Stacked tucker decomposition with multi-nonlinear products for remote
+  sensing imagery inpainting.
+\newblock \emph{IEEE Transactions on Geoscience and Remote Sensing},
+  62:\penalty0 1--13, 2024.
+
+\bibitem[Xu et~al.(2011)Xu, Yan, et~al.]{xu2011infinite}
+Zenglin Xu, Feng Yan, et~al.
+\newblock Infinite tucker decomposition: Nonparametric bayesian models for
+  multiway data analysis.
+\newblock \emph{arXiv preprint arXiv:1108.6296}, 2011.
+
+\bibitem[Yang et~al.(2016)Yang, Fang, Li, and Zeng]{yang2016iterative}
+Linxiao Yang, Jun Fang, Hongbin Li, and Bing Zeng.
+\newblock An iterative reweighted method for tucker decomposition of incomplete
+  tensors.
+\newblock \emph{IEEE Transactions on Signal Processing}, 64\penalty0
+  (18):\penalty0 4817--4829, 2016.
+
+\bibitem[Yasuma et~al.(2010)Yasuma, Mitsunaga, Iso, and Nayar]{yasuma2010gapc}
+Fumihito Yasuma, Tomoo Mitsunaga, Daisuke Iso, and Shree~K. Nayar.
+\newblock Generalized assorted pixel camera: Postcapture control of resolution,
+  dynamic range, and spectrum.
+\newblock \emph{IEEE Transactions on Image Processing}, 19\penalty0
+  (9):\penalty0 2241--2253, 2010.
+\newblock \doi{10.1109/TIP.2010.2046811}.
+
+\bibitem[Zhai et~al.(2024)Zhai, Chen, and Sun]{zhai2024quadratic}
+Zheng Zhai, Hengchao Chen, and Qiang Sun.
+\newblock Quadratic matrix factorization with applications to manifold
+  learning.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
+  Intelligence}, 46\penalty0 (9):\penalty0 6384--6401, 2024.
+
+\bibitem[Zhao et~al.(2016)Zhao, Zhou, Xie, Zhang, and Cichocki]{zhao2016tr}
+Qibin Zhao, Guoxu Zhou, Shengli Xie, Liqing Zhang, and Andrzej Cichocki.
+\newblock Tensor ring decomposition.
+\newblock \emph{arXiv preprint arXiv:1606.05535}, 2016.
+
+\bibitem[Zhe et~al.(2016)Zhe, Zhang, Wang, Lee, Xu, Qi, and
+  Ghahramani]{zhe2016distributed}
+Shandian Zhe, Kai Zhang, Pengyuan Wang, Kuang-chih Lee, Zenglin Xu, Yuan Qi,
+  and Zoubin Ghahramani.
+\newblock Distributed flexible nonlinear tensor factorization.
+\newblock \emph{Advances in neural information processing systems}, 29, 2016.
+
+\end{thebibliography}

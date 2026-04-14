@@ -10,6 +10,7 @@ figs
 /latex-zh/out
 tmp/
 /experiment/outputs/
+
 /latex-zh/inputs/cave-random-completion/advantage_maps
 /latex-zh/main.aux
 /latex-zh/main.bbl
@@ -21,6 +22,18 @@ tmp/
 /latex-zh/main.run.xml
 /latex-zh/main.synctex.gz
 /latex-zh/main.toc
+
+/latex-en/inputs/cave-random-completion/advantage_maps
+/latex-en/main.aux
+/latex-en/main.bbl
+/latex-en/main.bcf
+/latex-en/main.blg
+/latex-en/main.fdb_latexmk
+/latex-en/main.fls
+/latex-en/main.log
+/latex-en/main.run.xml
+/latex-en/main.synctex.gz
+/latex-en/main.toc
 
 # Python cache and artifacts
 __pycache__/

@@ -1,0 +1,36 @@
+\section{Notation and Preliminaries}
+\label{sec:preliminaries}
+
+We use calligraphic letters for tensors, bold uppercase letters for matrices, bold lowercase letters for vectors, and italic lowercase letters for scalars. Let
+\[
+\cY\in\R^{I_1\times\cdots\times I_N}
+\]
+be an $N$th-order observation tensor, and let $[I_n]=\{1,\dots,I_n\}$ denote the index set of mode $n$.
+
+For tensors of the same size, $\odot$ denotes the Hadamard product. The element-wise power is written as $\cS^{\odot p}$, with $(\cS^{\odot p})_{\mathbf{i}}=s_{\mathbf{i}}^p$ and $\cS^{\odot 0}=\mathbf{1}$. We use $\|\cdot\|_F$ for the Frobenius norm. The mode-$n$ product between $\cX$ and a matrix $\mathbf{A}$ is denoted by $\cX\times_n \mathbf{A}$.
+
+The Tucker model approximates $\cY$ as
+\[
+\widehat{\cY}
+=
+\llbracket \cX;\mathbf{A}^{(1)},\dots,\mathbf{A}^{(N)} \rrbracket
+:=
+\cX\times_1 \mathbf{A}^{(1)}\times_2\cdots\times_N \mathbf{A}^{(N)},
+\]
+where $\cX\in\R^{R_1\times\cdots\times R_N}$ is the core tensor and $\mathbf{A}^{(n)}\in\R^{I_n\times R_n}$ are factor matrices.
+
+To handle incomplete observations, we use a binary mask tensor $\Omega\in\{0,1\}^{I_1\times\cdots\times I_N}$. The observed-entry fitting form is then
+\[
+\min_{\cX,\{\mathbf{A}^{(n)}\}}
+\frac12\left\|\Omega\odot\left(\cY-\llbracket \cX;\mathbf{A}^{(1)},\dots,\mathbf{A}^{(N)} \rrbracket\right)\right\|_F^2.
+\]
+
+We also define an element-wise polynomial link. Given a degree $P$ and coefficients $\boldsymbol{\beta}=(\beta_0,\beta_1,\dots,\beta_P)^\top$, let
+\[
+f_{\boldsymbol{\beta}}(t)=\sum_{p=0}^{P}\beta_p t^p
+\]
+for a scalar $t$. Applied element-wise to a tensor $\cS$, this becomes
+\[
+f_{\boldsymbol{\beta}}(\cS)=\sum_{p=0}^{P}\beta_p\cS^{\odot p}.
+\]
+When $\beta_1=1$ and all other coefficients vanish, the link reduces to the identity map.

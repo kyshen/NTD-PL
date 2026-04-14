@@ -1,0 +1,7 @@
+﻿setting_key,setting,method_name,method,params,param_note,rmse_metric,rmse_mean,rmse_std,rmse_pm,sam_metric,sam_mean,sam_std,sam_pm
+full_reconstruction,Full reconstruction,tucker,Tucker,38272,Backbone only,RMSE,0.02606496603972742,0.01718234250024906,0.02606 +- 0.01718,SAM,16.432867039665847,7.220688955695722,16.4329 +- 7.2207
+full_reconstruction,Full reconstruction,tucker_polycal_p4,Tucker + PolyCal,38277,Backbone + 5 post-hoc coeffs,RMSE,0.025572772261997063,0.016613796039197826,0.02557 +- 0.01661,SAM,15.40535929599619,6.301294002013243,15.4054 +- 6.3013
+full_reconstruction,Full reconstruction,ntdpl,NTD-PL,38279,"Joint model, $p_{max}=6$",RMSE,0.022338953541078576,0.014974096513803182,0.02234 +- 0.01497,SAM,14.408211134009914,6.30099339780063,14.4082 +- 6.3010
+completion,Completion ($\rho=0.5$),tucker,Tucker,38272,Backbone only,RMSE*,0.0263688603474433,0.0179123457798108,0.02637 +- 0.01791,SAM*,15.556886533736428,6.850182923553795,15.5569 +- 6.8502
+completion,Completion ($\rho=0.5$),tucker_polycal_p4,Tucker + PolyCal,38277,Backbone + 5 post-hoc coeffs,RMSE*,0.0258718705839581,0.0173099773518297,0.02587 +- 0.01731,SAM*,14.341986647874045,5.761708298674205,14.3420 +- 5.7617
+completion,Completion ($\rho=0.5$),ntdpl,NTD-PL,38277,"Joint model, $p_{max}=4$",RMSE*,0.0229938416431347,0.0158198381177773,0.02299 +- 0.01582,SAM*,13.484134060279324,5.745864552475742,13.4841 +- 5.7459

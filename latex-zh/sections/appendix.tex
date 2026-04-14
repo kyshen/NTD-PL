@@ -795,7 +795,7 @@ Hessian 为
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{./inputs/figures/appendix/geometry_response_maps.pdf}
-    \caption{固定二维 Tucker 局部 patch 时，不同多项式最高阶数 $P$ 下学习到的局部响应图与相对 $P=1$ 的偏差图。上排展示局部响应，下排展示相对线性基线的偏差。该图用于补充正文第~5.2.2 节关于“新增表达能力如何随阶数逐步进入局部响应结构”的讨论。}
+    \caption{固定二维 Tucker 局部 patch 时，不同多项式最高阶数 $P$ 下学习到的局部响应图与相对 $P=1$ 的偏差图。上排展示局部响应，下排展示相对线性基线的偏差。}
     \label{fig:geometry-response}
 \end{figure}
 
@@ -804,61 +804,6 @@ Hessian 为
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{./inputs/figures/main/cave_completion_visual_grid.pdf}
-    \caption{CAVE 随机缺失补全的代表性空间可视化。各列依次为原图、带掩膜的观测输入、Tucker 补全、NTD-PL 补全、Tucker 的 missing-only 误差、NTD-PL 的 missing-only 误差，以及 missing-only 误差下降图。最后一列按 Tucker $-$ NTD-PL 定义，正值表示 NTD-PL 在缺失位置上进一步降低了补全误差。该图用于补充正文第~5.3.3 节关于“收益主要发生在缺失区域本身”的讨论。}
+    \caption{CAVE 随机缺失补全的代表性空间可视化。各列依次为原图、带掩膜的观测输入、Tucker 补全、NTD-PL 补全、Tucker 的 missing-only 误差、NTD-PL 的 missing-only 误差，以及 missing-only 误差下降图。最后一列按 Tucker $-$ NTD-PL 定义，正值表示 NTD-PL 在缺失位置上进一步降低了补全误差。}
     \label{fig:cave-completion-visual-app}
 \end{figure}
-
-% \clearpage
-% \section{实验补充图表}
-% \label{app:exp_supp}
-
-% 本节汇总正文第 5 章引用的补充图表，包括残差统计、实现细节和代表性可视化。它们与正文采用相同协议，用于补充数值与现象说明。
-
-% \subsection{合成实验补充}
-
-% \begin{figure}[htbp]
-%     \centering
-%     \includegraphics[width=\textwidth]{./inputs/figures/appendix/geometry_link_evolution.pdf}
-%     \caption{该图使用 $\alpha=0.3$ 的真实训练结果，直接展示 多项式链接 随 $P$ 升阶时如何从近线性的 $p=1$ 基线逐步偏离。左上给出共享坐标范围下的链接函数 $f_{\beta^{(p)}}(s)$，右上给出相对 $p=1$ 的偏差 $\Delta_p(s)$，下排用两个简单统计量量化这种偏离在 1D 链接空间和固定局部响应 patch 上的增强。}
-%     \label{fig:geometry-link}
-% \end{figure}
-
-% \begin{figure}[htbp]
-%     \centering
-%     \includegraphics[width=\textwidth]{./inputs/figures/appendix/geometry_response_maps.pdf}
-%     \caption{该图在同一组学习得到的 $\beta$ 系数下，固定一个二维 Tucker 局部 patch，并比较不同 $P$ 对局部观测响应的影响。第一行给出共享色轴下的局部响应等值图，并叠加 $p=1$ 的虚线等值线作为线性参考；第二行给出相对 $p=1$ 的偏差热图。}
-%     \label{fig:geometry-response}
-% \end{figure}
-
-% \subsection{真实高光谱实验补充}
-
-% \begin{table}[htbp]
-%     \centering
-%     \caption{该表汇总外部鲁棒性验证所用四个补充高光谱数据集的原始尺寸、保留波段与统一协议。补充数据集选自与 Jasper Ridge 更接近的经典 scene benchmark，均直接使用 full scene，采用 global max normalization，并在与 CAVE 主文中预算近似匹配的统一规则下自动确定 rank；completion 统一使用 $\rho=0.5$ 的随机逐元素缺失。}
-%     \label{tab:real_hsi_protocol}
-%     \small
-%     \setlength{\tabcolsep}{3.8pt}
-%     \resizebox{\linewidth}{!}{%
-%     \input{inputs/real-hsi-robustness/real_hsi_robustness_protocol.tex}}
-% \end{table}
-
-% \begin{table}[htbp]
-%     \centering
-%     \caption{该表给出外部鲁棒性验证的完整数值版本。Recon. 行报告 RMSE / NMSE(dB) / SAM；Compl. 行报告 RMSE* / NMSE(dB)* / SAM*，其中 completion 数值为三个随机缺失种子的均值 $\pm$ 标准差，Rank 列为按统一压缩率匹配规则自动确定的 multilinear rank。}
-%     \label{tab:real_hsi_robustness_appendix}
-%     \small
-%     \setlength{\tabcolsep}{3.8pt}
-%     \resizebox{\linewidth}{!}{%
-%     \input{inputs/real-hsi-robustness/real_hsi_robustness_appendix_table.tex}}
-% \end{table}
-
-% \begin{table}[htbp]
-%     \centering
-%     \caption{该表给出随机缺失补全的完整结果版本。与正文主表相比，这里额外保留 all-entry 指标，用于说明 missing-only 主结论与整体误差趋势一致。}
-%     \label{tab:cave-random-completion-full}
-%     \small
-%     \setlength{\tabcolsep}{3.8pt}
-%     \resizebox{\textwidth}{!}{%
-%     \input{inputs/cave-random-completion/random_completion_full_table.tex}}
-% \end{table}
-

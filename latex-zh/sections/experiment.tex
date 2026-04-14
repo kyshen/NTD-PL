@@ -256,7 +256,7 @@ c_p
     \label{fig:cave_completion_advantage_heatmap}
 \end{figure}
 
-为了把图~\ref{fig:cave_completion_advantage_heatmap} 的统计结果落实到具体空间位置，图~\ref{fig:cave_completion_advantage_spatial} 固定展示 \texttt{cd} 场景。四个 panel 从左到右依次为：原图、difficulty map、boundary map、missing-only error reduction map。difficulty map 橙色越亮表示越难；boundary map 蓝色越亮表示边界/纹理越强；第四列红色表示 NTD-PL 更优、蓝色表示 Tucker 更优。图中的白色轮廓表示 top difficulty 与 top boundary 的交集区域。从空间分布看，红色和橙色增益区域并非在整幅图像上均匀铺开，最显著的误差下降发生在“既难又靠近边界”的像素位置，即材料交界、细纹理和过渡带等线性低秩假设更易失配的区域。由此可以更直观地理解：NTD-PL 的优势不是全局平滑，而是对关键局部残差的定点修正。
+为了把图~\ref{fig:cave_completion_advantage_heatmap} 的统计结果落实到具体空间位置，图~\ref{fig:cave_completion_advantage_spatial} 固定展示 \texttt{cd} 场景。四个 panel 从左到右依次为：原图、difficulty map、boundary map、missing-only error reduction map。difficulty map 橙色越亮表示越难；boundary map 蓝色越亮表示边界/纹理越强；第四列红色表示 NTD-PL 更优、蓝色表示 Tucker 更优。图中的白色轮廓表示 top difficulty 与 top boundary 的交集区域。从空间分布看，红色和橙色增益区域并非在整幅图像上均匀铺开，最显著的误差下降发生在既难又靠近边界的像素位置，即材料交界、细纹理和过渡带等线性低秩假设更易失配的区域。由此可以更直观地理解：NTD-PL 的优势不是全局平滑，而是对关键局部残差的定点修正。
 
 \begin{figure}[htbp]
     \centering
@@ -272,7 +272,7 @@ c_p
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\linewidth]{./inputs/figures/main/cave_parameter_mechanism.pdf}
-    \caption{CAVE 随机缺失补全中的阶数机制分析。左图给出缺失位置主指标随多项式最高阶数 $P$ 的变化，显示主要收益在低到中阶范围内逐步建立；右图给出不同 $P$ 下各阶项的平均 effective contribution，表明二阶和三阶项始终占主导，而更高阶项的边际贡献明显较弱。}
+    \caption{CAVE 随机缺失补全中的阶数机制分析。左图给出缺失位置主指标随多项式最高阶数 $P$ 的变化；右图给出不同 $P$ 下各阶项的平均有效贡献。}
     \label{fig:parameter_mechanism}
 \end{figure}
 
@@ -282,7 +282,7 @@ c_p
 
 \begin{table}[htbp]
     \centering
-    \caption{跨数据集鲁棒性验证主表。Rank 为按统一压缩率匹配规则自动确定的 multilinear rank。Recon. 行中 Tucker / NTD-PL 为 RMSE，Compl. 行中 Tucker / NTD-PL 为 RMSE*；Gain(\%)、$\Delta$NMSE(dB) 与 $\Delta$SAM 统一按 Tucker $-$ NTD-PL 定义，因此正值表示 NTD-PL 更优。}
+    \caption{跨数据集鲁棒性验证主表。Recon. 行中 Tucker / NTD-PL 为 RMSE，Compl. 行中 Tucker / NTD-PL 为 RMSE*；Gain(\%)、$\Delta$NMSE(dB) 与 $\Delta$SAM 统一按 Tucker $-$ NTD-PL 定义，因此正值表示 NTD-PL 更优。}
     \label{tab:real_hsi_robustness}
     \small
     \setlength{\tabcolsep}{4.6pt}

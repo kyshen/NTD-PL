@@ -1,0 +1,98 @@
+\begin{tikzpicture}[
+    line cap=round,
+    line join=round,
+    >=Latex,
+    font=\small,
+    factor/.style={
+        circle,
+        draw=black,
+        fill=white,
+        minimum size=9mm,
+        inner sep=0pt,
+        line width=1.0pt
+    },
+    core/.style={
+        circle,
+        draw=black,
+        fill=gray!20,
+        minimum size=9mm,
+        inner sep=0pt,
+        line width=1.0pt
+    },
+    edge/.style={
+        draw=black,
+        line width=1.0pt
+    },
+    hedge/.style={
+        draw=black,
+        dashed,
+        line width=1.0pt,
+        dash pattern=on 4pt off 3pt
+    }
+]
+
+% =========================================================
+% p-Tucker
+% =========================================================
+\begin{scope}[xshift=0cm]
+    \node[factor] (f1) at (0.00, 0.00) {$\mathcal{A}^{(1)}$};
+    \node[factor] (f2) at (3.464, 2.000) {$\mathcal{A}^{(2)}$};
+    \node[factor] (f3) at (2.249, 2.932) {$\mathcal{A}^{(3)}$};
+
+    \node[core] (c1) at (1.378, 1.354) {$\mathcal{X}$};
+    \node[core] (c2) at (0.671, 2.061) {$\mathcal{X}$};
+    \node[core] (c3) at (2.793, -0.061) {$\mathcal{X}$};
+
+    \draw[edge] (f1) -- (c1);
+    \draw[edge] (f1) -- (c2);
+    \draw[edge] (f1) -- (c3);
+    \draw[hedge] (f2) -- (c1);
+    \draw[hedge] (f2) -- (c2);
+    \draw[edge] (f2) -- (c3);
+    \draw[edge] (f3) -- (c1);
+    \draw[edge] (f3) -- (c2);
+    \draw[edge] (f3) -- (c3);
+
+    \node[font=\Large, rotate=-45] at (2.085, 0.64) {$\dots$};
+    \node[font=\normalsize] at (1.732,-1.35) {$p$-Tucker};
+\end{scope}
+
+\node[font=\Large] at (4.65, 1.05) {$\approx$};
+
+% =========================================================
+% Tucker 1
+% =========================================================
+\begin{scope}[xshift=5.8cm]
+    \node[factor] (g1f1) at (0.00, 0.00) {$\mathbf{B}^{(1)}$};
+    \node[factor] (g1f2) at (3.464, 2.000) {$\mathbf{B}^{(2)}$};
+    \node[factor] (g1f3) at (2.249, 2.932) {$\mathbf{B}^{(3)}$};
+    \node[core]   (g1c1) at (1.732, 1.00) {$\mathcal{X}$};
+
+    \draw[edge] (g1f1) -- (g1c1);
+    \draw[edge] (g1f2) -- (g1c1);
+    \draw[edge] (g1f3) -- (g1c1);
+
+    \node[font=\normalsize] at (1.732,-1.35) {$\mathcal{S}_1$};
+\end{scope}
+
+\node[font=\Large] at (10.05, 1.05) {$\odot$};
+\node[font=\Large] at (11.25, 1.05) {$\cdots$};
+\node[font=\Large] at (12.45, 1.05) {$\odot$};
+
+% =========================================================
+% Tucker p
+% =========================================================
+\begin{scope}[xshift=13.6cm]
+    \node[factor] (gpf1) at (0.00, 0.00) {$\mathbf{P}^{(1)}$};
+    \node[factor] (gpf2) at (3.464, 2.000) {$\mathbf{P}^{(2)}$};
+    \node[factor] (gpf3) at (2.249, 2.932) {$\mathbf{P}^{(3)}$};
+    \node[core]   (gpc1) at (1.732, 1.00) {$\mathcal{X}$};
+
+    \draw[edge] (gpf1) -- (gpc1);
+    \draw[edge] (gpf2) -- (gpc1);
+    \draw[edge] (gpf3) -- (gpc1);
+
+    \node[font=\normalsize] at (1.732,-1.35) {$\mathcal{S}_p$};
+\end{scope}
+
+\end{tikzpicture}

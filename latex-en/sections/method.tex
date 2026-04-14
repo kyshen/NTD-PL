@@ -1,0 +1,451 @@
+\section{Proposed Method}
+\label{sec:method}
+
+Under the premise of preserving the Tucker low-rank backbone, how can we introduce higher-order interactions in a controlled way while still maintaining a manageable parameter scale, interpretability, and practical optimization? To answer this question, this section first presents the structural motivation behind NTD-PL, then formally defines the model, summarizes its basic properties, and finally gives a unified learning objective and optimization framework consistent with the current implementation.
+
+\subsection{Design Motivation: Explicit Higher-Order Interactions}
+
+Standard Tucker decomposition $\mathcal{T}(\mathcal{X},\{\mathbf{A}^{(n)}\})$ forms a multilinear generation mechanism through a shared core tensor and mode-wise factor matrices. Its essence is to generate the observation tensor through successive mode products in a low-rank latent space. This structure enjoys good parameter efficiency and structural transparency in compression, recovery, and representation learning, but it implicitly assumes that observed entries can be adequately described by a multilinear mechanism. For data with saturated responses, nonlinear observations, complex higher-order couplings, or curved structures, reliance on multilinearity alone often leads to systematic mismatch.
+
+In the matrix setting, a natural enhancement is to generalize a linear mapping
+\begin{equation}
+\mathbf y = \mathbf A\mathbf x
+\end{equation}
+to a mapping with quadratic interactions,
+\begin{equation}
+\label{eq:qmf_motivation}
+\mathbf y = \mathbf A\mathbf x + \mathcal A(\mathbf x,\mathbf x).
+\end{equation}
+The central insight of QMF \cite{zhai2024quadratic} is precisely that the role of the quadratic term is not simply to add parameters, but to provide the most basic step from locally flat representations to locally curved ones. Following the same line of thought, for tensors a natural question is: since Tucker is already the extension of linear low-rank models to multiway data, can we further bring explicit higher-order interactions into the generative mechanism of Tucker?
+
+To this end, we write $p$th-order interactions into Tucker. A natural explicit prototype can be written as
+\begin{equation}
+\label{eq:explicit_p_tucker_prototype}
+\widehat y^{(p)}_{i_1\cdots i_N}
+=
+\sum_{\mathbf r^{(1)},\dots,\mathbf r^{(p)}}
+\Bigl(\prod_{q=1}^{p} x_{\mathbf r^{(q)}}\Bigr)
+\prod_{n=1}^{N}
+ a^{(n)}_{i_n,\,r_n^{(1)},\dots,r_n^{(p)}},
+\end{equation}
+where each mode factor depends simultaneously on $p$ latent indices in mode $n$. Equation~\eqref{eq:explicit_p_tucker_prototype} defines a higher-order Tucker decomposition: it preserves the mode-wise generative form of Tucker, but replaces the linear mapping in each mode with an explicit local coupling of order $p$. When $p=2$, it corresponds to quadratic Tucker; for general $p$, it can be viewed as an explicit $p$th-order Tucker prototype, which we denote by $p$-Tucker. The following tensor network diagram gives a more intuitive illustration of this higher-order extension of Tucker.
+\begin{center}
+\resizebox{\linewidth}{!}{\input{./artifacts/p-tucker.tex}}
+\end{center}
+
+Although this prototype is conceptually natural, it is not suitable as the final model. As the order $p$ increases, the mode factors must be lifted to higher-order tensors, and the core tensor induces Kronecker-type higher-order expansions during generation. As a result, the parameter count, storage, and contraction cost all grow rapidly. More importantly, the optimization problem also becomes significantly harder. Therefore, explicit $p$-Tucker is better viewed as structural motivation: it explains how higher-order interactions may enter Tucker, but does not by itself provide a scalable implementation.
+
+Based on this observation, instead of directly training the explicit higher-order model corresponding to \eqref{eq:explicit_p_tucker_prototype}, we seek a structured compression that preserves the semantics of higher-order interactions in $p$-Tucker while keeping the parameter scale of Tucker. NTD-PL is the model obtained under this design goal.
+
+\subsection{NTD-PL Model Definition and Structural Interpretation}
+
+\subsubsection{Model Definition}
+
+We propose Nonlinear Tucker Decomposition with Polynomial Links, abbreviated as NTD-PL. Its core idea is to first generate a shared low-rank latent tensor by Tucker decomposition, and then apply an explicit element-wise polynomial link to this latent tensor. Specifically, let
+\begin{equation}
+\label{eq:ntdpl_latent_tensor}
+\cS
+=
+\mathcal{T}(\mathcal{X},\{\mathbf{A}^{(n)}\}),
+\end{equation}
+where $\cX\in\mathbb R^{R_1\times\cdots\times R_N}$ is the core tensor and $\mathbf A^{(n)}\in\mathbb R^{I_n\times R_n}$ is the factor matrix for mode $n$. NTD-PL is defined as
+\begin{equation}
+\label{eq:ntdpl_model}
+\widehat{\cY}
+=
+ f_{\boldsymbol\beta}(\cS)
+=
+\sum_{p=0}^{P} \beta_p \cS^{\odot p},
+\end{equation}
+where $\boldsymbol\beta=(\beta_0,\beta_1,\dots,\beta_P)^\top$ is the vector of polynomial link coefficients, and $\cS^{\odot p}$ denotes the element-wise $p$th power of $\cS$.
+
+In \eqref{eq:ntdpl_model}, $\beta_0$ corresponds to a constant bias term, $\beta_1$ corresponds to the standard Tucker linear term, and $\beta_p$ for $p\ge 2$ corresponds to higher-order interaction terms activated on the shared low-rank backbone. In particular, when
+\begin{equation}
+\beta_1=1,\qquad \beta_p=0\ (p\neq 1),
+\end{equation}
+the model reduces exactly to standard Tucker. Therefore, NTD-PL is not another new backbone meant to replace Tucker, but a controlled nonlinear extension centered on the Tucker latent tensor.
+
+NTD-PL should not be simply understood as performing Tucker reconstruction first and then applying an element-wise correction to the output. The key difference is that the nonlinearity in \eqref{eq:ntdpl_model} acts not on an external signal independent of the low-rank structure, but on the shared Tucker latent tensor $\cS$ itself. Since each entry of $\cS$ is already generated through multilinear coupling between the core tensor and the mode factors, $\cS^{\odot p}$ corresponds to a reorganization of interaction patterns on the same backbone, rather than an independent calibration applied after a completed linear reconstruction. Later, we will explicitly distinguish these two mechanisms by comparing polynomial post-processing of Tucker with NTD-PL.
+
+\subsubsection{A Structured Compression of $p$-Tucker}
+
+The definition of NTD-PL comes from a structured compression of $p$-Tucker. Consider the quadratic case. If we write the mode factor in \eqref{eq:explicit_p_tucker_prototype} as
+\begin{equation}
+ a^{(n)}_{i_n,r_n,r_n'} \approx b^{(n)}_{i_n,r_n}c^{(n)}_{i_n,r_n'},
+\end{equation}
+then the quadratic term can be rewritten as the element-wise product of two Tucker tensors:
+\begin{equation}
+\label{eq:separable_quadratic_factorization}
+\widehat{\cY}_2 \approx \cS_B \odot \cS_C,
+\end{equation}
+where
+\begin{equation}
+\mathcal{T}(\mathcal{X},\{\mathbf{B}^{(n)}\}),
+\qquad
+\mathcal{T}(\mathcal{X},\{\mathbf{C}^{(n)}\}).
+\end{equation}
+If we further impose the shared projection constraint $\mathbf B^{(n)}=\mathbf C^{(n)}$, we obtain
+\begin{equation}
+\label{eq:shared_quadratic_term}
+\widehat{\cY}_2 \approx \cS^{\odot 2}.
+\end{equation}
+Extending the same idea to higher orders yields $\cS^{\odot p}$ on a shared backbone. NTD-PL can therefore be understood as linearly combining these shared-projection $p$th-order interaction terms by their coefficients, thereby compressing the complexity of explicit $p$-Tucker into a small number of link coefficients. The following tensor network diagram illustrates this behavior more directly.
+\begin{center}
+\resizebox{\linewidth}{!}{\input{./artifacts/p-tucker-hadamard.tex}}
+\end{center}
+
+\subsection{Basic Properties of NTD-PL}
+
+This subsection summarizes the three most basic properties of NTD-PL: model-family relations and parameter efficiency, expressivity under nonlinear generation, and scale indeterminacy together with the normalization mechanism. Detailed proofs are deferred to Appendix~\ref{app:model_properties}--\ref{app:expressivity}. As we will see later, these properties are also validated in controlled synthetic experiments.
+
+\subsubsection{Model-Family Relations and Parameter Efficiency}
+
+\begin{proposition}[Reduction to Tucker]
+\label{prop:tucker_special_case}
+If $\beta_1=1$ and $\beta_p=0$ for all $p\neq 1$, then \eqref{eq:ntdpl_model} reduces to the standard Tucker model, namely
+\begin{equation}
+\widehat{\cY}
+=
+\cS
+=
+\mathcal{T}(\mathcal{X},\{\mathbf{A}^{(n)}\}).
+\end{equation}
+\end{proposition}
+
+\begin{proposition}[Degree Nesting]
+\label{prop:nested_model_family}
+For any $P_1<P_2$, the degree-$P_1$ NTD-PL model class is a subset of the degree-$P_2$ model class.
+\end{proposition}
+
+These two propositions show that NTD-PL forms a nested family of models with respect to the polynomial degree $P$: when the higher-order terms are turned off, it returns exactly to Tucker; as $P$ increases, the model expressivity expands in a controlled fashion by degree. This is also the theoretical basis for the degree-continuation optimization used later.
+
+\begin{proposition}[Parameter Complexity]
+\label{prop:param_complexity}
+Let the multilinear rank be $(R_1,\dots,R_N)$. Then the total number of parameters in NTD-PL is
+\begin{equation}
+\#\mathrm{param}
+=
+\prod_{n=1}^{N}R_n
++
+\sum_{n=1}^{N}I_nR_n
++
+(P+1),
+\label{eq:ntdpl_param_count_main}
+\end{equation}
+where the first two terms correspond to the core and factor parameters of standard Tucker decomposition, and the last term corresponds to the polynomial link coefficients.
+\end{proposition}
+
+Proposition~\ref{prop:param_complexity} shows that the additional degrees of freedom in NTD-PL are reflected only in $P+1$ scalar coefficients, rather than in new higher-order factor tensors or higher-order cores. Hence, compared with explicit $p$-Tucker, NTD-PL does not enhance expressivity by introducing another set of higher-order parameterizations, but by adding controlled nonlinearity while essentially preserving the parameter scale of Tucker.
+
+\subsubsection{Expressivity Under Nonlinear Generation}
+
+The expressivity of NTD-PL can be understood from the viewpoint of an element-wise nonlinear generation model. Suppose there exists a true Tucker latent tensor
+\begin{equation}
+\cS^\star
+=
+\mathcal{T}(\mathcal{X^\star},\{\mathbf{A}^{(n)\star}\})
+\end{equation}
+and suppose the observation tensor is generated by applying a scalar function $g:\mathbb R\to\mathbb R$ element-wise, namely
+\begin{equation}
+\cY = g(\cS^\star).
+\end{equation}
+
+\begin{proposition}[Exact Representation Under Polynomial Generation]
+\label{prop:poly_exact_main}
+If the observation tensor satisfies $\cY = g(\cS^\star)$, where $g(s)=\sum_{p=0}^{P} a_p s^p$ is a polynomial of degree at most $P$, then NTD-PL can represent this generation process exactly by taking the latent tensor $\cS=\cS^\star$ and setting $\beta_p=a_p$. A detailed proof is given in Appendix Theorem~\ref{thm:poly_exact}.
+\end{proposition}
+
+\begin{theorem}[Explicit Truncation Error Bound for Analytic Functions]
+\label{thm:analytic_bound_main}
+Suppose $g$ is analytic on the complex disk
+\begin{equation}
+D(0,\rho)=\{z\in\mathbb C:|z|<\rho\}
+\end{equation}
+and there exists a constant $B$ such that
+\begin{equation}
+\|\cS^\star\|_\infty \le B < \rho.
+\end{equation}
+Let the Taylor expansion of $g$ at $0$ be
+\begin{equation}
+g(s)=\sum_{p=0}^{\infty} a_p s^p,
+\end{equation}
+and let its degree-$P$ truncated polynomial be
+\begin{equation}
+q_P(s)=\sum_{p=0}^{P} a_p s^p.
+\end{equation}
+If we take the latent tensor of NTD-PL to be $\cS^\star$ and set the link coefficients to $\beta_p=a_p$, then the approximation error satisfies
+\begin{equation}
+\|g(\cS^\star)-q_P(\cS^\star)\|_F
+\le
+\sqrt{N_e}\,M_\rho
+\frac{(B/\rho)^{P+1}}{1-B/\rho},
+\label{eq:analytic_bound_main}
+\end{equation}
+where
+\begin{equation}
+N_e=\prod_{n=1}^N I_n,
+\qquad
+M_\rho=\sup_{|z|=\rho}|g(z)|.
+\end{equation}
+\end{theorem}
+
+Equation~\eqref{eq:analytic_bound_main} provides an error decomposition with a clear interpretation. First, the leading term $(B/\rho)^{P+1}$ shows that, when $B/\rho<1$ is fixed, the truncation error decays geometrically with the polynomial degree $P$. Therefore, as long as the amplitude range of the true latent tensor does not approach the boundary of the radius of analyticity, finite-order NTD-PL can rapidly approximate the analytic generating function. Second, the denominator term $1-B/\rho$ characterizes the margin to the nearest singularity: when $B$ is smaller relative to $\rho$, the active range of the true signal lies deeper inside a stable analytic region, and the remainder bound becomes tighter; conversely, as $B$ approaches $\rho$, approximation becomes substantially harder. Finally, $\sqrt{N_e}$ only reflects the scale enlargement that occurs when passing from uniform scalar approximation to the Frobenius error over the whole tensor, and does not change the convergence order with respect to $P$. Hence, the theorem shows that the approximation ability of NTD-PL is primarily determined by the analyticity of the link function over the effective input range and the relative magnitude of $B/\rho$, rather than by the introduction of additional higher-order tensor parameters. This will help explain the approximation behavior in Section~\ref{sec:nonlinearapprox}.
+
+\subsubsection{Scale Indeterminacy and the Normalization Mechanism}
+
+Like standard Tucker, NTD-PL inherits the scale indeterminacy between the core tensor and the factor matrices. Since NTD-PL simultaneously combines $\cS,\cS^{\odot 2},\dots,\cS^{\odot P}$, this scale issue is even more sensitive under a polynomial link: if the scale of $\cS$ drifts, terms of different orders are amplified or shrunk at different rates, which directly affects the numerical stability of $\boldsymbol\beta$.
+
+\begin{proposition}[Scale Invariance]
+\label{prop:scale_invariance_main}
+Suppose an invertible diagonal scaling $D^{(n)}$ is applied to the factor matrix of some mode $n$, and the corresponding inverse scaling is simultaneously absorbed into the core tensor. Then the latent tensor $\cS$ remains unchanged, and consequently the NTD-PL output $\widehat{\cY}=f_{\boldsymbol\beta}(\cS)$ also remains unchanged.
+\end{proposition}
+
+Proposition~\ref{prop:scale_invariance_main} shows that column normalization of the factor matrices together with absorption of scale into the core tensor can be understood as a form of \emph{gauge fixing}: it does not change the model class, but simply selects a more stable representative from an equivalence class of parameterizations. When higher-order terms participate in modeling, this step is particularly important for the estimation of $\boldsymbol\beta$, and is therefore included as a fixed step in the optimization algorithm below.
+
+\subsection{Unified Learning Objective and Optimization Algorithm}
+
+\subsubsection{Unified Learning Objective}
+
+To handle decomposition and missing-data completion within a single optimization framework, let the binary observation mask tensor be denoted by $\Omega\in\{0,1\}^{I_1\times\cdots\times I_N}$. Consider the following objective:
+\begin{equation}
+\label{eq:ntdpl_masked_objective}
+\min_{\cX,\{\mathbf A^{(n)}\},\boldsymbol\beta}
+\;
+\frac{1}{2Z_\Omega}
+\left\|
+\Omega \odot
+\left(
+\cY - f_{\boldsymbol\beta}(\cS)
+\right)
+\right\|_F^2
++
+\mathcal R(\cX,\{\mathbf A^{(n)}\},\boldsymbol\beta),
+\end{equation}
+where $\cS=\mathcal{T}(\mathcal{X},\{\mathbf{A}^{(n)}\})$, and
+\begin{equation}
+Z_\Omega =
+\begin{cases}
+\prod_{n=1}^{N} I_n, & \Omega \equiv \mathbf 1,\\[2mm]
+\sum\limits_{i_1,\dots,i_N} \Omega_{i_1\cdots i_N}, & \text{otherwise}.
+\end{cases}
+\end{equation}
+Here, $Z_\Omega$ normalizes the data-fitting term by the number of effective entries so that the gradient magnitude remains comparable between the full-observation and missing-observation cases. This is also consistent with the residual scaling used in the current implementation. The regularizer is taken as
+\begin{equation}
+\label{eq:ntdpl_reg_obj}
+\mathcal R(\cX,\{\mathbf A^{(n)}\},\boldsymbol\beta)
+=
+\frac{\lambda_X}{2}\|\cX\|_F^2
++
+\sum_{n=1}^{N}\frac{\lambda_n}{2}\|\mathbf A^{(n)}\|_F^2
++
+\frac{\lambda_\beta}{2}\|\boldsymbol\beta\|_2^2.
+\end{equation}
+
+When $\Omega\equiv \mathbf 1$, \eqref{eq:ntdpl_masked_objective} becomes the NTD-PL decomposition objective for a fully observed tensor; when $\Omega$ is a general mask, it becomes a completion objective trained only on the observed entries. In this way, decomposition and completion no longer require two separate models; they are simply two observation settings under the same learning objective.
+
+\subsubsection{Initialization}
+
+As a polynomial extension of Tucker, NTD-PL can naturally use Tucker decomposition as the optimization starting point. For fully observed data we use standard Tucker initialization, and for missing observations we use masked Tucker initialization \cite{yang2016iterative, liu2012tensor}. For the polynomial coefficients, we use a linear warm start:
+\begin{equation}
+\beta_0=0,\qquad \beta_1=1,\qquad \beta_p=0\quad (p\ge 2).
+\label{eq:beta_warm_start}
+\end{equation}
+We adopt a continuation-style optimization strategy, starting from the linear case $p=1$ and progressively activating higher-order terms as optimization proceeds. This means that the model always starts from a neighborhood of the standard Tucker solution, rather than from a fully nonlinear high-order model from the outset.
+
+\subsubsection{Updates for the Core and the Factors}
+
+After fixing $\boldsymbol\beta$, we first construct the latent tensor
+\begin{equation}
+\cS = \llbracket \cX;\mathbf A^{(1)},\dots,\mathbf A^{(N)}\rrbracket,
+\end{equation}
+and compute the prediction tensor
+\begin{equation}
+\widehat{\cY}=f_{\boldsymbol\beta}(\cS),
+\qquad
+f_{\boldsymbol\beta}'(\cS)=\sum_{p=1}^{P} p\beta_p\cS^{\odot(p-1)}.
+\label{eq:poly_derivative_tensor}
+\end{equation}
+In the current implementation, $f_{\boldsymbol\beta}(\cS)$ and $f_{\boldsymbol\beta}'(\cS)$ are evaluated simultaneously through a fused Horner recursion to reduce repeated power computations and memory access. This only changes the constant factor in runtime and does not change the model itself.
+
+Let the normalized masked residual be
+\begin{equation}
+\mathbf E = \frac{1}{Z_\Omega}\,\Omega\odot(\widehat{\cY}-\cY),
+\end{equation}
+and define
+\begin{equation}
+\mathbf T = \mathbf E \odot f_{\boldsymbol\beta}'(\cS).
+\label{eq:T_tensor}
+\end{equation}
+Then, by the chain rule, the gradient of the objective with respect to the latent tensor $\cS$ is proportional to $\mathbf T$. Propagating further through the Tucker reconstruction relation gives the core-tensor gradient
+\begin{equation}
+\label{eq:grad_core_main}
+\nabla_{\cX}\mathcal L
+=
+\mathbf T
+\times_1 \mathbf A^{(1)\top}
+\times_2 \cdots
+\times_N \mathbf A^{(N)\top}
++
+\lambda_X\cX.
+\end{equation}
+For the factor matrix in mode $n$, let
+\begin{equation}
+\label{eq:Zn_def}
+\mathbf Z^{(n)}
+=
+\Bigl[\cX\times_{m\neq n}\mathbf A^{(m)}\Bigr]_{(n)},
+\end{equation}
+where $[\cdot]_{(n)}$ denotes mode-$n$ unfolding. Then the corresponding gradient can be written as
+\begin{equation}
+\label{eq:grad_factor_main}
+\nabla_{\mathbf A^{(n)}}\mathcal L
+=
+\mathbf T_{(n)}\,\mathbf Z^{(n)\top}
++
+\lambda_n\mathbf A^{(n)}.
+\end{equation}
+
+Since the element-wise polynomial link breaks the closed-form least-squares structure of classical Tucker subproblems, we do not use alternating least squares. Instead, we update $\cX$ and all factor matrices by Adam \cite{kingma2014adam}.
+
+\subsubsection{Update of the Polynomial Coefficients}
+
+When $\cX$ and $\{\mathbf A^{(n)}\}_{n=1}^{N}$ are fixed, the latent tensor $\cS$ is also fixed. At this point, the update of $\boldsymbol\beta$ reduces to a low-dimensional ridge-regression problem \cite{hoerl1970ridge}. Let the observation vector be $\mathbf y_\Omega$, and define the design matrix
+\begin{equation}
+\label{eq:PhiOmega_main}
+\Phi_\Omega
+=
+\left[
+\mathbf 1,
+\mathrm{vec}(\cS)_\Omega,
+\mathrm{vec}(\cS^{\odot 2})_\Omega,
+\dots,
+\mathrm{vec}(\cS^{\odot P})_\Omega
+\right]
+\in \mathbb R^{|\Omega|\times(P+1)}.
+\end{equation}
+Then the $\boldsymbol\beta$ subproblem is
+\begin{equation}
+\label{eq:beta_ridge}
+\min_{\boldsymbol\beta}
+\frac12\|\mathbf y_\Omega-\Phi_\Omega\boldsymbol\beta\|_2^2
++
+\frac{\lambda_\beta}{2}\|\boldsymbol\beta\|_2^2.
+\end{equation}
+If the constant term is allowed to participate in fitting, we solve \eqref{eq:beta_ridge} directly. If not, we fix $\beta_0=0$ and perform the same ridge update only for the coefficients with $p\ge 1$. Since $\lambda_\beta>0$, the system matrix $\Phi_\Omega^\top\Phi_\Omega+\lambda_\beta I$ is always positive definite. Therefore, this subproblem is strongly convex and has a unique solution. A strict proof is given in Appendix~\ref{app:beta_unique}.
+
+Although the overall problem is nonconvex jointly in $(\cX,\{\mathbf A^{(n)}\},\boldsymbol\beta)$, once the Tucker latent variable $\cS$ is fixed, the update of $\boldsymbol\beta$ is always a strongly convex ridge-regression problem of size only $P+1$. This is one of the key reasons why the paper can retain higher-order nonlinear expressivity while still using a stable alternating optimization framework.
+
+Power bases of high order may be numerically ill-conditioned, especially when the range of $\cS$ is large. To improve this, in implementation we may first solve for coefficients $\boldsymbol\gamma$ on the power basis of the standardized variable
+\begin{equation}
+\mathbf Z = \frac{\cS-\mu}{\sigma},
+\end{equation}
+and then map them back to the original power-basis coefficients $\boldsymbol\beta$ by a basis transformation. This process only improves numerical conditioning in solving the subproblem and does not change the form of the outer model.
+
+\subsubsection{Factor Normalization and Core Absorption}
+
+After each round of gradient updates, we normalize every column of each factor matrix to unit $\ell_2$ norm and absorb the corresponding scale into the core tensor. According to Proposition~\ref{prop:scale_invariance_main}, this step does not change the latent tensor $\cS$, and therefore does not change the output of NTD-PL. Its role is to reduce scale drift caused by equivalent parameterizations, especially to weaken the coupling effect of scale variation in $\cS$ on higher-order terms $\cS^{\odot p}$ and on the estimation of $\boldsymbol\beta$.
+
+\subsubsection{Degree Continuation Strategy}
+
+Directly optimizing a high-order polynomial model from scratch is often unstable. For this reason, we adopt a degree continuation strategy: training starts from the linear Tucker case $p=1$, and higher-order terms are gradually activated at preset milestones $\tau_2<\cdots<\tau_P$. Whenever the $p$th-order term is activated, the corresponding new coefficient is initialized to zero, namely
+\begin{equation}
+\boldsymbol\beta^{\mathrm{new}}
+=
+(\beta_0,\dots,\beta_{p-1},0)^\top.
+\end{equation}
+In this way, the model transitions gradually from a stable linear solution to a richer nonlinear one, rather than jointly optimizing all coefficients in a high-order search space from the beginning. Proposition~\ref{prop:nested_model_family} has already shown that such continuation is not merely a heuristic trick, but a natural optimization path that follows the nested structure of the model family.
+
+\begin{algorithm}[t]
+\caption{NTD-PL with alternating optimization and degree continuation}
+\label{alg:ntdpl}
+\begin{algorithmic}[1]
+\State Input: observation tensor $\cY$, mask $\Omega$, multilinear rank $\{R_n\}$, maximum polynomial degree $P$
+\State Initialize $(\cX,\{\mathbf A^{(n)}\})$ by Tucker / masked Tucker
+\State Initialize $\beta_0=0,\beta_1=1,\beta_p=0\ (p\ge 2)$
+\State If continuation is enabled, set the current degree to $p\leftarrow 1$; otherwise set it to $p\leftarrow P$
+\For{$t=1,2,\dots,T$}
+    \State If a new degree milestone is reached, activate the next order and set the new coefficient to zero
+    \State Construct the latent tensor $\cS=\llbracket \cX;\mathbf A^{(1)},\dots,\mathbf A^{(N)}\rrbracket$
+    \State Compute $f_{\boldsymbol\beta}(\cS)$ and $f'_{\boldsymbol\beta}(\cS)$, and obtain the residual tensor and the intermediate tensor $\mathbf T$
+    \State Update the core tensor $\cX$ and the mode factors $\{\mathbf A^{(n)}\}$ by Adam
+    \State Normalize the factor columns and absorb their scales into the core tensor
+    \If{$t$ reaches a $\boldsymbol\beta$ update interval}
+        \State Fix the current $\cS$ and update $\boldsymbol\beta$ by ridge regression
+    \EndIf
+\EndFor
+\State Output: $\cX$, $\{\mathbf A^{(n)}\}$, and $\boldsymbol\beta$
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Complexity Analysis of the Algorithm}
+
+Let the total number of entries in the observation tensor be
+\begin{equation}
+M = \prod_{n=1}^{N} I_n,
+\qquad
+M_\Omega = |\Omega|,
+\qquad
+R=\prod_{n=1}^{N}R_n.
+\end{equation}
+Here, $M$ denotes the total number of entries in the full tensor, and $M_\Omega$ denotes the number of observed entries.
+
+For one standard Tucker reconstruction, if implemented by successive mode products, the forward complexity can be written as
+\begin{equation}
+\mathcal C_{\mathrm{rec}}
+=
+\sum_{n=1}^{N}
+I_nR_n
+\left(\prod_{m<n} I_m\right)
+\left(\prod_{m>n} R_m\right).
+\label{eq:tucker_reconstruction_complexity}
+\end{equation}
+This term gives the main cost of constructing the latent tensor $\cS$, and also serves as the basis for subsequent gradient propagation.
+
+Given $\cS$, the costs of computing $f_{\boldsymbol\beta}(\cS)$ and $f'_{\boldsymbol\beta}(\cS)$ are both element-wise polynomial evaluations. If a fused Horner recursion is used, they can be completed simultaneously in a single pass, with asymptotic complexity
+\begin{equation}
+\mathcal O(PM).
+\end{equation}
+Compared with computing the forward value and derivative separately, this fused implementation only reduces the constant factor, without changing the order with respect to $P$ and $M$.
+
+The computation of the core gradient can be viewed as projecting the tensor $\mathbf T$ back into the core space, with complexity of the same order as one Tucker compression. The computation of the factor gradients has an MTTKRP-like structure: for each mode $n$, we first construct $\mathbf Z^{(n)}$ in \eqref{eq:Zn_def}, and then compute $\mathbf T_{(n)}\mathbf Z^{(n)\top}$. Therefore, if each outer iteration performs $K$ Adam steps on $(\cX,\{\mathbf A^{(n)}\})$, the dominant cost can be approximated as
+\begin{equation}
+\mathcal O\!\left(
+K\bigl(\mathcal C_{\mathrm{rec}} + PM + \mathcal C_{\mathrm{bwd}}\bigr)
+\right),
+\label{eq:grad_update_complexity}
+\end{equation}
+where $\mathcal C_{\mathrm{bwd}}$ represents the backward cost composed of the core back-projection and the MTTKRP-like multiplications for all mode factors, and is typically of the same order as the contraction/unfolding complexity of the Tucker backbone itself.
+
+When $\cS$ is fixed, the $\boldsymbol\beta$ subproblem depends only on the observed entries. Constructing the observed design matrix $\Phi_\Omega\in\mathbb R^{M_\Omega\times(P+1)}$ costs
+\begin{equation}
+\mathcal O(PM_\Omega),
+\end{equation}
+and solving the normal equation
+\begin{equation}
+(\Phi_\Omega^\top\Phi_\Omega+\lambda_\beta I)\boldsymbol\beta
+=
+\Phi_\Omega^\top\mathbf y_\Omega
+\end{equation}
+costs
+\begin{equation}
+\mathcal O(M_\Omega P^2 + P^3).
+\label{eq:beta_update_complexity}
+\end{equation}
+Since $P$ is usually small in the settings of this paper, such as $2,3,4$, the update of $\boldsymbol\beta$ is theoretically an extra step but is usually not the dominant component of the total runtime.
+
+The cost of factor normalization and core absorption is
+\begin{equation}
+\mathcal O\!\left(\sum_{n=1}^{N} I_nR_n + R\right),
+\end{equation}
+which is typically negligible compared with \eqref{eq:grad_update_complexity}. Degree continuation does not change the asymptotic complexity of each individual outer iteration; it only affects the total number of iterations by gradually activating higher-order terms. In implementation, avoiding repeated Tucker reconstruction, fusing polynomial and derivative evaluation, and solving for $\boldsymbol\beta$ stably on a standardized power basis all reduce only constant costs or improve numerical conditioning, without changing the above asymptotic orders.
+
+Putting the above pieces together, the complexity of one outer iteration of NTD-PL under the current dense implementation can be summarized as
+\begin{equation}
+\mathcal O\!\left(
+K\bigl(\mathcal C_{\mathrm{rec}} + PM + \mathcal C_{\mathrm{bwd}}\bigr)
++
+PM_\Omega + M_\Omega P^2 + P^3
+\right).
+\label{eq:total_complexity_main}
+\end{equation}
+Therefore, compared with standard Tucker, the extra computation of NTD-PL mainly comes from two parts: first, the computation of the element-wise polynomial link and its derivative, whose cost is the low-order, parallelizable term $\mathcal O(PM)$; second, the small-scale ridge update of $\boldsymbol\beta$, whose cost is $\mathcal O(PM_\Omega + M_\Omega P^2 + P^3)$. In other words, under the current implementation, the dominant cost still comes from the forward and backward propagation of the Tucker backbone itself, rather than from solving the polynomial link coefficients.
