@@ -783,7 +783,7 @@ This section supplements the figures used in Chapter 5 of the main text to help 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{./inputs/figures/main/linear_consistency_paired_gap.pdf}
-    \caption{Distribution of paired differences in the linear-consistency experiment. The figure compares the paired error gap between Tucker and NTD-PL across random seeds under different settings, supplementing the scene-wise mean conclusion in Table~\ref{tab:linear-consistency}. One can see that when \texttt{bias=0}, the paired differences between Tucker and NTD-PL without a constant term are concentrated near zero; when an affine bias is present, a more obvious systematic gap appears between the model with restricted $\beta_0$ and Tucker.}
+    \caption{Distribution of paired differences in the linear-consistency experiment. The figure compares the paired error gap between Tucker and NTD-PL across random seeds under different settings, supplementing the scene-wise mean conclusion in Table~\ref{tab:linear-consistency}. One can see that when \texttt{bias=0}, the paired differences between Tucker and NTD-PL without a constant term are concentrated near zero; when an affine bias is present, a more obvious systematic gap appears between Tucker and the model with restricted $\beta_0$.}
     \label{fig:linear-consistency-paired-gap}
 \end{figure}
 
@@ -799,6 +799,6 @@ This section supplements the figures used in Chapter 5 of the main text to help 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{./inputs/figures/main/cave_completion_visual_grid.pdf}
-    \caption{Representative spatial visualization for random-missing completion on CAVE. The columns show, in order, the original image, the masked observation input, Tucker completion, NTD-PL completion, the missing-only error of Tucker, the missing-only error of NTD-PL, and the missing-only error-reduction map. The last column is defined as Tucker $-$ NTD-PL, so positive values indicate that NTD-PL further reduces the completion error at the missing entries.}
+    \caption{Representative spatial visualization of random-missing completion on CAVE. The columns show, in order, the original image, the masked observation input, Tucker completion, NTD-PL completion, the missing-only error of Tucker, the missing-only error of NTD-PL, and the missing-only error-reduction map. The last column is defined as Tucker $-$ NTD-PL, so positive values indicate that NTD-PL further reduces the completion error at the missing entries.}
     \label{fig:cave-completion-visual-app}
 \end{figure}

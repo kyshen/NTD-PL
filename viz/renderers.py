@@ -257,9 +257,9 @@ def render_line_grid(data, spec: LineGridSpec, *, step_mode: bool = False):
                 marker=style.get("marker"),
                 linewidth=style["linewidth"],
                 markersize=style.get("markersize", 4.0),
-                label=method,
+                label=method if spec.figure_id != "nonlinear_pmax_grid" else "_nolegend_",
             )
-            if all(handle.get_label() != line.get_label() for handle in legend_handles):
+            if spec.figure_id != "nonlinear_pmax_grid" and all(handle.get_label() != line.get_label() for handle in legend_handles):
                 legend_handles.append(line)
             lower_all.extend([float(value) for value in lower if np.isfinite(value)])
             upper_all.extend([float(value) for value in upper if np.isfinite(value)])
@@ -320,7 +320,7 @@ def render_line_grid(data, spec: LineGridSpec, *, step_mode: bool = False):
         pad = 0.06 * max(y_max - y_min, 1e-6)
         for ax in axes.ravel()[: len(panel_order)]:
             ax.set_ylim(y_min - pad, y_max + pad)
-    if spec.shared_legend and legend_handles:
+    if spec.figure_id != "nonlinear_pmax_grid" and spec.shared_legend and legend_handles:
         fig.legend(
             legend_handles,
             [handle.get_label() for handle in legend_handles],

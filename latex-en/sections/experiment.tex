@@ -93,7 +93,7 @@ Figure~\ref{fig:nonlinear-alpha-grid} shows that under all types of nonlinear re
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{./inputs/figures/main/nonlinear_alpha_grid.pdf}
-    \caption{Approximation error of NTD-PL and the baseline methods as a function of nonlinear strength.}
+    \caption{Variation of NMSE with nonlinear strength $\alpha$ for different methods in the controlled nonlinear-residual experiment. The four panels correspond to \texttt{poly2}, \texttt{poly3}, \texttt{sin}, and \texttt{tanh}, and together show that NTD-PL maintains a stable advantage across the full range of $\alpha$.}
     \label{fig:nonlinear-alpha-grid}
 \end{figure}
 
@@ -106,17 +106,19 @@ Figure~\ref{fig:nonlinear-alpha-grid} shows that under all types of nonlinear re
     \input{inputs/nonlinear-approx/beta_contribution_table.tex}}
 \end{table}
 
+Figure~\ref{fig:nonlinear-pmax-grid} clearly shows the fitting behavior of NTD-PL under different degrees $P$, where the gray horizontal line indicates the Tucker baseline. One can see that the performance at $P=1$ is close to Tucker, again confirming the linear consistency of NTD-PL, and that the performance of NTD-PL gradually surpasses the Tucker baseline as the polynomial degree increases. This result shows that NTD-PL can indeed progressively absorb nonlinear residuals. Further, the performance gains are concentrated mainly in the low- to medium-degree range, while the benefit saturates at higher degrees, which is consistent with Theorem~\ref{thm:analytic_bound_main}: when the true link function is analytic, the finite-order truncation error is controlled mainly by $(B/\rho)^{P+1}$, so the main gains are typically achieved at low to medium degrees, and further increasing $P$ yields diminishing marginal improvements. For \texttt{poly2} and \texttt{poly3}, NTD-PL exhibits systematic matching at the corresponding degrees ($P=2$ and $P=3$), which is a direct experimental manifestation of Proposition~\ref{prop:poly_exact_main}. An interesting phenomenon is that the gains do not appear uniformly with increasing degree. For \texttt{sin} and \texttt{tanh}, the more obvious improvements occur mainly when odd degrees are added, whereas adjacent even degrees provide only limited additional gain. Since both links have odd symmetry, this suggests that under the approximately zero-centered experimental protocol used here, the newly effective expressive power is more likely to concentrate in odd-order terms, and also indicates that the theoretical notion of progressive approximation can, in concrete experiments, be influenced by the dominant-term structure of the true function. Figure~\ref{fig:rmse_step_grid} further shows the training-loss curves under progressive degree activation, where one can see step-like gains around the degree-switching milestones. From the viewpoint of local-response geometry, Appendix Figure~\ref{fig:geometry-response} shows the response maps and deviation maps induced by different $P$ for a fixed local Tucker patch, making it more intuitive how newly added orders progressively change the local nonlinear response shape.
+
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{./inputs/figures/main/nonlinear_pmax_grid.pdf}
-    \caption{Approximation error of NTD-PL as a function of the degree $P$.}
+    \caption{Variation of the approximation error of NTD-PL with the maximum polynomial degree $P$ under a fixed nonlinear strength, together with Tucker as a reference; the gray horizontal line indicates the Tucker baseline. The figure shows that $P=1$ is close to Tucker, confirming linear consistency, and that the error decreases as $P$ increases, with gradually saturating marginal gains.}
     \label{fig:nonlinear-pmax-grid}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{./inputs/figures/main/nonlinear_step_grid.pdf}
-    \caption{Training-loss curves of NTD-PL under the progressive degree-increasing strategy.}
+    \caption{Training-loss curves of NTD-PL under the progressive degree-increasing strategy. The dashed lines mark the degree-switching milestones, and most cases show a stage-wise drop after each increment, indicating that newly activated orders absorb previously unmodeled nonlinear residuals.}
     \label{fig:rmse_step_grid}
 \end{figure}
 

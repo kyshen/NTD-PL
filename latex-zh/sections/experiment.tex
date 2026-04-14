@@ -93,7 +93,7 @@ c_p
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{./inputs/figures/main/nonlinear_alpha_grid.pdf}
-    \caption{NTD-PL及基线方法的逼近误差随非线性强度的变化}
+    \caption{可控非线性残差实验中，不同方法的 NMSE 随非线性强度 $\alpha$ 的变化。四个 panel 分别对应 \texttt{poly2}、\texttt{poly3}、\texttt{sin} 与 \texttt{tanh}，整体显示 NTD-PL 在各强度区间内保持稳定优势。}
     \label{fig:nonlinear-alpha-grid}
 \end{figure}
 
@@ -107,19 +107,19 @@ c_p
     \input{inputs/nonlinear-approx/beta_contribution_table.tex}}
 \end{table}
 
-图~\ref{fig:nonlinear-pmax-grid} 清晰地展示了不同次数$P$下的NTD-PL的拟合效果。可以看到，$P=1$时的性能与Tucker相近，又一次说明了NTD-PL的线性一致性，随着多项式次数$P$的增加，NTD-PL 的性能逐渐优于Tucker基线。该结果表明，NTD-PL 确实能够逐步吸收非线性残差。进一步地，性能提升主要集中在较低到中等阶数范围内，而在更高阶时增益趋于饱和，这与定理~\ref{thm:analytic_bound_main} 的结论一致：当真实链接函数为解析函数时，有限阶截断误差主要由 $(B/\rho)^{P+1}$ 控制，因此低阶到中阶时往往已经获得主要收益，而继续提高 $P$ 只会带来递减的边际改进。对于 \texttt{poly2} 和 \texttt{poly3} ，NTD-PL 均在对应次数（$P=2$和$P=3$）时出现系统性匹配，这正是命题~\ref{prop:poly_exact_main} 在实验中的直接体现。一个有意思的现象是，性能提升并非随次数增加而均匀出现。对于 \texttt{sin} 和 \texttt{tanh}，明显的改进主要发生在奇数阶提升处，而相邻偶数阶带来的额外收益较弱。考虑到这两类链路都具有奇对称性，这一现象说明，在当前近似零中心的实验协议下，新增的有效表达能力更可能集中在奇次项上，也说明理论上的“逐阶逼近”在具体实验中会受到真实函数主导项结构的影响。图~\ref{fig:rmse_step_grid}进一步展示了 NTD-PL 逐次增加的策略下的训练损失曲线，可以看到次数增加的时刻往往伴随阶跃式的增益；若从局部响应几何的角度理解这一过程，附录图~\ref{fig:geometry-response} 给出了固定局部 Tucker patch 下不同 $P$ 所诱导的响应图与偏差图，可以更直观地看到新增阶次如何逐步改变局部非线性响应形状。
+图~\ref{fig:nonlinear-pmax-grid} 清晰地展示了不同次数$P$下的NTD-PL的拟合效果，其中灰色水平线表示 Tucker 基线。可以看到，$P=1$时的性能与Tucker相近，又一次说明了NTD-PL的线性一致性，随着多项式次数$P$的增加，NTD-PL 的性能逐渐优于Tucker基线。该结果表明，NTD-PL 确实能够逐步吸收非线性残差。进一步地，性能提升主要集中在较低到中等阶数范围内，而在更高阶时增益趋于饱和，这与定理~\ref{thm:analytic_bound_main} 的结论一致：当真实链接函数为解析函数时，有限阶截断误差主要由 $(B/\rho)^{P+1}$ 控制，因此低阶到中阶时往往已经获得主要收益，而继续提高 $P$ 只会带来递减的边际改进。对于 \texttt{poly2} 和 \texttt{poly3} ，NTD-PL 均在对应次数（$P=2$和$P=3$）时出现系统性匹配，这正是命题~\ref{prop:poly_exact_main} 在实验中的直接体现。一个有意思的现象是，性能提升并非随次数增加而均匀出现。对于 \texttt{sin} 和 \texttt{tanh}，明显的改进主要发生在奇数阶提升处，而相邻偶数阶带来的额外收益较弱。考虑到这两类链路都具有奇对称性，这一现象说明，在当前近似零中心的实验协议下，新增的有效表达能力更可能集中在奇次项上，也说明理论上的“逐阶逼近”在具体实验中会受到真实函数主导项结构的影响。图~\ref{fig:rmse_step_grid}进一步展示了 NTD-PL 逐次增加的策略下的训练损失曲线，可以看到次数增加的时刻往往伴随阶跃式的增益；若从局部响应几何的角度理解这一过程，附录图~\ref{fig:geometry-response} 给出了固定局部 Tucker patch 下不同 $P$ 所诱导的响应图与偏差图，可以更直观地看到新增阶次如何逐步改变局部非线性响应形状。
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{./inputs/figures/main/nonlinear_pmax_grid.pdf}
-    \caption{NTD-PL的逼近误差随次数 $P$ 的变化}
+    \caption{固定非线性强度下，NTD-PL 的逼近误差随多项式最高阶数 $P$ 的变化，并与 Tucker 对照；图中的灰色水平线表示 Tucker 基线。图中显示 $P=1$ 与 Tucker 接近（线性一致性），随后随 $P$ 增大误差下降且边际收益逐步趋于饱和。}
     \label{fig:nonlinear-pmax-grid}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{./inputs/figures/main/nonlinear_step_grid.pdf}
-    \caption{NTD-PL在逐次增加策略下的训练损失曲线}
+    \caption{NTD-PL 在逐次增阶训练策略下的损失演化曲线。虚线对应阶数切换时刻，可见多数场景在增阶后出现阶段性下降，说明新增阶次能够吸收此前未建模的非线性残差。}
     \label{fig:rmse_step_grid}
 \end{figure}
 

@@ -202,9 +202,9 @@ Suppose an invertible diagonal scaling $D^{(n)}$ is applied to the factor matrix
 
 Proposition~\ref{prop:scale_invariance_main} shows that column normalization of the factor matrices together with absorption of scale into the core tensor can be understood as a form of \emph{gauge fixing}: it does not change the model class, but simply selects a more stable representative from an equivalence class of parameterizations. When higher-order terms participate in modeling, this step is particularly important for the estimation of $\boldsymbol\beta$, and is therefore included as a fixed step in the optimization algorithm below.
 
-\subsection{Unified Learning Objective and Optimization Algorithm}
+\subsection{Learning Objective and Optimization Algorithm}
 
-\subsubsection{Unified Learning Objective}
+\subsubsection{Learning Objective}
 
 To handle decomposition and missing-data completion within a single optimization framework, let the binary observation mask tensor be denoted by $\Omega\in\{0,1\}^{I_1\times\cdots\times I_N}$. Consider the following objective:
 \begin{equation}
@@ -356,7 +356,7 @@ Directly optimizing a high-order polynomial model from scratch is often unstable
 In this way, the model transitions gradually from a stable linear solution to a richer nonlinear one, rather than jointly optimizing all coefficients in a high-order search space from the beginning. Proposition~\ref{prop:nested_model_family} has already shown that such continuation is not merely a heuristic trick, but a natural optimization path that follows the nested structure of the model family.
 
 \begin{algorithm}[t]
-\caption{NTD-PL with alternating optimization and degree continuation}
+\caption{NTD-PL with alternating optimization and degree continuation.}
 \label{alg:ntdpl}
 \begin{algorithmic}[1]
 \State Input: observation tensor $\cY$, mask $\Omega$, multilinear rank $\{R_n\}$, maximum polynomial degree $P$
