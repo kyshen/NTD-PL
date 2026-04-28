@@ -1,0 +1,2205 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{Kolda2009Tensor}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=a17e10e04fa2d01fdb9bfc9a669b4182}{%
+           family={Kolda},
+           familyi={K\bibinitperiod},
+           given={Tamara\bibnamedelima G.},
+           giveni={T\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=e452c0602af86438cb78062b7bac80bb}{%
+           family={Bader},
+           familyi={B\bibinitperiod},
+           given={Brett\bibnamedelima W.},
+           giveni={B\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \name{namea}{2}{}{%
+        {{hash=a17e10e04fa2d01fdb9bfc9a669b4182}{%
+           family={Kolda},
+           familyi={K\bibinitperiod},
+           given={Tamara\bibnamedelima G.},
+           giveni={T\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=e452c0602af86438cb78062b7bac80bb}{%
+           family={Bader},
+           familyi={B\bibinitperiod},
+           given={Brett\bibnamedelima W.},
+           giveni={B\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{f1526ff603630fcfa03e6ca808ff4f56}
+      \strng{fullhash}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{fullhashraw}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{bibnamehash}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{authorbibnamehash}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{authornamehash}{f1526ff603630fcfa03e6ca808ff4f56}
+      \strng{authorfullhash}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{authorfullhashraw}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{nameabibnamehash}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{nameanamehash}{f1526ff603630fcfa03e6ca808ff4f56}
+      \strng{nameafullhash}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{nameafullhashraw}{782cc4ad2fea7afb684072cddcaf4d10}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{SIAM Review}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{3}
+      \field{title}{Tensor Decompositions and Applications}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{51}
+      \field{year}{2009}
+      \field{dateera}{ce}
+      \field{pages}{455\bibrangedash 500}
+      \range{pages}{46}
+      \verb{doi}
+      \verb 10.1137/07070111X
+      \endverb
+      \keyw{Kolda2009Tensor}
+    \endentry
+    \entry{DeLathauwer2000MLSVD}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=422686a2e68522fbd3ed47c5f42b0fc7}{%
+           family={De\bibnamedelima Lathauwer},
+           familyi={D\bibinitperiod\bibinitdelim L\bibinitperiod},
+           given={Lieven},
+           giveni={L\bibinitperiod}}}%
+        {{hash=0015ed1c5600e0f872cdc14119c2480a}{%
+           family={De\bibnamedelima Moor},
+           familyi={D\bibinitperiod\bibinitdelim M\bibinitperiod},
+           given={Bart},
+           giveni={B\bibinitperiod}}}%
+        {{hash=82536ff0964fccea8b7ae77b0b8ff5a8}{%
+           family={Vandewalle},
+           familyi={V\bibinitperiod},
+           given={Joos},
+           giveni={J\bibinitperiod}}}%
+      }
+      \name{namea}{3}{}{%
+        {{hash=422686a2e68522fbd3ed47c5f42b0fc7}{%
+           family={De\bibnamedelima Lathauwer},
+           familyi={D\bibinitperiod\bibinitdelim L\bibinitperiod},
+           given={Lieven},
+           giveni={L\bibinitperiod}}}%
+        {{hash=0015ed1c5600e0f872cdc14119c2480a}{%
+           family={De\bibnamedelima Moor},
+           familyi={D\bibinitperiod\bibinitdelim M\bibinitperiod},
+           given={Bart},
+           giveni={B\bibinitperiod}}}%
+        {{hash=82536ff0964fccea8b7ae77b0b8ff5a8}{%
+           family={Vandewalle},
+           familyi={V\bibinitperiod},
+           given={Joos},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{c0e2db1ecdfb89d87d0a606b69d362ed}
+      \strng{fullhash}{dce5e8a2961461211fd473bcf7e71192}
+      \strng{fullhashraw}{dce5e8a2961461211fd473bcf7e71192}
+      \strng{bibnamehash}{dce5e8a2961461211fd473bcf7e71192}
+      \strng{authorbibnamehash}{dce5e8a2961461211fd473bcf7e71192}
+      \strng{authornamehash}{c0e2db1ecdfb89d87d0a606b69d362ed}
+      \strng{authorfullhash}{dce5e8a2961461211fd473bcf7e71192}
+      \strng{authorfullhashraw}{dce5e8a2961461211fd473bcf7e71192}
+      \strng{nameabibnamehash}{dce5e8a2961461211fd473bcf7e71192}
+      \strng{nameanamehash}{c0e2db1ecdfb89d87d0a606b69d362ed}
+      \strng{nameafullhash}{dce5e8a2961461211fd473bcf7e71192}
+      \strng{nameafullhashraw}{dce5e8a2961461211fd473bcf7e71192}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{SIAM Journal on Matrix Analysis and Applications}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{4}
+      \field{title}{A Multilinear Singular Value Decomposition}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{21}
+      \field{year}{2000}
+      \field{dateera}{ce}
+      \field{pages}{1253\bibrangedash 1278}
+      \range{pages}{26}
+      \verb{doi}
+      \verb 10.1137/S0895479896305696
+      \endverb
+      \keyw{DeLathauwer2000MLSVD}
+    \endentry
+    \entry{Cichocki2015SignalProcessing}{article}{}{}
+      \name{author}{7}{}{%
+        {{hash=08ffe474d1c0bebee63a5696b8bc17dd}{%
+           family={Cichocki},
+           familyi={C\bibinitperiod},
+           given={Andrzej},
+           giveni={A\bibinitperiod}}}%
+        {{hash=f65d461df3311f7d46f2831ecb66fabf}{%
+           family={Mandic},
+           familyi={M\bibinitperiod},
+           given={Danilo\bibnamedelima P.},
+           giveni={D\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=000e4f9a9c783fd4f247acb377cd6dbe}{%
+           family={Phan},
+           familyi={P\bibinitperiod},
+           given={Anh-Huy},
+           giveni={A\bibinithyphendelim H\bibinitperiod}}}%
+        {{hash=d7e9f0c914a14d8c6baa99ac3dfbf2b8}{%
+           family={Caiafa},
+           familyi={C\bibinitperiod},
+           given={Cesar\bibnamedelima F.},
+           giveni={C\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{hash=11506400eabf2f393c9bf5b2f5ea3aa9}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Guoxu},
+           giveni={G\bibinitperiod}}}%
+        {{hash=8a239bd07f908087a20dfcf87572e035}{%
+           family={Zhao},
+           familyi={Z\bibinitperiod},
+           given={Qibin},
+           giveni={Q\bibinitperiod}}}%
+        {{hash=422686a2e68522fbd3ed47c5f42b0fc7}{%
+           family={De\bibnamedelima Lathauwer},
+           familyi={D\bibinitperiod\bibinitdelim L\bibinitperiod},
+           given={Lieven},
+           giveni={L\bibinitperiod}}}%
+      }
+      \name{namea}{7}{}{%
+        {{hash=08ffe474d1c0bebee63a5696b8bc17dd}{%
+           family={Cichocki},
+           familyi={C\bibinitperiod},
+           given={Andrzej},
+           giveni={A\bibinitperiod}}}%
+        {{hash=f65d461df3311f7d46f2831ecb66fabf}{%
+           family={Mandic},
+           familyi={M\bibinitperiod},
+           given={Danilo\bibnamedelima P.},
+           giveni={D\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=000e4f9a9c783fd4f247acb377cd6dbe}{%
+           family={Phan},
+           familyi={P\bibinitperiod},
+           given={Anh-Huy},
+           giveni={A\bibinithyphendelim H\bibinitperiod}}}%
+        {{hash=d7e9f0c914a14d8c6baa99ac3dfbf2b8}{%
+           family={Caiafa},
+           familyi={C\bibinitperiod},
+           given={Cesar\bibnamedelima F.},
+           giveni={C\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{hash=11506400eabf2f393c9bf5b2f5ea3aa9}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Guoxu},
+           giveni={G\bibinitperiod}}}%
+        {{hash=8a239bd07f908087a20dfcf87572e035}{%
+           family={Zhao},
+           familyi={Z\bibinitperiod},
+           given={Qibin},
+           giveni={Q\bibinitperiod}}}%
+        {{hash=422686a2e68522fbd3ed47c5f42b0fc7}{%
+           family={De\bibnamedelima Lathauwer},
+           familyi={D\bibinitperiod\bibinitdelim L\bibinitperiod},
+           given={Lieven},
+           giveni={L\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{fe89acd1fc18bfcd61f5d60877595c4f}
+      \strng{fullhash}{99acb38635143e40b5bd8108f47dea63}
+      \strng{fullhashraw}{99acb38635143e40b5bd8108f47dea63}
+      \strng{bibnamehash}{afacd595560d709e89977b57cc9a6b47}
+      \strng{authorbibnamehash}{afacd595560d709e89977b57cc9a6b47}
+      \strng{authornamehash}{fe89acd1fc18bfcd61f5d60877595c4f}
+      \strng{authorfullhash}{99acb38635143e40b5bd8108f47dea63}
+      \strng{authorfullhashraw}{99acb38635143e40b5bd8108f47dea63}
+      \strng{nameabibnamehash}{afacd595560d709e89977b57cc9a6b47}
+      \strng{nameanamehash}{fe89acd1fc18bfcd61f5d60877595c4f}
+      \strng{nameafullhash}{99acb38635143e40b5bd8108f47dea63}
+      \strng{nameafullhashraw}{99acb38635143e40b5bd8108f47dea63}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Signal Processing Magazine}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{2}
+      \field{title}{Tensor Decompositions for Signal Processing Applications: From Two-way to Multiway Component Analysis}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{32}
+      \field{year}{2015}
+      \field{dateera}{ce}
+      \field{pages}{145\bibrangedash 163}
+      \range{pages}{19}
+      \verb{doi}
+      \verb 10.1109/MSP.2013.2297439
+      \endverb
+      \keyw{Cichocki2015SignalProcessing}
+    \endentry
+    \entry{Sidiropoulos2017TSP}{article}{}{}
+      \name{author}{6}{}{%
+        {{hash=10038fc4e6c709ecc9bf61bda239563d}{%
+           family={Sidiropoulos},
+           familyi={S\bibinitperiod},
+           given={Nicholas\bibnamedelima D.},
+           giveni={N\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=422686a2e68522fbd3ed47c5f42b0fc7}{%
+           family={De\bibnamedelima Lathauwer},
+           familyi={D\bibinitperiod\bibinitdelim L\bibinitperiod},
+           given={Lieven},
+           giveni={L\bibinitperiod}}}%
+        {{hash=a16957c7d7cda3dc5a3a62c799682423}{%
+           family={Fu},
+           familyi={F\bibinitperiod},
+           given={Xiao},
+           giveni={X\bibinitperiod}}}%
+        {{hash=2697c954472411c49f44a8558a9f7ae5}{%
+           family={Huang},
+           familyi={H\bibinitperiod},
+           given={Kejun},
+           giveni={K\bibinitperiod}}}%
+        {{hash=63dbf975652e49f099d009f8c3a3b73c}{%
+           family={Papalexakis},
+           familyi={P\bibinitperiod},
+           given={Evangelos\bibnamedelima E.},
+           giveni={E\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=976e034dd29cfc47640ae45c16d21a9d}{%
+           family={Faloutsos},
+           familyi={F\bibinitperiod},
+           given={Christos},
+           giveni={C\bibinitperiod}}}%
+      }
+      \name{namea}{6}{}{%
+        {{hash=10038fc4e6c709ecc9bf61bda239563d}{%
+           family={Sidiropoulos},
+           familyi={S\bibinitperiod},
+           given={Nicholas\bibnamedelima D.},
+           giveni={N\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=422686a2e68522fbd3ed47c5f42b0fc7}{%
+           family={De\bibnamedelima Lathauwer},
+           familyi={D\bibinitperiod\bibinitdelim L\bibinitperiod},
+           given={Lieven},
+           giveni={L\bibinitperiod}}}%
+        {{hash=a16957c7d7cda3dc5a3a62c799682423}{%
+           family={Fu},
+           familyi={F\bibinitperiod},
+           given={Xiao},
+           giveni={X\bibinitperiod}}}%
+        {{hash=2697c954472411c49f44a8558a9f7ae5}{%
+           family={Huang},
+           familyi={H\bibinitperiod},
+           given={Kejun},
+           giveni={K\bibinitperiod}}}%
+        {{hash=63dbf975652e49f099d009f8c3a3b73c}{%
+           family={Papalexakis},
+           familyi={P\bibinitperiod},
+           given={Evangelos\bibnamedelima E.},
+           giveni={E\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=976e034dd29cfc47640ae45c16d21a9d}{%
+           family={Faloutsos},
+           familyi={F\bibinitperiod},
+           given={Christos},
+           giveni={C\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{0c6b05de034b8614454374310cbd403d}
+      \strng{fullhash}{642a2fcb34dc432fa0e1d0b2eb2b77b1}
+      \strng{fullhashraw}{642a2fcb34dc432fa0e1d0b2eb2b77b1}
+      \strng{bibnamehash}{4dda9f755579a17e17cb372762a19b7b}
+      \strng{authorbibnamehash}{4dda9f755579a17e17cb372762a19b7b}
+      \strng{authornamehash}{0c6b05de034b8614454374310cbd403d}
+      \strng{authorfullhash}{642a2fcb34dc432fa0e1d0b2eb2b77b1}
+      \strng{authorfullhashraw}{642a2fcb34dc432fa0e1d0b2eb2b77b1}
+      \strng{nameabibnamehash}{4dda9f755579a17e17cb372762a19b7b}
+      \strng{nameanamehash}{0c6b05de034b8614454374310cbd403d}
+      \strng{nameafullhash}{642a2fcb34dc432fa0e1d0b2eb2b77b1}
+      \strng{nameafullhashraw}{642a2fcb34dc432fa0e1d0b2eb2b77b1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Signal Processing}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{13}
+      \field{title}{Tensor Decomposition for Signal Processing and Machine Learning}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{65}
+      \field{year}{2017}
+      \field{dateera}{ce}
+      \field{pages}{3551\bibrangedash 3582}
+      \range{pages}{32}
+      \verb{doi}
+      \verb 10.1109/TSP.2017.2690524
+      \endverb
+      \keyw{Sidiropoulos2017TSP}
+    \endentry
+    \entry{Liu2013TensorCompletion}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=0fb3269d926c0f6914d41e63b3182271}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Ji},
+           giveni={J\bibinitperiod}}}%
+        {{hash=f1f87aa5949d8c706218ceac6de3809c}{%
+           family={Musialski},
+           familyi={M\bibinitperiod},
+           given={Przemyslaw},
+           giveni={P\bibinitperiod}}}%
+        {{hash=3aeeab76494ab92e6e09421085e90833}{%
+           family={Wonka},
+           familyi={W\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod}}}%
+        {{hash=45f8892411700a9b1d4fcd3acaeeefd0}{%
+           family={Ye},
+           familyi={Y\bibinitperiod},
+           given={Jieping},
+           giveni={J\bibinitperiod}}}%
+      }
+      \name{namea}{4}{}{%
+        {{hash=0fb3269d926c0f6914d41e63b3182271}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Ji},
+           giveni={J\bibinitperiod}}}%
+        {{hash=f1f87aa5949d8c706218ceac6de3809c}{%
+           family={Musialski},
+           familyi={M\bibinitperiod},
+           given={Przemyslaw},
+           giveni={P\bibinitperiod}}}%
+        {{hash=3aeeab76494ab92e6e09421085e90833}{%
+           family={Wonka},
+           familyi={W\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod}}}%
+        {{hash=45f8892411700a9b1d4fcd3acaeeefd0}{%
+           family={Ye},
+           familyi={Y\bibinitperiod},
+           given={Jieping},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{4b5133e9bff1fd6e18909049809d6f73}
+      \strng{fullhash}{a83424bc2e23b51ef0213b896690dbf0}
+      \strng{fullhashraw}{a83424bc2e23b51ef0213b896690dbf0}
+      \strng{bibnamehash}{e6300555462b9d2d1d1b22a7ab3bde94}
+      \strng{authorbibnamehash}{e6300555462b9d2d1d1b22a7ab3bde94}
+      \strng{authornamehash}{4b5133e9bff1fd6e18909049809d6f73}
+      \strng{authorfullhash}{a83424bc2e23b51ef0213b896690dbf0}
+      \strng{authorfullhashraw}{a83424bc2e23b51ef0213b896690dbf0}
+      \strng{nameabibnamehash}{e6300555462b9d2d1d1b22a7ab3bde94}
+      \strng{nameanamehash}{4b5133e9bff1fd6e18909049809d6f73}
+      \strng{nameafullhash}{a83424bc2e23b51ef0213b896690dbf0}
+      \strng{nameafullhashraw}{a83424bc2e23b51ef0213b896690dbf0}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Pattern Analysis and Machine Intelligence}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{1}
+      \field{title}{Tensor Completion for Estimating Missing Values in Visual Data}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{35}
+      \field{year}{2013}
+      \field{dateera}{ce}
+      \field{pages}{208\bibrangedash 220}
+      \range{pages}{13}
+      \verb{doi}
+      \verb 10.1109/TPAMI.2012.39
+      \endverb
+      \keyw{Liu2013TensorCompletion}
+    \endentry
+    \entry{tucker1966some}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=c642cf9c299552a56f88a493bb0c4ba3}{%
+           family={Tucker},
+           familyi={T\bibinitperiod},
+           given={Ledyard\bibnamedelima R},
+           giveni={L\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+      }
+      \name{namea}{1}{}{%
+        {{hash=c642cf9c299552a56f88a493bb0c4ba3}{%
+           family={Tucker},
+           familyi={T\bibinitperiod},
+           given={Ledyard\bibnamedelima R},
+           giveni={L\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{c642cf9c299552a56f88a493bb0c4ba3}
+      \strng{fullhash}{c642cf9c299552a56f88a493bb0c4ba3}
+      \strng{fullhashraw}{c642cf9c299552a56f88a493bb0c4ba3}
+      \strng{bibnamehash}{c642cf9c299552a56f88a493bb0c4ba3}
+      \strng{authorbibnamehash}{c642cf9c299552a56f88a493bb0c4ba3}
+      \strng{authornamehash}{c642cf9c299552a56f88a493bb0c4ba3}
+      \strng{authorfullhash}{c642cf9c299552a56f88a493bb0c4ba3}
+      \strng{authorfullhashraw}{c642cf9c299552a56f88a493bb0c4ba3}
+      \strng{nameabibnamehash}{c642cf9c299552a56f88a493bb0c4ba3}
+      \strng{nameanamehash}{c642cf9c299552a56f88a493bb0c4ba3}
+      \strng{nameafullhash}{c642cf9c299552a56f88a493bb0c4ba3}
+      \strng{nameafullhashraw}{c642cf9c299552a56f88a493bb0c4ba3}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Psychometrika}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{3}
+      \field{title}{Some mathematical notes on three-mode factor analysis}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{31}
+      \field{year}{1966}
+      \field{dateera}{ce}
+      \field{pages}{279\bibrangedash 311}
+      \range{pages}{33}
+      \keyw{tucker1966some}
+    \endentry
+    \entry{de2000multilinear}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=422686a2e68522fbd3ed47c5f42b0fc7}{%
+           family={De\bibnamedelima Lathauwer},
+           familyi={D\bibinitperiod\bibinitdelim L\bibinitperiod},
+           given={Lieven},
+           giveni={L\bibinitperiod}}}%
+        {{hash=0015ed1c5600e0f872cdc14119c2480a}{%
+           family={De\bibnamedelima Moor},
+           familyi={D\bibinitperiod\bibinitdelim M\bibinitperiod},
+           given={Bart},
+           giveni={B\bibinitperiod}}}%
+        {{hash=82536ff0964fccea8b7ae77b0b8ff5a8}{%
+           family={Vandewalle},
+           familyi={V\bibinitperiod},
+           given={Joos},
+           giveni={J\bibinitperiod}}}%
+      }
+      \name{namea}{3}{}{%
+        {{hash=422686a2e68522fbd3ed47c5f42b0fc7}{%
+           family={De\bibnamedelima Lathauwer},
+           familyi={D\bibinitperiod\bibinitdelim L\bibinitperiod},
+           given={Lieven},
+           giveni={L\bibinitperiod}}}%
+        {{hash=0015ed1c5600e0f872cdc14119c2480a}{%
+           family={De\bibnamedelima Moor},
+           familyi={D\bibinitperiod\bibinitdelim M\bibinitperiod},
+           given={Bart},
+           giveni={B\bibinitperiod}}}%
+        {{hash=82536ff0964fccea8b7ae77b0b8ff5a8}{%
+           family={Vandewalle},
+           familyi={V\bibinitperiod},
+           given={Joos},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \list{publisher}{1}{%
+        {SIAM}%
+      }
+      \strng{namehash}{c0e2db1ecdfb89d87d0a606b69d362ed}
+      \strng{fullhash}{dce5e8a2961461211fd473bcf7e71192}
+      \strng{fullhashraw}{dce5e8a2961461211fd473bcf7e71192}
+      \strng{bibnamehash}{dce5e8a2961461211fd473bcf7e71192}
+      \strng{authorbibnamehash}{dce5e8a2961461211fd473bcf7e71192}
+      \strng{authornamehash}{c0e2db1ecdfb89d87d0a606b69d362ed}
+      \strng{authorfullhash}{dce5e8a2961461211fd473bcf7e71192}
+      \strng{authorfullhashraw}{dce5e8a2961461211fd473bcf7e71192}
+      \strng{nameabibnamehash}{dce5e8a2961461211fd473bcf7e71192}
+      \strng{nameanamehash}{c0e2db1ecdfb89d87d0a606b69d362ed}
+      \strng{nameafullhash}{dce5e8a2961461211fd473bcf7e71192}
+      \strng{nameafullhashraw}{dce5e8a2961461211fd473bcf7e71192}
+      \field{extraname}{2}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{SIAM journal on Matrix Analysis and Applications}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{4}
+      \field{title}{A multilinear singular value decomposition}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{21}
+      \field{year}{2000}
+      \field{dateera}{ce}
+      \field{pages}{1253\bibrangedash 1278}
+      \range{pages}{26}
+      \keyw{de2000multilinear}
+    \endentry
+    \entry{kolda2009tensor}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=a17e10e04fa2d01fdb9bfc9a669b4182}{%
+           family={Kolda},
+           familyi={K\bibinitperiod},
+           given={Tamara\bibnamedelima G},
+           giveni={T\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=e452c0602af86438cb78062b7bac80bb}{%
+           family={Bader},
+           familyi={B\bibinitperiod},
+           given={Brett\bibnamedelima W},
+           giveni={B\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \name{namea}{2}{}{%
+        {{hash=a17e10e04fa2d01fdb9bfc9a669b4182}{%
+           family={Kolda},
+           familyi={K\bibinitperiod},
+           given={Tamara\bibnamedelima G},
+           giveni={T\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=e452c0602af86438cb78062b7bac80bb}{%
+           family={Bader},
+           familyi={B\bibinitperiod},
+           given={Brett\bibnamedelima W},
+           giveni={B\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \list{publisher}{1}{%
+        {SIAM}%
+      }
+      \strng{namehash}{f1526ff603630fcfa03e6ca808ff4f56}
+      \strng{fullhash}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{fullhashraw}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{bibnamehash}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{authorbibnamehash}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{authornamehash}{f1526ff603630fcfa03e6ca808ff4f56}
+      \strng{authorfullhash}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{authorfullhashraw}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{nameabibnamehash}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{nameanamehash}{f1526ff603630fcfa03e6ca808ff4f56}
+      \strng{nameafullhash}{782cc4ad2fea7afb684072cddcaf4d10}
+      \strng{nameafullhashraw}{782cc4ad2fea7afb684072cddcaf4d10}
+      \field{extraname}{2}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{SIAM review}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{3}
+      \field{title}{Tensor decompositions and applications}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{51}
+      \field{year}{2009}
+      \field{dateera}{ce}
+      \field{pages}{455\bibrangedash 500}
+      \range{pages}{46}
+      \keyw{kolda2009tensor}
+    \endentry
+    \entry{hong2020generalized}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=b0e77f15cdca544e1d325e3c740ba573}{%
+           family={Hong},
+           familyi={H\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+        {{hash=a17e10e04fa2d01fdb9bfc9a669b4182}{%
+           family={Kolda},
+           familyi={K\bibinitperiod},
+           given={Tamara\bibnamedelima G},
+           giveni={T\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=812cfdf06bee5e3e1dd64b091f3715ba}{%
+           family={Duersch},
+           familyi={D\bibinitperiod},
+           given={Jed\bibnamedelima A},
+           giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \name{namea}{3}{}{%
+        {{hash=b0e77f15cdca544e1d325e3c740ba573}{%
+           family={Hong},
+           familyi={H\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+        {{hash=a17e10e04fa2d01fdb9bfc9a669b4182}{%
+           family={Kolda},
+           familyi={K\bibinitperiod},
+           given={Tamara\bibnamedelima G},
+           giveni={T\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=812cfdf06bee5e3e1dd64b091f3715ba}{%
+           family={Duersch},
+           familyi={D\bibinitperiod},
+           given={Jed\bibnamedelima A},
+           giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \list{publisher}{1}{%
+        {SIAM}%
+      }
+      \strng{namehash}{bd46d05fb08af4c4767c2e7dab16ce2d}
+      \strng{fullhash}{7c4ff15420ef4b45b67af8e9b67edd90}
+      \strng{fullhashraw}{7c4ff15420ef4b45b67af8e9b67edd90}
+      \strng{bibnamehash}{7c4ff15420ef4b45b67af8e9b67edd90}
+      \strng{authorbibnamehash}{7c4ff15420ef4b45b67af8e9b67edd90}
+      \strng{authornamehash}{bd46d05fb08af4c4767c2e7dab16ce2d}
+      \strng{authorfullhash}{7c4ff15420ef4b45b67af8e9b67edd90}
+      \strng{authorfullhashraw}{7c4ff15420ef4b45b67af8e9b67edd90}
+      \strng{nameabibnamehash}{7c4ff15420ef4b45b67af8e9b67edd90}
+      \strng{nameanamehash}{bd46d05fb08af4c4767c2e7dab16ce2d}
+      \strng{nameafullhash}{7c4ff15420ef4b45b67af8e9b67edd90}
+      \strng{nameafullhashraw}{7c4ff15420ef4b45b67af8e9b67edd90}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{SIAM review}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{1}
+      \field{title}{Generalized canonical polyadic tensor decomposition}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{62}
+      \field{year}{2020}
+      \field{dateera}{ce}
+      \field{pages}{133\bibrangedash 163}
+      \range{pages}{31}
+      \keyw{hong2020generalized}
+    \endentry
+    \entry{xu2011infinite}{article}{}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{2}{}{%
+        {{hash=c52fa409a52d45f0a1dffcfee1ba6740}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Zenglin},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=4fe97619fbcea382ff3f04ba8aedf48d}{%
+           family={Yan},
+           familyi={Y\bibinitperiod},
+           given={Feng},
+           giveni={F\bibinitperiod}}}%
+      }
+      \true{morenamea}
+      \name{namea}{2}{}{%
+        {{hash=c52fa409a52d45f0a1dffcfee1ba6740}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Zenglin},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=4fe97619fbcea382ff3f04ba8aedf48d}{%
+           family={Yan},
+           familyi={Y\bibinitperiod},
+           given={Feng},
+           giveni={F\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{0d7154da839bacc32a2d9b41385d56d0}
+      \strng{fullhash}{b6e0e4d4e23adcf9b9fae94fc44df4d1}
+      \strng{fullhashraw}{b6e0e4d4e23adcf9b9fae94fc44df4d1}
+      \strng{bibnamehash}{b6e0e4d4e23adcf9b9fae94fc44df4d1}
+      \strng{authorbibnamehash}{b6e0e4d4e23adcf9b9fae94fc44df4d1}
+      \strng{authornamehash}{0d7154da839bacc32a2d9b41385d56d0}
+      \strng{authorfullhash}{b6e0e4d4e23adcf9b9fae94fc44df4d1}
+      \strng{authorfullhashraw}{b6e0e4d4e23adcf9b9fae94fc44df4d1}
+      \strng{nameabibnamehash}{b6e0e4d4e23adcf9b9fae94fc44df4d1}
+      \strng{nameanamehash}{0d7154da839bacc32a2d9b41385d56d0}
+      \strng{nameafullhash}{b6e0e4d4e23adcf9b9fae94fc44df4d1}
+      \strng{nameafullhashraw}{b6e0e4d4e23adcf9b9fae94fc44df4d1}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1108.6296}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{title}{Infinite Tucker decomposition: Nonparametric Bayesian models for multiway data analysis}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{year}{2011}
+      \field{dateera}{ce}
+      \keyw{xu2011infinite}
+    \endentry
+    \entry{saragadam2024deeptensor}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=7a73396b9ea3f87b8a52174195f3113b}{%
+           family={Saragadam},
+           familyi={S\bibinitperiod},
+           given={Vishwanath},
+           giveni={V\bibinitperiod}}}%
+        {{hash=a75b6ce02c54a20ff2c3f73f049815e2}{%
+           family={Balestriero},
+           familyi={B\bibinitperiod},
+           given={Randall},
+           giveni={R\bibinitperiod}}}%
+        {{hash=737f8b88bc0cd2a2a1afc3f84195c7d7}{%
+           family={Veeraraghavan},
+           familyi={V\bibinitperiod},
+           given={Ashok},
+           giveni={A\bibinitperiod}}}%
+        {{hash=f1f805a4cc52031d03fa9ec073fc738a}{%
+           family={Baraniuk},
+           familyi={B\bibinitperiod},
+           given={Richard\bibnamedelima G},
+           giveni={R\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+      }
+      \name{namea}{4}{}{%
+        {{hash=7a73396b9ea3f87b8a52174195f3113b}{%
+           family={Saragadam},
+           familyi={S\bibinitperiod},
+           given={Vishwanath},
+           giveni={V\bibinitperiod}}}%
+        {{hash=a75b6ce02c54a20ff2c3f73f049815e2}{%
+           family={Balestriero},
+           familyi={B\bibinitperiod},
+           given={Randall},
+           giveni={R\bibinitperiod}}}%
+        {{hash=737f8b88bc0cd2a2a1afc3f84195c7d7}{%
+           family={Veeraraghavan},
+           familyi={V\bibinitperiod},
+           given={Ashok},
+           giveni={A\bibinitperiod}}}%
+        {{hash=f1f805a4cc52031d03fa9ec073fc738a}{%
+           family={Baraniuk},
+           familyi={B\bibinitperiod},
+           given={Richard\bibnamedelima G},
+           giveni={R\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \list{publisher}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{6293ffa13001b677c9f1169e6128486c}
+      \strng{fullhash}{26e08f2dc7cdb7d35a0b30f322545b5b}
+      \strng{fullhashraw}{26e08f2dc7cdb7d35a0b30f322545b5b}
+      \strng{bibnamehash}{0dc4825e32bcbfff02982ac0768eabfa}
+      \strng{authorbibnamehash}{0dc4825e32bcbfff02982ac0768eabfa}
+      \strng{authornamehash}{6293ffa13001b677c9f1169e6128486c}
+      \strng{authorfullhash}{26e08f2dc7cdb7d35a0b30f322545b5b}
+      \strng{authorfullhashraw}{26e08f2dc7cdb7d35a0b30f322545b5b}
+      \strng{nameabibnamehash}{0dc4825e32bcbfff02982ac0768eabfa}
+      \strng{nameanamehash}{6293ffa13001b677c9f1169e6128486c}
+      \strng{nameafullhash}{26e08f2dc7cdb7d35a0b30f322545b5b}
+      \strng{nameafullhashraw}{26e08f2dc7cdb7d35a0b30f322545b5b}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Pattern Analysis and Machine Intelligence}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{12}
+      \field{title}{DeepTensor: Low-rank tensor decomposition with deep network priors}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{46}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \field{pages}{10337\bibrangedash 10348}
+      \range{pages}{12}
+      \keyw{saragadam2024deeptensor}
+    \endentry
+    \entry{varolgunes2023nmtucker}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=3bf0fed8ab42ab25d23e8658986f3af1}{%
+           family={Varolgunes},
+           familyi={V\bibinitperiod},
+           given={Uras},
+           giveni={U\bibinitperiod}}}%
+        {{hash=158d306d88763fce56a5b90184e1b5b8}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Dan},
+           giveni={D\bibinitperiod}}}%
+        {{hash=af3c2146bd3af9661fe3d150c661a1a6}{%
+           family={Yu},
+           familyi={Y\bibinitperiod},
+           given={Dantong},
+           giveni={D\bibinitperiod}}}%
+        {{hash=fbc637784968cd7b3bf29507b8e20e97}{%
+           family={Uddin},
+           familyi={U\bibinitperiod},
+           given={Ajim},
+           giveni={A\bibinitperiod}}}%
+      }
+      \name{namea}{4}{}{%
+        {{hash=3bf0fed8ab42ab25d23e8658986f3af1}{%
+           family={Varolgunes},
+           familyi={V\bibinitperiod},
+           given={Uras},
+           giveni={U\bibinitperiod}}}%
+        {{hash=158d306d88763fce56a5b90184e1b5b8}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Dan},
+           giveni={D\bibinitperiod}}}%
+        {{hash=af3c2146bd3af9661fe3d150c661a1a6}{%
+           family={Yu},
+           familyi={Y\bibinitperiod},
+           given={Dantong},
+           giveni={D\bibinitperiod}}}%
+        {{hash=fbc637784968cd7b3bf29507b8e20e97}{%
+           family={Uddin},
+           familyi={U\bibinitperiod},
+           given={Ajim},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{122d55c782d5660dff6a521bf0f08332}
+      \strng{fullhash}{e2909ef9e7d41b613ce4df73e5545cc4}
+      \strng{fullhashraw}{e2909ef9e7d41b613ce4df73e5545cc4}
+      \strng{bibnamehash}{f8ed37d58f80d0fb8b9053705d0ce4b0}
+      \strng{authorbibnamehash}{f8ed37d58f80d0fb8b9053705d0ce4b0}
+      \strng{authornamehash}{122d55c782d5660dff6a521bf0f08332}
+      \strng{authorfullhash}{e2909ef9e7d41b613ce4df73e5545cc4}
+      \strng{authorfullhashraw}{e2909ef9e7d41b613ce4df73e5545cc4}
+      \strng{nameabibnamehash}{f8ed37d58f80d0fb8b9053705d0ce4b0}
+      \strng{nameanamehash}{122d55c782d5660dff6a521bf0f08332}
+      \strng{nameafullhash}{e2909ef9e7d41b613ce4df73e5545cc4}
+      \strng{nameafullhashraw}{e2909ef9e7d41b613ce4df73e5545cc4}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the Fourth ACM International Conference on AI in Finance}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{title}{NMTucker: Non-linear Matryoshka Tucker Decomposition for Financial Time Series Imputation}
+      \field{usera}{C}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{year}{2023}
+      \field{dateera}{ce}
+      \field{pages}{516\bibrangedash 523}
+      \range{pages}{8}
+      \keyw{varolgunes2023nmtucker}
+    \endentry
+    \entry{zhai2024quadratic}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=95b013aa6feb6c18e3d87a3cab72c033}{%
+           family={Zhai},
+           familyi={Z\bibinitperiod},
+           given={Zheng},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=645ffdc6d290ea0fd078bb5a498270d6}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Hengchao},
+           giveni={H\bibinitperiod}}}%
+        {{hash=575f200f8623b6fb7acbf451d420814e}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={Qiang},
+           giveni={Q\bibinitperiod}}}%
+      }
+      \name{namea}{3}{}{%
+        {{hash=95b013aa6feb6c18e3d87a3cab72c033}{%
+           family={Zhai},
+           familyi={Z\bibinitperiod},
+           given={Zheng},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=645ffdc6d290ea0fd078bb5a498270d6}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={Hengchao},
+           giveni={H\bibinitperiod}}}%
+        {{hash=575f200f8623b6fb7acbf451d420814e}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={Qiang},
+           giveni={Q\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \list{publisher}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{faadb7d461781305e957ad64155debcc}
+      \strng{fullhash}{7276a62c1fb0b59dfc8d1da608a163f1}
+      \strng{fullhashraw}{7276a62c1fb0b59dfc8d1da608a163f1}
+      \strng{bibnamehash}{7276a62c1fb0b59dfc8d1da608a163f1}
+      \strng{authorbibnamehash}{7276a62c1fb0b59dfc8d1da608a163f1}
+      \strng{authornamehash}{faadb7d461781305e957ad64155debcc}
+      \strng{authorfullhash}{7276a62c1fb0b59dfc8d1da608a163f1}
+      \strng{authorfullhashraw}{7276a62c1fb0b59dfc8d1da608a163f1}
+      \strng{nameabibnamehash}{7276a62c1fb0b59dfc8d1da608a163f1}
+      \strng{nameanamehash}{faadb7d461781305e957ad64155debcc}
+      \strng{nameafullhash}{7276a62c1fb0b59dfc8d1da608a163f1}
+      \strng{nameafullhashraw}{7276a62c1fb0b59dfc8d1da608a163f1}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Pattern Analysis and Machine Intelligence}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{9}
+      \field{title}{Quadratic matrix factorization with applications to manifold learning}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{46}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \field{pages}{6384\bibrangedash 6401}
+      \range{pages}{18}
+      \keyw{zhai2024quadratic}
+    \endentry
+    \entry{schein2016bayesian}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=7c33557eee60725309b0eff668659851}{%
+           family={Schein},
+           familyi={S\bibinitperiod},
+           given={Aaron},
+           giveni={A\bibinitperiod}}}%
+        {{hash=878d1e852f366574c40df3a1b07b8905}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Mingyuan},
+           giveni={M\bibinitperiod}}}%
+        {{hash=df034c01f40f9863f7986f0670e3f863}{%
+           family={Blei},
+           familyi={B\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+        {{hash=db345367734bd532af652711d02f6234}{%
+           family={Wallach},
+           familyi={W\bibinitperiod},
+           given={Hanna},
+           giveni={H\bibinitperiod}}}%
+      }
+      \name{namea}{4}{}{%
+        {{hash=7c33557eee60725309b0eff668659851}{%
+           family={Schein},
+           familyi={S\bibinitperiod},
+           given={Aaron},
+           giveni={A\bibinitperiod}}}%
+        {{hash=878d1e852f366574c40df3a1b07b8905}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Mingyuan},
+           giveni={M\bibinitperiod}}}%
+        {{hash=df034c01f40f9863f7986f0670e3f863}{%
+           family={Blei},
+           familyi={B\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+        {{hash=db345367734bd532af652711d02f6234}{%
+           family={Wallach},
+           familyi={W\bibinitperiod},
+           given={Hanna},
+           giveni={H\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \list{organization}{1}{%
+        {PMLR}%
+      }
+      \strng{namehash}{ffc06c9589c473e4ff31ee9471871192}
+      \strng{fullhash}{1c199f6bcb42a8d75a8fd4d59ff1b322}
+      \strng{fullhashraw}{1c199f6bcb42a8d75a8fd4d59ff1b322}
+      \strng{bibnamehash}{a4343f8be14b8399e5b7c3dc47d73628}
+      \strng{authorbibnamehash}{a4343f8be14b8399e5b7c3dc47d73628}
+      \strng{authornamehash}{ffc06c9589c473e4ff31ee9471871192}
+      \strng{authorfullhash}{1c199f6bcb42a8d75a8fd4d59ff1b322}
+      \strng{authorfullhashraw}{1c199f6bcb42a8d75a8fd4d59ff1b322}
+      \strng{nameabibnamehash}{a4343f8be14b8399e5b7c3dc47d73628}
+      \strng{nameanamehash}{ffc06c9589c473e4ff31ee9471871192}
+      \strng{nameafullhash}{1c199f6bcb42a8d75a8fd4d59ff1b322}
+      \strng{nameafullhashraw}{1c199f6bcb42a8d75a8fd4d59ff1b322}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{International Conference on Machine Learning}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{title}{Bayesian poisson tucker decomposition for learning the structure of international relations}
+      \field{usera}{C}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{year}{2016}
+      \field{dateera}{ce}
+      \field{pages}{2810\bibrangedash 2819}
+      \range{pages}{10}
+      \keyw{schein2016bayesian}
+    \endentry
+    \entry{zhe2016distributed}{article}{}{}
+      \name{author}{7}{}{%
+        {{hash=2b2d4c95737d2d23f0073f459c476a5b}{%
+           family={Zhe},
+           familyi={Z\bibinitperiod},
+           given={Shandian},
+           giveni={S\bibinitperiod}}}%
+        {{hash=accfaf086a407bfb746d7875478d9130}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Kai},
+           giveni={K\bibinitperiod}}}%
+        {{hash=a2ac4942af20d9af7f08a1014e495f20}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Pengyuan},
+           giveni={P\bibinitperiod}}}%
+        {{hash=2fce95d45312fa9ad5ac55b510605d86}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Kuang-chih},
+           giveni={K\bibinithyphendelim c\bibinitperiod}}}%
+        {{hash=c52fa409a52d45f0a1dffcfee1ba6740}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Zenglin},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=a384b480aa61181467d32b3ca38297fd}{%
+           family={Qi},
+           familyi={Q\bibinitperiod},
+           given={Yuan},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=bf5cf30deddddad00a6341ad7a414445}{%
+           family={Ghahramani},
+           familyi={G\bibinitperiod},
+           given={Zoubin},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \name{namea}{7}{}{%
+        {{hash=2b2d4c95737d2d23f0073f459c476a5b}{%
+           family={Zhe},
+           familyi={Z\bibinitperiod},
+           given={Shandian},
+           giveni={S\bibinitperiod}}}%
+        {{hash=accfaf086a407bfb746d7875478d9130}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Kai},
+           giveni={K\bibinitperiod}}}%
+        {{hash=a2ac4942af20d9af7f08a1014e495f20}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Pengyuan},
+           giveni={P\bibinitperiod}}}%
+        {{hash=2fce95d45312fa9ad5ac55b510605d86}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Kuang-chih},
+           giveni={K\bibinithyphendelim c\bibinitperiod}}}%
+        {{hash=c52fa409a52d45f0a1dffcfee1ba6740}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Zenglin},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=a384b480aa61181467d32b3ca38297fd}{%
+           family={Qi},
+           familyi={Q\bibinitperiod},
+           given={Yuan},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=bf5cf30deddddad00a6341ad7a414445}{%
+           family={Ghahramani},
+           familyi={G\bibinitperiod},
+           given={Zoubin},
+           giveni={Z\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{191d6427f4680338d92d823981c0dc40}
+      \strng{fullhash}{f0729d88e47791f59569be9d67362eb6}
+      \strng{fullhashraw}{f0729d88e47791f59569be9d67362eb6}
+      \strng{bibnamehash}{b128fd21e6b0d856057bf04f335df0b5}
+      \strng{authorbibnamehash}{b128fd21e6b0d856057bf04f335df0b5}
+      \strng{authornamehash}{191d6427f4680338d92d823981c0dc40}
+      \strng{authorfullhash}{f0729d88e47791f59569be9d67362eb6}
+      \strng{authorfullhashraw}{f0729d88e47791f59569be9d67362eb6}
+      \strng{nameabibnamehash}{b128fd21e6b0d856057bf04f335df0b5}
+      \strng{nameanamehash}{191d6427f4680338d92d823981c0dc40}
+      \strng{nameafullhash}{f0729d88e47791f59569be9d67362eb6}
+      \strng{nameafullhashraw}{f0729d88e47791f59569be9d67362eb6}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Advances in neural information processing systems}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{title}{Distributed flexible nonlinear tensor factorization}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{29}
+      \field{year}{2016}
+      \field{dateera}{ce}
+      \keyw{zhe2016distributed}
+    \endentry
+    \entry{pan2020streaming}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{hash=20038065d7d81c169b9f05e63f9ec13b}{%
+           family={Pan},
+           familyi={P\bibinitperiod},
+           given={Zhimeng},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=c92fb4d761d5c067a9eb42b2a2cf1521}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Zheng},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=2b2d4c95737d2d23f0073f459c476a5b}{%
+           family={Zhe},
+           familyi={Z\bibinitperiod},
+           given={Shandian},
+           giveni={S\bibinitperiod}}}%
+      }
+      \name{namea}{3}{}{%
+        {{hash=20038065d7d81c169b9f05e63f9ec13b}{%
+           family={Pan},
+           familyi={P\bibinitperiod},
+           given={Zhimeng},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=c92fb4d761d5c067a9eb42b2a2cf1521}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Zheng},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=2b2d4c95737d2d23f0073f459c476a5b}{%
+           family={Zhe},
+           familyi={Z\bibinitperiod},
+           given={Shandian},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \list{organization}{1}{%
+        {PMLR}%
+      }
+      \strng{namehash}{e801b4546d5e46a42d12029ab7cd40e3}
+      \strng{fullhash}{50a68112eb84edd37defa589889d9465}
+      \strng{fullhashraw}{50a68112eb84edd37defa589889d9465}
+      \strng{bibnamehash}{50a68112eb84edd37defa589889d9465}
+      \strng{authorbibnamehash}{50a68112eb84edd37defa589889d9465}
+      \strng{authornamehash}{e801b4546d5e46a42d12029ab7cd40e3}
+      \strng{authorfullhash}{50a68112eb84edd37defa589889d9465}
+      \strng{authorfullhashraw}{50a68112eb84edd37defa589889d9465}
+      \strng{nameabibnamehash}{50a68112eb84edd37defa589889d9465}
+      \strng{nameanamehash}{e801b4546d5e46a42d12029ab7cd40e3}
+      \strng{nameafullhash}{50a68112eb84edd37defa589889d9465}
+      \strng{nameafullhashraw}{50a68112eb84edd37defa589889d9465}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Conference on Uncertainty in Artificial Intelligence}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{title}{Streaming nonlinear Bayesian tensor decomposition}
+      \field{usera}{C}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{year}{2020}
+      \field{dateera}{ce}
+      \field{pages}{490\bibrangedash 499}
+      \range{pages}{10}
+      \keyw{pan2020streaming}
+    \endentry
+    \entry{ahn2024neural}{inproceedings}{}{}
+      \name{author}{4}{}{%
+        {{hash=c79d3fa5a1ea8299d3a8d01d42d1d1ad}{%
+           family={Ahn},
+           familyi={A\bibinitperiod},
+           given={Dawon},
+           giveni={D\bibinitperiod}}}%
+        {{hash=4b1a232ef16a58fb66d2a5bed128f3fc}{%
+           family={Saini},
+           familyi={S\bibinitperiod},
+           given={Uday\bibnamedelima Singh},
+           giveni={U\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=63dbf975652e49f099d009f8c3a3b73c}{%
+           family={Papalexakis},
+           familyi={P\bibinitperiod},
+           given={Evangelos\bibnamedelima E},
+           giveni={E\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=0d1bb37c4dd2e82d4399802c327e5336}{%
+           family={Payani},
+           familyi={P\bibinitperiod},
+           given={Ali},
+           giveni={A\bibinitperiod}}}%
+      }
+      \name{namea}{4}{}{%
+        {{hash=c79d3fa5a1ea8299d3a8d01d42d1d1ad}{%
+           family={Ahn},
+           familyi={A\bibinitperiod},
+           given={Dawon},
+           giveni={D\bibinitperiod}}}%
+        {{hash=4b1a232ef16a58fb66d2a5bed128f3fc}{%
+           family={Saini},
+           familyi={S\bibinitperiod},
+           given={Uday\bibnamedelima Singh},
+           giveni={U\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=63dbf975652e49f099d009f8c3a3b73c}{%
+           family={Papalexakis},
+           familyi={P\bibinitperiod},
+           given={Evangelos\bibnamedelima E},
+           giveni={E\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=0d1bb37c4dd2e82d4399802c327e5336}{%
+           family={Payani},
+           familyi={P\bibinitperiod},
+           given={Ali},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{5fdc45952e50ac6fa8527377be4af70d}
+      \strng{fullhash}{92d108b4cd1df3be376f3735f1148792}
+      \strng{fullhashraw}{92d108b4cd1df3be376f3735f1148792}
+      \strng{bibnamehash}{c2996c568871f394f771c9ffde712086}
+      \strng{authorbibnamehash}{c2996c568871f394f771c9ffde712086}
+      \strng{authornamehash}{5fdc45952e50ac6fa8527377be4af70d}
+      \strng{authorfullhash}{92d108b4cd1df3be376f3735f1148792}
+      \strng{authorfullhashraw}{92d108b4cd1df3be376f3735f1148792}
+      \strng{nameabibnamehash}{c2996c568871f394f771c9ffde712086}
+      \strng{nameanamehash}{5fdc45952e50ac6fa8527377be4af70d}
+      \strng{nameafullhash}{92d108b4cd1df3be376f3735f1148792}
+      \strng{nameafullhashraw}{92d108b4cd1df3be376f3735f1148792}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Proceedings of the 33rd ACM International Conference on Information and Knowledge Management}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{title}{Neural additive tensor decomposition for sparse tensors}
+      \field{usera}{C}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{year}{2024}
+      \field{dateera}{ce}
+      \field{pages}{14\bibrangedash 23}
+      \range{pages}{10}
+      \keyw{ahn2024neural}
+    \endentry
+    \entry{yang2016iterative}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=15a9483d352c673da03bee8f5a878bc9}{%
+           family={Yang},
+           familyi={Y\bibinitperiod},
+           given={Linxiao},
+           giveni={L\bibinitperiod}}}%
+        {{hash=d2b384ceae95e7c310db8eec96e93d6d}{%
+           family={Fang},
+           familyi={F\bibinitperiod},
+           given={Jun},
+           giveni={J\bibinitperiod}}}%
+        {{hash=269b154500887b433113fb750a75e488}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Hongbin},
+           giveni={H\bibinitperiod}}}%
+        {{hash=a1e34b5a7fff8ff02cbc55387fc697b0}{%
+           family={Zeng},
+           familyi={Z\bibinitperiod},
+           given={Bing},
+           giveni={B\bibinitperiod}}}%
+      }
+      \name{namea}{4}{}{%
+        {{hash=15a9483d352c673da03bee8f5a878bc9}{%
+           family={Yang},
+           familyi={Y\bibinitperiod},
+           given={Linxiao},
+           giveni={L\bibinitperiod}}}%
+        {{hash=d2b384ceae95e7c310db8eec96e93d6d}{%
+           family={Fang},
+           familyi={F\bibinitperiod},
+           given={Jun},
+           giveni={J\bibinitperiod}}}%
+        {{hash=269b154500887b433113fb750a75e488}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Hongbin},
+           giveni={H\bibinitperiod}}}%
+        {{hash=a1e34b5a7fff8ff02cbc55387fc697b0}{%
+           family={Zeng},
+           familyi={Z\bibinitperiod},
+           given={Bing},
+           giveni={B\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \list{publisher}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{f3acf6e493f759f39fc4782c693e0168}
+      \strng{fullhash}{ce9fffafee9eebb865bd6eeaa41d9ad4}
+      \strng{fullhashraw}{ce9fffafee9eebb865bd6eeaa41d9ad4}
+      \strng{bibnamehash}{78267e53a0c7f32b5ece8cb6652a5310}
+      \strng{authorbibnamehash}{78267e53a0c7f32b5ece8cb6652a5310}
+      \strng{authornamehash}{f3acf6e493f759f39fc4782c693e0168}
+      \strng{authorfullhash}{ce9fffafee9eebb865bd6eeaa41d9ad4}
+      \strng{authorfullhashraw}{ce9fffafee9eebb865bd6eeaa41d9ad4}
+      \strng{nameabibnamehash}{78267e53a0c7f32b5ece8cb6652a5310}
+      \strng{nameanamehash}{f3acf6e493f759f39fc4782c693e0168}
+      \strng{nameafullhash}{ce9fffafee9eebb865bd6eeaa41d9ad4}
+      \strng{nameafullhashraw}{ce9fffafee9eebb865bd6eeaa41d9ad4}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Signal Processing}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{18}
+      \field{title}{An iterative reweighted method for tucker decomposition of incomplete tensors}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{64}
+      \field{year}{2016}
+      \field{dateera}{ce}
+      \field{pages}{4817\bibrangedash 4829}
+      \range{pages}{13}
+      \keyw{yang2016iterative}
+    \endentry
+    \entry{liu2012tensor}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=0fb3269d926c0f6914d41e63b3182271}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Ji},
+           giveni={J\bibinitperiod}}}%
+        {{hash=f1f87aa5949d8c706218ceac6de3809c}{%
+           family={Musialski},
+           familyi={M\bibinitperiod},
+           given={Przemyslaw},
+           giveni={P\bibinitperiod}}}%
+        {{hash=3aeeab76494ab92e6e09421085e90833}{%
+           family={Wonka},
+           familyi={W\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod}}}%
+        {{hash=45f8892411700a9b1d4fcd3acaeeefd0}{%
+           family={Ye},
+           familyi={Y\bibinitperiod},
+           given={Jieping},
+           giveni={J\bibinitperiod}}}%
+      }
+      \name{namea}{4}{}{%
+        {{hash=0fb3269d926c0f6914d41e63b3182271}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Ji},
+           giveni={J\bibinitperiod}}}%
+        {{hash=f1f87aa5949d8c706218ceac6de3809c}{%
+           family={Musialski},
+           familyi={M\bibinitperiod},
+           given={Przemyslaw},
+           giveni={P\bibinitperiod}}}%
+        {{hash=3aeeab76494ab92e6e09421085e90833}{%
+           family={Wonka},
+           familyi={W\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod}}}%
+        {{hash=45f8892411700a9b1d4fcd3acaeeefd0}{%
+           family={Ye},
+           familyi={Y\bibinitperiod},
+           given={Jieping},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \list{publisher}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{4b5133e9bff1fd6e18909049809d6f73}
+      \strng{fullhash}{a83424bc2e23b51ef0213b896690dbf0}
+      \strng{fullhashraw}{a83424bc2e23b51ef0213b896690dbf0}
+      \strng{bibnamehash}{e6300555462b9d2d1d1b22a7ab3bde94}
+      \strng{authorbibnamehash}{e6300555462b9d2d1d1b22a7ab3bde94}
+      \strng{authornamehash}{4b5133e9bff1fd6e18909049809d6f73}
+      \strng{authorfullhash}{a83424bc2e23b51ef0213b896690dbf0}
+      \strng{authorfullhashraw}{a83424bc2e23b51ef0213b896690dbf0}
+      \strng{nameabibnamehash}{e6300555462b9d2d1d1b22a7ab3bde94}
+      \strng{nameanamehash}{4b5133e9bff1fd6e18909049809d6f73}
+      \strng{nameafullhash}{a83424bc2e23b51ef0213b896690dbf0}
+      \strng{nameafullhashraw}{a83424bc2e23b51ef0213b896690dbf0}
+      \field{extraname}{2}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE transactions on pattern analysis and machine intelligence}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{1}
+      \field{title}{Tensor completion for estimating missing values in visual data}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{35}
+      \field{year}{2012}
+      \field{dateera}{ce}
+      \field{pages}{208\bibrangedash 220}
+      \range{pages}{13}
+      \keyw{liu2012tensor}
+    \endentry
+    \entry{kingma2014adam}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=b6fbd171848aad4edf3925543f1f1522}{%
+           family={Kingma},
+           familyi={K\bibinitperiod},
+           given={Diederik\bibnamedelima P},
+           giveni={D\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=8aa66e8231cc2fdbe67aa4f18ca970c6}{%
+           family={Ba},
+           familyi={B\bibinitperiod},
+           given={Jimmy},
+           giveni={J\bibinitperiod}}}%
+      }
+      \name{namea}{2}{}{%
+        {{hash=b6fbd171848aad4edf3925543f1f1522}{%
+           family={Kingma},
+           familyi={K\bibinitperiod},
+           given={Diederik\bibnamedelima P},
+           giveni={D\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=8aa66e8231cc2fdbe67aa4f18ca970c6}{%
+           family={Ba},
+           familyi={B\bibinitperiod},
+           given={Jimmy},
+           giveni={J\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{0018e09b9f142d15c9693e18a17bdf3f}
+      \strng{fullhash}{a09df9f123146b8e2c7f1134c9496932}
+      \strng{fullhashraw}{a09df9f123146b8e2c7f1134c9496932}
+      \strng{bibnamehash}{a09df9f123146b8e2c7f1134c9496932}
+      \strng{authorbibnamehash}{a09df9f123146b8e2c7f1134c9496932}
+      \strng{authornamehash}{0018e09b9f142d15c9693e18a17bdf3f}
+      \strng{authorfullhash}{a09df9f123146b8e2c7f1134c9496932}
+      \strng{authorfullhashraw}{a09df9f123146b8e2c7f1134c9496932}
+      \strng{nameabibnamehash}{a09df9f123146b8e2c7f1134c9496932}
+      \strng{nameanamehash}{0018e09b9f142d15c9693e18a17bdf3f}
+      \strng{nameafullhash}{a09df9f123146b8e2c7f1134c9496932}
+      \strng{nameafullhashraw}{a09df9f123146b8e2c7f1134c9496932}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1412.6980}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{title}{Adam: A method for stochastic optimization}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{year}{2014}
+      \field{dateera}{ce}
+      \keyw{kingma2014adam}
+    \endentry
+    \entry{hoerl1970ridge}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=073bf156684ab93b481fb9a5dd6a82c7}{%
+           family={Hoerl},
+           familyi={H\bibinitperiod},
+           given={Arthur\bibnamedelima E},
+           giveni={A\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=39f4e06a9e51f345e243e2b24175e7e4}{%
+           family={Kennard},
+           familyi={K\bibinitperiod},
+           given={Robert\bibnamedelima W},
+           giveni={R\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \name{namea}{2}{}{%
+        {{hash=073bf156684ab93b481fb9a5dd6a82c7}{%
+           family={Hoerl},
+           familyi={H\bibinitperiod},
+           given={Arthur\bibnamedelima E},
+           giveni={A\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=39f4e06a9e51f345e243e2b24175e7e4}{%
+           family={Kennard},
+           familyi={K\bibinitperiod},
+           given={Robert\bibnamedelima W},
+           giveni={R\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \list{publisher}{1}{%
+        {Taylor \& Francis}%
+      }
+      \strng{namehash}{b97ec9aa217e20891d66847c4a4a9eae}
+      \strng{fullhash}{5ca383125b65b015cb46067f1150f462}
+      \strng{fullhashraw}{5ca383125b65b015cb46067f1150f462}
+      \strng{bibnamehash}{5ca383125b65b015cb46067f1150f462}
+      \strng{authorbibnamehash}{5ca383125b65b015cb46067f1150f462}
+      \strng{authornamehash}{b97ec9aa217e20891d66847c4a4a9eae}
+      \strng{authorfullhash}{5ca383125b65b015cb46067f1150f462}
+      \strng{authorfullhashraw}{5ca383125b65b015cb46067f1150f462}
+      \strng{nameabibnamehash}{5ca383125b65b015cb46067f1150f462}
+      \strng{nameanamehash}{b97ec9aa217e20891d66847c4a4a9eae}
+      \strng{nameafullhash}{5ca383125b65b015cb46067f1150f462}
+      \strng{nameafullhashraw}{5ca383125b65b015cb46067f1150f462}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Technometrics}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{1}
+      \field{title}{Ridge regression: Biased estimation for nonorthogonal problems}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{12}
+      \field{year}{1970}
+      \field{dateera}{ce}
+      \field{pages}{55\bibrangedash 67}
+      \range{pages}{13}
+      \keyw{hoerl1970ridge}
+    \endentry
+    \entry{oseledets2011}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=5d2040a109787d73e1d4cbec5e574f80}{%
+           family={Oseledets},
+           familyi={O\bibinitperiod},
+           given={Ivan\bibnamedelima V.},
+           giveni={I\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+      }
+      \name{namea}{1}{}{%
+        {{hash=5d2040a109787d73e1d4cbec5e574f80}{%
+           family={Oseledets},
+           familyi={O\bibinitperiod},
+           given={Ivan\bibnamedelima V.},
+           giveni={I\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{fullhash}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{fullhashraw}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{bibnamehash}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{authorbibnamehash}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{authornamehash}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{authorfullhash}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{authorfullhashraw}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{nameabibnamehash}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{nameanamehash}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{nameafullhash}{5d2040a109787d73e1d4cbec5e574f80}
+      \strng{nameafullhashraw}{5d2040a109787d73e1d4cbec5e574f80}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{SIAM Journal on Scientific Computing}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{5}
+      \field{title}{Tensor-Train Decomposition}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{33}
+      \field{year}{2011}
+      \field{dateera}{ce}
+      \field{pages}{2295\bibrangedash 2317}
+      \range{pages}{23}
+      \keyw{oseledets2011}
+    \endentry
+    \entry{zhao2016tr}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=8a239bd07f908087a20dfcf87572e035}{%
+           family={Zhao},
+           familyi={Z\bibinitperiod},
+           given={Qibin},
+           giveni={Q\bibinitperiod}}}%
+        {{hash=11506400eabf2f393c9bf5b2f5ea3aa9}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Guoxu},
+           giveni={G\bibinitperiod}}}%
+        {{hash=0dda031be6d5f223ef471abe99490f27}{%
+           family={Xie},
+           familyi={X\bibinitperiod},
+           given={Shengli},
+           giveni={S\bibinitperiod}}}%
+        {{hash=f6bbd94d210d5c7e232002a8fb243519}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Liqing},
+           giveni={L\bibinitperiod}}}%
+        {{hash=08ffe474d1c0bebee63a5696b8bc17dd}{%
+           family={Cichocki},
+           familyi={C\bibinitperiod},
+           given={Andrzej},
+           giveni={A\bibinitperiod}}}%
+      }
+      \name{namea}{5}{}{%
+        {{hash=8a239bd07f908087a20dfcf87572e035}{%
+           family={Zhao},
+           familyi={Z\bibinitperiod},
+           given={Qibin},
+           giveni={Q\bibinitperiod}}}%
+        {{hash=11506400eabf2f393c9bf5b2f5ea3aa9}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Guoxu},
+           giveni={G\bibinitperiod}}}%
+        {{hash=0dda031be6d5f223ef471abe99490f27}{%
+           family={Xie},
+           familyi={X\bibinitperiod},
+           given={Shengli},
+           giveni={S\bibinitperiod}}}%
+        {{hash=f6bbd94d210d5c7e232002a8fb243519}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Liqing},
+           giveni={L\bibinitperiod}}}%
+        {{hash=08ffe474d1c0bebee63a5696b8bc17dd}{%
+           family={Cichocki},
+           familyi={C\bibinitperiod},
+           given={Andrzej},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{2e4bc13df356d33dfefd13e3bcd76015}
+      \strng{fullhash}{6d63fa46f68e1e85f2065b2e9057cec6}
+      \strng{fullhashraw}{6d63fa46f68e1e85f2065b2e9057cec6}
+      \strng{bibnamehash}{2dd829845b8ed28e6f022ab5099e2915}
+      \strng{authorbibnamehash}{2dd829845b8ed28e6f022ab5099e2915}
+      \strng{authornamehash}{2e4bc13df356d33dfefd13e3bcd76015}
+      \strng{authorfullhash}{6d63fa46f68e1e85f2065b2e9057cec6}
+      \strng{authorfullhashraw}{6d63fa46f68e1e85f2065b2e9057cec6}
+      \strng{nameabibnamehash}{2dd829845b8ed28e6f022ab5099e2915}
+      \strng{nameanamehash}{2e4bc13df356d33dfefd13e3bcd76015}
+      \strng{nameafullhash}{6d63fa46f68e1e85f2065b2e9057cec6}
+      \strng{nameafullhashraw}{6d63fa46f68e1e85f2065b2e9057cec6}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1606.05535}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{title}{Tensor Ring Decomposition}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{year}{2016}
+      \field{dateera}{ce}
+      \keyw{zhao2016tr}
+    \endentry
+    \entry{cave_multispectral_database}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=06bc2b4c919b04758b9459c32767ee38}{%
+           family={{Columbia CAVE Laboratory}},
+           familyi={C\bibinitperiod}}}%
+      }
+      \name{namea}{1}{}{%
+        {{hash=06bc2b4c919b04758b9459c32767ee38}{%
+           family={{Columbia CAVE Laboratory}},
+           familyi={C\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{06bc2b4c919b04758b9459c32767ee38}
+      \strng{fullhash}{06bc2b4c919b04758b9459c32767ee38}
+      \strng{fullhashraw}{06bc2b4c919b04758b9459c32767ee38}
+      \strng{bibnamehash}{06bc2b4c919b04758b9459c32767ee38}
+      \strng{authorbibnamehash}{06bc2b4c919b04758b9459c32767ee38}
+      \strng{authornamehash}{06bc2b4c919b04758b9459c32767ee38}
+      \strng{authorfullhash}{06bc2b4c919b04758b9459c32767ee38}
+      \strng{authorfullhashraw}{06bc2b4c919b04758b9459c32767ee38}
+      \strng{nameabibnamehash}{06bc2b4c919b04758b9459c32767ee38}
+      \strng{nameanamehash}{06bc2b4c919b04758b9459c32767ee38}
+      \strng{nameafullhash}{06bc2b4c919b04758b9459c32767ee38}
+      \strng{nameafullhashraw}{06bc2b4c919b04758b9459c32767ee38}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://cave.cs.columbia.edu/repository/Multispectral}}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{note}{Accessed: 2026-04-13}
+      \field{title}{Multispectral Image Database}
+      \field{usera}{Z}
+      \field{userd}{english}
+      \field{userf}{english}
+      \keyw{cave_multispectral_database}
+    \endentry
+    \entry{yasuma2010gapc}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=e00376ee294eec40d3bc222ec5c14729}{%
+           family={Yasuma},
+           familyi={Y\bibinitperiod},
+           given={Fumihito},
+           giveni={F\bibinitperiod}}}%
+        {{hash=7dfdc1132ad2643b8ad843d53da020f8}{%
+           family={Mitsunaga},
+           familyi={M\bibinitperiod},
+           given={Tomoo},
+           giveni={T\bibinitperiod}}}%
+        {{hash=8805e958088a2b313446bcb94ad5a924}{%
+           family={Iso},
+           familyi={I\bibinitperiod},
+           given={Daisuke},
+           giveni={D\bibinitperiod}}}%
+        {{hash=9272cbc8c0135d92b32e936f50633bf2}{%
+           family={Nayar},
+           familyi={N\bibinitperiod},
+           given={Shree\bibnamedelima K.},
+           giveni={S\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+      }
+      \name{namea}{4}{}{%
+        {{hash=e00376ee294eec40d3bc222ec5c14729}{%
+           family={Yasuma},
+           familyi={Y\bibinitperiod},
+           given={Fumihito},
+           giveni={F\bibinitperiod}}}%
+        {{hash=7dfdc1132ad2643b8ad843d53da020f8}{%
+           family={Mitsunaga},
+           familyi={M\bibinitperiod},
+           given={Tomoo},
+           giveni={T\bibinitperiod}}}%
+        {{hash=8805e958088a2b313446bcb94ad5a924}{%
+           family={Iso},
+           familyi={I\bibinitperiod},
+           given={Daisuke},
+           giveni={D\bibinitperiod}}}%
+        {{hash=9272cbc8c0135d92b32e936f50633bf2}{%
+           family={Nayar},
+           familyi={N\bibinitperiod},
+           given={Shree\bibnamedelima K.},
+           giveni={S\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{f6edf212a61d7ee66f89a1af3bc69e0e}
+      \strng{fullhash}{c0b9e6b835c9059ea7054b802c281db4}
+      \strng{fullhashraw}{c0b9e6b835c9059ea7054b802c281db4}
+      \strng{bibnamehash}{d6443b60da1f1055a2cae8fc77b5cb9c}
+      \strng{authorbibnamehash}{d6443b60da1f1055a2cae8fc77b5cb9c}
+      \strng{authornamehash}{f6edf212a61d7ee66f89a1af3bc69e0e}
+      \strng{authorfullhash}{c0b9e6b835c9059ea7054b802c281db4}
+      \strng{authorfullhashraw}{c0b9e6b835c9059ea7054b802c281db4}
+      \strng{nameabibnamehash}{d6443b60da1f1055a2cae8fc77b5cb9c}
+      \strng{nameanamehash}{f6edf212a61d7ee66f89a1af3bc69e0e}
+      \strng{nameafullhash}{c0b9e6b835c9059ea7054b802c281db4}
+      \strng{nameafullhashraw}{c0b9e6b835c9059ea7054b802c281db4}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Image Processing}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{9}
+      \field{title}{Generalized Assorted Pixel Camera: Postcapture Control of Resolution, Dynamic Range, and Spectrum}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{19}
+      \field{year}{2010}
+      \field{dateera}{ce}
+      \field{pages}{2241\bibrangedash 2253}
+      \range{pages}{13}
+      \verb{doi}
+      \verb 10.1109/TIP.2010.2046811
+      \endverb
+      \keyw{yasuma2010gapc}
+    \endentry
+    \entry{roberts1993jasperridge}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=c845634a0f9fa19c5296ac1dc7612353}{%
+           family={Roberts},
+           familyi={R\bibinitperiod},
+           given={D.\bibnamedelimi A.},
+           giveni={D\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=a2de13f4cb3d5cae6119b30ce2b51f25}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={M.\bibnamedelimi O.},
+           giveni={M\bibinitperiod\bibinitdelim O\bibinitperiod}}}%
+        {{hash=0f3300a6811d5b03f63060c87be284ca}{%
+           family={Adams},
+           familyi={A\bibinitperiod},
+           given={J.\bibnamedelimi B.},
+           giveni={J\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+      }
+      \name{namea}{3}{}{%
+        {{hash=c845634a0f9fa19c5296ac1dc7612353}{%
+           family={Roberts},
+           familyi={R\bibinitperiod},
+           given={D.\bibnamedelimi A.},
+           giveni={D\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=a2de13f4cb3d5cae6119b30ce2b51f25}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={M.\bibnamedelimi O.},
+           giveni={M\bibinitperiod\bibinitdelim O\bibinitperiod}}}%
+        {{hash=0f3300a6811d5b03f63060c87be284ca}{%
+           family={Adams},
+           familyi={A\bibinitperiod},
+           given={J.\bibnamedelimi B.},
+           giveni={J\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{7b0c25ce6feaa16dcec7377d555ab422}
+      \strng{fullhash}{9ffb96099e7826c70895c640d44887e9}
+      \strng{fullhashraw}{9ffb96099e7826c70895c640d44887e9}
+      \strng{bibnamehash}{9ffb96099e7826c70895c640d44887e9}
+      \strng{authorbibnamehash}{9ffb96099e7826c70895c640d44887e9}
+      \strng{authornamehash}{7b0c25ce6feaa16dcec7377d555ab422}
+      \strng{authorfullhash}{9ffb96099e7826c70895c640d44887e9}
+      \strng{authorfullhashraw}{9ffb96099e7826c70895c640d44887e9}
+      \strng{nameabibnamehash}{9ffb96099e7826c70895c640d44887e9}
+      \strng{nameanamehash}{7b0c25ce6feaa16dcec7377d555ab422}
+      \strng{nameafullhash}{9ffb96099e7826c70895c640d44887e9}
+      \strng{nameafullhashraw}{9ffb96099e7826c70895c640d44887e9}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Remote Sensing of Environment}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{2--3}
+      \field{title}{Green Vegetation, Nonphotosynthetic Vegetation, and Soils in AVIRIS Data}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{44}
+      \field{year}{1993}
+      \field{dateera}{ce}
+      \field{pages}{255\bibrangedash 269}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1016/0034-4257(93)90020-X
+      \endverb
+      \keyw{roberts1993jasperridge}
+    \endentry
+    \entry{davis2007samson}{inproceedings}{}{}
+      \name{author}{5}{}{%
+        {{hash=6275548b952346a953b4e566701f1cef}{%
+           family={Davis},
+           familyi={D\bibinitperiod},
+           given={Curtiss\bibnamedelima O.},
+           giveni={C\bibinitperiod\bibinitdelim O\bibinitperiod}}}%
+        {{hash=a4783b1e954b9a1548b469e3d16ba4b7}{%
+           family={Kavanaugh},
+           familyi={K\bibinitperiod},
+           given={Maria},
+           giveni={M\bibinitperiod}}}%
+        {{hash=4fc88f3ece4c8e3d10f89bc483415a54}{%
+           family={Letelier},
+           familyi={L\bibinitperiod},
+           given={Ricardo},
+           giveni={R\bibinitperiod}}}%
+        {{hash=e1e97a176a79d700bdd1aabab7fef5a2}{%
+           family={Bissett},
+           familyi={B\bibinitperiod},
+           given={W.\bibnamedelimi Paul},
+           giveni={W\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=b5ad74ced4ed720dadbf047b65037900}{%
+           family={Kohler},
+           familyi={K\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+      }
+      \name{namea}{5}{}{%
+        {{hash=6275548b952346a953b4e566701f1cef}{%
+           family={Davis},
+           familyi={D\bibinitperiod},
+           given={Curtiss\bibnamedelima O.},
+           giveni={C\bibinitperiod\bibinitdelim O\bibinitperiod}}}%
+        {{hash=a4783b1e954b9a1548b469e3d16ba4b7}{%
+           family={Kavanaugh},
+           familyi={K\bibinitperiod},
+           given={Maria},
+           giveni={M\bibinitperiod}}}%
+        {{hash=4fc88f3ece4c8e3d10f89bc483415a54}{%
+           family={Letelier},
+           familyi={L\bibinitperiod},
+           given={Ricardo},
+           giveni={R\bibinitperiod}}}%
+        {{hash=e1e97a176a79d700bdd1aabab7fef5a2}{%
+           family={Bissett},
+           familyi={B\bibinitperiod},
+           given={W.\bibnamedelimi Paul},
+           giveni={W\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=b5ad74ced4ed720dadbf047b65037900}{%
+           family={Kohler},
+           familyi={K\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{d957bfc59116a389de5988a3dd471915}
+      \strng{fullhash}{90ae26ba6b9ad5afc32d51e82606414a}
+      \strng{fullhashraw}{90ae26ba6b9ad5afc32d51e82606414a}
+      \strng{bibnamehash}{d723082a5257b5b6b4a7a64b5c5962c2}
+      \strng{authorbibnamehash}{d723082a5257b5b6b4a7a64b5c5962c2}
+      \strng{authornamehash}{d957bfc59116a389de5988a3dd471915}
+      \strng{authorfullhash}{90ae26ba6b9ad5afc32d51e82606414a}
+      \strng{authorfullhashraw}{90ae26ba6b9ad5afc32d51e82606414a}
+      \strng{nameabibnamehash}{d723082a5257b5b6b4a7a64b5c5962c2}
+      \strng{nameanamehash}{d957bfc59116a389de5988a3dd471915}
+      \strng{nameafullhash}{90ae26ba6b9ad5afc32d51e82606414a}
+      \strng{nameafullhashraw}{90ae26ba6b9ad5afc32d51e82606414a}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Coastal Ocean Remote Sensing}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{series}{Proceedings of SPIE}
+      \field{title}{Spatial and Spectral Resolution Considerations for Imaging Coastal Waters}
+      \field{usera}{C}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{6680}
+      \field{year}{2007}
+      \field{dateera}{ce}
+      \field{pages}{66800P}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1117/12.734288
+      \endverb
+      \keyw{davis2007samson}
+    \endentry
+    \entry{urban_hypercube_dataset}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=4a45efa6e65ce3c25e6c0592ca671a35}{%
+           family={{Geospatial Research Laboratory (U.S.)}},
+           familyi={G\bibinitperiod}}}%
+      }
+      \name{namea}{1}{}{%
+        {{hash=4a45efa6e65ce3c25e6c0592ca671a35}{%
+           family={{Geospatial Research Laboratory (U.S.)}},
+           familyi={G\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{4a45efa6e65ce3c25e6c0592ca671a35}
+      \strng{fullhash}{4a45efa6e65ce3c25e6c0592ca671a35}
+      \strng{fullhashraw}{4a45efa6e65ce3c25e6c0592ca671a35}
+      \strng{bibnamehash}{4a45efa6e65ce3c25e6c0592ca671a35}
+      \strng{authorbibnamehash}{4a45efa6e65ce3c25e6c0592ca671a35}
+      \strng{authornamehash}{4a45efa6e65ce3c25e6c0592ca671a35}
+      \strng{authorfullhash}{4a45efa6e65ce3c25e6c0592ca671a35}
+      \strng{authorfullhashraw}{4a45efa6e65ce3c25e6c0592ca671a35}
+      \strng{nameabibnamehash}{4a45efa6e65ce3c25e6c0592ca671a35}
+      \strng{nameanamehash}{4a45efa6e65ce3c25e6c0592ca671a35}
+      \strng{nameafullhash}{4a45efa6e65ce3c25e6c0592ca671a35}
+      \strng{nameafullhashraw}{4a45efa6e65ce3c25e6c0592ca671a35}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://hdl.handle.net/11681/2925}}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{note}{Dataset}
+      \field{title}{HyperCube Sample Data Set: HYDICE Sensor Imagery URBAN}
+      \field{usera}{Z}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{year}{2015}
+      \field{dateera}{ce}
+      \keyw{urban_hypercube_dataset}
+    \endentry
+    \entry{resmini1997cuprite}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=9cd8d7ce1764499436234780129ad7dc}{%
+           family={Resmini},
+           familyi={R\bibinitperiod},
+           given={Ronald\bibnamedelima G.},
+           giveni={R\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=a56d16dfc95589810192f4271bbbf7b3}{%
+           family={Kappus},
+           familyi={K\bibinitperiod},
+           given={Mary\bibnamedelima E.},
+           giveni={M\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=3364fe7a5be033c9a9bf031144a11733}{%
+           family={Aldrich},
+           familyi={A\bibinitperiod},
+           given={W.\bibnamedelimi S.},
+           giveni={W\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=7b114a475d07045b305a6db9461c4dc3}{%
+           family={Harsanyi},
+           familyi={H\bibinitperiod},
+           given={John\bibnamedelima C.},
+           giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=0f1fccc54cb4ae214922144adc27b09e}{%
+           family={Anderson},
+           familyi={A\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+      }
+      \name{namea}{5}{}{%
+        {{hash=9cd8d7ce1764499436234780129ad7dc}{%
+           family={Resmini},
+           familyi={R\bibinitperiod},
+           given={Ronald\bibnamedelima G.},
+           giveni={R\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=a56d16dfc95589810192f4271bbbf7b3}{%
+           family={Kappus},
+           familyi={K\bibinitperiod},
+           given={Mary\bibnamedelima E.},
+           giveni={M\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=3364fe7a5be033c9a9bf031144a11733}{%
+           family={Aldrich},
+           familyi={A\bibinitperiod},
+           given={W.\bibnamedelimi S.},
+           giveni={W\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=7b114a475d07045b305a6db9461c4dc3}{%
+           family={Harsanyi},
+           familyi={H\bibinitperiod},
+           given={John\bibnamedelima C.},
+           giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=0f1fccc54cb4ae214922144adc27b09e}{%
+           family={Anderson},
+           familyi={A\bibinitperiod},
+           given={M.},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {english}%
+      }
+      \strng{namehash}{a2438fbb0bcf3df5b2f2107fa76a7eb7}
+      \strng{fullhash}{96fdb44bf1b3888d4ca6447934dc7367}
+      \strng{fullhashraw}{96fdb44bf1b3888d4ca6447934dc7367}
+      \strng{bibnamehash}{729f3c11607834012718755e084fd308}
+      \strng{authorbibnamehash}{729f3c11607834012718755e084fd308}
+      \strng{authornamehash}{a2438fbb0bcf3df5b2f2107fa76a7eb7}
+      \strng{authorfullhash}{96fdb44bf1b3888d4ca6447934dc7367}
+      \strng{authorfullhashraw}{96fdb44bf1b3888d4ca6447934dc7367}
+      \strng{nameabibnamehash}{729f3c11607834012718755e084fd308}
+      \strng{nameanamehash}{a2438fbb0bcf3df5b2f2107fa76a7eb7}
+      \strng{nameafullhash}{96fdb44bf1b3888d4ca6447934dc7367}
+      \strng{nameafullhashraw}{96fdb44bf1b3888d4ca6447934dc7367}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{International Journal of Remote Sensing}
+      \field{langid}{english}
+      \field{languageid}{english}
+      \field{lansortorder}{4}
+      \field{number}{7}
+      \field{title}{Mineral Mapping with HYperspectral Digital Imagery Collection Experiment (HYDICE) Sensor Data at Cuprite, Nevada, U.S.A.}
+      \field{usera}{J}
+      \field{userd}{english}
+      \field{userf}{english}
+      \field{volume}{18}
+      \field{year}{1997}
+      \field{dateera}{ce}
+      \field{pages}{1553\bibrangedash 1570}
+      \range{pages}{18}
+      \verb{doi}
+      \verb 10.1080/014311697218278
+      \endverb
+      \keyw{resmini1997cuprite}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
