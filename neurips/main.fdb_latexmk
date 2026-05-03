@@ -1,18 +1,17 @@
 # Fdb version 4
-["bibtex main"] 1777811874.38276 "main.aux" "main.bbl" "main" 1777811942.36841 0
+["bibtex main"] 1777815436.25998 "main.aux" "main.bbl" "main" 1777815485.75827 0
   "./references.bib" 1777803733 17071 c6751bab7ba1a34d3996034b25c2797f ""
   "c:/texlive/2026/texmf-dist/bibtex/bst/natbib/plainnat.bst" 1773380545 26816 ffe5423d2019860bad9f54bc402fac15 ""
-  "main.aux" 1777811941 19289 900a66c865be975862919b5ec0e5304c "pdflatex"
+  "main.aux" 1777815484 19871 e23dbd52ad96dc309e3ed9344bff3cd9 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1777811939.69578 "c:/Users/mrkys/workspace/NTD-PL/neurips/main.tex" "main.pdf" "main" 1777811942.36891 0
+["pdflatex"] 1777815482.81925 "main.tex" "main.pdf" "main" 1777815485.75887 0
   "appendix/experiments.tex" 1777789231 8667 9d3bb67e0812eea7b0ad2f0a8d8775c2 ""
-  "appendix/model_details.tex" 1777810978 3029 08b451707fcf7505a11ac9b22e031fd1 ""
+  "appendix/model_details.tex" 1777815418 8010 ba5f06115b8f03ca538f90514c68d49e ""
   "appendix/proofs.tex" 1777740225 10703 b4828fc21c8897ab77031a284b138b32 ""
   "artifacts/p-tucker.tex" 1777810828 3360 d876e0ecf99cec7abed92cfccb5cc98b ""
-  "c:/Users/mrkys/workspace/NTD-PL/neurips/main.tex" 1777809989 945 38e6d0e177594e94001d5c3a48306576 ""
   "c:/texlive/2026/texmf-dist/fonts/enc/dvips/base/8r.enc" 1773378120 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "c:/texlive/2026/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1773377537 2971 def0b6c1f0b107b3b936def894055589 ""
   "c:/texlive/2026/texmf-dist/fonts/map/fontname/texfonts.map" 1773378659 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -272,10 +271,10 @@
   "figures/controlled_nonlinear_summary_slope.pdf" 1777772789 11722 78ece89265c3c02cf31da3fa6289a1b2 ""
   "figures/recon_calibration_gain_plot.pdf" 1777775782 11800 a90ade49e7202c90318633e4f8e5e5db ""
   "macros.tex" 1777382205 1030 397d1ca12b8401d6595fffa6484ae98e ""
-  "main.aux" 1777811941 19289 900a66c865be975862919b5ec0e5304c "pdflatex"
-  "main.bbl" 1777811874 7474 039d6c85e3de0ffe7da7b67f3ef9c219 "bibtex main"
-  "main.out" 1777811941 6094 4b0f8b5e33cc1e904413ad708a53a4b2 "pdflatex"
-  "main.tex" 1777809989 945 38e6d0e177594e94001d5c3a48306576 ""
+  "main.aux" 1777815484 19871 e23dbd52ad96dc309e3ed9344bff3cd9 "pdflatex"
+  "main.bbl" 1777815436 7474 039d6c85e3de0ffe7da7b67f3ef9c219 "bibtex main"
+  "main.out" 1777815484 5611 6ba32eb0dd7d96ef65bd9dd3407bda38 "pdflatex"
+  "main.tex" 1777814667 959 82ec251b7277f6de662f39d0354bf279 ""
   "neurips_2026.sty" 1777382753 13462 818d80447f57703e59b8270885421e82 ""
   "preamble.tex" 1777809946 1161 ad8d48a02baf552aa8c1226523b6cf13 ""
   "sections/abstract.tex" 1777802589 1639 2b5d459024340d09a6396127e37c11b7 ""
@@ -283,10 +282,10 @@
   "sections/experiments.tex" 1777788994 7336 0063879a38ea836dcbe569d4c2c3e19a ""
   "sections/introduction.tex" 1777809007 3279 2f788628f2cdb04da80bf229218efa0b ""
   "sections/limitations.tex" 1777788853 698 9bc7319336a189c02a990d5e521cf663 ""
-  "sections/method.tex" 1777811856 3696 5f759b8b21b473a899f05dba127d6b66 ""
-  "sections/optimization.tex" 1777740507 6212 6c681e1a29f9ad88ff099b12a8157671 ""
+  "sections/method.tex" 1777813117 3784 6e38f6dba771c11dc890233db94a32ee ""
+  "sections/optimization.tex" 1777815468 1912 626101081de367fe3b6e2dd7d431a540 ""
   "sections/related_work.tex" 1777803506 1852 585105e2491a657564e77af5a78aa140 ""
-  "sections/theory.tex" 1777801450 4613 ee1b37533b290319598e4e65edf69f88 ""
+  "sections/theory.tex" 1777813131 4281 13923cb5797305cc21a55bd783bd2f8c ""
   "tables/cave_completion_main.tex" 1777772030 809 8cd81f576187bb3e387da397524892c0 ""
   "tables/cave_completion_significance.tex" 1777782441 708 4a2dee1ffa962d52012df32f1bb9d15a ""
   "tables/cave_reconstruction_main.tex" 1777691020 673 259795e7ab5b21c1f98bbf5b0c4ff43f ""

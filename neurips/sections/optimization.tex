@@ -1,162 +1,40 @@
 \section{Optimization}
+\label{sec:optimization}
 
-The objective in Section~3 is nonconvex in the Tucker core, factors, and link
-coefficients jointly, but it has a useful block structure. With the polynomial
-link fixed, the loss can be differentiated through the Tucker reconstruction.
-With the latent tensor fixed, the link coefficients solve a low-dimensional
-ridge regression on the currently observed entries. Algorithm~\ref{alg:ntdpl}
-summarizes the solver used in the experiments.
+We optimize the masked objective in Section~\ref{sec:masked-objective} with a
+simple alternating scheme. The Tucker backbone \((\cX,\{\bA^{(n)}\})\) is
+updated by first-order steps through the current polynomial link, while the
+link coefficients are updated by a small ridge-regression problem on the
+current latent entries. This gives a practical solver while keeping the
+optimization layer standard.
 
-\begin{algorithm}[t]
-  \caption{Masked NTD-PL optimization}
-  \label{alg:ntdpl}
-  \begin{algorithmic}[1]
-    \Require observed tensor \(\cY\), mask \(\Omega\), rank \((R_1,\ldots,R_N)\), degree \(P\)
-    \State initialize \(\cX,\{\bA^{(n)}\}\) from Tucker on the masked tensor
-    \State initialize active degree \(P_{\mathrm{act}}\leftarrow 1\) and
-    \(\bbeta=(0,1)\)
-    \For{\(t=1,\ldots,T\)}
-      \State form \(\cS=\tucker{\cX}{\bA^{(1)},\ldots,\bA^{(N)}}\)
-      \If{a link update is scheduled}
-        \State update active coefficients
-        \(\bbeta_{0:P_{\mathrm{act}}}\) by ridge regression on
-        \(\{(S_{\mathbf i},Y_{\mathbf i}):\Omega_{\mathbf i}=1\}\)
-      \EndIf
-      \State compute \(f_{\bbeta}(\cS)\) and \(f_{\bbeta}'(\cS)\)
-      \State take first-order steps on \(\cX\) and \(\{\bA^{(n)}\}\) using
-      the masked gradient
-      \State normalize factor scales and absorb them into the core
-      \State increase \(P_{\mathrm{act}}\) according to the continuation schedule,
-      initializing the new coefficient at zero
-    \EndFor
-    \State \Return \(\cX,\{\bA^{(n)}\},\bbeta\)
-  \end{algorithmic}
-\end{algorithm}
-
-Unlike a post-hoc calibration baseline, the Tucker tensor is not held fixed
-after initialization. The link update uses the current latent tensor, and the
-subsequent backbone gradient step is taken under the current nonlinear link.
-This coupling is the optimization counterpart of the model distinction made
-in Section~3.
-
-\subsection{Backbone Gradient Step}
-
-For a fixed \(\bbeta\), define
-\begin{equation}
-  f_{\bbeta}'(\cS)
-  =
-  \sum_{p=1}^{P}p\beta_p\cS^{\odot(p-1)}.
-\end{equation}
-The gradient of the normalized masked data term with respect to the latent
-tensor \(\cS\) is
-\begin{equation}
-  \bT =
-  \frac{1}{|\Omega|}
-  \Omega \odot
-  \left(f_{\bbeta}(\cS)-\cY\right)
-  \odot f_{\bbeta}'(\cS).
-  \label{eq:latent-gradient}
-\end{equation}
-Backpropagating \(\bT\) through the Tucker reconstruction gives the core
-gradient
-\begin{equation}
-  \nabla_{\cX}\mathcal L
-  =
-  \bT
-  \times_1 \bA^{(1)\top}
-  \times_2 \cdots
-  \times_N \bA^{(N)\top}
-  +
-  \lambda_X\cX.
-\end{equation}
-For the \(n\)-th factor, let
-\begin{equation}
-  \mathbf{Z}^{(n)}
-  =
-  \left[
-  \cX
-  \times_1 \bA^{(1)}
-  \cdots
-  \times_{n-1}\bA^{(n-1)}
-  \times_{n+1}\bA^{(n+1)}
-  \cdots
-  \times_N \bA^{(N)}
-  \right]_{(n)} .
-\end{equation}
-Then the factor gradient can be written in unfolding form as
-\begin{equation}
-  \nabla_{\bA^{(n)}}\mathcal L
-  =
-  \bT_{(n)}\mathbf{Z}^{(n)\top}
-  +
-  \lambda_n\bA^{(n)}.
-\end{equation}
-The experiments use first-order updates for these gradients. The algorithmic
-claim does not depend on a particular adaptive optimizer; the important point
-is that the backbone is updated jointly with the current nonlinear link.
-
-\subsection{Closed-Form Link Update}
-
-With \(\cS\) fixed and active degree \(Q=P_{\mathrm{act}}\), the coefficient
-subproblem is ridge regression. Let \(\by_\Omega\) collect the observed values
-and let \(\bPhi_{\Omega,Q}(\cS)\) have rows
-\([1,s,s^2,\ldots,s^Q]\) for \(s=S_{\mathbf i}\),
-\(\Omega_{\mathbf i}=1\). The subproblem corresponding to the normalized
-objective in Section~3 is
+Given the current latent tensor
+\(\cS=\tucker{\cX}{\bA^{(1)},\ldots,\bA^{(N)}}\), the coefficient update for
+active degree \(Q\) solves
 \begin{equation}
   \min_{\bbeta_{0:Q}}
   \frac{1}{2|\Omega|}
   \norm{\by_\Omega-\bPhi_{\Omega,Q}(\cS)\bbeta_{0:Q}}_2^2
   +
-  \frac{\lambda_\beta}{2}\norm{\bbeta_{0:Q}}_2^2.
+  \frac{\lambda_\beta}{2}\norm{\bbeta_{0:Q}}_2^2,
+  \label{eq:main-beta-subproblem}
 \end{equation}
-Hence
-\begin{equation}
-  \bbeta_{0:Q}^\star =
-  \left(
-  \bPhi_{\Omega,Q}^\top\bPhi_{\Omega,Q}
-  +
-  |\Omega|\lambda_\beta\bI
-  \right)^{-1}
-  \bPhi_{\Omega,Q}^\top\by_\Omega.
-  \label{eq:beta-ridge-update}
-\end{equation}
-Equivalently, one may absorb \(|\Omega|\) into the ridge parameter and solve
-the usual unnormalized normal equations. If the constant term is disabled,
-the first column is removed and \(\beta_0\) is fixed at zero. In practice the
-least-squares system is tiny because \(Q\le P\le6\) in our experiments.
+where \(\bPhi_{\Omega,Q}(\cS)\) contains the observed powers
+\([1,s,\ldots,s^Q]\). The backbone update uses the chain rule through
+\(f_{\bbeta}\); the implementation evaluates \(f_{\bbeta}(\cS)\) and
+\(f_{\bbeta}'(\cS)\) together, then backpropagates the masked residual through
+the Tucker reconstruction.
 
-\subsection{Continuation and Stabilization}
+Training starts from the Tucker-compatible degree-one model and activates
+higher powers gradually. When a new degree is activated, its coefficient is
+initialized at zero, so the model expands from the current low-degree fit
+rather than beginning with all nonlinear terms active. We also normalize factor
+scales and absorb them into the core, which fixes a Tucker gauge without
+changing \(\cS\).
 
-The polynomial family is nested in the maximum degree, so we use a continuation
-schedule that starts from the Tucker-compatible degree-one model and activates
-one additional degree at a time:
-\[
-  t_k = \operatorname{round}\left(\frac{kT}{P}\right),
-  \qquad k=1,\ldots,P-1.
-\]
-When degree \(p+1\) is activated, the previous coefficients and Tucker factors
-are kept and the new coefficient \(\beta_{p+1}\) is initialized at zero. The
-model therefore expands from a linear low-rank fit instead of starting from a
-high-degree polynomial link immediately.
-
-This staging is useful because high powers of \(\cS\) are sensitive to scale
-and can dominate early gradients. We also normalize factor columns during
-training and absorb their scales into the core; this is a gauge fixing of the
-Tucker parameterization and does not change \(\cS\). For numerical stability
-in the ridge update, the implementation may solve the Vandermonde system on a
-centered and scaled latent variable \((S-\mu)/\sigma\), then convert the
-coefficients back to the original power basis of \(S\). This changes only the
-conditioning of the coefficient solve, not the model being optimized.
-
-\subsection{Cost}
-
-The dominant cost is forming the Tucker reconstruction and its reverse
-contractions on the observed tensor. For dense tensors this is comparable to
-standard Tucker optimization at the same rank, plus \(O(P|\Omega|)\) work to
-evaluate the scalar polynomial and its derivative. The link update forms a
-Vandermonde design or the corresponding moment equations and solves a
-\((P+1)\times(P+1)\) linear system, with direct cost
-\(O(P^2|\Omega|+P^3)\). Since \(P\) is small, this cost is negligible compared
-with the Tucker contractions. Thus the polynomial link changes the observation
-model without introducing a tensor-valued high-order parameter block.
+The dominant cost is the same forward and reverse Tucker contractions used by
+standard Tucker optimization at the chosen rank. The polynomial link adds
+\(O(P|\Omega|)\) elementwise work and a \((P+1)\times(P+1)\) ridge solve, so
+for the small degrees used here its overhead is minor. Full update equations,
+stabilization details, and pseudocode are given in
+Appendix~\ref{app:optimization-details}.

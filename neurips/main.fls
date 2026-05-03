@@ -1,8 +1,8 @@
-PWD c:/Users/mrkys/workspace/NTD-PL/neurips
+PWD C:/Users/mrkys/workspace/NTD-PL/neurips
 INPUT c:/texlive/2026/texmf.cnf
 INPUT c:/texlive/2026/texmf-dist/web2c/texmf.cnf
 INPUT c:/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT c:/Users/mrkys/workspace/NTD-PL/neurips/main.tex
+INPUT main.tex
 OUTPUT main.log
 INPUT c:/texlive/2026/texmf-dist/tex/latex/base/article.cls
 INPUT c:/texlive/2026/texmf-dist/tex/latex/base/article.cls
