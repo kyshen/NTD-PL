@@ -1,0 +1,68 @@
+\section{Additional Model Details}
+\label{app:model-details}
+
+\subsection{\texorpdfstring{Explicit \(p\)-Fold Tucker Motivation}{Explicit p-Fold Tucker Motivation}}
+\label{app:pfold-tucker-motivation}
+
+This section expands the motivation behind the explicit \(p\)-fold Tucker
+channel in Section~3.2. The construction is best viewed as the tensor analogue
+of adding polynomial interactions to a linear map. In the matrix case, one may
+move from a linear model \(\by=\bA\mathbf{x}\) to a quadratic model
+\[
+  \by=\bA\mathbf{x}+\cA(\mathbf{x},\mathbf{x}),
+\]
+where the second term couples pairs of latent coordinates. The corresponding
+question for Tucker is: if standard Tucker is the multilinear low-rank map for
+multiway data, what is the direct \(p\)-th order interaction analogue?
+
+For a Tucker backbone, an explicit \(p\)-fold interaction can be written as
+\begin{equation}
+  \widetilde Y^{(p)}_{\mathbf i}
+  =
+  \sum_{\mathbf r^{(1)},\ldots,\mathbf r^{(p)}}
+  \left(
+  \prod_{q=1}^{p}
+  \cX_{r_1^{(q)},\ldots,r_N^{(q)}}
+  \right)
+  \prod_{n=1}^{N}
+  \cA^{(n,p)}_{i_n,r_n^{(1)},\ldots,r_n^{(p)}} .
+  \label{eq:appendix-explicit-pfold-tucker}
+\end{equation}
+Here each mode projection depends on \(p\) latent indices instead of one.
+For \(p=1\), this reduces to the ordinary Tucker entry formula. For \(p=2\),
+the same core appears twice and the mode projections couple two latent tuples,
+giving a quadratic Tucker-style channel. Figure~\ref{fig:pfold-tucker-network}
+illustrates this progression.
+
+\begin{figure}[ht]
+  \centering
+  \resizebox{\linewidth}{!}{\input{artifacts/p-tucker.tex}}
+  \caption{Tensor-network view of a formal \(p\)-fold Tucker extension. The
+  construction keeps the Tucker idea of mode-wise generation, but lets each
+  mode projection couple multiple latent index tuples.}
+  \label{fig:pfold-tucker-network}
+\end{figure}
+
+The explicit construction is useful as a reference model, but it is not the
+parameterization used by NTD-PL. Its mode projections
+\(\cA^{(n,p)}\) have size \(I_nR_n^p\), so a direct implementation introduces
+new high-order projection tensors and rapidly increases storage and
+contraction cost. NTD-PL keeps the same high-order interaction pattern by
+tying the projection tensor to the original Tucker factor:
+\begin{equation}
+  \cA^{(n,p)}_{i_n,r_n^{(1)},\ldots,r_n^{(p)}}
+  =
+  \prod_{q=1}^{p} A^{(n)}_{i_n,r_n^{(q)}} .
+  \label{eq:appendix-shared-projection-tying}
+\end{equation}
+Substituting \eqref{eq:appendix-shared-projection-tying} into
+\eqref{eq:appendix-explicit-pfold-tucker} gives exactly
+\(\cS^{\odot p}\), where
+\(\cS=\tucker{\cX}{\bA^{(1)},\ldots,\bA^{(N)}}\). Thus the degree-\(p\)
+NTD-PL channel is a shared-projection version of the explicit \(p\)-fold
+Tucker prototype.
+
+This is the modeling role of the \(p\)-fold Tucker prototype: it defines the
+high-order Tucker interaction that NTD-PL compresses. The final model does not
+train the untied tensors \(\cA^{(n,p)}\); it keeps a single Tucker backbone and
+adds only the polynomial coefficients \(\{\beta_p\}\).
