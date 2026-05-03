@@ -1,9 +1,0 @@
-﻿dataset,dataset_label,task_name,task_label,rank,metric_label,Tucker,NTD-PL,Gain(%),Delta_NMSE(dB),Delta_SAM,all_metrics_positive
-jasper_ridge_hsi,Jasper Ridge,decompose,Recon.,"(11,11,43)",RMSE,0.04623,0.04302,6.93,0.623,0.981,3
-jasper_ridge_hsi,Jasper Ridge,random-missing-completion,Compl.,"(11,11,43)",RMSE*,0.04710,0.04342,7.82,0.708,1.156,3
-samson_hsi,Samson,decompose,Recon.,"(10,10,35)",RMSE,0.02626,0.02417,7.95,0.719,0.057,3
-samson_hsi,Samson,random-missing-completion,Compl.,"(10,10,35)",RMSE*,0.02681,0.02444,8.86,0.806,0.310,3
-urban_hsi,Urban,decompose,Recon.,"(43,43,47)",RMSE,0.04444,0.04285,3.59,0.318,0.288,3
-urban_hsi,Urban,random-missing-completion,Compl.,"(43,43,47)",RMSE*,0.04538,0.04326,4.67,0.415,0.488,3
-cuprite_hsi,Cuprite,decompose,Recon.,"(35,26,54)",RMSE,0.01759,0.01770,-0.60,-0.052,-0.037,0
-cuprite_hsi,Cuprite,random-missing-completion,Compl.,"(35,26,54)",RMSE*,0.01791,0.01781,0.56,0.048,-0.004,2

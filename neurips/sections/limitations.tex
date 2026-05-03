@@ -1,0 +1,13 @@
+\section{Limitations}
+\label{sec:limitations}
+
+NTD-PL assumes that the residual left by a low-rank Tucker backbone is well
+described by a shared entry-level nonlinear response. It is therefore not a
+universal tensor model: when Tucker already fits well at the chosen rank, or
+when residual nonlinearities vary strongly across space, spectra, or modes, a
+single scalar link may add little.
+
+The method also does not remove rank selection. Increasing Tucker rank can
+recover part of the RMSE gap, and NTD-PL inherits Tucker's nonconvexity and
+initialization sensitivity. Although the link adds few parameters, evaluating
+it over all observed entries still increases runtime relative to plain Tucker.

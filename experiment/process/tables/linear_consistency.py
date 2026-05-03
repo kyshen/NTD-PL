@@ -145,26 +145,37 @@ def _beta_summary(frame: pd.DataFrame) -> pd.DataFrame:
 
 
 def _latex_table(summary: pd.DataFrame) -> str:
+    settings = list(summary["Setting"].drop_duplicates())
+    if len(settings) != 2:
+        raise ValueError(f"Expected two linear-consistency settings, got {settings}")
+
+    def _cell(method: str, setting: str, metric: str) -> str:
+        panel = summary.loc[(summary["Method"] == method) & (summary["Setting"] == setting)]
+        if panel.empty:
+            return "--"
+        return str(panel.iloc[0][metric]).replace("+-", r"$\pm$")
+
+    methods = list(summary["Method"].drop_duplicates())
     lines = [
-        r"\begin{tabular}{c|c|c|c|c}",
-        r"    \hline",
-        r"    Setting & Method & RMSE & NMSE(dB) & $p>1$ contrib. (\%) \\",
-        r"    \hline",
+        r"\begin{tabular}{@{}l ccc ccc@{}}",
+        r"\toprule",
+        rf"\multirow{{2}}{{*}}{{Method}} & \multicolumn{{3}}{{c}}{{{settings[0]}}} & \multicolumn{{3}}{{c}}{{{settings[1]}}} \\",
+        r"\cmidrule(lr){2-4}\cmidrule(l){5-7}",
+        r"& RMSE$\downarrow$ & NMSE(dB)$\downarrow$ & \(p>1\) & RMSE$\downarrow$ & NMSE(dB)$\downarrow$ & \(p>1\) \\",
+        r"\midrule",
     ]
-    for setting in summary["Setting"].drop_duplicates():
-        panel = summary.loc[summary["Setting"] == setting].to_dict("records")
-        for idx, row in enumerate(panel):
-            setting_text = rf"\multirow{{{len(panel)}}}{{*}}{{{row['Setting']}}}" if idx == 0 else ""
-            cells = [
-                setting_text,
-                row["Method"],
-                str(row["RMSE"]).replace("+-", r"$\pm$"),
-                str(row["NMSE(dB)"]).replace("+-", r"$\pm$"),
-                str(row["HO contrib.(%)"]).replace("+-", r"$\pm$"),
-            ]
-            lines.append("    " + " & ".join(cells) + r" \\")
-        lines.append(r"    \hline")
-    lines.append(r"\end{tabular}")
+    for method in methods:
+        cells = [method]
+        for setting in settings:
+            cells.extend(
+                [
+                    _cell(method, setting, "RMSE"),
+                    _cell(method, setting, "NMSE(dB)"),
+                    _cell(method, setting, "HO contrib.(%)"),
+                ]
+            )
+        lines.append("    " + " & ".join(cells) + r" \\")
+    lines.extend([r"\bottomrule", r"\end{tabular}"])
     return "\n".join(lines) + "\n"
 
 

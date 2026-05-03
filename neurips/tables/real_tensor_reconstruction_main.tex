@@ -1,0 +1,17 @@
+\begin{tabular}{@{}l l c c c c c c@{}}
+\toprule
+\multirow{2}{*}{Domain} & \multirow{2}{*}{Dataset} & \multirow{2}{*}{Shape} & \multirow{2}{*}{Rank} & \multicolumn{3}{c}{NMSE(dB)$\downarrow$} & \multirow{2}{*}{NMSE gain} \\
+\cmidrule(lr){5-7}
+& & & & Tucker & NTD-PL & $\Delta$ & \\
+\midrule
+Hyperspectral & Jasper Ridge & 100$\times$100$\times$198 & (11,11,43) & -15.96 & -16.58 & \textbf{0.62} & \textbf{13.4\%} \\
+Hyperspectral & Samson & 95$\times$95$\times$156 & (10,10,35) & -19.37 & -20.09 & \textbf{0.72} & \textbf{15.3\%} \\
+Hyperspectral & Urban & 307$\times$307$\times$162 & (43,43,47) & -13.21 & -13.53 & \textbf{0.32} & \textbf{7.1\%} \\
+\midrule
+Natural images & CBSD68 & 68$\times$96$\times$96$\times$3 & (20,32,32,3) & -11.27 & -11.40 & \textbf{0.13} & \textbf{3.0\%} \\
+Natural images & CIFAR-10 & 1000$\times$32$\times$32$\times$3 & (96,20,20,3) & -17.04 & -17.37 & \textbf{0.34} & \textbf{7.5\%} \\
+\midrule
+Object views & COIL-100 & 8$\times$36$\times$48$\times$48$\times$3 & (4,8,12,12,2) & -10.17 & -10.71 & \textbf{0.54} & \textbf{11.7\%} \\
+Object views & smallNORB & 25$\times$18$\times$64$\times$64$\times$2 & (18,12,24,24,2) & -25.97 & -26.45 & \textbf{0.48} & \textbf{10.5\%} \\
+\bottomrule
+\end{tabular}

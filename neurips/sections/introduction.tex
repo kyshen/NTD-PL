@@ -1,0 +1,59 @@
+\section{Introduction}
+
+Tensor decompositions provide compact models for multiway data in scientific
+sensing, imaging, and signal processing
+\citep{Kolda2009Tensor,Sidiropoulos2017TSP,Liu2013TensorCompletion}. Tucker
+decomposition is especially useful because it separates a small core from
+mode-wise factors, but its observation model is linear in the reconstructed
+latent entry. This is a strong assumption in measurement pipelines where
+latent signals may pass through saturation, radiometric response curves,
+material-dependent nonlinearities, or other entry-level generation effects.
+After such a response, an intrinsically low-rank latent tensor can appear
+substantially higher-rank to a linear Tucker model.
+
+One way to absorb this mismatch is to increase Tucker rank, but doing so
+expands the core and factor dimensions everywhere in the model. Another is to
+calibrate the fitted Tucker output post hoc, but that leaves the learned
+latent geometry fixed. We ask a narrower question: can a small nonlinear
+observation model, learned jointly with the Tucker factors, make a tight
+multilinear rank budget more effective? This paper focuses on the case where
+the residual is well described by a shared entry-level response. The goal is
+therefore not to replace rank selection or general nonlinear tensor decoders,
+but to isolate a simple mechanism by which nonlinear observation effects can
+be represented inside a Tucker backbone.
+
+We instantiate this idea with a polynomial link over a multilinear low-rank
+latent tensor. Given a Tucker latent tensor
+\begin{equation}
+  \cS = \tucker{\cX}{\bA^{(1)}, \ldots, \bA^{(N)}},
+\end{equation}
+we model the observed tensor by a polynomial link
+\begin{equation}
+  \widehat{\cY} = f_{\bbeta}(\cS)
+  = \sum_{p=0}^{P} \beta_p \cS^{\odot p}.
+\end{equation}
+We call this model NTD-PL. It preserves the Tucker backbone and adds only
+\(P+1\) scalar link coefficients, while the powers \(\cS^{\odot p}\) induce
+tied high-order interactions among the same latent factors. Thus the link is
+not an independent high-rank correction; it is a structured,
+parameter-efficient way to expose nonlinear tensor structure already
+organized by the Tucker factors.
+
+\paragraph{Contributions.}
+We make four contributions.
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+  \item We introduce NTD-PL, a Tucker model with a jointly learned polynomial
+  observation link, with standard Tucker recovered as the degree-one special
+  case.
+  \item We show that polynomial links act as compressed high-order Tucker
+  interactions, yielding approximation and separation results for nonlinear
+  low-rank observations.
+  \item We give a masked learning objective, a practical alternating
+  algorithm with degree continuation, and a masked-entry generalization
+  bound.
+  \item We empirically test the mechanism rather than a broad benchmark
+  claim: controlled tensors isolate when the link should help, held-out CAVE
+  completion tests low-rank generalization, reconstruction checks separate
+  the effect from rank-lift and post-hoc calibration, and external HSI scenes
+  show both transfer and boundary cases.
+\end{enumerate}

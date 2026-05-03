@@ -1,2 +1,0 @@
-scene_id,scene_name,missing_rate,selection_rule,q4q4_delta_rmse_missing
-3,cd,0.5,median-positive hard+boundary intersection gain,0.006633125916242228

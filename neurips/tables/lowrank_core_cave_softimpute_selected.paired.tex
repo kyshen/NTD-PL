@@ -1,0 +1,28 @@
+\begin{tabular}{@{}l l c c c c c@{}}
+\toprule
+Protocol & Method & Rank & $\rho$ & RMSE gain & SAM gain & Wins\\
+\midrule
+block & NTD-PL & (12,12,3) & 0.3 & 8.7\% & 27.3\% & 32/45 RMSE, 45/45 SAM\\
+block & SoftImpute & (12,12,3) & 0.3 & 25.3\% & 53.7\% & 43/45 RMSE, 45/45 SAM\\
+block & NTD-PL & (12,12,3) & 0.5 & 6.6\% & 26.3\% & 37/45 RMSE, 45/45 SAM\\
+block & SoftImpute & (12,12,3) & 0.5 & 11.4\% & 49.5\% & 41/45 RMSE, 45/45 SAM\\
+block & NTD-PL & (12,12,3) & 0.7 & 3.2\% & 15.8\% & 37/45 RMSE, 45/45 SAM\\
+block & SoftImpute & (12,12,3) & 0.7 & 0.0\% & 39.6\% & 24/45 RMSE, 45/45 SAM\\
+block & NTD-PL & (24,24,4) & 0.3 & 12.9\% & 29.0\% & 42/45 RMSE, 45/45 SAM\\
+block & SoftImpute & (24,24,4) & 0.3 & 30.8\% & 49.6\% & 6/7 RMSE, 7/7 SAM\\
+block & NTD-PL & (24,24,4) & 0.5 & 6.6\% & 20.0\% & 42/45 RMSE, 45/45 SAM\\
+block & NTD-PL & (24,24,4) & 0.7 & 3.9\% & 9.9\% & 44/45 RMSE, 44/45 SAM\\
+random & NTD-PL & (12,12,3) & 0.3 & 9.0\% & 10.8\% & 45/45 RMSE, 41/45 SAM\\
+random & SoftImpute & (12,12,3) & 0.3 & -14.7\% & 35.1\% & 15/45 RMSE, 45/45 SAM\\
+random & NTD-PL & (12,12,3) & 0.5 & 9.0\% & 9.3\% & 45/45 RMSE, 36/45 SAM\\
+random & SoftImpute & (12,12,3) & 0.5 & -40.8\% & 29.3\% & 6/45 RMSE, 42/45 SAM\\
+random & NTD-PL & (12,12,3) & 0.7 & 8.6\% & 9.6\% & 45/45 RMSE, 37/45 SAM\\
+random & SoftImpute & (12,12,3) & 0.7 & -85.4\% & 20.6\% & 3/45 RMSE, 36/45 SAM\\
+random & NTD-PL & (24,24,4) & 0.3 & 10.9\% & 14.6\% & 45/45 RMSE, 42/45 SAM\\
+random & SoftImpute & (24,24,4) & 0.3 & -90.0\% & 15.8\% & 3/45 RMSE, 34/45 SAM\\
+random & NTD-PL & (24,24,4) & 0.5 & 10.7\% & 13.6\% & 45/45 RMSE, 39/45 SAM\\
+random & SoftImpute & (24,24,4) & 0.5 & -128.3\% & 3.6\% & 3/45 RMSE, 26/45 SAM\\
+random & NTD-PL & (24,24,4) & 0.7 & 10.1\% & 13.3\% & 44/45 RMSE, 39/45 SAM\\
+random & SoftImpute & (24,24,4) & 0.7 & -174.6\% & -15.1\% & 0/45 RMSE, 15/45 SAM\\
+\bottomrule
+\end{tabular}

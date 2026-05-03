@@ -1,5 +1,0 @@
-﻿dataset,dataset_label,source_shape,bands_used,crop_shape,normalization,completion_rate,rank_rule
-jasper_ridge_hsi,Jasper Ridge,100x100x198,198,full scene,global max,rho=0.5,"(11,11,43)"
-samson_hsi,Samson,95x95x156,156,full scene,global max,rho=0.5,"(10,10,35)"
-urban_hsi,Urban,307x307x162,162,full scene,global max,rho=0.5,"(43,43,47)"
-cuprite_hsi,Cuprite,250x190x188,188,full scene,global max,rho=0.5,"(35,26,54)"

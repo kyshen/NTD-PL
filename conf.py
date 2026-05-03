@@ -29,6 +29,20 @@ class RandomMissingCompletionTaskCfg(TaskCfg):
     seed: int = 0
 
 
+@dataclass
+class StructuredMissingCompletionTaskCfg(TaskCfg):
+    _target_: str = "src.tasks.StructuredMissingCompletionTask"
+    _name: str = "structured-missing-completion"
+    log_level: int = 0
+    missing_rate: float = 0.5
+    seed: int = 0
+    pattern: str = "block"
+    block_shape: Optional[Tuple[int, int]] = None
+    stripe_axis: int = 1
+    stripe_width: Optional[int] = None
+    band_axis: int = -1
+
+
 # --------- group: data ----------
 @dataclass
 class DataCfg:
@@ -316,6 +330,7 @@ def register_configs():
     Cfg_list = [
         DecomposeTaskCfg,
         RandomMissingCompletionTaskCfg,
+        StructuredMissingCompletionTaskCfg,
         RandDataCfg,
         KodakDataCfg,
         CBSDDataCfg,

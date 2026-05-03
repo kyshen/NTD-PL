@@ -1,0 +1,21 @@
+\begin{abstract}
+Classical Tucker models explain multiway data through multilinear low-rank
+structure, but many measurement processes introduce nonlinear entry-level
+effects such as saturation, response curves, and material-dependent
+nonlinearities. We study a focused question: can one add nonlinear observation
+capacity to Tucker while preserving its parameter-efficient low-rank
+backbone?
+
+We propose Nonlinear Tucker Decomposition with Polynomial Links (NTD-PL),
+which applies a finite polynomial link to a shared Tucker latent tensor. The
+model contains Tucker as a linear special case, acts as a compressed surrogate
+for high-order Tucker interactions, and admits masked learning through
+alternating gradient updates and a small ridge-regression subproblem for the
+link coefficients. We give approximation and separation results, together
+with a masked-entry generalization bound. Experiments on controlled tensors,
+CAVE hyperspectral completion and reconstruction, and external HSI scenes
+show that NTD-PL improves matched-rank Tucker when a shared nonlinear residual
+is present, that the effect is not explained by modest rank increases or
+post-hoc scalar calibration, and that boundary cases arise when Tucker already
+leaves little coherent residual for the link to capture.
+\end{abstract}

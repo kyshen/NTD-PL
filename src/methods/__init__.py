@@ -1,4 +1,5 @@
 from .base import BaseDecomposeMethod
+from .mlpcal import ScalarMLPCalibration
 from .ntdpl import NTDPLDecomposition
 from .polycal import PolynomialCalibration
 from .tucker import TuckerDecomposition

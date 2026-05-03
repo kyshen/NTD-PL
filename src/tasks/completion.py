@@ -5,11 +5,11 @@ from typing import Any
 import numpy as np
 
 from src.data import BaseData
-from src.metrics import val_ERGAS, val_NMSE_dB, val_RMSE, val_SAM
+from src.metrics import val_ERGAS, val_NMSE_dB, val_PSNR, val_RMSE, val_SAM, val_SSIM
 from src.methods.base import BaseDecomposeMethod
 from src.tasks.base import BaseTask
 from src.types import LogCallback, Result, Tensor
-from src.utils.completion_ops import random_observed_mask
+from src.utils.completion_ops import random_observed_mask, structured_observed_mask
 
 
 def _metric_bundle(
@@ -22,6 +22,8 @@ def _metric_bundle(
         f"RMSE_{prefix}": val_RMSE(original, reconstructed),
         f"SAM_{prefix}": val_SAM(original, reconstructed),
         f"NMSE_dB_{prefix}": val_NMSE_dB(original, reconstructed),
+        f"PSNR_{prefix}": val_PSNR(original, reconstructed),
+        f"SSIM_{prefix}": val_SSIM(original, reconstructed),
         f"ERGAS_{prefix}": val_ERGAS(original, reconstructed),
     }
 
@@ -92,4 +94,30 @@ class RandomMissingCompletionTask(BaseTask):
 
         if self.fit_time_sec is not None:
             eval_dict["fit_time_sec"] = self.fit_time_sec
+        return eval_dict
+
+
+class StructuredMissingCompletionTask(RandomMissingCompletionTask):
+    def setup(self, data: BaseData, method: BaseDecomposeMethod) -> None:
+        self.data = data
+        self.method = method
+        dense = np.asarray(self.data.get(split="eval").dense)
+        block_shape = self.cfg.get("block_shape", None)
+        if block_shape is not None:
+            block_shape = tuple(int(v) for v in block_shape)
+        self.observed_mask = structured_observed_mask(
+            dense.shape,
+            pattern=str(self.cfg["pattern"]),
+            missing_rate=float(self.cfg["missing_rate"]),
+            seed=int(self.cfg["seed"]),
+            block_shape=block_shape,
+            stripe_axis=int(self.cfg.get("stripe_axis", 1)),
+            stripe_width=self.cfg.get("stripe_width", None),
+            band_axis=int(self.cfg.get("band_axis", -1)),
+        )
+        self.data._mask = np.array(self.observed_mask, dtype=bool, copy=True)
+
+    def evaluate(self, reconstruction: Tensor | None = None) -> dict[str, float]:
+        eval_dict = super().evaluate(reconstruction)
+        eval_dict["mask_pattern"] = str(self.cfg["pattern"])
         return eval_dict

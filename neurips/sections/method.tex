@@ -1,0 +1,124 @@
+\section{Polynomial-Linked Tucker Models}
+
+\subsection{Model and Observation Assumption}
+
+Let \(\cY \in \R^{I_1 \times \cdots \times I_N}\) be an observed tensor and let
+\begin{equation}
+  \cS =
+  \tucker{\cX}{\bA^{(1)}, \ldots, \bA^{(N)}},
+  \qquad
+  \cX \in \R^{R_1 \times \cdots \times R_N},
+  \quad
+  \bA^{(n)} \in \R^{I_n \times R_n}.
+\end{equation}
+NTD-PL treats \(\cS\) as a shared low-rank latent tensor and models each
+observed entry through a scalar polynomial response:
+\begin{equation}
+  Y_{\mathbf i}
+  =
+  f_{\bbeta}(S_{\mathbf i})+\varepsilon_{\mathbf i},
+  \qquad
+  f_{\bbeta}(s)=\sum_{p=0}^{P}\beta_p s^p,
+  \qquad
+  \mathbf i=(i_1,\ldots,i_N).
+\end{equation}
+Equivalently, the tensor prediction is
+\begin{equation}
+  \widehat{\cY}
+  =
+  f_{\bbeta}(\cS)
+  =
+  \sum_{p=0}^{P} \beta_p \cS^{\odot p},
+  \qquad
+  \bbeta \in \R^{P+1}.
+\end{equation}
+The constant term \(\beta_0\) captures affine response shifts, the linear term
+\(\beta_1\cS\) is the usual Tucker channel, and terms with \(p\ge2\) activate
+nonlinear channels on the same latent tensor. Standard Tucker is recovered by
+setting \(\beta_1=1\) and \(\beta_p=0\) for \(p\neq 1\). Thus NTD-PL changes
+the entry-generation map while leaving the Tucker backbone and its
+multilinear ranks fixed.
+
+\subsection{Shared-Backbone High-Order Interactions}
+
+Although \(f_{\bbeta}\) is scalar, the term \(\cS^{\odot p}\) is not merely an
+independent output calibration. Expanding one entry gives
+\begin{align}
+  S_{\mathbf i}^{p}
+  &=
+  \left(
+  \sum_{r_1=1}^{R_1}\cdots\sum_{r_N=1}^{R_N}
+  \cX_{r_1,\ldots,r_N}
+  \prod_{n=1}^{N} A^{(n)}_{i_n,r_n}
+  \right)^p \\
+  &=
+  \sum_{\mathbf r^{(1)},\ldots,\mathbf r^{(p)}}
+  \left(
+  \prod_{q=1}^{p} \cX_{r_1^{(q)},\ldots,r_N^{(q)}}
+  \right)
+  \prod_{n=1}^{N}
+  \prod_{q=1}^{p} A^{(n)}_{i_n,r_n^{(q)}} .
+\end{align}
+Thus a degree-\(p\) channel couples \(p\) latent Tucker index tuples while
+reusing the same mode factors in every copy. This is the sense in which the
+polynomial link acts as a shared-backbone high-order Tucker interaction:
+it forms the kind of products that would appear in an explicit \(p\)-fold
+Tucker expansion, but ties all mode projections to
+\(\bA^{(1)},\ldots,\bA^{(N)}\) and mixes the resulting channels only through
+the scalar coefficients \(\{\beta_p\}\).
+
+This distinction also separates NTD-PL from post-hoc calibration. A post-hoc
+calibrator learns a scalar map after a Tucker tensor has already been fitted.
+NTD-PL instead learns the latent tensor and the link jointly, so the nonlinear
+response can shape the low-rank geometry itself. Section~\ref{sec:theory}
+formalizes the induced rank expansion and the resulting separation from
+standard Tucker.
+
+\subsection{Masked Least-Squares Objective}
+
+Let \(\Omega\in\{0,1\}^{I_1\times\cdots\times I_N}\) denote the observed-entry
+mask and let \(|\Omega|=\sum_{\mathbf i}\Omega_{\mathbf i}\). The empirical
+data-fitting term is the average squared residual over observed entries,
+\begin{equation}
+  \mathcal L_{\Omega}
+  =
+  \frac{1}{2|\Omega|}
+  \sum_{\mathbf i:\Omega_{\mathbf i}=1}
+  \left(Y_{\mathbf i}-f_{\bbeta}(S_{\mathbf i})\right)^2 .
+\end{equation}
+The squared loss is the standard least-squares choice for real-valued
+reconstruction and completion, and it aligns with the RMSE-based evaluation
+used in the experiments. The Frobenius form below is simply the tensor notation
+for the same observed-entry residual sum:
+\begin{equation}
+  \min_{\cX,\{\bA^{(n)}\},\bbeta}
+  \frac{1}{2|\Omega|}
+  \norm{
+    \Omega \odot
+    \left(\cY - f_{\bbeta}(\cS)\right)
+  }_F^2
+  +
+  \frac{\lambda_X}{2}\norm{\cX}_F^2
+  +
+  \sum_{n=1}^{N}\frac{\lambda_n}{2}\norm{\bA^{(n)}}_F^2
+  +
+  \frac{\lambda_\beta}{2}\norm{\bbeta}_2^2.
+\end{equation}
+The factor \(1/|\Omega|\) keeps the loss and gradient scale comparable across
+full-observation reconstruction and different missing rates, while the
+factor \(1/2\) removes a constant \(2\) from the residual gradients. The
+Frobenius penalties are ridge/Tikhonov regularizers for the core and mode
+factors; the \(\ell_2\) penalty on \(\bbeta\) stabilizes the polynomial link
+and makes the coefficient subproblem well-conditioned. When
+\(\Omega\equiv\mathbf 1\), the same objective gives full tensor
+reconstruction; otherwise it gives masked tensor completion.
+
+\paragraph{Practical scaling.}
+Like Tucker, NTD-PL has scale indeterminacies between the core and mode
+factors. Polynomial powers make this numerically more sensitive: if the scale
+of \(\cS\) drifts, different powers change at different rates and the link
+coefficients become poorly conditioned. In the implementation we initialize
+from Tucker, normalize factor scales during training, and absorb the inverse
+scales into the core. This gauge fixing does not change the latent tensor
+\(\cS\) or the model class, but it makes the alternating optimization more
+stable in the low-rank regimes used in the experiments.

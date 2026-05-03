@@ -1,0 +1,10 @@
+\begin{tabular}{@{}l c c c c c@{}}
+\toprule
+Method & Latent & Map & RMSE$\downarrow$ & SAM$\downarrow$ & SAM gain \\
+\midrule
+Tucker & Joint & Identity & 0.0141 $\pm$ nan & 8.14 $\pm$ nan & -- \\
+Tucker + PolyCal(P=4) & Fixed Tucker & Polynomial & 0.0140 $\pm$ nan & 7.94 $\pm$ nan & 2.5\% \\
+Tucker + MLPCal(H=32) & Fixed Tucker & Scalar MLP & 0.0140 $\pm$ nan & 7.91 $\pm$ nan & 2.8\% \\
+NTD-PL & Joint & Polynomial & \textbf{0.0132 $\pm$ nan} & \textbf{7.40 $\pm$ nan} & 9.1\% \\
+\bottomrule
+\end{tabular}

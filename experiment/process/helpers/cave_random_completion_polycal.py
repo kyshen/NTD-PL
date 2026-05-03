@@ -12,6 +12,7 @@ import pandas as pd
 from ...utils.io import load_state_mat
 from src.data.hsi import CAVEHSIData
 from src.filters.bias import BiasFilter
+from src.methods.mlpcal import ScalarMLPCalibration
 from src.methods.polycal import PolynomialCalibration
 from src.metrics import val_NMSE_dB, val_RMSE, val_SAM
 from src.types import Tensor
@@ -28,15 +29,24 @@ from .cave_random_completion import (
 
 POLYCAL_DEGREES = (2, 3, 4)
 POLYCAL_LAMBDA = 1e-6
+MLPCAL_HIDDEN_UNITS = 16
+MLPCAL_LAMBDA = 1e-5
+MLPCAL_LR = 1e-3
+MLPCAL_MAX_ITER = 1500
+MLPCAL_BATCH_SIZE = 8192
+MLPCAL_MAX_TRAIN_SAMPLES = 200_000
+MLPCAL_TARGET_MISSING_RATES = (0.5,)
 TARGET_MISSING_RATES = (0.3, 0.5)
 MAIN_MISSING_RATE = 0.5
 MAIN_POLYCAL_DEGREE = 4
+MAIN_MLPCAL_NAME = f"tucker_mlpcal_h{MLPCAL_HIDDEN_UNITS}"
 
 METHOD_LABELS = {
     "tucker": "Tucker",
     "tucker_polycal_p2": "Tucker + PolyCal(P=2)",
     "tucker_polycal_p3": "Tucker + PolyCal(P=3)",
     "tucker_polycal_p4": "Tucker + PolyCal(P=4)",
+    MAIN_MLPCAL_NAME: f"Tucker + MLPCal(H={MLPCAL_HIDDEN_UNITS})",
     "ntdpl": "NTD-PL",
 }
 
@@ -179,7 +189,76 @@ def collect_polycal_results(frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataF
     return metrics_frame, coeff_frame
 
 
-def merge_mechanism_runs(frame: pd.DataFrame, polycal_metrics: pd.DataFrame) -> pd.DataFrame:
+def collect_mlpcal_results(frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    tucker_rows = frame.loc[
+        frame["method_name"].eq("tucker")
+        & frame["missing_rate"].isin(MLPCAL_TARGET_MISSING_RATES)
+    ].copy()
+    metric_rows: list[dict[str, Any]] = []
+    diag_rows: list[dict[str, Any]] = []
+
+    for row in tucker_rows.to_dict("records"):
+        scene_id = int(row["scene_id"])
+        mask_seed = int(row["mask_seed"])
+        missing_rate = float(row["missing_rate"])
+        state = load_state_mat(_resolve_state_path(row["state_path"]))
+        recon_tucker = np.asarray(_jsonish(state["reconstruction"]), dtype=np.float32)
+        observed_mask = np.asarray(_jsonish(state["observed_mask"]), dtype=bool)
+        scene_name, original = load_scene_original(scene_id, **_cave_dataset_kwargs_from_row(row))
+
+        model = ScalarMLPCalibration(
+            hidden_units=MLPCAL_HIDDEN_UNITS,
+            lambda_reg=MLPCAL_LAMBDA,
+            lr=MLPCAL_LR,
+            max_iter=MLPCAL_MAX_ITER,
+            batch_size=MLPCAL_BATCH_SIZE,
+            max_train_samples=MLPCAL_MAX_TRAIN_SAMPLES,
+            random_state=mask_seed,
+        ).fit(recon_tucker, original, observed_mask)
+        recon_mlpcal = model.apply(recon_tucker)
+        metrics = _completion_metrics(original, recon_mlpcal, observed_mask)
+        diagnostics = model.diagnostics
+        assert diagnostics is not None
+
+        metric_rows.append(
+            {
+                "scene_id": scene_id,
+                "scene_name": scene_name,
+                "mask_seed": mask_seed,
+                "missing_rate": missing_rate,
+                "method_name": MAIN_MLPCAL_NAME,
+                "hidden_units": MLPCAL_HIDDEN_UNITS,
+                "lambda_reg": MLPCAL_LAMBDA,
+                "mlpcal_fit_time_sec": float(diagnostics.fit_time_sec),
+                "fit_time_sec": float(row["fit_time_sec"]) + float(diagnostics.fit_time_sec),
+                **metrics,
+            }
+        )
+        diag_rows.append(
+            {
+                "scene_id": scene_id,
+                "scene_name": scene_name,
+                "mask_seed": mask_seed,
+                "missing_rate": missing_rate,
+                "method_name": MAIN_MLPCAL_NAME,
+                **diagnostics.__dict__,
+            }
+        )
+
+    metrics_frame = pd.DataFrame(metric_rows).sort_values(
+        ["missing_rate", "scene_id", "mask_seed"]
+    ).reset_index(drop=True)
+    diag_frame = pd.DataFrame(diag_rows).sort_values(
+        ["missing_rate", "scene_id", "mask_seed"]
+    ).reset_index(drop=True)
+    return metrics_frame, diag_frame
+
+
+def merge_mechanism_runs(
+    frame: pd.DataFrame,
+    polycal_metrics: pd.DataFrame,
+    mlpcal_metrics: pd.DataFrame | None = None,
+) -> pd.DataFrame:
     base_cols = [
         "scene_id",
         "scene_name",
@@ -197,7 +276,12 @@ def merge_mechanism_runs(frame: pd.DataFrame, polycal_metrics: pd.DataFrame) -> 
     existing = frame.loc[frame["method_name"].isin(["tucker", "ntdpl"]), base_cols].copy()
     polycal_with_state = polycal_metrics.copy()
     polycal_with_state["state_path"] = None
-    merged = pd.concat([existing, polycal_with_state[base_cols]], ignore_index=True)
+    frames = [existing, polycal_with_state[base_cols]]
+    if mlpcal_metrics is not None and not mlpcal_metrics.empty:
+        mlpcal_with_state = mlpcal_metrics.copy()
+        mlpcal_with_state["state_path"] = None
+        frames.append(mlpcal_with_state[base_cols])
+    merged = pd.concat(frames, ignore_index=True)
     return merged.sort_values(["missing_rate", "scene_id", "mask_seed", "method_name"]).reset_index(drop=True)
 
 
@@ -239,7 +323,7 @@ def build_summary(scene_mean: pd.DataFrame) -> pd.DataFrame:
 
 
 def build_main_table(summary: pd.DataFrame) -> pd.DataFrame:
-    methods = ["tucker", f"tucker_polycal_p{MAIN_POLYCAL_DEGREE}", "ntdpl"]
+    methods = ["tucker", f"tucker_polycal_p{MAIN_POLYCAL_DEGREE}", MAIN_MLPCAL_NAME, "ntdpl"]
     panel = summary.loc[
         np.isclose(summary["missing_rate"], MAIN_MISSING_RATE, atol=1e-12)
         & summary["method_name"].isin(methods)

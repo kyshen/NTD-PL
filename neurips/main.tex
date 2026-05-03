@@ -1,0 +1,45 @@
+\documentclass{article}
+
+% NeurIPS style options:
+%   \usepackage{neurips_2026}          % anonymous submission
+%   \usepackage[preprint]{neurips_2026} % non-anonymous preprint/draft
+%   \usepackage[final]{neurips_2026}    % camera-ready
+\usepackage{neurips_2026}
+
+\input{preamble}
+\input{macros}
+
+\title{Polynomial-Linked Tucker Models for Nonlinear Low-Rank Tensor Observations}
+
+\author{%
+  Kaiyu Shen\\
+  UESTC\\
+  \texttt{mr.kyshen@gmail.com}
+}
+
+\begin{document}
+
+\maketitle
+
+\input{sections/abstract}
+
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/method}
+\input{sections/theory}
+\input{sections/optimization}
+\input{sections/experiments}
+\FloatBarrier
+\input{sections/limitations}
+\input{sections/conclusion}
+
+\FloatBarrier
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\appendix
+\input{appendix/proofs}
+\input{appendix/experiments}
+\input{checklist}
+
+\end{document}

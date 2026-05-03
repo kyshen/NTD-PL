@@ -6,6 +6,7 @@ from ..helpers.cave_random_completion_polycal import (
     build_pairwise_scene_gains,
     build_scene_mean,
     build_summary,
+    collect_mlpcal_results,
     collect_polycal_results,
     latex_degree_table,
     latex_main_table,
@@ -21,13 +22,16 @@ from ...utils.paper import write_csv_artifact, write_text_artifact
 def polycal_tables() -> None:
     frame, env = load_target_runs()
     polycal_metrics, polycal_coeffs = collect_polycal_results(frame)
-    mechanism_runs = merge_mechanism_runs(frame, polycal_metrics)
+    mlpcal_metrics, mlpcal_diagnostics = collect_mlpcal_results(frame)
+    mechanism_runs = merge_mechanism_runs(frame, polycal_metrics, mlpcal_metrics)
     scene_mean = build_scene_mean(mechanism_runs)
     summary = build_summary(scene_mean)
     pairwise = build_pairwise_scene_gains(scene_mean)
 
     write_csv_artifact(env, polycal_metrics, "polycal_run_metrics.csv")
     write_csv_artifact(env, polycal_coeffs, "polycal_run_coefficients.csv")
+    write_csv_artifact(env, mlpcal_metrics, "mlpcal_run_metrics.csv")
+    write_csv_artifact(env, mlpcal_diagnostics, "mlpcal_run_diagnostics.csv")
     write_csv_artifact(env, scene_mean, "polycal_scene_mean.csv")
     write_csv_artifact(env, summary, "polycal_summary.csv")
     write_csv_artifact(env, build_main_table(summary), "polycal_main_table.csv")

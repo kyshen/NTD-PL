@@ -449,7 +449,7 @@ def build_significance_summary(scene_mean: pd.DataFrame) -> pd.DataFrame:
             values=["RMSE_missing", "SAM_missing"],
             aggfunc="mean",
         )
-        for metric, display_name in (("RMSE_missing", "RMSE*"), ("SAM_missing", "SAM*")):
+        for metric, display_name in (("RMSE_missing", "RMSE"), ("SAM_missing", "SAM")):
             diffs = (pivot[(metric, "tucker")] - pivot[(metric, "ntdpl")]).dropna().to_numpy(dtype=float)
             wins = int(np.sum(diffs > 0.0))
             ties = int(np.sum(np.isclose(diffs, 0.0)))
@@ -465,6 +465,10 @@ def build_significance_summary(scene_mean: pd.DataFrame) -> pd.DataFrame:
                     "Task": f"Completion ($\\rho={missing_rate:.1f}$)",
                     "missing_rate": float(missing_rate),
                     "Metric": display_name,
+                    "Wins": wins,
+                    "Losses": losses,
+                    "Ties": ties,
+                    "Wins/Losses": f"{wins}/{losses}",
                     "Win/Loss/Tie": f"{wins}/{losses}/{ties}",
                     "Mean gain": float(diffs.mean()),
                     "Median gain": float(np.median(diffs)),
@@ -482,16 +486,28 @@ def build_significance_summary(scene_mean: pd.DataFrame) -> pd.DataFrame:
 
 def significance_summary_latex(summary: pd.DataFrame) -> str:
     lines = [
-        r"\begin{tabular}{c c c c c c}",
+        r"\begin{tabular}{@{}c*{4}{c}*{4}{c}@{}}",
         r"\toprule",
-        r"$\rho$ & Metric & Win/Loss/Tie & Median gain & Sign test $p$ & Wilcoxon $p$ \\",
+        r" & \multicolumn{4}{c}{RMSE} & \multicolumn{4}{c}{SAM} \\",
+        r"\cmidrule(lr){2-5}\cmidrule(l){6-9}",
+        r"$\rho$ & W/L & Med. gain & Sign $p$ & Wilcoxon $p$ & W/L & Med. gain & Sign $p$ & Wilcoxon $p$ \\",
         r"\midrule",
     ]
-    for _, row in summary.iterrows():
+    for missing_rate in MAIN_MISSING_RATES:
+        panel = summary.loc[np.isclose(summary["missing_rate"], missing_rate, atol=1e-12)].copy()
+        if panel.empty:
+            continue
+        metric_rows = {str(row["Metric"]): row for row in panel.to_dict("records")}
+        rmse = metric_rows.get("RMSE")
+        sam = metric_rows.get("SAM")
+        if rmse is None or sam is None:
+            continue
         lines.append(
-            f"{float(row['missing_rate']):.1f} & {row['Metric']} & {row['Win/Loss/Tie']} & "
-            f"{float(row['Median gain']):.4f} & "
-            f"{_latex_pvalue(float(row['Sign test p']))} & {_latex_pvalue(float(row['Wilcoxon p']))} \\\\"
+            f"{missing_rate:.1f} & "
+            f"{rmse['Wins/Losses']} & {float(rmse['Median gain']):.4f} & "
+            f"{_latex_pvalue(float(rmse['Sign test p']))} & {_latex_pvalue(float(rmse['Wilcoxon p']))} & "
+            f"{sam['Wins/Losses']} & {float(sam['Median gain']):.4f} & "
+            f"{_latex_pvalue(float(sam['Sign test p']))} & {_latex_pvalue(float(sam['Wilcoxon p']))} \\\\"
         )
     lines.extend([r"\bottomrule", r"\end{tabular}"])
     return "\n".join(lines) + "\n"

@@ -1,0 +1,353 @@
+\section{Additional Proofs}
+\label{app:proofs}
+
+\subsection{Polynomial and Analytic Approximation}
+
+\begin{proof}[Proof of Theorem~\ref{thm:poly-generation}]
+Since \(g\) has degree at most \(P\), write
+\begin{equation}
+  g(s)=\sum_{p=0}^{P} c_p s^p.
+\end{equation}
+Take the NTD-PL latent tensor to be the true latent tensor,
+\(\cS=\cS^\star\), and set \(\beta_p=c_p\). Then, entrywise,
+\begin{equation}
+  \widehat{\cY}_{i_1,\ldots,i_N}
+  =
+  \sum_{p=0}^{P} \beta_p
+  \left(\cS^\star_{i_1,\ldots,i_N}\right)^p
+  =
+  g\left(\cS^\star_{i_1,\ldots,i_N}\right)
+  =
+  \cY_{i_1,\ldots,i_N}.
+\end{equation}
+Thus \(\widehat{\cY}=\cY\).
+\end{proof}
+
+\begin{lemma}[Scalar-to-tensor approximation]
+\label{lem:scalar-to-tensor}
+Let \(\norm{\cS^\star}_\infty\le B\). For any scalar function \(g\) and any
+degree-\(P\) polynomial \(q_P\),
+\begin{equation}
+  \norm{g(\cS^\star)-q_P(\cS^\star)}_F
+  \le
+  \sqrt{\prod_{n=1}^{N}I_n}\,
+  \sup_{|s|\le B}|g(s)-q_P(s)|.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Every entry of \(\cS^\star\) lies in \([-B,B]\), so every entrywise
+approximation error is bounded by
+\(\sup_{|s|\le B}|g(s)-q_P(s)|\). Squaring, summing over all entries, and
+taking the square root gives the claim.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:analytic-approx}]
+Let \(g(s)=\sum_{k=0}^{\infty} a_k s^k\) be the Taylor expansion of \(g\)
+around zero, and choose \(q_P(s)=\sum_{k=0}^{P}a_k s^k\). By Cauchy's
+estimate,
+\begin{equation}
+  |a_k| \le \frac{M_\rho}{\rho^k}.
+\end{equation}
+For \(|s|\le B<\rho\),
+\begin{align}
+  |g(s)-q_P(s)|
+  &\le
+  \sum_{k=P+1}^{\infty}|a_k|\,|s|^k \\
+  &\le
+  M_\rho\sum_{k=P+1}^{\infty}(B/\rho)^k
+  =
+  M_\rho\frac{(B/\rho)^{P+1}}{1-B/\rho}.
+\end{align}
+Applying Lemma~\ref{lem:scalar-to-tensor} and taking
+\(\cS=\cS^\star\), \(\beta_k=a_k\) for \(0\le k\le P\), yields the stated
+unnormalized bound. Dividing by
+\(\sqrt{M}\), \(M=\prod_{n=1}^{N}I_n\), gives the normalized form used in
+Theorem~\ref{thm:analytic-approx}.
+\end{proof}
+
+\subsection{Rank Expansion}
+
+\begin{proof}[Proof of Proposition~\ref{prop:rank-expansion}]
+Write the Tucker tensor entrywise as
+\begin{equation}
+  \cS_{i_1,\ldots,i_N}
+  =
+  \sum_{r_1=1}^{R_1}\cdots\sum_{r_N=1}^{R_N}
+  \cX_{r_1,\ldots,r_N}
+  \prod_{n=1}^{N} A^{(n)}_{i_n,r_n}.
+\end{equation}
+Taking an element-wise \(p\)-th power gives
+\begin{align}
+  \left(\cS_{i_1,\ldots,i_N}\right)^p
+  &=
+  \prod_{q=1}^{p}
+  \left(
+  \sum_{r_1^{(q)}=1}^{R_1}\cdots
+  \sum_{r_N^{(q)}=1}^{R_N}
+  \cX_{r_1^{(q)},\ldots,r_N^{(q)}}
+  \prod_{n=1}^{N} A^{(n)}_{i_n,r_n^{(q)}}
+  \right) \\
+  &=
+  \sum_{\gamma_1\in[R_1]^p}\cdots
+  \sum_{\gamma_N\in[R_N]^p}
+  \left(
+  \prod_{q=1}^{p}
+  \cX_{r_1^{(q)},\ldots,r_N^{(q)}}
+  \right)
+  \prod_{n=1}^{N}
+  \left(
+  \prod_{q=1}^{p} A^{(n)}_{i_n,r_n^{(q)}}
+  \right),
+\end{align}
+where \(\gamma_n=(r_n^{(1)},\ldots,r_n^{(p)})\). For each mode \(n\), let
+\(\alpha_n\in\mathbb N^{R_n}\) record the counts of the entries in
+\(\gamma_n\), so \(|\alpha_n|=p\). Then
+\begin{equation}
+  \prod_{q=1}^{p} A^{(n)}_{i_n,r_n^{(q)}}
+  =
+  \prod_{r=1}^{R_n}\left(A^{(n)}_{i_n,r}\right)^{\alpha_{n,r}}
+  =
+  A^{(n)\langle p\rangle}_{i_n,\alpha_n}.
+\end{equation}
+Group all ordered tuples \((\gamma_1,\ldots,\gamma_N)\) that produce the same
+multi-indices \((\alpha_1,\ldots,\alpha_N)\), and define the aggregated core
+\begin{equation}
+  \cX^{\langle p\rangle}_{\alpha_1,\ldots,\alpha_N}
+  =
+  \sum_{\substack{\gamma_1,\ldots,\gamma_N:\\
+  \operatorname{count}(\gamma_n)=\alpha_n\ \forall n}}
+  \prod_{q=1}^{p}
+  \cX_{r_1^{(q)},\ldots,r_N^{(q)}}.
+\end{equation}
+The preceding display is exactly the Tucker reconstruction
+\begin{equation}
+  \cS^{\odot p}
+  =
+  \tucker{\cX^{\langle p\rangle}}
+  {\bA^{(1)\langle p\rangle},\ldots,\bA^{(N)\langle p\rangle}}.
+\end{equation}
+The \(n\)-th Veronese factor has \(\binom{R_n+p-1}{p}\) columns, giving the
+claimed Tucker rank bound.
+\end{proof}
+
+\subsection{Separation}
+
+\begin{lemma}[Full-rank Veronese evaluations]
+\label{lem:veronese-full-rank}
+Let \(D=\binom{R+p-1}{p}\). There exists a matrix \(\bA\in\R^{D\times R}\)
+whose Veronese feature matrix \(\bA^{\langle p\rangle}\in\R^{D\times D}\)
+has rank \(D\). Consequently, for \(I\ge D\), a generic matrix
+\(\bA\in\R^{I\times R}\) has \(\operatorname{rank}(\bA^{\langle p\rangle})=D\).
+\end{lemma}
+
+\begin{proof}
+The homogeneous degree-\(p\) monomials in \(R\) variables are linearly
+independent polynomials. Hence there exist evaluation points
+\(x_1,\ldots,x_D\in\R^R\) such that the matrix
+\((x_i^\alpha)_{i,\alpha}\), \(|\alpha|=p\), is nonsingular; otherwise every
+\(D\times D\) evaluation determinant would vanish, which would imply a
+nontrivial linear dependence among the monomials. Taking these points as the
+rows of \(\bA\) gives the first claim.
+
+For \(I\ge D\), choose any \(D\) rows. The determinant of the corresponding
+\(D\times D\) Veronese submatrix is a polynomial in the entries of \(\bA\)
+that is not identically zero by the first claim. Its nonvanishing is therefore
+a generic property, so \(\bA^{\langle p\rangle}\) has full column rank for
+generic \(\bA\).
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:tucker-separation}]
+Let \(D=\binom{R+p-1}{p}\). Choose generic factor matrices
+\(\bA^{(n)}=[a_1^{(n)},\ldots,a_R^{(n)}]\in\R^{I_n\times R}\), and define
+the CP-diagonal Tucker backbone
+\begin{equation}
+  \cS
+  =
+  \sum_{r=1}^{R}
+  a_r^{(1)}\otimes\cdots\otimes a_r^{(N)}.
+\end{equation}
+Its mode-\(n\) unfolding is
+\begin{equation}
+  \cS_{(n)}
+  =
+  \bA^{(n)}
+  \left(
+  \bA^{(N)}\odot\cdots\odot\bA^{(n+1)}
+  \odot\bA^{(n-1)}\odot\cdots\odot\bA^{(1)}
+  \right)^\top .
+\end{equation}
+For generic \(\bA^{(n)}\), \(\bA^{(n)}\) has rank \(R\), and the Khatri-Rao
+product on the right has rank \(R\). Thus
+\(\operatorname{rank}(\cS_{(n)})=R\) for every \(n\), so \(\cS\) has exact
+Tucker rank \((R,\ldots,R)\).
+
+Set \(\beta_p=1\) and \(\beta_q=0\) for \(q\ne p\). Then
+\(\cY=\cS^{\odot p}\) is a valid degree-\(p\) NTD-PL tensor. Entrywise,
+\begin{align}
+  \cY_{i_1,\ldots,i_N}
+  &=
+  \left(
+  \sum_{r=1}^{R}\prod_{n=1}^{N} A^{(n)}_{i_n,r}
+  \right)^p \\
+  &=
+  \sum_{|\alpha|=p}
+  c_\alpha
+  \prod_{n=1}^{N}\prod_{r=1}^{R}
+  \left(A^{(n)}_{i_n,r}\right)^{\alpha_r},
+\end{align}
+where \(c_\alpha=p!/(\alpha_1!\cdots\alpha_R!)>0\). Let
+\(\bB^{(n)}=\bA^{(n)\langle p\rangle}\in\R^{I_n\times D}\). By
+Lemma~\ref{lem:veronese-full-rank}, each \(\bB^{(n)}\) has full column rank
+\(D\) for generic \(\bA^{(n)}\). The mode-\(n\) unfolding is
+\begin{equation}
+  \cY_{(n)}
+  =
+  \bB^{(n)}\operatorname{diag}(c)
+  \left(
+  \bB^{(N)}\odot\cdots\odot\bB^{(n+1)}
+  \odot\bB^{(n-1)}\odot\cdots\odot\bB^{(1)}
+  \right)^\top .
+\end{equation}
+The diagonal matrix \(\operatorname{diag}(c)\) is nonsingular. Since a
+Khatri-Rao product of full-column-rank matrices is full column rank, the
+right factor has rank \(D\). Therefore \(\operatorname{rank}(\cY_{(n)})=D\).
+This holds for every mode \(n\), and the exact Tucker rank of \(\cY\) is
+\((D,\ldots,D)\).
+\end{proof}
+
+\subsection{Masked Generalization}
+\label{app:masked-generalization}
+
+\begin{theorem}[Masked-entry uniform convergence]
+\label{thm:masked-generalization}
+Let \(\Theta\subset\R^d\) be a bounded NTD-PL parameter set with
+\[
+  d=
+  \prod_{n=1}^{N}R_n
+  +
+  \sum_{n=1}^{N}I_nR_n
+  +
+  (P+1).
+\]
+For \(\theta\in\Theta\), define the full-entry risk
+\[
+  \mathcal L(\theta)
+  =
+  \frac{1}{M}\sum_{\mathbf i}\ell_{\mathbf i}(\theta),
+  \qquad
+  M=\prod_{n=1}^{N}I_n,
+\]
+and the masked empirical risk
+\[
+  \widehat{\mathcal L}_{m}(\theta)
+  =
+  \frac{1}{m}\sum_{t=1}^{m}
+  \ell_{\mathbf i_t}(\theta),
+\]
+where \(\mathbf i_t\) are sampled uniformly from tensor entries. Assume
+\(0\le \ell_{\mathbf i}(\theta)\le B_\ell\) and
+\(\ell_{\mathbf i}(\theta)\) is \(G\)-Lipschitz in \(\theta\), uniformly over
+\(\mathbf i\). If \(\Theta\) is contained in a Euclidean ball of radius
+\(B_\Theta\), then with probability at least \(1-\delta\),
+\[
+  \sup_{\theta\in\Theta}
+  \left|
+  \mathcal L(\theta)-\widehat{\mathcal L}_{m}(\theta)
+  \right|
+  \le
+  2G\varepsilon
+  +
+  B_\ell
+  \sqrt{
+  \frac{
+  d\log(3B_\Theta/\varepsilon)+\log(2/\delta)}
+  {2m}}
+\]
+for every \(0<\varepsilon\le B_\Theta\).
+\end{theorem}
+
+\begin{proof}[Proof of Theorem~\ref{thm:masked-generalization}]
+Fix \(0<\varepsilon\le B_\Theta\), and let
+\(\mathcal N_\varepsilon\) be an \(\varepsilon\)-net of \(\Theta\) in
+Euclidean norm. Since \(\Theta\) lies in a \(d\)-dimensional ball of radius
+\(B_\Theta\), it admits a net with
+\begin{equation}
+  |\mathcal N_\varepsilon|
+  \le
+  \left(\frac{3B_\Theta}{\varepsilon}\right)^d.
+\end{equation}
+For any fixed \(\theta_0\in\mathcal N_\varepsilon\), the random variables
+\(\ell_{\mathbf i_t}(\theta_0)\) are independent and bounded in
+\([0,B_\ell]\). Hoeffding's inequality gives
+\begin{equation}
+  \Pr\left(
+  \left|
+  \mathcal L(\theta_0)-\widehat{\mathcal L}_m(\theta_0)
+  \right|
+  \ge u
+  \right)
+  \le
+  2\exp\left(-\frac{2mu^2}{B_\ell^2}\right).
+\end{equation}
+Taking a union bound over \(\mathcal N_\varepsilon\), with probability at
+least \(1-\delta\),
+\begin{equation}
+  \max_{\theta_0\in\mathcal N_\varepsilon}
+  \left|
+  \mathcal L(\theta_0)-\widehat{\mathcal L}_m(\theta_0)
+  \right|
+  \le
+  B_\ell
+  \sqrt{
+  \frac{
+  \log(2|\mathcal N_\varepsilon|/\delta)}
+  {2m}}.
+\end{equation}
+Substituting the net-size bound yields the stated stochastic term.
+
+Now take any \(\theta\in\Theta\), and choose
+\(\theta_0\in\mathcal N_\varepsilon\) with
+\(\norm{\theta-\theta_0}_2\le\varepsilon\). By the uniform Lipschitz
+assumption,
+\begin{equation}
+  |\mathcal L(\theta)-\mathcal L(\theta_0)|
+  \le G\varepsilon,
+  \qquad
+  |\widehat{\mathcal L}_m(\theta)-\widehat{\mathcal L}_m(\theta_0)|
+  \le G\varepsilon.
+\end{equation}
+Therefore
+\begin{align}
+  \left|
+  \mathcal L(\theta)-\widehat{\mathcal L}_m(\theta)
+  \right|
+  &\le
+  |\mathcal L(\theta)-\mathcal L(\theta_0)|
+  +
+  \left|
+  \mathcal L(\theta_0)-\widehat{\mathcal L}_m(\theta_0)
+  \right| \\
+  &\quad+
+  |\widehat{\mathcal L}_m(\theta_0)-\widehat{\mathcal L}_m(\theta)| \\
+  &\le
+  2G\varepsilon
+  +
+  B_\ell
+  \sqrt{
+  \frac{
+  d\log(3B_\Theta/\varepsilon)+\log(2/\delta)}
+  {2m}}.
+\end{align}
+Taking the supremum over \(\theta\in\Theta\) completes the proof.
+\end{proof}
+
+\begin{remark}
+The Lipschitz and bounded-loss assumptions are standard for compact
+parametric classes. For NTD-PL, they follow when the observed values, core,
+factor matrices, and polynomial coefficients are bounded and the polynomial
+degree \(P\) is finite. The resulting Lipschitz constant may depend
+polynomially on these bounds and on \(P\), but the covering dimension remains
+the number of tied NTD-PL parameters rather than the number of parameters in
+an untied high-order Tucker expansion.
+\end{remark}

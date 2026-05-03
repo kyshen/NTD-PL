@@ -335,45 +335,60 @@ def build_overview_figure_data(summary: pd.DataFrame) -> pd.DataFrame:
 
 def main_table_latex(main_table: pd.DataFrame) -> str:
     lines = [
-        r"\begin{tabular}{@{}l l c c c c c c@{}}",
+        r"\begin{tabular}{@{}l cccc cccc@{}}",
         r"    \toprule",
-        r"    Dataset & Task & Rank & Tucker & NTD-PL & Gain(\%) & $\Delta$NMSE(dB) & $\Delta$SAM($^\circ$) \\",
+        r"    \multirow{2}{*}{Dataset} & \multicolumn{4}{c}{Reconstruction} & \multicolumn{4}{c}{Completion} \\",
+        r"    \cmidrule(lr){2-5}\cmidrule(lr){6-9}",
+        r"    & Tucker & NTD-PL & Gain & $\Delta$SAM & Tucker & NTD-PL & Gain & $\Delta$SAM \\",
         r"    \midrule",
     ]
     for dataset_name in DATASET_ORDER:
         panel = main_table.loc[main_table["dataset"].eq(dataset_name)].copy()
         if panel.empty:
             continue
-        for idx, (_, row) in enumerate(panel.iterrows()):
-            dataset_cell = row["dataset_label"] if idx == 0 else ""
-            gain_value = float(row["gain_pct"])
-            nmse_value = float(row["delta_nmse_db"])
-            sam_value = float(row["delta_sam"])
-            gain_text = f"{gain_value:.2f}"
-            nmse_text = f"{nmse_value:.3f}"
-            sam_text = f"{sam_value:.3f}"
-            if gain_value > 0.0:
-                gain_text = rf"\textbf{{{gain_text}}}"
-            if nmse_value > 0.0:
-                nmse_text = rf"\textbf{{{nmse_text}}}"
-            if sam_value > 0.0:
-                sam_text = rf"\textbf{{{sam_text}}}"
-            lines.append(
-                "    "
-                + " & ".join(
-                    [
-                        str(dataset_cell),
-                        str(row["task_label"]),
-                        str(row["rank"]),
-                        f"{float(row['tucker_rmse']):.5f}",
-                        f"{float(row['ntdpl_rmse']):.5f}",
-                        gain_text,
-                        nmse_text,
-                        sam_text,
-                    ]
-                )
-                + r" \\"
+        recon = panel.loc[panel["task_name"].eq("reconstruction")].iloc[0]
+        compl = panel.loc[panel["task_name"].eq("completion")].iloc[0]
+
+        def _fmt_pair(tucker: float, ntdpl: float) -> tuple[str, str]:
+            tucker_text = f"{tucker:.4f}"
+            ntdpl_text = f"{ntdpl:.4f}"
+            if tucker <= ntdpl:
+                tucker_text = rf"\textbf{{{tucker_text}}}"
+            else:
+                ntdpl_text = rf"\textbf{{{ntdpl_text}}}"
+            return tucker_text, ntdpl_text
+
+        def _fmt_positive(value: float, precision: int) -> str:
+            text = f"{value:.{precision}f}"
+            if value > 0.0:
+                return rf"\textbf{{{text}}}"
+            return text
+
+        def _fmt_gain(value: float) -> str:
+            text = f"{value:.2f}\\%"
+            if value > 0.0:
+                return rf"\textbf{{{text}}}"
+            return text
+
+        recon_tucker, recon_ntdpl = _fmt_pair(float(recon["tucker_rmse"]), float(recon["ntdpl_rmse"]))
+        compl_tucker, compl_ntdpl = _fmt_pair(float(compl["tucker_rmse"]), float(compl["ntdpl_rmse"]))
+        lines.append(
+            "    "
+            + " & ".join(
+                [
+                    str(recon["dataset_label"]),
+                    recon_tucker,
+                    recon_ntdpl,
+                    _fmt_gain(float(recon["gain_pct"])),
+                    _fmt_positive(float(recon["delta_sam"]), 2),
+                    compl_tucker,
+                    compl_ntdpl,
+                    _fmt_gain(float(compl["gain_pct"])),
+                    _fmt_positive(float(compl["delta_sam"]), 2),
+                ]
             )
+            + r" \\"
+        )
         lines.append(r"    \midrule")
     lines[-1] = r"    \bottomrule"
     lines.append(r"\end{tabular}")

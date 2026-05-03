@@ -1,0 +1,43 @@
+\section{Related Work}
+
+\paragraph{Low-rank tensor models.}
+Classical tensor decompositions such as CP, Tucker, tensor train, and tensor
+ring provide compact representations for multiway data
+\citep{Kolda2009Tensor,DeLathauwer2000MLSVD,oseledets2011,zhao2016tr}. Tucker
+is the closest baseline for our work because its core tensor and mode factors
+give a flexible multilinear backbone. Most methods in this family improve the
+representation by changing ranks, factor structures, regularizers, or
+optimization procedures. NTD-PL keeps the same Tucker parameterization and
+instead changes the observation map from the latent tensor to the measured
+entries.
+
+\paragraph{Nonlinear tensor factorization.}
+Prior work has introduced nonlinearity through generalized likelihoods,
+kernels, Gaussian processes, neural decoders, and nonlinear tensor network
+architectures
+\citep{hong2020generalized,xu2011infinite,zhe2016distributed,pan2020streaming,saragadam2024deeptensor,varolgunes2023nmtucker}.
+These approaches are often more expressive than polynomial links, but they
+can trade off structural transparency, optimization simplicity, or explicit
+finite-dimensional analysis. Our goal is complementary. We use a minimal
+shared observation link so that the nonlinear effect can still be analyzed as
+a structured extension of Tucker rather than as an unconstrained decoder.
+
+\paragraph{Polynomial feature lifts and high-order interactions.}
+Polynomial expansions and Volterra-style models are classical tools for
+representing nonlinear systems. In tensor settings, high-order interactions
+can be represented explicitly but often incur rapidly growing parameter and
+contraction costs. Polynomial matrix and tensor factorization methods use
+feature expansions to increase expressivity, but they typically introduce
+larger lifted spaces, independent high-order parameters, or model-specific
+factor structures. NTD-PL can be viewed as a shared-backbone compression of
+high-order Tucker interactions: the lifted features are induced by powers of
+one learned latent tensor, not by an independent high-order tensor parameter.
+
+\paragraph{Rank lifting and post-hoc calibration.}
+Two natural alternatives explain why the empirical comparisons are organized
+as mechanism checks. Rank lifting gives Tucker more ordinary multilinear
+capacity and can absorb part of the nonlinear residual, but it enlarges the
+core and factors throughout the model. Post-hoc scalar calibration is cheaper,
+but it remaps a Tucker reconstruction after the latent geometry has already
+been learned. NTD-PL sits between these alternatives: it adds only a small
+shared link, but learns that link jointly with the Tucker factors.

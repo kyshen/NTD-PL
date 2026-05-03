@@ -1,0 +1,12 @@
+\begin{tabular}{@{}l r c c c c@{}}
+\toprule
+Model & Param. & RMSE$\downarrow$ & SAM$\downarrow$ & Extra params vs. NTD-PL & Outcome \\
+\midrule
+NTD-PL $(24,24,4)$ & 27,011 & \textbf{0.0256} & \textbf{15.15} & -- & reference \\
+Tucker $(33,33,4)$ & 38,272 & 0.0261 & 16.43 & $+41.7\%$ & worse \\
+Tucker $(40,40,5)$ & 49,115 & \textbf{0.0217} & \textbf{12.65} & $+81.8\%$ & better \\
+\midrule
+NTD-PL $(33,33,4)$ & 38,279 & 0.0223 & 14.41 & -- & reference \\
+Tucker $(40,40,5)$ & 49,115 & \textbf{0.0217} & \textbf{12.65} & $+28.3\%$ & better \\
+\bottomrule
+\end{tabular}

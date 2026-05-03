@@ -1,0 +1,205 @@
+\section{Additional Experiments}
+
+\subsection{Controlled Synthetic Mechanism Checks}
+\label{app:controlled-synthetic}
+
+The controlled experiments in the main text are designed to isolate the role
+of the scalar link. Table~\ref{tab:linear-consistency-controlled} first checks
+a negative control: when the source is linear Tucker, NTD-PL does not improve
+by inventing nonlinear terms. The only exception is an affine offset, where
+the constant link term is the intended correction.
+
+For the nonlinear controlled tensors, the nonlinearity is introduced as an
+orthogonal residual rather than by directly setting \(Y=g(S^\star)\). Let
+\(S^\star\) be the linear low-rank Tucker backbone and let \(g\) be one of the
+candidate scalar responses. We form
+\begin{equation}
+  R^\star
+  =
+  g(S^\star)
+  -
+  \frac{\langle g(S^\star),S^\star\rangle}{\|S^\star\|_F^2}\,S^\star,
+  \label{eq:controlled-orthogonal-residual}
+\end{equation}
+and, when \(\|R^\star\|_F>0\), normalize it as
+\begin{equation}
+  \widetilde R^\star
+  =
+  \frac{\|S^\star\|_F}{\|R^\star\|_F}R^\star .
+  \label{eq:controlled-normalized-residual}
+\end{equation}
+The observed tensor is then
+\begin{equation}
+  Y_\alpha
+  =
+  \sqrt{1-\alpha}\,S^\star
+  +
+  \sqrt{\alpha}\,\widetilde R^\star,
+  \qquad 0\le \alpha\le 1 .
+  \label{eq:controlled-residual-mixture}
+\end{equation}
+By construction, \(\langle S^\star,\widetilde R^\star\rangle=0\) and
+\(\|\widetilde R^\star\|_F=\|S^\star\|_F\), so \(\alpha\) is exactly the
+energy fraction assigned to the nonlinear residual. This keeps the total
+energy fixed while moving the observation away from the linear Tucker
+backbone. The candidate residual families are \(g(s)=s^2\),
+\(g(s)=s^2+s^3\), \(g(s)=\sin(\kappa s)\), and
+\(g(s)=\tanh(\kappa s)\), with \(\kappa\) set from the input scale.
+
+Table~\ref{tab:controlled-beta-contribution} shows a small but consistent
+term-mass concentration effect: the dominant contribution usually lands on
+the degree that matches the injected response, while smooth odd links spread
+mass across nearby odd orders.
+
+\begin{table}[ht]
+  \centering
+  \caption{Linear consistency on synthetic Tucker tensors. The \(p>1\)
+  columns report effective higher-order NTD-PL contribution.}
+  \label{tab:linear-consistency-controlled}
+  {\small
+  \setlength{\tabcolsep}{4.5pt}
+  \renewcommand{\arraystretch}{1.06}
+  \input{tables/controlled_linear_consistency.tex}
+  }
+\end{table}
+
+Figures~\ref{fig:controlled-alpha-grid} and~\ref{fig:controlled-pmax-strip}
+give the fuller nonlinear sweep behind the compact main-text figures. The
+alpha sweep shows that NTD-PL separates from linear tensor models as nonlinear
+residual energy increases; the degree sweep shows that this gain is tied to
+the expressive order of the polynomial link rather than to an arbitrary
+post-processing effect.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{figures/controlled_nonlinear_alpha_grid.pdf}
+  \caption{Controlled nonlinear alpha sweep. Each panel uses a different
+  candidate response to define the orthogonal residual; lower NMSE(dB) is
+  better.}
+  \label{fig:controlled-alpha-grid}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\linewidth]{figures/controlled_nonlinear_pmax_strip.pdf}
+  \caption{Controlled nonlinear degree sweep. Increasing the polynomial degree
+  helps when the residual is induced by higher-order structure.}
+  \label{fig:controlled-pmax-strip}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\linewidth]{figures/controlled_nonlinear_step_strip.pdf}
+  \caption{NTD-PL training curves for the controlled nonlinear mechanism
+  checks. Dashed vertical lines mark degree-activation events.}
+  \label{fig:controlled-training-curves}
+\end{figure}
+
+\begin{table}[ht]
+  \centering
+  \caption{Representative effective NTD-PL term contributions under moderate
+  nonlinearity, reported as percentages over ten seeds. Polynomial targets
+  concentrate mass at the matching nonlinear degrees, while odd smooth links
+  place most nonlinear mass on odd powers.}
+  \label{tab:controlled-beta-contribution}
+  {\small
+  \setlength{\tabcolsep}{4pt}
+  \renewcommand{\arraystretch}{1.08}
+  \input{tables/controlled_beta_contribution.tex}
+  }
+\end{table}
+
+\subsection{CAVE Completion Significance and Robustness}
+\label{app:single-rank-completion}
+
+The main text reports the full-resolution random-missing CAVE completion table
+at rank \((33,33,4)\). We do not repeat that table here; instead,
+Table~\ref{tab:cave-completion-significance} gives the paired sign and
+Wilcoxon tests for the same protocol.
+
+\begin{table}[ht]
+  \centering
+  \caption{Significance tests for full-resolution CAVE completion at rank
+  \((33,33,4)\). Metrics are computed on missing entries.}
+  \label{tab:cave-completion-significance}
+  \scriptsize
+  \resizebox{\linewidth}{!}{\input{tables/cave_completion_significance.tex}}
+\end{table}
+
+\subsection{Post-Hoc Calibration Implementation}
+\label{app:posthoc-calibration-baselines}
+
+The calibration baselines in Figure~\ref{fig:recon-calibration} are
+post-processing models applied to a fixed Tucker reconstruction. Let
+\(\widehat{\cY}_{\mathrm{T}}\) denote the Tucker output and \(\cY\) the target
+tensor. PolyCal fits a scalar degree-four polynomial
+\[
+  h_{\gamma}(x)=\sum_{p=0}^{4}\gamma_p x^p
+\]
+by ridge regression on pairs
+\((\widehat Y_{\mathrm{T},\mathbf i},Y_{\mathbf i})\). In full reconstruction,
+all entries are used for this fit. In completion, the fit uses only observed
+entries and is then evaluated on held-out entries. The fitted map is applied
+entrywise to \(\widehat{\cY}_{\mathrm{T}}\); the Tucker core and factors are
+never updated.
+
+MLPCal uses the same fixed-input protocol, but replaces the polynomial with a
+one-dimensional MLP. The input and target scalars are standardized, then a
+single-hidden-layer tanh network with a scalar skip connection is trained with
+Adam and \(\ell_2\) weight decay on the observed calibration pairs. In the CAVE
+runs we use 16 hidden units, learning rate \(10^{-3}\), weight decay \(10^{-5}\),
+batch size 8192, at most 200,000 calibration samples, and 1500 optimization
+steps. Thus both PolyCal and MLPCal test post-hoc scalar remapping of an
+already learned Tucker tensor, while NTD-PL jointly updates the latent Tucker
+geometry under the nonlinear link.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.72\linewidth]{figures/recon_calibration_gain_plot.pdf}
+  \caption{Post-hoc scalar calibration versus joint linked fitting on CAVE
+  reconstruction at rank \((33,33,4)\). Gains are relative to Tucker.}
+  \label{fig:recon-calibration}
+\end{figure}
+
+\subsection{CAVE Beads Pseudo-RGB Visualization}
+\label{app:cave-beads-visualization}
+
+Figure~\ref{fig:cave-beads-recon-completion} visualizes the CAVE beads scene
+under the reconstruction and random-completion protocols. Each 31-band tensor
+is rendered as pseudo-RGB by selecting three representative spectral bands
+near \(75\%\), \(50\%\), and \(20\%\) of the wavelength index range and applying
+a shared linear intensity scaling within each task. For completion, unobserved
+entries in the observation panel are shown in gray.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.98\linewidth]{figures/cave_beads_recon_completion_visual.pdf}
+  \caption{CAVE beads visual comparison. Rows correspond to reconstruction
+  and random completion at missing rate \(0.5\). Error maps show Tucker minus
+  NTD-PL per-pixel RMSE, so positive values indicate lower NTD-PL error.}
+  \label{fig:cave-beads-recon-completion}
+\end{figure}
+
+\subsection{Cross-Domain Real Tensor Checks}
+\label{app:cross-domain-real-tensors}
+
+Table~\ref{tab:real-tensor-reconstruction} reports matched-rank
+reconstruction on tensors outside the main hyperspectral setting: additional
+hyperspectral scenes, natural-image collections, and object-view tensors.  We
+use NMSE(dB) as the main cross-dataset metric because it normalizes by the
+energy of each tensor and is therefore less sensitive to scale differences
+across domains.  The results are
+consistent with the scoped claim in Section~\ref{subsec:external-hsi-validity}:
+gains are clearest on hyperspectral and object-view data, while natural-image
+collections provide more modest improvements.
+
+\begin{table}[ht]
+  \centering
+  \caption{Additional matched-rank real tensor reconstruction. NMSE columns
+  are in dB; lower is better. \(\Delta\)NMSE is the Tucker-minus-NTD-PL dB
+  gap, and NMSE gain is the relative reduction in linear NMSE; positive values
+  favor NTD-PL.}
+  \label{tab:real-tensor-reconstruction}
+  \scriptsize
+  \resizebox{\linewidth}{!}{\input{tables/real_tensor_reconstruction_main.tex}}
+\end{table}

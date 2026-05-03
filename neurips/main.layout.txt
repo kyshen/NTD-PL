@@ -1,0 +1,1109 @@
+          Polynomial-Linked Tucker Models for Nonlinear
+                 Low-Rank Tensor Observations
+
+
+                                                  Anonymous Author(s)
+                                                      Affiliation
+                                                       Address
+                                                        email
+
+
+
+                                                         Abstract
+
+ 1             Classical Tucker models explain multiway data through multilinear low-rank struc-
+ 2             ture, but many measurement processes introduce nonlinear entry-level effects such
+ 3             as saturation, response curves, and material-dependent nonlinearities. We study
+ 4             a focused question: can one add nonlinear observation capacity to Tucker while
+ 5             preserving its parameter-efficient low-rank backbone?
+ 6             We propose Nonlinear Tucker Decomposition with Polynomial Links (NTD-PL),
+ 7             which applies a finite polynomial link to a shared Tucker latent tensor. The model
+ 8             contains Tucker as a linear special case, acts as a compressed surrogate for high-
+ 9             order Tucker interactions, and admits masked learning through alternating gradient
+10             updates and a small ridge-regression subproblem for the link coefficients. We give
+11             approximation and separation results, together with a masked-entry generalization
+12             bound. Experiments on controlled tensors, CAVE hyperspectral completion and
+13             reconstruction, and external HSI scenes show that NTD-PL improves matched-rank
+14             Tucker when a shared nonlinear residual is present, that the effect is not explained
+15             by modest rank increases or post-hoc scalar calibration, and that boundary cases
+16             arise when Tucker already leaves little coherent residual for the link to capture.
+
+
+
+17   1    Introduction
+
+18   Tensor decompositions provide compact models for multiway data in scientific sensing, imaging,
+19   and signal processing [Kolda and Bader, 2009, Sidiropoulos et al., 2017, Liu et al., 2013]. Tucker
+20   decomposition is especially useful because it separates a small core from mode-wise factors, but
+21   its observation model is linear in the reconstructed latent entry. This is a strong assumption in
+22   measurement pipelines where latent signals may pass through saturation, radiometric response curves,
+23   material-dependent nonlinearities, or other entry-level generation effects. After such a response, an
+24   intrinsically low-rank latent tensor can appear substantially higher-rank to a linear Tucker model.
+25   One way to absorb this mismatch is to increase Tucker rank, but doing so expands the core and factor
+26   dimensions everywhere in the model. Another is to calibrate the fitted Tucker output post hoc, but
+27   that leaves the learned latent geometry fixed. We ask a narrower question: can a small nonlinear
+28   observation model, learned jointly with the Tucker factors, make a tight multilinear rank budget more
+29   effective? This paper focuses on the case where the residual is well described by a shared entry-level
+30   response. The goal is therefore not to replace rank selection or general nonlinear tensor decoders, but
+31   to isolate a simple mechanism by which nonlinear observation effects can be represented inside a
+32   Tucker backbone.
+33   We instantiate this idea with a polynomial link over a multilinear low-rank latent tensor. Given a
+34   Tucker latent tensor
+                                                S = JX ; A(1) , . . . , A(N ) K,                                (1)
+     Submitted to 40th Conference on Neural Information Processing Systems (NeurIPS 2026). Do not distribute.
+35   we model the observed tensor by a polynomial link
+                                                            P
+                                                            X
+                                          Yb = fβ (S) =           βp S ⊙p .                              (2)
+                                                            p=0
+
+36   We call this model NTD-PL. It preserves the Tucker backbone and adds only P + 1 scalar link
+37   coefficients, while the powers S ⊙p induce tied high-order interactions among the same latent factors.
+38   Thus the link is not an independent high-rank correction; it is a structured, parameter-efficient way to
+39   expose nonlinear tensor structure already organized by the Tucker factors.
+
+40   Contributions.    We make four contributions.
+
+41   1. We introduce NTD-PL, a Tucker model with a jointly learned polynomial observation link, with
+42      standard Tucker recovered as the degree-one special case.
+43   2. We show that polynomial links act as compressed high-order Tucker interactions, yielding approx-
+44      imation and separation results for nonlinear low-rank observations.
+45   3. We give a masked learning objective, a practical alternating algorithm with degree continuation,
+46      and a masked-entry generalization bound.
+47   4. We empirically test the mechanism rather than a broad benchmark claim: controlled tensors isolate
+48      when the link should help, held-out CAVE completion tests low-rank generalization, reconstruction
+49      checks separate the effect from rank-lift and post-hoc calibration, and external HSI scenes show
+50      both transfer and boundary cases.
+
+51   2   Related Work
+52   Low-rank tensor models. Classical tensor decompositions such as CP, Tucker, tensor train, and
+53   tensor ring provide compact representations for multiway data [Kolda and Bader, 2009, De Lathauwer
+54   et al., 2000, Oseledets, 2011, Zhao et al., 2016]. Tucker is the closest baseline for our work
+55   because its core tensor and mode factors give a flexible multilinear backbone. Most methods in this
+56   family improve the representation by changing ranks, factor structures, regularizers, or optimization
+57   procedures. NTD-PL keeps the same Tucker parameterization and instead changes the observation
+58   map from the latent tensor to the measured entries.
+
+59   Nonlinear tensor factorization. Prior work has introduced nonlinearity through generalized like-
+60   lihoods, kernels, Gaussian processes, neural decoders, and nonlinear tensor network architectures
+61   [Hong et al., 2020, Xu et al., 2011, Zhe et al., 2016, Pan et al., 2020, Saragadam et al., 2024, Varol-
+62   gunes et al., 2023]. These approaches are often more expressive than polynomial links, but they can
+63   trade off structural transparency, optimization simplicity, or explicit finite-dimensional analysis. Our
+64   goal is complementary. We use a minimal shared observation link so that the nonlinear effect can still
+65   be analyzed as a structured extension of Tucker rather than as an unconstrained decoder.
+
+66   Polynomial feature lifts and high-order interactions. Polynomial expansions and Volterra-style
+67   models are classical tools for representing nonlinear systems. In tensor settings, high-order inter-
+68   actions can be represented explicitly but often incur rapidly growing parameter and contraction
+69   costs. Polynomial matrix and tensor factorization methods use feature expansions to increase ex-
+70   pressivity, but they typically introduce larger lifted spaces, independent high-order parameters, or
+71   model-specific factor structures. NTD-PL can be viewed as a shared-backbone compression of
+72   high-order Tucker interactions: the lifted features are induced by powers of one learned latent tensor,
+73   not by an independent high-order tensor parameter.
+
+74   Rank lifting and post-hoc calibration. Two natural alternatives explain why the empirical com-
+75   parisons are organized as mechanism checks. Rank lifting gives Tucker more ordinary multilinear
+76   capacity and can absorb part of the nonlinear residual, but it enlarges the core and factors throughout
+77   the model. Post-hoc scalar calibration is cheaper, but it remaps a Tucker reconstruction after the
+78   latent geometry has already been learned. NTD-PL sits between these alternatives: it adds only a
+79   small shared link, but learns that link jointly with the Tucker factors.
+
+
+                                                        2
+80    3     Polynomial-Linked Tucker Models
+ 81   3.1   Model and Observation Assumption
+
+82    Let Y ∈ RI1 ×···×IN be an observed tensor and let
+                    S = JX ; A(1) , . . . , A(N ) K,            X ∈ RR1 ×···×RN ,            A(n) ∈ RIn ×Rn .                       (3)
+83    NTD-PL treats S as a shared low-rank latent tensor and models each observed entry through a scalar
+84    polynomial response:
+                                                                      P
+                                                                      X
+                       Yi = fβ (Si ) + εi ,             fβ (s) =            βp sp ,       i = (i1 , . . . , iN ).                   (4)
+                                                                      p=0
+
+ 85   Equivalently, the tensor prediction is
+                                                          P
+                                                          X
+                                    Yb = fβ (S) =               βp S ⊙p ,             β ∈ RP +1 .                                   (5)
+                                                          p=0
+
+86    The constant term β0 captures affine response shifts, the linear term β1 S is the usual Tucker channel,
+87    and terms with p ≥ 2 activate nonlinear channels on the same latent tensor. Standard Tucker is
+88    recovered by setting β1 = 1 and βp = 0 for p ̸= 1. Thus NTD-PL changes the entry-generation map
+89    while leaving the Tucker backbone and its multilinear ranks fixed.
+
+90    3.2   Shared-Backbone High-Order Interactions
+
+91    Although fβ is scalar, the term S ⊙p is not merely an independent output calibration. Expanding one
+92    entry gives
+                                       R1       RN              N
+                                                                          !p
+                                                                   (n)
+                                p
+                                      X         X               Y
+                              Si =         ···      Xr1 ,...,rN   Ain ,rn                              (6)
+                                        r1 =1          rN =1                 n=1
+                                                        p
+                                                                                 ! N p
+                                                                                                 (n)
+                                          X             Y                         YY
+                                  =                            Xr(q) ,...,r(q)               A         (q)   .                      (7)
+                                                                  1         N                    in ,rn
+                                      r(1) ,...,r(p)    q=1                        n=1 q=1
+
+93    Thus a degree-p channel couples p latent Tucker index tuples while reusing the same mode factors
+94    in every copy. This is the sense in which the polynomial link acts as a shared-backbone high-order
+95    Tucker interaction: it forms the kind of products that would appear in an explicit p-fold Tucker
+96    expansion, but ties all mode projections to A(1) , . . . , A(N ) and mixes the resulting channels only
+ 97   through the scalar coefficients {βp }.
+98    This distinction also separates NTD-PL from post-hoc calibration. A post-hoc calibrator learns a
+99    scalar map after a Tucker tensor has already been fitted. NTD-PL instead learns the latent tensor
+100   and the link jointly, so the nonlinear response can shape the low-rank geometry itself. Section 4
+101   formalizes the induced rank expansion and the resulting separation from standard Tucker.
+
+102   3.3   Masked Least-Squares Objective
+
+      Let Ω ∈ {0, 1}I1 ×···×IN denote the observed-entry mask and let |Ω| =
+                                                                                                                 P
+103
+                                                                                                                 i Ωi .   The empirical
+104   data-fitting term is the average squared residual over observed entries,
+                                                1 X                      2
+                                        LΩ =              (Yi − fβ (Si )) .                                                         (8)
+                                               2|Ω|
+                                                           i:Ωi =1
+
+105   The squared loss is the standard least-squares choice for real-valued reconstruction and completion,
+106   and it aligns with the RMSE-based evaluation used in the experiments. The Frobenius form below is
+107   simply the tensor notation for the same observed-entry residual sum:
+                                                                 N         2
+                           1                     2   λX     2
+                                                                X   λn        λβ    2
+                 min           ∥Ω ⊙ (Y − fβ (S))∥F +    ∥X ∥F +        A(n) +    ∥β∥2 .                                             (9)
+             X ,{A(n) },β 2|Ω|                        2              2     F   2
+                                                                n=1
+
+
+                                                                      3
+108   The factor 1/|Ω| keeps the loss and gradient scale comparable across full-observation reconstruction
+109   and different missing rates, while the factor 1/2 removes a constant 2 from the residual gradients. The
+110   Frobenius penalties are ridge/Tikhonov regularizers for the core and mode factors; the ℓ2 penalty on β
+111   stabilizes the polynomial link and makes the coefficient subproblem well-conditioned. When Ω ≡ 1,
+112   the same objective gives full tensor reconstruction; otherwise it gives masked tensor completion.
+
+113   Practical scaling. Like Tucker, NTD-PL has scale indeterminacies between the core and mode
+114   factors. Polynomial powers make this numerically more sensitive: if the scale of S drifts, different
+115   powers change at different rates and the link coefficients become poorly conditioned. In the imple-
+116   mentation we initialize from Tucker, normalize factor scales during training, and absorb the inverse
+117   scales into the core. This gauge fixing does not change the latent tensor S or the model class, but it
+118   makes the alternating optimization more stable in the low-rank regimes used in the experiments.
+
+119   4     Theory
+120   The analysis formalizes the mechanism behind NTD-PL: polynomial links preserve the low-rank
+121   Tucker latent tensor while inducing structured high-order interactions in the observed tensor. The
+122   results below are representation results. They explain what the model class can express under a shared
+123   entrywise observation mechanism; they do not assert identifiability or guarantee that a nonconvex
+124   optimizer recovers the representing parameters.
+
+125   4.1   Approximation Under Nonlinear Observations
+
+126   Theorem 1 (Polynomial generation). Suppose Y = g(S ⋆ ), where S ⋆ has Tucker rank at most
+127   (R1 , . . . , RN ) and g is a polynomial of degree at most P . Then degree-P NTD-PL with the same
+128   Tucker rank can represent Y exactly.
+129   Theorem 2 (Analytic link approximation). Suppose Y = g(S ⋆ ), where S ⋆ has Tucker rank at most
+130   (R1 , . . . , RN ) and ∥S ⋆ ∥∞ ≤ B. If g is analytic on the complex disk D(0, ρ) with B < ρ, and
+131   Mρ = sup|z|=ρ |g(z)|, then there exists a degree-P NTD-PL model with the same Tucker backbone
+132   satisfying
+                                                                             N
+                                   1                  (B/ρ)P +1             Y
+                                √     Y −Yb     ≤ Mρ             ,    M=        In .               (10)
+                                   M         F         1 − B/ρ              n=1
+
+133   This is the normalized Frobenius error, matching the scale of RMSE-style reconstruction metrics.
+134   The bound is intentionally stated for the simple Taylor truncation; stronger best-polynomial bounds
+135   can be substituted when additional regularity or a specific approximation basis is desired.
+
+136   4.2   Rank Expansion and Separation
+
+137   Proposition 1 (Shared-backbone rank expansion). Let S = JX ; A(1) , . . . , A(N ) K have Tucker rank
+138   at most (R1 , . . . , RN ). For every integer p ≥ 1, S ⊙p admits a Tucker representation with mode ranks
+139   at most                                                            
+                                           R1 + p − 1            RN + p − 1
+                                                         ,...,                   .                        (11)
+                                                 p                    p
+140   More explicitly, the ordinary Tucker factors of S ⊙p can be chosen as Veronese lifts of the original
+      factors. For A ∈ RI×R , define A⟨p⟩ ∈ RI×D , D = R+p−1
+                                                                  
+141
+                                                              p     , by
+                                                          R
+                                                   ⟨p⟩
+                                                          Y
+                                                 Ai,α =         Aα
+                                                                 i,r ,
+                                                                   r
+                                                                                                         (12)
+                                                          r=1
+
+142   where α ∈ NR ranges over |α| = p. Then S ⊙p factors through A(1)⟨p⟩ , . . . , A(N )⟨p⟩ .
+
+143   The entrywise expansion in Section 3 can therefore be regrouped as an ordinary Tucker tensor whose
+144   mode factors are polynomial feature lifts of the same backbone factors. This is the mechanism
+145   behind the separation below: S ⊙p is not a free high-rank correction, but a tied high-order interaction
+146   generated from one latent tensor.
+
+
+                                                          4
+      Algorithm 1 Masked NTD-PL optimization
+      Require: observed tensor Y, mask Ω, rank (R1 , . . . , RN ), degree P
+       1: initialize X , {A(n) } from Tucker on the masked tensor
+       2: initialize active degree Pact ← 1 and β = (0, 1)
+       3: for t = 1, . . . , T do
+       4:      form S = JX ; A(1) , . . . , A(N ) K
+       5:      if a link update is scheduled then
+       6:           update active coefficients β0:Pact by ridge regression on {(Si , Yi ) : Ωi = 1}
+       7:      end if
+       8:      compute fβ (S) and fβ′ (S)
+       9:      take first-order steps on X and {A(n) } using the masked gradient
+      10:      normalize factor scales and absorb them into the core
+      11:      increase Pact according to the continuation schedule, initializing the new coefficient at zero
+      12: end for
+      13: return X , {A(n) }, β
+
+147   Theorem 3 (Tensorial separation from standard            Tucker). Let N ≥ 3, R ≥ 2, p ≥ 2, and suppose
+      In ≥ D for every n, where D = R+p−1                            exists an order-N tensor Y ∈ RI1 ×···×IN that
+                                                    
+148
+                                                p     . Then there
+149   is representable by a degree-p NTD-PL model with Tucker backbone rank (R, . . . , R), but whose
+150   exact standard Tucker rank is
+                                                        (D, . . . , D).                                          (13)
+151   Equivalently,       a  degree-p   polynomial  link  can   generate    tensors  whose     multilinear ranks  are
+      ( R+p−1               R+p−1
+                                 
+152
+           p     , . . . ,     p    ) from a shared Tucker  backbone     of rank (R, . . . , R).
+
+153   The construction, given in Appendix A, uses a CP-diagonal Tucker backbone and the fact that generic
+154   Veronese feature matrices have full column rank. The theorem does not say that NTD-PL represents
+155   arbitrary high-rank Tucker tensors. Rather, it identifies a structured high-rank Tucker subset generated
+156   by a low-rank shared backbone. This is the precise sense in which the polynomial link provides a tied
+157   rank lift rather than an independent high-rank correction.
+158   Together, these results give the intended scope of the model. If the data are generated by a shared
+159   entrywise nonlinear response, polynomial links give a finite-dimensional approximation route on top
+160   of the same latent tensor. At the same time, the powers of that latent tensor induce Veronese-lifted
+161   Tucker factors, explaining why a scalar link can change multilinear rank structure without introducing
+162   an arbitrary high-rank tensor parameter.
+
+163   5     Optimization
+164   The objective in Section 3 is nonconvex in the Tucker core, factors, and link coefficients jointly, but it
+165   has a useful block structure. With the polynomial link fixed, the loss can be differentiated through
+166   the Tucker reconstruction. With the latent tensor fixed, the link coefficients solve a low-dimensional
+167   ridge regression on the currently observed entries. Algorithm 1 summarizes the solver used in the
+168   experiments.
+169   Unlike a post-hoc calibration baseline, the Tucker tensor is not held fixed after initialization. The link
+170   update uses the current latent tensor, and the subsequent backbone gradient step is taken under the
+171   current nonlinear link. This coupling is the optimization counterpart of the model distinction made in
+172   Section 3.
+
+173   5.1   Backbone Gradient Step
+
+174   For a fixed β, define
+                                                          P
+                                                          X
+                                              fβ′ (S) =         pβp S ⊙(p−1) .                                  (14)
+                                                          p=1
+175   The gradient of the normalized masked data term with respect to the latent tensor S is
+                                          1
+                                    T=       Ω ⊙ (fβ (S) − Y) ⊙ fβ′ (S).                                        (15)
+                                         |Ω|
+
+                                                            5
+176   Backpropagating T through the Tucker reconstruction gives the core gradient
+
+                               ∇X L = T ×1 A(1)⊤ ×2 · · · ×N A(N )⊤ + λX X .                             (16)
+177   For the n-th factor, let
+                             h                                                    i
+                    Z(n) = X ×1 A(1) · · · ×n−1 A(n−1) ×n+1 A(n+1) · · · ×N A(N )                .       (17)
+                                                                                           (n)
+
+178   Then the factor gradient can be written in unfolding form as
+
+                                        ∇A(n) L = T(n) Z(n)⊤ + λn A(n) .                                 (18)
+179   The experiments use first-order updates for these gradients. The algorithmic claim does not depend
+180   on a particular adaptive optimizer; the important point is that the backbone is updated jointly with the
+181   current nonlinear link.
+
+182   5.2   Closed-Form Link Update
+
+183   With S fixed and active degree Q = Pact , the coefficient subproblem is ridge regression. Let yΩ
+184   collect the observed values and let ΦΩ,Q (S) have rows [1, s, s2 , . . . , sQ ] for s = Si , Ωi = 1. The
+185   subproblem corresponding to the normalized objective in Section 3 is
+                                     1                       2   λβ        2
+                               min       ∥yΩ − ΦΩ,Q (S)β0:Q ∥2 +    ∥β0:Q ∥2 .                           (19)
+                               β0:Q 2|Ω|                          2
+186   Hence
+                                                                   −1
+                                   ⋆
+                                  β0:Q = Φ⊤
+                                          Ω,Q ΦΩ,Q + |Ω|λβ I             Φ⊤
+                                                                          Ω,Q yΩ .                       (20)
+187   Equivalently, one may absorb |Ω| into the ridge parameter and solve the usual unnormalized normal
+188   equations. If the constant term is disabled, the first column is removed and β0 is fixed at zero. In
+189   practice the least-squares system is tiny because Q ≤ P ≤ 6 in our experiments.
+
+190   5.3   Continuation and Stabilization
+
+191   The polynomial family is nested in the maximum degree, so we use a continuation schedule that
+192   starts from the Tucker-compatible degree-one model and activates one additional degree at a time:
+                                                 
+                                               kT
+                                tk = round          ,    k = 1, . . . , P − 1.
+                                               P
+193   When degree p + 1 is activated, the previous coefficients and Tucker factors are kept and the new
+194   coefficient βp+1 is initialized at zero. The model therefore expands from a linear low-rank fit instead
+195   of starting from a high-degree polynomial link immediately.
+196   This staging is useful because high powers of S are sensitive to scale and can dominate early gradients.
+197   We also normalize factor columns during training and absorb their scales into the core; this is a
+198   gauge fixing of the Tucker parameterization and does not change S. For numerical stability in the
+199   ridge update, the implementation may solve the Vandermonde system on a centered and scaled latent
+200   variable (S − µ)/σ, then convert the coefficients back to the original power basis of S. This changes
+201   only the conditioning of the coefficient solve, not the model being optimized.
+
+202   5.4   Cost
+
+203   The dominant cost is forming the Tucker reconstruction and its reverse contractions on the observed
+204   tensor. For dense tensors this is comparable to standard Tucker optimization at the same rank,
+205   plus O(P |Ω|) work to evaluate the scalar polynomial and its derivative. The link update forms a
+206   Vandermonde design or the corresponding moment equations and solves a (P + 1) × (P + 1) linear
+207   system, with direct cost O(P 2 |Ω| + P 3 ). Since P is small, this cost is negligible compared with the
+208   Tucker contractions. Thus the polynomial link changes the observation model without introducing a
+209   tensor-valued high-order parameter block.
+
+
+                                                         6
+                     NMSE gain over Tucker (dB)
+                                                             s2   s2 + s3         sin(κs)    tanh(κs)
+
+                                                  10
+
+
+
+                                                   5
+
+
+
+                                                   0
+                                                         1                    2                      3                 4             5                   6
+                                                                                                     Polynomial degree P
+
+      Figure 1: Controlled nonlinear tensors. NTD-PL gains over Tucker increase as orthogonal nonlinear
+      residual energy increases.
+
+                                                                    Best linear             NTD-PL
+                                                             s2                                                                     3.4 dB
+
+
+                                                        s2 + s3                                                     7.5 dB
+
+
+                                                        sin(κs)                                                                              13.3 dB
+
+
+                                                       tanh(κs)                                                                          10.6 dB
+
+                                                                            −25                         −20                   −15                  −10
+                                                                                                 NMSE (dB), lower is better
+
+      Figure 2: Endpoint controlled-tensor comparison. Each row compares the best linear baseline with
+      NTD-PL on normalized error; horizontal distance is the gain in dB.
+
+210   6     Experiments
+
+211   The empirical study tests a scoped mechanism: when a Tucker backbone is kept low-rank, can a
+212   shared polynomial link capture residual structure that is invisible to a linear Tucker observation
+213   model? The experiments are organized to separate this question from a broad benchmark claim.
+214   Controlled tensors isolate when the link should help, masked CAVE completion tests whether the
+215   learned low-rank geometry generalizes to held-out entries, CAVE reconstruction ablations rule out
+216   simple rank-lift and post-hoc calibration explanations, and external HSI scenes probe transfer and
+217   boundary cases.
+
+218   Protocol. Unless stated otherwise, real tensors are globally max-normalized and used without
+219   spatial downsampling or cropping. NTD-PL is compared with Tucker at the same multilinear rank,
+220   except in the explicit rank-lift ablation where Tucker is given extra rank. We report RMSE and
+221   spectral angle (SAM), with NMSE(dB) used for cross-domain reconstruction where scale varies
+222   across tensors. Completion masks entries uniformly at random and computes all completion metrics
+223   only on the held-out entries.
+
+224   6.1   Controlled Nonlinear Tensors
+                                                                                                 √
+225   The first check isolates the intended effect. We generate tensors of the form Yα = 1 − α S ⋆ +
+      √ e⋆
+226      α R , where S ⋆ is low-rank Tucker and R  e⋆ is the normalized component of a candidate nonlinear
+227   response that is orthogonal to S ⋆ . Thus α controls nonlinear residual energy rather than the amplitude
+228   of a raw scalar nonlinearity. When the source is linear, NTD-PL reduces to Tucker up to the fitted
+229   affine link; when nonlinear residual energy is present, the higher-order link terms should become
+230   useful. Figure 1 shows exactly this pattern: NTD-PL matches Tucker on linear sources and improves
+231   as the nonlinear residual grows. Figure 2 summarizes the endpoint comparison against the best
+232   linear baseline. The formal residual construction, full alpha sweep, polynomial-degree sweep,
+233   degree-continuation training curves, and fitted link-term contributions are reported in Appendix B.1.
+
+234   6.2   Low-Rank Masked Completion
+
+235   Masked completion is the main empirical test because held-out entries expose whether the learned
+236   low-rank geometry transfers beyond the observed tensor. In this setting, the polynomial link is useful
+237   only if it changes the inductive bias of the shared Tucker backbone, rather than simply calibrating
+238   training entries. Table 1 shows that this effect persists across random-mask rates at full resolution:
+239   with the same rank budget as Tucker, NTD-PL gives consistent held-out RMSE gains and also
+
+
+                                                                                                              7
+      Table 1: Full-resolution CAVE completion at rank (33, 33, 4) under random masks. Metrics are
+      computed on missing entries. Tucker and NTD-PL columns report mean ± standard deviation over
+      scenes; gains are paired relative improvements over Tucker.
+                                 RMSE*↓                                               SAM*↓
+      ρ
+                    Tucker             NTD-PL              Gain            Tucker       NTD-PL           Gain
+      0.1     0.0263±0.0179       0.0229±0.0158         12.9%        11.82±5.33       8.36±3.38          29.3%
+      0.3     0.0263±0.0179       0.0230±0.0158         12.5%        14.75±6.33       12.47±5.06         15.5%
+      0.5     0.0264±0.0179       0.0230±0.0158         12.9%        15.56±6.85       13.48±5.75         13.4%
+      0.7     0.0266±0.0180       0.0219±0.0128         17.7%        16.02±7.21       13.79±5.43         13.9%
+
+
+            Table 2: CAVE full reconstruction at matched ranks. Metrics are averaged over 15 scenes.
+             Rank            Params         RMSE↓                         SAM↓            Gain
+                                      Tucker     NTD-PL       Tucker         NTD-PL    RMSE      SAM
+             (18, 18, 3)       20k    0.0369      0.0319          22.36       19.23    13.6%     14.0%
+             (24, 24, 4)       27k    0.0299      0.0256          17.42       15.15    14.3%     13.0%
+             (33, 33, 4)       38k    0.0261      0.0223          16.43       14.41    14.3%     12.3%
+             (40, 40, 5)       49k    0.0217      0.0192          12.65       11.85    11.5%     6.4%
+
+240   improves spectral angle on most scenes. The scene-level sign and Wilcoxon tests in Appendix B.2
+241   support the same conclusion.
+
+242   6.3   CAVE Reconstruction Mechanism Checks
+
+243   Full-observation reconstruction is a controlled mechanism check rather than the main generalization
+244   test: with all entries observed, we can ask whether the polynomial link consistently removes residual
+245   structure left by a matched-rank Tucker backbone. Table 2 supports this interpretation. NTD-PL
+246   improves both intensity error and spectral angle across the rank range, while the advantage becomes
+247   smaller as the Tucker rank increases. This trend is the expected signature of a lightweight observation
+248   model: it helps most when the linear backbone is tight, and becomes less necessary as ordinary
+249   multilinear capacity grows.
+250   Two ablations clarify what the gain means. First, Table 3 asks how much spatial Tucker rank is
+251   needed before ordinary Tucker first matches the RMSE of a lower-rank NTD-PL model, while
+252   holding the spectral rank fixed. Tucker can buy back part of the RMSE gap by increasing rank, so
+253   NTD-PL should not be read as a replacement for rank selection. The spectral-angle gap, however,
+254   remains visible at the first RMSE-matching Tucker ranks, suggesting that the link is not merely
+255   trading for a slightly larger multilinear model. Second, post-hoc scalar calibration of a fitted Tucker
+256   reconstruction improves Tucker but remains below joint fitting in RMSE and SAM; the comparison
+257   and implementation details are given in Appendix B.3.
+
+258   6.4   External HSI Validity and Boundary Cases
+
+259   Table 4 asks whether the CAVE mechanism transfers to other hyperspectral tensors and where the
+260   shared-link assumption weakens. NTD-PL improves reconstruction and completion on Jasper Ridge,
+261   Samson, and Urban. Cuprite is the boundary case: Tucker is already strong, leaving little coherent
+262   residual for a shared polynomial link. Thus the evidence supports a scoped claim: NTD-PL is most
+263   useful under a tight rank budget when the linear Tucker residual is coherent enough to be modeled by
+264   a shared nonlinear link. Additional cross-domain checks are in Appendix B.5.
+
+
+
+
+                                                        8
+      Table 3: Rank-lifted Tucker comparison on CAVE reconstruction. The table reports the first fixed-
+      channel Tucker rank that matches each NTD-PL RMSE.
+                     NTD-PL reference                      First fixed-channel Tucker matching RMSE      Extra
+      Rank               Params     RMSE↓      SAM↓       Rank          Params    RMSE↓       SAM↓
+      (18, 18, 3)          20k      0.0319     19.23      (28, 28, 3)      31k     0.0316     21.41   +59.5%
+      (24, 24, 4)          27k      0.0256     15.15      (35, 35, 4)      41k     0.0254     16.26   +51.3%
+      (33, 33, 4)          38k      0.0223     14.41      (49, 49, 4)      60k     0.0222     15.28   +56.5%
+
+
+      Table 4: External HSI reconstruction and completion. Columns report RMSE; gains are relative
+      RMSE reductions over Tucker, and positive ∆SAM favors NTD-PL.
+                                        Reconstruction                              Completion
+          Dataset
+                           Tucker    NTD-PL       Gain       ∆SAM       Tucker   NTD-PL       Gain    ∆SAM
+          Jasper Ridge     0.0462     0.0430     6.93%           0.98   0.0471    0.0434     7.82%    1.16
+          Samson           0.0263     0.0242     7.95%           0.06   0.0268    0.0244     8.86%    0.31
+          Urban            0.0444     0.0429     3.59%           0.29   0.0454    0.0433     4.67%    0.49
+          Cuprite          0.0176     0.0177     -0.60%       -0.04     0.0179    0.0178     0.56%    -0.00
+
+265   7     Limitations
+266   NTD-PL assumes that the residual left by a low-rank Tucker backbone is well described by a shared
+267   entry-level nonlinear response. It is therefore not a universal tensor model: when Tucker already fits
+268   well at the chosen rank, or when residual nonlinearities vary strongly across space, spectra, or modes,
+269   a single scalar link may add little.
+270   The method also does not remove rank selection. Increasing Tucker rank can recover part of the
+271   RMSE gap, and NTD-PL inherits Tucker’s nonconvexity and initialization sensitivity. Although the
+272   link adds few parameters, evaluating it over all observed entries still increases runtime relative to
+273   plain Tucker.
+
+274   8     Conclusion
+275   We introduced NTD-PL, a Tucker model with a shared polynomial observation link. Rather than re-
+276   placing multilinear low-rank structure, NTD-PL adds a small nonlinear layer that expresses structured
+277   residuals left by a linear Tucker fit. The theory explains this as tied high-order Tucker interactions, or
+278   a structured rank lift without an independent high-rank correction.
+279   The experiments support the same scoped interpretation. Controlled tensors, held-out CAVE com-
+280   pletion, reconstruction mechanism checks, and external HSI scenes show that the link helps when
+281   a shared nonlinear residual is plausible under a tight rank budget, while also revealing near-linear
+282   boundary cases. Adaptive links and broader tensor modalities are natural next steps.
+
+283   References
+284   Lieven De Lathauwer, Bart De Moor, and Joos Vandewalle. A multilinear singular value decom-
+285     position. SIAM Journal on Matrix Analysis and Applications, 21(4):1253–1278, 2000. doi:
+286     10.1137/S0895479896305696.
+287   David Hong, Tamara G Kolda, and Jed A Duersch. Generalized canonical polyadic tensor decompo-
+288     sition. SIAM review, 62(1):133–163, 2020.
+289   Tamara G. Kolda and Brett W. Bader. Tensor decompositions and applications. SIAM Review, 51(3):
+290     455–500, 2009. doi: 10.1137/07070111X.
+291   Ji Liu, Przemyslaw Musialski, Peter Wonka, and Jieping Ye. Tensor completion for estimating
+292      missing values in visual data. IEEE Transactions on Pattern Analysis and Machine Intelligence,
+293      35(1):208–220, 2013. doi: 10.1109/TPAMI.2012.39.
+
+
+                                                              9
+294   Ivan V. Oseledets. Tensor-train decomposition. SIAM Journal on Scientific Computing, 33(5):
+295     2295–2317, 2011.
+296   Zhimeng Pan, Zheng Wang, and Shandian Zhe. Streaming nonlinear bayesian tensor decomposition.
+297     In Conference on Uncertainty in Artificial Intelligence, pages 490–499. PMLR, 2020.
+298   Vishwanath Saragadam, Randall Balestriero, Ashok Veeraraghavan, and Richard G Baraniuk.
+299     Deeptensor: Low-rank tensor decomposition with deep network priors. IEEE Transactions
+300     on Pattern Analysis and Machine Intelligence, 46(12):10337–10348, 2024.
+301   Nicholas D. Sidiropoulos, Lieven De Lathauwer, Xiao Fu, Kejun Huang, Evangelos E. Papalexakis,
+302     and Christos Faloutsos. Tensor decomposition for signal processing and machine learning. IEEE
+303     Transactions on Signal Processing, 65(13):3551–3582, 2017. doi: 10.1109/TSP.2017.2690524.
+304   Uras Varolgunes, Dan Zhou, Dantong Yu, and Ajim Uddin. Nmtucker: Non-linear matryoshka
+305     tucker decomposition for financial time series imputation. In Proceedings of the Fourth ACM
+306     International Conference on AI in Finance, pages 516–523, 2023.
+307   Zenglin Xu, Feng Yan, et al. Infinite tucker decomposition: Nonparametric bayesian models for
+308     multiway data analysis. arXiv preprint arXiv:1108.6296, 2011.
+309   Qibin Zhao, Guoxu Zhou, Shengli Xie, Liqing Zhang, and Andrzej Cichocki. Tensor ring decomposi-
+310     tion. arXiv preprint arXiv:1606.05535, 2016.
+311   Shandian Zhe, Kai Zhang, Pengyuan Wang, Kuang-chih Lee, Zenglin Xu, Yuan Qi, and Zoubin
+312     Ghahramani. Distributed flexible nonlinear tensor factorization. Advances in neural information
+313     processing systems, 29, 2016.
+
+
+314   A     Additional Proofs
+315   A.1   Polynomial and Analytic Approximation
+
+316   Proof of Theorem 1. Since g has degree at most P , write
+                                                                   P
+                                                                   X
+                                                       g(s) =            cp sp .                           (21)
+                                                                   p=0
+
+317   Take the NTD-PL latent tensor to be the true latent tensor, S = S ⋆ , and set βp = cp . Then, entrywise,
+                                           P
+                                           X                       p
+                                                 βp Si⋆1 ,...,iN        = g Si⋆1 ,...,iN = Yi1 ,...,iN .
+                                                                                        
+                          Ybi1 ,...,iN =                                                                   (22)
+                                           p=0
+
+318   Thus Yb = Y.
+319   Lemma 1 (Scalar-to-tensor approximation). Let ∥S ⋆ ∥∞ ≤ B. For any scalar function g and any
+320   degree-P polynomial qP ,
+                                                v
+                                                uN
+                                                uY
+                               ⋆        ⋆
+                          ∥g(S ) − qP (S )∥F ≤ t      In sup |g(s) − qP (s)|.                  (23)
+                                                                   n=1         |s|≤B
+
+
+321   Proof. Every entry of S ⋆ lies in [−B, B], so every entrywise approximation error is bounded by
+322   sup|s|≤B |g(s) − qP (s)|. Squaring, summing over all entries, and taking the square root gives the
+323   claim.
+                                    P∞
+324   Proof of Theorem 2. Let g(s) = k=0 ak sk be the Taylor expansion of g around zero, and choose
+               PP
+325   qP (s) = k=0 ak sk . By Cauchy’s estimate,
+                                                                        Mρ
+                                                          |ak | ≤          .                               (24)
+                                                                        ρk
+
+                                                                   10
+326   For |s| ≤ B < ρ,
+                                                          ∞
+                                                          X
+                              |g(s) − qP (s)| ≤                     |ak | |s|k                                                             (25)
+                                                        k=P +1
+                                                              ∞
+                                                             X                                   (B/ρ)P +1
+                                                      ≤ Mρ               (B/ρ)k = Mρ                       .                               (26)
+                                                                                                  1 − B/ρ
+                                                               k=P +1
+
+327   Applying Lemma 1 √and taking S = S ⋆ , βk = ak for 0 ≤ k ≤ P , yields the stated unnormalized
+                                   QN
+328   bound. Dividing by M , M = n=1 In , gives the normalized form used in Theorem 2.
+
+329   A.2   Rank Expansion
+
+330   Proof of Proposition 1. Write the Tucker tensor entrywise as
+                                                      R1            RN                     N
+                                                                                                   (n)
+                                                      X             X                      Y
+                                   Si1 ,...,iN =              ···            Xr1 ,...,rN         Ain ,rn .                                 (27)
+                                                      r1 =1         rN =1                  n=1
+
+331   Taking an element-wise p-th power gives
+                                                                         
+                                  p   R1       RN                 N
+                                                                     (n)
+                               p
+                                  Y   X        X                  Y
+                 (Si1 ,...,iN ) =          ···    Xr(q) ,...,r(q)   A (q)                                                                 (28)
+                                                                         
+                                                                    i ,r1            N           n   n
+                                   q=1       (q)
+                                            r1 =1
+                                                           (q)
+                                                          rN =1                           n=1
+
+                                                                       p                                     p
+                                                                                                ! N                                !
+                                                                                                                       (n)
+                                      X                  X             Y                         Y           Y
+                               =                ···                           Xr(q) ,...,r(q)                      A         (q)       ,   (29)
+                                                                                  1        N                           in ,rn
+                                   γ1 ∈[R1 ]p         γN ∈[RN ]p       q=1                        n=1        q=1
+
+                      (1)       (p)
+332   where γn = (rn , . . . , rn ). For each mode n, let αn ∈ NRn record the counts of the entries in γn ,
+333   so |αn | = p. Then
+                                     p           Rn          αn,r
+                                         (n)              (n)          (n)⟨p⟩
+                                   Y             Y
+                                       A (q) =         Ain ,r       = Ain ,αn .                       (30)
+                                             in ,rn
+                                      q=1                     r=1
+334   Group all ordered tuples (γ1 , . . . , γN ) that produce the same multi-indices (α1 , . . . , αN ), and define
+335   the aggregated core
+                                                          X          p
+                                                                     Y
+                                 Xα⟨p⟩1 ,...,αN
+                                                 =                      Xr(q) ,...,r(q) .                       (31)
+                                                                                            1         N
+                                                            γ1 ,...,γN : q=1
+                                                        count(γn )=αn ∀n
+336   The preceding display is exactly the Tucker reconstruction
+                                   S ⊙p = JX ⟨p⟩ ; A(1)⟨p⟩ , . . . , A(N )⟨p⟩ K.                                                           (32)
+      The n-th Veronese factor has Rn +p−1
+                                          
+337
+                                      p     columns, giving the claimed Tucker rank bound.
+
+338   A.3   Separation
+
+      Lemma 2 (Full-rank Veronese evaluations). Let D = R+p−1
+                                                               
+339
+                                                            p    . There exists a matrix A ∈ RD×R
+                                     ⟨p⟩    D×D
+340   whose Veronese feature matrix A ∈ R         has rank D. Consequently, for I ≥ D, a generic
+341   matrix A ∈ RI×R has rank(A⟨p⟩ ) = D.
+
+342   Proof. The homogeneous degree-p monomials in R variables are linearly independent polynomials.
+343   Hence there exist evaluation points x1 , . . . , xD ∈ RR such that the matrix (xα
+                                                                                      i )i,α , |α| = p, is
+344   nonsingular; otherwise every D × D evaluation determinant would vanish, which would imply a
+345   nontrivial linear dependence among the monomials. Taking these points as the rows of A gives the
+346   first claim.
+347   For I ≥ D, choose any D rows. The determinant of the corresponding D × D Veronese submatrix
+348   is a polynomial in the entries of A that is not identically zero by the first claim. Its nonvanishing is
+349   therefore a generic property, so A⟨p⟩ has full column rank for generic A.
+
+
+                                                                      11
+                                                                                        (n)          (n)
+      Proof of Theorem 3. Let D = R+p−1
+                                            
+350
+                                        p     . Choose generic factor matrices A(n) = [a1 , . . . , aR ] ∈
+351   RIn ×R , and define the CP-diagonal Tucker backbone
+                                                    R
+                                                    X
+                                              S=          a(1)          (N )
+                                                           r ⊗ · · · ⊗ ar .                           (33)
+                                                    r=1
+
+352   Its mode-n unfolding is
+                                                                                ⊤
+                       S(n) = A(n) A(N ) ⊙ · · · ⊙ A(n+1) ⊙ A(n−1) ⊙ · · · ⊙ A(1) .                   (34)
+
+353   For generic A(n) , A(n) has rank R, and the Khatri-Rao product on the right has rank R. Thus
+354   rank(S(n) ) = R for every n, so S has exact Tucker rank (R, . . . , R).
+355   Set βp = 1 and βq = 0 for q ̸= p. Then Y = S ⊙p is a valid degree-p NTD-PL tensor. Entrywise,
+                                                 R YN
+                                                               !p
+                                                          (n)
+                                                 X
+                                   Yi1 ,...,iN =        Ain ,r                                   (35)
+                                                      r=1 n=1
+                                                                 N Y
+                                                                   R               αr
+                                                                             (n)
+                                                     X           Y
+                                                =           cα             Ain ,r         ,           (36)
+                                                    |α|=p        n=1 r=1
+
+356   where cα = p!/(α1 ! · · · αR !) > 0. Let B = A(n)⟨p⟩ ∈ RIn ×D . By Lemma 2, each B(n) has full
+                                                    (n)
+
+357   column rank D for generic A(n) . The mode-n unfolding is
+                                                                                   ⊤
+                  Y(n) = B(n) diag(c) B(N ) ⊙ · · · ⊙ B(n+1) ⊙ B(n−1) ⊙ · · · ⊙ B(1) .         (37)
+
+358   The diagonal matrix diag(c) is nonsingular. Since a Khatri-Rao product of full-column-rank matrices
+359   is full column rank, the right factor has rank D. Therefore rank(Y(n) ) = D. This holds for every
+360   mode n, and the exact Tucker rank of Y is (D, . . . , D).
+
+361   A.4   Masked Generalization
+
+362   Theorem 4 (Masked-entry uniform convergence). Let Θ ⊂ Rd be a bounded NTD-PL parameter set
+363   with
+                                       N
+                                       Y        XN
+                                  d=      Rn +      In Rn + (P + 1).
+                                              n=1          n=1
+364   For θ ∈ Θ, define the full-entry risk
+                                                                              N
+                                               1 X                            Y
+                                    L(θ) =         ℓi (θ),             M=            In ,
+                                               M                              n=1
+                                                      i
+
+365   and the masked empirical risk
+                                                            m
+                                                         1 X
+                                               Lbm (θ) =      ℓi (θ),
+                                                         m t=1 t
+366   where it are sampled uniformly from tensor entries. Assume 0 ≤ ℓi (θ) ≤ Bℓ and ℓi (θ) is G-Lipschitz
+367   in θ, uniformly over i. If Θ is contained in a Euclidean ball of radius BΘ , then with probability at
+368   least 1 − δ,                                         r
+                                                              d log(3BΘ /ε) + log(2/δ)
+                        sup L(θ) − Lbm (θ) ≤ 2Gε + Bℓ
+                        θ∈Θ                                              2m
+369   for every 0 < ε ≤ BΘ .
+
+370   Proof of Theorem 4. Fix 0 < ε ≤ BΘ , and let Nε be an ε-net of Θ in Euclidean norm. Since Θ lies
+371   in a d-dimensional ball of radius BΘ , it admits a net with
+                                                              d
+                                                          3BΘ
+                                                |Nε | ≤           .                              (38)
+                                                            ε
+
+                                                             12
+372   For any fixed θ0 ∈ Nε , the random variables ℓit (θ0 ) are independent and bounded in [0, Bℓ ].
+373   Hoeffding’s inequality gives
+                                                                     2mu2
+                                                                       
+                             Pr L(θ0 ) − Lm (θ0 ) ≥ u ≤ 2 exp − 2
+                                         b                                   .                 (39)
+                                                                      Bℓ
+374   Taking a union bound over Nε , with probability at least 1 − δ,
+                                                               r
+                                                                  log(2|Nε |/δ)
+                               max L(θ0 ) − Lm (θ0 ) ≤ Bℓ
+                                               b                                .                        (40)
+                              θ0 ∈Nε                                   2m
+375   Substituting the net-size bound yields the stated stochastic term.
+376   Now take any θ ∈ Θ, and choose θ0 ∈ Nε with ∥θ − θ0 ∥2 ≤ ε. By the uniform Lipschitz assumption,
+
+                             |L(θ) − L(θ0 )| ≤ Gε,            |Lbm (θ) − Lbm (θ0 )| ≤ Gε.                (41)
+377   Therefore
+                           L(θ) − Lbm (θ) ≤ |L(θ) − L(θ0 )| + L(θ0 ) − Lbm (θ0 )                         (42)
+
+                                                + |Lbm (θ0 ) − Lbm (θ)|                                  (43)
+                                                            r
+                                                              d log(3BΘ /ε) + log(2/δ)
+                                              ≤ 2Gε + Bℓ                               .                 (44)
+                                                                        2m
+378   Taking the supremum over θ ∈ Θ completes the proof.
+379   Remark 1. The Lipschitz and bounded-loss assumptions are standard for compact parametric
+380   classes. For NTD-PL, they follow when the observed values, core, factor matrices, and polynomial
+381   coefficients are bounded and the polynomial degree P is finite. The resulting Lipschitz constant may
+382   depend polynomially on these bounds and on P , but the covering dimension remains the number
+383   of tied NTD-PL parameters rather than the number of parameters in an untied high-order Tucker
+384   expansion.
+
+385   B     Additional Experiments
+386   B.1   Controlled Synthetic Mechanism Checks
+
+387   The controlled experiments in the main text are designed to isolate the role of the scalar link. Table 5
+388   first checks a negative control: when the source is linear Tucker, NTD-PL does not improve by
+389   inventing nonlinear terms. The only exception is an affine offset, where the constant link term is the
+390   intended correction.
+391   For the nonlinear controlled tensors, the nonlinearity is introduced as an orthogonal residual rather
+392   than by directly setting Y = g(S ⋆ ). Let S ⋆ be the linear low-rank Tucker backbone and let g be one
+393   of the candidate scalar responses. We form
+                                                          ⟨g(S ⋆ ), S ⋆ ⟩ ⋆
+                                         R⋆ = g(S ⋆ ) −                  S ,                             (45)
+                                                            ∥S ⋆ ∥2F
+394   and, when ∥R⋆ ∥F > 0, normalize it as
+                                                              ⋆
+                                                 e⋆ = ∥S ∥F R⋆ .
+                                                 R                                                       (46)
+                                                      ∥R⋆ ∥F
+395   The observed tensor is then
+                                         √                √
+                                  Yα =       1 − α S⋆ +        e⋆ ,
+                                                              αR        0 ≤ α ≤ 1.                       (47)
+396                           e⋆ ⟩ = 0 and ∥R
+      By construction, ⟨S ⋆ , R             e⋆ ∥F = ∥S ⋆ ∥F , so α is exactly the energy fraction assigned
+397   to the nonlinear residual. This keeps the total energy fixed while moving the observation away
+398   from the linear Tucker backbone. The candidate residual families are g(s) = s2 , g(s) = s2 + s3 ,
+399   g(s) = sin(κs), and g(s) = tanh(κs), with κ set from the input scale.
+
+
+                                                          13
+      Table 5: Linear consistency on synthetic Tucker tensors. The p > 1 columns report effective higher-
+      order NTD-PL contribution.
+                                                                                bias = 0                                                     bias = 0.5
+                            Method
+                                                             RMSE↓         NMSE(dB)↓                    p>1           RMSE↓              NMSE(dB)↓                p>1
+                            Tucker                           0.0114                -38.88                  –              0.0647                   -24.05             –
+                            NTD-PL, β0 = 0                   0.0116                -38.72               4.19%             0.0522                   -25.85         39.17%
+                            NTD-PL, β0 free                  0.0117                -38.65               3.19%             0.0118                   -38.58          2.98%
+
+400   Table 6 shows a small but consistent term-mass concentration effect: the dominant contribution
+401   usually lands on the degree that matches the injected response, while smooth odd links spread mass
+402   across nearby odd orders.
+403    Figures 3 and 4 give the fuller nonlinear sweep behind the compact main-text figures. The alpha
+404    sweep shows that NTD-PL separates from linear tensor models as nonlinear residual energy increases;
+405    the degree sweep shows that this gain is tied to the expressive order of the polynomial link rather
+406    than to an arbitrary post-processing effect.
+                                                                          Tucker        CP         TT            TR        NTD-PL
+
+                                      s2                                    s2 + s3                                          sin(κs)                                    tanh(κs)
+      NMSE (dB)
+
+
+
+
+              −10
+
+              −20
+
+              −30
+                    .10         .20        .30         .40    .10         .20         .30         .40        .10           .20         .30          .40     .10       .20      .30         .40
+                                                                                            nonlinear residual energy α
+
+       Figure 3: Controlled nonlinear alpha sweep. Each panel uses a different candidate response to define
+       the orthogonal residual; lower NMSE(dB) is better.
+
+                                                                                        Tucker             NTD-PL
+
+                                      s2                                    s2 + s3                                          sin(κs)                                    tanh(κs)
+              −10
+      NMSE (dB)
+
+
+
+
+              −15
+              −20
+              −25
+              −30
+                        1   2     3        4      5    6          1   2      3      4        5    6           1       2      3      4         5      6      1     2     3     4      5     6
+                                                                                                        degree P
+
+       Figure 4: Controlled nonlinear degree sweep. Increasing the polynomial degree helps when the
+       residual is induced by higher-order structure.
+                                      s2                                    s2 + s3                                          sin(κs)                                    tanh(κs)
+              0.3
+      RMSE
+
+
+
+
+              0.2
+
+              0.1
+
+                    0           400              800          0            400              800              0              400              800            0          400           800
+                                                                                                        iteration
+
+       Figure 5: NTD-PL training curves for the controlled nonlinear mechanism checks. Dashed vertical
+       lines mark degree-activation events.
+
+
+407    B.2              CAVE Completion Significance and Robustness
+
+408   The main text reports the full-resolution random-missing CAVE completion table at rank (33, 33, 4).
+409   We do not repeat that table here; instead, Table 7 gives the paired sign and Wilcoxon tests for the
+410   same protocol.
+
+411    B.3              Post-Hoc Calibration Implementation
+
+412   The calibration baselines in Figure 6 are post-processing models applied to a fixed Tucker recon-
+413   struction. Let YbT denote the Tucker output and Y the target tensor. PolyCal fits a scalar degree-four
+
+
+                                                                                                  14
+      Table 6: Representative effective NTD-PL term contributions under moderate nonlinearity, reported
+      as percentages over ten seeds. Polynomial targets concentrate mass at the matching nonlinear degrees,
+      while odd smooth links place most nonlinear mass on odd powers.
+                          Link                                Effective contribution (%)
+                                            p=0 p=1 p=2 p=3 p=4 p=5 p=6
+                            2
+                          s                     0.5    43.3       23.2         5.8        8.2        9.1          9.8
+                          s2 + s3               0.1    24.1        9.8        38.1        7.3       11.5          9.1
+                          sin(κs)               0.1    37.7        0.6        35.4        2.8       19.8          3.6
+                          tanh(κs)              0.2    37.9        1.3        30.9        5.4       17.3          7.0
+
+
+      Table 7: Significance tests for full-resolution CAVE completion at rank (33, 33, 4). Metrics are
+      computed on missing entries.
+                                     RMSE                                                                        SAM
+      ρ     W/L     Med. gain              Sign p           Wilcoxon p            W/L      Med. gain                  Sign p         Wilcoxon p
+                                                  −4                  −4                                                    −4
+      0.1   14/1     0.0027          9.77×10                1.22×10               14/1      2.9742               9.77×10             8.54×10−4
+      0.3   14/1     0.0027          9.77×10−4              1.22×10−4             13/2      1.9194                  0.007               0.004
+      0.5   14/1     0.0026          9.77×10−4              1.22×10−4             13/2      1.6566                  0.007               0.012
+      0.7   14/1     0.0027          9.77×10−4              1.22×10−4             12/3      1.3394                  0.035               0.048
+
+
+414   polynomial
+                                                                            4
+                                                                            X
+                                                            hγ (x) =              γp xp
+                                                                            p=0
+
+
+415   by ridge regression on pairs (YbT,i , Yi ). In full reconstruction, all entries are used for this fit. In
+416   completion, the fit uses only observed entries and is then evaluated on held-out entries. The fitted
+417   map is applied entrywise to YbT ; the Tucker core and factors are never updated.
+418   MLPCal uses the same fixed-input protocol, but replaces the polynomial with a one-dimensional
+419   MLP. The input and target scalars are standardized, then a single-hidden-layer tanh network with a
+420   scalar skip connection is trained with Adam and ℓ2 weight decay on the observed calibration pairs. In
+421   the CAVE runs we use 16 hidden units, learning rate 10−3 , weight decay 10−5 , batch size 8192, at
+422   most 200,000 calibration samples, and 1500 optimization steps. Thus both PolyCal and MLPCal test
+423   post-hoc scalar remapping of an already learned Tucker tensor, while NTD-PL jointly updates the
+424   latent Tucker geometry under the nonlinear link.
+
+                                RMSE gain                                           SAM gain
+                     +PolyCal       1.9                                                              6.3
+
+
+                     +MLPCal         2.3                                                                   8.0
+
+
+                     NTD-PL                                          14.3                                                12.3
+
+                                0           5          10            15             0           5                10             15
+
+                                                             Gain over Tucker (%)
+
+      Figure 6: Post-hoc scalar calibration versus joint linked fitting on CAVE reconstruction at rank
+      (33, 33, 4). Gains are relative to Tucker.
+
+
+
+425   B.4   CAVE Beads Pseudo-RGB Visualization
+
+426   Figure 7 visualizes the CAVE beads scene under the reconstruction and random-completion protocols.
+427   Each 31-band tensor is rendered as pseudo-RGB by selecting three representative spectral bands near
+428   75%, 50%, and 20% of the wavelength index range and applying a shared linear intensity scaling
+429   within each task. For completion, unobserved entries in the observation panel are shown in gray.
+
+
+                                                                       15
+                       Observation               Tucker                 NTD-PL                  Error
+
+
+
+
+      Reconstruction
+                                                                                                                        Error
+                                                                                                                                0.08
+
+                                                                                                                                0.06
+
+
+
+
+                                                                                                                                        Tucker - NTD-PL RMSE
+                                                                                                                                0.04
+
+                                                                                                                                0.02
+
+                                                                                                                                0.00
+
+                                                                                                                                −0.02
+
+                                                                                                                                −0.04
+      Completion
+
+
+
+
+                                                                                                                                −0.06
+
+                                                                                                                                −0.08
+
+
+
+
+      Figure 7: CAVE beads visual comparison. Rows correspond to reconstruction and random completion
+      at missing rate 0.5. Error maps show Tucker minus NTD-PL per-pixel RMSE, so positive values
+      indicate lower NTD-PL error.
+
+430   B.5                 Cross-Domain Real Tensor Checks
+
+431   Table 8 reports matched-rank reconstruction on tensors outside the main hyperspectral setting: addi-
+432   tional hyperspectral scenes, natural-image collections, and object-view tensors. We use NMSE(dB)
+433   as the main cross-dataset metric because it normalizes by the energy of each tensor and is therefore
+434   less sensitive to scale differences across domains. The results are consistent with the scoped claim in
+435   Section 6.4: gains are clearest on hyperspectral and object-view data, while natural-image collections
+436   provide more modest improvements.
+
+      Table 8: Additional matched-rank real tensor reconstruction. NMSE columns are in dB; lower is
+      better. ∆NMSE is the Tucker-minus-NTD-PL dB gap, and NMSE gain is the relative reduction in
+      linear NMSE; positive values favor NTD-PL.
+                                                                                                    NMSE(dB)↓
+      Domain                         Dataset                 Shape            Rank                                      NMSE gain
+                                                                                           Tucker     NTD-PL     ∆
+      Hyperspectral                  Jasper Ridge         100×100×198      (11,11,43)      -15.96       -16.58   0.62     13.4%
+      Hyperspectral                  Samson                95×95×156       (10,10,35)      -19.37       -20.09   0.72     15.3%
+      Hyperspectral                  Urban                307×307×162      (43,43,47)      -13.21       -13.53   0.32     7.1%
+      Natural images                 CBSD68            68×96×96×3         (20,32,32,3)     -11.27       -11.40   0.13      3.0%
+      Natural images                 CIFAR-10         1000×32×32×3        (96,20,20,3)     -17.04       -17.37   0.34      7.5%
+      Object views                   COIL-100        8×36×48×48×3         (4,8,12,12,2)    -10.17       -10.71   0.54     11.7%
+      Object views                   smallNORB       25×18×64×64×2       (18,12,24,24,2)   -25.97       -26.45   0.48     10.5%
+
+
+
+437   NeurIPS Paper Checklist
+
+438   This draft uses a working checklist. It should be replaced by the official NeurIPS checklist distributed
+439   with the final 2026 submission template.
+
+440   1. Claims. The main claims are stated in the abstract, introduction, theory section, and experiment
+441      captions: NTD-PL is a parameter-efficient nonlinear observation model for Tucker tensors; its
+442      gains are not explained by modest rank increases or post-hoc scalar calibration.
+443   2. Limitations. Section 7 discusses near-linear boundary cases, whole-axis missingness, shared-link
+444      assumptions, and the current domain concentration in hyperspectral data.
+445   3. Theory assumptions. The approximation results assume a bounded latent tensor and polynomial
+446      or analytic scalar links. The separation results use generic full-rank feature constructions. The
+447      masked generalization bound assumes bounded parameters, bounded observations, and random
+448      observed entries.
+
+
+                                                                         16
+449   4. Reproducibility. The experiment section reports datasets, ranks, mask types, missing rates,
+450      and baseline definitions. The codebase includes scripts for rank sweeps, MLPCal, structured
+451      missingness, and the cross-domain real-tensor reconstruction benchmark; the final version should
+452      add hardware details and exact command manifests.
+
+
+
+
+                                                      17
+

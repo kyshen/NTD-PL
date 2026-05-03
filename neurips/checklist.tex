@@ -1,0 +1,25 @@
+\section*{NeurIPS Paper Checklist}
+
+This draft uses a working checklist. It should be replaced by the official
+NeurIPS checklist distributed with the final 2026 submission template.
+
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+  \item \textbf{Claims.} The main claims are stated in the abstract,
+  introduction, theory section, and experiment captions: NTD-PL is a
+  parameter-efficient nonlinear observation model for Tucker tensors; its
+  gains are not explained by modest rank increases or post-hoc scalar
+  calibration.
+  \item \textbf{Limitations.} Section~\ref{sec:limitations} discusses
+  near-linear boundary cases, whole-axis missingness, shared-link assumptions,
+  and the current domain concentration in hyperspectral data.
+  \item \textbf{Theory assumptions.} The approximation results assume a
+  bounded latent tensor and polynomial or analytic scalar links. The
+  separation results use generic full-rank feature constructions. The masked
+  generalization bound assumes bounded parameters, bounded observations, and
+  random observed entries.
+  \item \textbf{Reproducibility.} The experiment section reports datasets,
+  ranks, mask types, missing rates, and baseline definitions. The codebase
+  includes scripts for rank sweeps, MLPCal, structured missingness, and the
+  cross-domain real-tensor reconstruction benchmark; the final version should add hardware
+  details and exact command manifests.
+\end{enumerate}
