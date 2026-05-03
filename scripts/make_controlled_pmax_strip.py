@@ -4,17 +4,18 @@ from pathlib import Path
 import sys
 
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from viz.aggregate import aggregate_nonlinear_pmax_grid
-from viz.style import PALETTE, apply_style, method_style, style_axes
+from viz.style import PALETTE, apply_style
 
 
 OUT_DIR = ROOT / "neurips" / "figures"
-OUT_STEM = "controlled_nonlinear_pmax_strip"
+OUT_STEM = "controlled_nonlinear_pmax_heatmap"
 
 PANEL_LABELS = {
     "poly2": r"$s^2$",
@@ -24,66 +25,75 @@ PANEL_LABELS = {
 }
 
 
-def _plot_panel(ax: plt.Axes, panel_data, panel_key: str, *, show_ylabel: bool) -> None:
-    tucker_style = method_style("Tucker")
-    tucker_style.update({"marker": None, "linewidth": 1.25, "linestyle": "--", "color": PALETTE.tucker})
-    ntdpl_style = method_style("NTD-PL")
-    ntdpl_style.update({"linewidth": 1.55, "markersize": 3.0})
-
-    for method, style in (("Tucker", tucker_style), ("NTD-PL", ntdpl_style)):
-        sub = panel_data.loc[panel_data["method"].eq(method)].sort_values("x")
-        if sub.empty:
-            continue
-        x = sub["x"].to_numpy(dtype=float)
-        y = sub["mean"].to_numpy(dtype=float)
-        lower = sub["band_lower"].to_numpy(dtype=float)
-        upper = sub["band_upper"].to_numpy(dtype=float)
-        if method == "NTD-PL":
-            ax.fill_between(x, lower, upper, color=style["color"], alpha=0.10, linewidth=0)
-        ax.plot(
-            x,
-            y,
-            color=style["color"],
-            linestyle=style["linestyle"],
-            marker=style.get("marker"),
-            linewidth=style["linewidth"],
-            markersize=style.get("markersize", 3.0),
-            label=method,
-        )
-
-    ax.set_title(PANEL_LABELS.get(panel_key, panel_key), pad=1.0)
-    ax.set_xticks([1, 2, 3, 4, 5, 6])
-    ax.set_ylim(-30, -8)
-    ax.set_yticks([-30, -25, -20, -15, -10])
-    ax.set_xlabel("")
-    ax.set_ylabel("NMSE (dB)" if show_ylabel else "", labelpad=0.8)
-    ax.tick_params(axis="both", pad=0.8)
-    style_axes(ax, grid=True)
+def _degree_gain_matrix(data, panel_order: list[str]) -> tuple[np.ndarray, list[int]]:
+    wide = data.pivot_table(index=["panel", "x"], columns="method", values="mean").reset_index()
+    wide["gain_db"] = wide["Tucker"] - wide["NTD-PL"]
+    degrees = sorted(int(x) for x in wide["x"].unique())
+    matrix = np.full((len(panel_order), len(degrees)), np.nan, dtype=float)
+    for row_idx, panel_key in enumerate(panel_order):
+        panel = wide.loc[wide["panel"].eq(panel_key)]
+        for col_idx, degree in enumerate(degrees):
+            value = panel.loc[panel["x"].eq(degree), "gain_db"]
+            if not value.empty:
+                matrix[row_idx, col_idx] = float(value.iloc[0])
+    return matrix, degrees
 
 
 def main() -> None:
-    apply_style("compact")
+    apply_style("single_column")
     data = aggregate_nonlinear_pmax_grid()
     panel_order = ["poly2", "poly3", "sin", "tanh"]
+    matrix, degrees = _degree_gain_matrix(data, panel_order)
 
-    fig, axes = plt.subplots(1, 4, figsize=(6.95, 1.22), sharex=True, sharey=True)
-    for idx, (ax, panel_key) in enumerate(zip(axes, panel_order, strict=True)):
-        panel_data = data.loc[data["panel"].eq(panel_key)].copy()
-        _plot_panel(ax, panel_data, panel_key, show_ylabel=idx == 0)
-
-    handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(
-        handles,
-        labels,
-        loc="upper center",
-        ncol=2,
-        bbox_to_anchor=(0.5, 1.045),
-        handlelength=1.8,
-        columnspacing=1.2,
-        borderaxespad=0.0,
+    cmap = LinearSegmentedColormap.from_list(
+        "ntdpl_degree_gain",
+        [PALETTE.heat_low, PALETTE.heat_mid, PALETTE.ntdpl],
     )
-    fig.text(0.54, 0.025, r"degree $P$", ha="center", va="bottom", color=PALETTE.border)
-    fig.subplots_adjust(left=0.062, right=0.995, bottom=0.27, top=0.75, wspace=0.18)
+    fig, ax = plt.subplots(figsize=(5.48, 1.42))
+    image = ax.imshow(
+        matrix,
+        aspect="auto",
+        cmap=cmap,
+        vmin=0.0,
+        vmax=max(1.0, float(np.nanmax(matrix))),
+    )
+
+    ax.set_xticks(np.arange(len(degrees)))
+    ax.set_xticklabels([str(degree) for degree in degrees])
+    ax.set_yticks(np.arange(len(panel_order)))
+    ax.set_yticklabels([PANEL_LABELS[key] for key in panel_order])
+    ax.set_xlabel(r"degree $P$", labelpad=2.0)
+    ax.set_ylabel("residual", labelpad=2.0)
+    ax.tick_params(axis="both", length=0, pad=2.0)
+
+    ax.set_xticks(np.arange(-0.5, len(degrees), 1), minor=True)
+    ax.set_yticks(np.arange(-0.5, len(panel_order), 1), minor=True)
+    ax.grid(which="minor", color=PALETTE.white, linewidth=0.9)
+    ax.tick_params(which="minor", bottom=False, left=False)
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+
+    threshold = 0.62 * float(np.nanmax(matrix))
+    for row_idx in range(matrix.shape[0]):
+        for col_idx in range(matrix.shape[1]):
+            value = matrix[row_idx, col_idx]
+            if not np.isfinite(value):
+                continue
+            ax.text(
+                col_idx,
+                row_idx,
+                f"{value:.1f}",
+                ha="center",
+                va="center",
+                color=PALETTE.white if value >= threshold else PALETTE.border,
+                fontsize=7.6,
+            )
+
+    cbar = fig.colorbar(image, ax=ax, fraction=0.042, pad=0.025)
+    cbar.set_label("gain over Tucker (dB)", labelpad=4.0)
+    cbar.outline.set_visible(False)
+    cbar.ax.tick_params(length=2.5, width=0.7, labelsize=7.4, colors=PALETTE.border)
+    fig.subplots_adjust(left=0.13, right=0.91, bottom=0.22, top=0.96)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     for ext in ("pdf", "png"):

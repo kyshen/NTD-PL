@@ -44,24 +44,25 @@
 \@writefile{toc}{\contentsline {paragraph}{Protocol.}{5}{section*.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Controlled Nonlinear Tensors}{5}{subsection.6.1}\protected@file@percent }
 \newlabel{subsec:controlled-experiments}{{6.1}{5}{Controlled Nonlinear Tensors}{subsection.6.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Low-Rank Masked Completion}{5}{subsection.6.2}\protected@file@percent }
-\newlabel{subsec:lowrank-completion}{{6.2}{5}{Low-Rank Masked Completion}{subsection.6.2}{}}
 \def\@LN@column{1}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Controlled nonlinear tensors. NTD-PL gains over Tucker increase as orthogonal nonlinear residual energy increases.}}{6}{figure.caption.7}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Controlled nonlinear alpha sweep. Each panel uses a different scalar response to define the orthogonal residual; lower NMSE(dB) is better.}}{6}{figure.caption.7}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:controlled-nonlinear-summary}{{1}{6}{Controlled nonlinear tensors. NTD-PL gains over Tucker increase as orthogonal nonlinear residual energy increases}{figure.caption.7}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Endpoint controlled-tensor comparison. Each row compares the best linear baseline with NTD-PL on normalized error; horizontal distance is the gain in dB.}}{6}{figure.caption.8}\protected@file@percent }
-\newlabel{fig:controlled-nonlinear-gap-summary}{{2}{6}{Endpoint controlled-tensor comparison. Each row compares the best linear baseline with NTD-PL on normalized error; horizontal distance is the gain in dB}{figure.caption.8}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}CAVE Reconstruction Mechanism Checks}{6}{subsection.6.3}\protected@file@percent }
-\newlabel{subsec:cave-reconstruction}{{6.3}{6}{CAVE Reconstruction Mechanism Checks}{subsection.6.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}External HSI Validity and Boundary Cases}{6}{subsection.6.4}\protected@file@percent }
-\newlabel{subsec:external-hsi-validity}{{6.4}{6}{External HSI Validity and Boundary Cases}{subsection.6.4}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Full-resolution CAVE completion at rank \((33,33,4)\) under random masks. Metrics are computed on missing entries. Tucker and NTD-PL columns report mean \(\pm \) standard deviation over scenes; gains are paired relative improvements over Tucker.}}{7}{table.caption.9}\protected@file@percent }
-\newlabel{tab:lowrank-completion-main}{{1}{7}{Full-resolution CAVE completion at rank \((33,33,4)\) under random masks. Metrics are computed on missing entries. Tucker and NTD-PL columns report mean \(\pm \) standard deviation over scenes; gains are paired relative improvements over Tucker}{table.caption.9}{}}
+\newlabel{fig:controlled-alpha-grid}{{1}{6}{Controlled nonlinear alpha sweep. Each panel uses a different scalar response to define the orthogonal residual; lower NMSE(dB) is better}{figure.caption.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Controlled nonlinear degree-gain heatmap at \(\alpha =0.25\). Cell values are Tucker minus NTD-PL NMSE(dB), so larger values favor NTD-PL.}}{6}{figure.caption.8}\protected@file@percent }
+\newlabel{fig:controlled-pmax-strip}{{2}{6}{Controlled nonlinear degree-gain heatmap at \(\alpha =0.25\). Cell values are Tucker minus NTD-PL NMSE(dB), so larger values favor NTD-PL}{figure.caption.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Low-Rank Masked Completion}{6}{subsection.6.2}\protected@file@percent }
+\newlabel{subsec:lowrank-completion}{{6.2}{6}{Low-Rank Masked Completion}{subsection.6.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Full-resolution CAVE completion at rank \((33,33,4)\) under random masks. Metrics are computed on missing entries. Tucker and NTD-PL columns report mean \(\pm \) standard deviation over scenes; gains are paired relative improvements over Tucker.}}{6}{table.caption.9}\protected@file@percent }
+\newlabel{tab:lowrank-completion-main}{{1}{6}{Full-resolution CAVE completion at rank \((33,33,4)\) under random masks. Metrics are computed on missing entries. Tucker and NTD-PL columns report mean \(\pm \) standard deviation over scenes; gains are paired relative improvements over Tucker}{table.caption.9}{}}
+\def\@LN@column{1}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}CAVE Reconstruction Mechanism Checks}{7}{subsection.6.3}\protected@file@percent }
+\newlabel{subsec:cave-reconstruction}{{6.3}{7}{CAVE Reconstruction Mechanism Checks}{subsection.6.3}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces CAVE full reconstruction at matched ranks. Metrics are averaged over 15 scenes.}}{7}{table.caption.10}\protected@file@percent }
 \newlabel{tab:cave-reconstruction}{{2}{7}{CAVE full reconstruction at matched ranks. Metrics are averaged over 15 scenes}{table.caption.10}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Rank-lifted Tucker comparison on CAVE reconstruction. The table reports the first fixed-channel Tucker rank that matches each NTD-PL RMSE.}}{7}{table.caption.11}\protected@file@percent }
 \newlabel{tab:rank-lift-tucker}{{3}{7}{Rank-lifted Tucker comparison on CAVE reconstruction. The table reports the first fixed-channel Tucker rank that matches each NTD-PL RMSE}{table.caption.11}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}External HSI Validity and Boundary Cases}{7}{subsection.6.4}\protected@file@percent }
+\newlabel{subsec:external-hsi-validity}{{6.4}{7}{External HSI Validity and Boundary Cases}{subsection.6.4}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces External HSI reconstruction and completion. Columns report RMSE; gains are relative RMSE reductions over Tucker, and positive \(\Delta \)SAM favors NTD-PL.}}{7}{table.caption.12}\protected@file@percent }
 \newlabel{tab:real-hsi-robustness}{{4}{7}{External HSI reconstruction and completion. Columns report RMSE; gains are relative RMSE reductions over Tucker, and positive \(\Delta \)SAM favors NTD-PL}{table.caption.12}{}}
 \bibstyle{plainnat}
@@ -136,31 +137,27 @@
 \newlabel{eq:controlled-residual-mixture}{{44}{15}{Controlled Synthetic Mechanism Checks}{equation.44}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Linear consistency on synthetic Tucker tensors. The \(p>1\) columns report effective higher-order NTD-PL contribution.}}{15}{table.caption.19}\protected@file@percent }
 \newlabel{tab:linear-consistency-controlled}{{5}{15}{Linear consistency on synthetic Tucker tensors. The \(p>1\) columns report effective higher-order NTD-PL contribution}{table.caption.19}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Controlled nonlinear alpha sweep. Each panel uses a different candidate response to define the orthogonal residual; lower NMSE(dB) is better.}}{15}{figure.caption.20}\protected@file@percent }
-\newlabel{fig:controlled-alpha-grid}{{4}{15}{Controlled nonlinear alpha sweep. Each panel uses a different candidate response to define the orthogonal residual; lower NMSE(dB) is better}{figure.caption.20}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.2}CAVE Completion Significance and Robustness}{15}{subsection.C.2}\protected@file@percent }
-\newlabel{app:single-rank-completion}{{C.2}{15}{CAVE Completion Significance and Robustness}{subsection.C.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Representative effective NTD-PL term contributions under moderate nonlinearity, reported as percentages over ten seeds. Polynomial targets concentrate mass at the matching nonlinear degrees, while odd smooth links place most nonlinear mass on odd powers.}}{15}{table.caption.21}\protected@file@percent }
+\newlabel{tab:controlled-beta-contribution}{{6}{15}{Representative effective NTD-PL term contributions under moderate nonlinearity, reported as percentages over ten seeds. Polynomial targets concentrate mass at the matching nonlinear degrees, while odd smooth links place most nonlinear mass on odd powers}{table.caption.21}{}}
 \def\@LN@column{1}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Controlled nonlinear degree sweep. Increasing the polynomial degree helps when the residual is induced by higher-order structure.}}{16}{figure.caption.21}\protected@file@percent }
-\newlabel{fig:controlled-pmax-strip}{{5}{16}{Controlled nonlinear degree sweep. Increasing the polynomial degree helps when the residual is induced by higher-order structure}{figure.caption.21}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces NTD-PL training curves for the controlled nonlinear mechanism checks. Dashed vertical lines mark degree-activation events.}}{16}{figure.caption.22}\protected@file@percent }
-\newlabel{fig:controlled-training-curves}{{6}{16}{NTD-PL training curves for the controlled nonlinear mechanism checks. Dashed vertical lines mark degree-activation events}{figure.caption.22}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces NTD-PL training curves for the controlled nonlinear mechanism checks at \(\alpha =0.25\) and \(P=5\). Dashed vertical lines mark degree-activation events.}}{16}{figure.caption.20}\protected@file@percent }
+\newlabel{fig:controlled-training-curves}{{4}{16}{NTD-PL training curves for the controlled nonlinear mechanism checks at \(\alpha =0.25\) and \(P=5\). Dashed vertical lines mark degree-activation events}{figure.caption.20}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.2}CAVE Completion Significance and Robustness}{16}{subsection.C.2}\protected@file@percent }
+\newlabel{app:single-rank-completion}{{C.2}{16}{CAVE Completion Significance and Robustness}{subsection.C.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Significance tests for full-resolution CAVE completion at rank \((33,33,4)\). Metrics are computed on missing entries.}}{16}{table.caption.22}\protected@file@percent }
+\newlabel{tab:cave-completion-significance}{{7}{16}{Significance tests for full-resolution CAVE completion at rank \((33,33,4)\). Metrics are computed on missing entries}{table.caption.22}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {C.3}Post-Hoc Calibration Implementation}{16}{subsection.C.3}\protected@file@percent }
 \newlabel{app:posthoc-calibration-baselines}{{C.3}{16}{Post-Hoc Calibration Implementation}{subsection.C.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Post-hoc scalar calibration versus joint linked fitting on CAVE reconstruction at rank \((33,33,4)\). Gains are relative to Tucker.}}{16}{figure.caption.25}\protected@file@percent }
-\newlabel{fig:recon-calibration}{{7}{16}{Post-hoc scalar calibration versus joint linked fitting on CAVE reconstruction at rank \((33,33,4)\). Gains are relative to Tucker}{figure.caption.25}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {C.4}CAVE Beads Pseudo-RGB Visualization}{16}{subsection.C.4}\protected@file@percent }
 \newlabel{app:cave-beads-visualization}{{C.4}{16}{CAVE Beads Pseudo-RGB Visualization}{subsection.C.4}{}}
 \def\@LN@column{1}
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Representative effective NTD-PL term contributions under moderate nonlinearity, reported as percentages over ten seeds. Polynomial targets concentrate mass at the matching nonlinear degrees, while odd smooth links place most nonlinear mass on odd powers.}}{17}{table.caption.23}\protected@file@percent }
-\newlabel{tab:controlled-beta-contribution}{{6}{17}{Representative effective NTD-PL term contributions under moderate nonlinearity, reported as percentages over ten seeds. Polynomial targets concentrate mass at the matching nonlinear degrees, while odd smooth links place most nonlinear mass on odd powers}{table.caption.23}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Significance tests for full-resolution CAVE completion at rank \((33,33,4)\). Metrics are computed on missing entries.}}{17}{table.caption.24}\protected@file@percent }
-\newlabel{tab:cave-completion-significance}{{7}{17}{Significance tests for full-resolution CAVE completion at rank \((33,33,4)\). Metrics are computed on missing entries}{table.caption.24}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces CAVE beads visual comparison. Rows correspond to reconstruction and random completion at missing rate \(0.5\). Error maps show Tucker minus NTD-PL per-pixel RMSE, so positive values indicate lower NTD-PL error.}}{17}{figure.caption.26}\protected@file@percent }
-\newlabel{fig:cave-beads-recon-completion}{{8}{17}{CAVE beads visual comparison. Rows correspond to reconstruction and random completion at missing rate \(0.5\). Error maps show Tucker minus NTD-PL per-pixel RMSE, so positive values indicate lower NTD-PL error}{figure.caption.26}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Post-hoc scalar calibration versus joint linked fitting on CAVE reconstruction at rank \((33,33,4)\). Gains are relative to Tucker.}}{17}{figure.caption.23}\protected@file@percent }
+\newlabel{fig:recon-calibration}{{5}{17}{Post-hoc scalar calibration versus joint linked fitting on CAVE reconstruction at rank \((33,33,4)\). Gains are relative to Tucker}{figure.caption.23}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces CAVE beads visual comparison. Rows correspond to reconstruction and random completion at missing rate \(0.5\). Error maps show Tucker minus NTD-PL per-pixel RMSE, so positive values indicate lower NTD-PL error.}}{17}{figure.caption.24}\protected@file@percent }
+\newlabel{fig:cave-beads-recon-completion}{{6}{17}{CAVE beads visual comparison. Rows correspond to reconstruction and random completion at missing rate \(0.5\). Error maps show Tucker minus NTD-PL per-pixel RMSE, so positive values indicate lower NTD-PL error}{figure.caption.24}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {C.5}Cross-Domain Real Tensor Checks}{17}{subsection.C.5}\protected@file@percent }
 \newlabel{app:cross-domain-real-tensors}{{C.5}{17}{Cross-Domain Real Tensor Checks}{subsection.C.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Additional matched-rank real tensor reconstruction. NMSE columns are in dB; lower is better. \(\Delta \)NMSE is the Tucker-minus-NTD-PL dB gap, and NMSE gain is the relative reduction in linear NMSE; positive values favor NTD-PL.}}{17}{table.caption.25}\protected@file@percent }
+\newlabel{tab:real-tensor-reconstruction}{{8}{17}{Additional matched-rank real tensor reconstruction. NMSE columns are in dB; lower is better. \(\Delta \)NMSE is the Tucker-minus-NTD-PL dB gap, and NMSE gain is the relative reduction in linear NMSE; positive values favor NTD-PL}{table.caption.25}{}}
 \def\@LN@column{1}
-\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Additional matched-rank real tensor reconstruction. NMSE columns are in dB; lower is better. \(\Delta \)NMSE is the Tucker-minus-NTD-PL dB gap, and NMSE gain is the relative reduction in linear NMSE; positive values favor NTD-PL.}}{18}{table.caption.27}\protected@file@percent }
-\newlabel{tab:real-tensor-reconstruction}{{8}{18}{Additional matched-rank real tensor reconstruction. NMSE columns are in dB; lower is better. \(\Delta \)NMSE is the Tucker-minus-NTD-PL dB gap, and NMSE gain is the relative reduction in linear NMSE; positive values favor NTD-PL}{table.caption.27}{}}
 \gdef \@abspage@last{18}

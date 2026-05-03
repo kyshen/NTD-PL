@@ -46,10 +46,13 @@ backbone. The candidate residual families are \(g(s)=s^2\),
 \(g(s)=s^2+s^3\), \(g(s)=\sin(\kappa s)\), and
 \(g(s)=\tanh(\kappa s)\), with \(\kappa\) set from the input scale.
 
-Table~\ref{tab:controlled-beta-contribution} shows a small but consistent
-term-mass concentration effect: the dominant contribution usually lands on
-the degree that matches the injected response, while smooth odd links spread
-mass across nearby odd orders.
+The main text reports the nonlinear alpha sweep and degree sweep.
+Figure~\ref{fig:controlled-training-curves} shows that degree continuation
+activates higher powers without destabilizing the fit.
+Table~\ref{tab:controlled-beta-contribution} complements those figures with a
+small but consistent term-mass concentration effect: the dominant contribution
+usually lands on the degree that matches the injected response, while smooth
+odd links spread mass across nearby odd orders.
 
 \begin{table}[ht]
   \centering
@@ -63,35 +66,12 @@ mass across nearby odd orders.
   }
 \end{table}
 
-Figures~\ref{fig:controlled-alpha-grid} and~\ref{fig:controlled-pmax-strip}
-give the fuller nonlinear sweep behind the compact main-text figures. The
-alpha sweep shows that NTD-PL separates from linear tensor models as nonlinear
-residual energy increases; the degree sweep shows that this gain is tied to
-the expressive order of the polynomial link rather than to an arbitrary
-post-processing effect.
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=\linewidth]{figures/controlled_nonlinear_alpha_grid.pdf}
-  \caption{Controlled nonlinear alpha sweep. Each panel uses a different
-  candidate response to define the orthogonal residual; lower NMSE(dB) is
-  better.}
-  \label{fig:controlled-alpha-grid}
-\end{figure}
-
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=\linewidth]{figures/controlled_nonlinear_pmax_strip.pdf}
-  \caption{Controlled nonlinear degree sweep. Increasing the polynomial degree
-  helps when the residual is induced by higher-order structure.}
-  \label{fig:controlled-pmax-strip}
-\end{figure}
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\linewidth]{figures/controlled_nonlinear_step_strip.pdf}
+  \includegraphics[width=0.98\linewidth]{figures/controlled_nonlinear_step_strip.pdf}
   \caption{NTD-PL training curves for the controlled nonlinear mechanism
-  checks. Dashed vertical lines mark degree-activation events.}
+  checks at \(\alpha=0.25\) and \(P=5\). Dashed vertical lines mark
+  degree-activation events.}
   \label{fig:controlled-training-curves}
 \end{figure}
 
@@ -108,6 +88,8 @@ post-processing effect.
   \input{tables/controlled_beta_contribution.tex}
   }
 \end{table}
+
+\FloatBarrier
 
 \subsection{CAVE Completion Significance and Robustness}
 \label{app:single-rank-completion}

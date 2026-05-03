@@ -34,34 +34,37 @@ def _plot_panel(ax: plt.Axes, data, panel_key: str, *, show_ylabel: bool) -> Non
     std = curve["std"].fillna(0).to_numpy(dtype=float)
 
     ax.fill_between(x, y - std, y + std, color=PALETTE.ntdpl, alpha=0.08, linewidth=0)
-    ax.plot(x, y, color=PALETTE.ntdpl, linewidth=1.55)
+    ax.plot(x, y, color=PALETTE.ntdpl, linewidth=1.85)
 
     for item in transitions.itertuples(index=False):
         xpos = float(item.x)
         nearest = int(np.argmin(np.abs(x - xpos)))
-        ax.axvline(xpos, color=PALETTE.highlight, linestyle="--", linewidth=0.85, alpha=0.9)
-        ax.plot(x[nearest], y[nearest], marker="o", color=PALETTE.highlight, markersize=3.2, zorder=3)
+        ax.axvline(xpos, color=PALETTE.highlight, linestyle="--", linewidth=1.0, alpha=0.9)
+        ax.plot(x[nearest], y[nearest], marker="o", color=PALETTE.highlight, markersize=3.7, zorder=3)
 
-    ax.set_title(PANEL_LABELS.get(panel_key, panel_key), pad=1.0)
+    ax.set_title(PANEL_LABELS.get(panel_key, panel_key), pad=2.0)
     ax.set_xlim(-35, 1035)
     ax.set_ylim(0.045, 0.31)
     ax.set_xticks([0, 400, 800])
-    ax.set_ylabel("RMSE" if show_ylabel else "", labelpad=0.8)
-    ax.tick_params(axis="both", pad=0.8)
+    ax.set_ylabel("RMSE" if show_ylabel else "", labelpad=1.5)
+    ax.tick_params(axis="both", pad=1.0)
     style_axes(ax, grid=True)
 
 
 def main() -> None:
-    apply_style("compact")
+    apply_style("single_column")
     data = aggregate_nonlinear_step_grid()
     panel_order = ["poly2", "poly3", "sin", "tanh"]
 
-    fig, axes = plt.subplots(1, 4, figsize=(6.95, 1.25), sharex=True, sharey=True)
-    for idx, (ax, panel_key) in enumerate(zip(axes, panel_order, strict=True)):
-        _plot_panel(ax, data, panel_key, show_ylabel=idx == 0)
+    fig, axes = plt.subplots(2, 2, figsize=(5.48, 2.46), sharex=True, sharey=True)
+    flat_axes = axes.ravel()
+    for idx, (ax, panel_key) in enumerate(zip(flat_axes, panel_order, strict=True)):
+        _plot_panel(ax, data, panel_key, show_ylabel=idx in (0, 2))
 
-    fig.text(0.54, 0.025, "iteration", ha="center", va="bottom", color=PALETTE.border)
-    fig.subplots_adjust(left=0.055, right=0.995, bottom=0.27, top=0.79, wspace=0.18)
+    for ax in flat_axes[2:]:
+        ax.set_xlabel("iteration", labelpad=1.5)
+
+    fig.subplots_adjust(left=0.078, right=0.995, bottom=0.13, top=0.91, wspace=0.11, hspace=0.40)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     for ext in ("pdf", "png"):

@@ -27,33 +27,39 @@ form \(Y_\alpha=\sqrt{1-\alpha}\,S^\star+\sqrt{\alpha}\,\widetilde R^\star\),
 where \(S^\star\) is low-rank Tucker and \(\widetilde R^\star\) is the
 normalized component of a candidate nonlinear response that is orthogonal to
 \(S^\star\). Thus \(\alpha\) controls nonlinear residual energy rather than
-the amplitude of a raw scalar nonlinearity.  When the source is linear,
-NTD-PL reduces to Tucker up to the fitted affine link; when nonlinear
-residual energy is present, the higher-order link terms should become useful.
-Figure~\ref{fig:controlled-nonlinear-summary} shows exactly this pattern:
-NTD-PL matches Tucker on linear sources and improves as the nonlinear
-residual grows.  Figure~\ref{fig:controlled-nonlinear-gap-summary}
-summarizes the endpoint comparison against the best linear baseline. The
-formal residual construction, full alpha sweep, polynomial-degree sweep,
-degree-continuation training curves, and fitted link-term contributions are
-reported in Appendix~\ref{app:controlled-synthetic}. 
+the amplitude of a raw scalar nonlinearity. 
 
-\begin{figure}[t]
+When the source is linear, NTD-PL reduces to Tucker up to the fitted affine
+link; when nonlinear residual energy is present, the higher-order link terms
+should become useful.  Figure~\ref{fig:controlled-alpha-grid} shows this
+pattern across four residual families: NTD-PL separates from linear tensor
+baselines as \(\alpha\) increases.  Figure~\ref{fig:controlled-pmax-strip}
+then varies the maximum polynomial degree at fixed residual energy, showing
+that the gain is tied to the expressive order of the link. Degree-continuation
+curves in Appendix~\ref{app:controlled-synthetic} show that activating higher
+powers does not destabilize the fit. The formal residual construction and
+fitted link-term contributions are reported in
+Appendix~\ref{app:controlled-synthetic}. 
+
+\begin{figure}[!htbp]
   \centering
-  \includegraphics[width=0.70\linewidth]{figures/controlled_nonlinear_degree_gain_compact.pdf}
-  \caption{Controlled nonlinear tensors. NTD-PL gains over Tucker increase
-  as orthogonal nonlinear residual energy increases.}
-  \label{fig:controlled-nonlinear-summary}
+  \includegraphics[width=0.98\linewidth]{figures/controlled_nonlinear_alpha_grid.pdf}
+  \caption{Controlled nonlinear alpha sweep. Each panel uses a different
+  scalar response to define the orthogonal residual; lower NMSE(dB) is
+  better.}
+  \label{fig:controlled-alpha-grid}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[!htbp]
   \centering
-  \includegraphics[width=0.60\linewidth]{figures/controlled_nonlinear_summary_slope.pdf}
-  \caption{Endpoint controlled-tensor comparison. Each row compares the best
-  linear baseline with NTD-PL on normalized error; horizontal distance is the
-  gain in dB.}
-  \label{fig:controlled-nonlinear-gap-summary}
+  \includegraphics[width=0.98\linewidth]{figures/controlled_nonlinear_pmax_heatmap.pdf}
+  \caption{Controlled nonlinear degree-gain heatmap at \(\alpha=0.25\).
+  Cell values are Tucker minus NTD-PL NMSE(dB), so larger values favor
+  NTD-PL.}
+  \label{fig:controlled-pmax-strip}
 \end{figure}
+
+\FloatBarrier
 
 \subsection{Low-Rank Masked Completion}
 \label{subsec:lowrank-completion}
@@ -69,7 +75,7 @@ improves spectral angle on most scenes. The scene-level sign and Wilcoxon
 tests in Appendix~\ref{app:single-rank-completion} support the same
 conclusion.
 
-\begin{table}[t]
+\begin{table}[!htbp]
   \centering
   \caption{Full-resolution CAVE completion at rank \((33,33,4)\) under random
   masks. Metrics are computed on missing entries. Tucker and NTD-PL columns
@@ -79,6 +85,8 @@ conclusion.
   \scriptsize
   \resizebox{\linewidth}{!}{\input{tables/cave_completion_main.tex}}
 \end{table}
+
+\FloatBarrier
 
 \subsection{CAVE Reconstruction Mechanism Checks}
 \label{subsec:cave-reconstruction}
@@ -93,7 +101,7 @@ rank increases. This trend is the expected signature of a lightweight
 observation model: it helps most when the linear backbone is tight, and
 becomes less necessary as ordinary multilinear capacity grows.
 
-\begin{table}[t]
+\begin{table}[!htbp]
   \centering
   \caption{CAVE full reconstruction at matched ranks. Metrics are averaged
   over 15 scenes.}
@@ -101,6 +109,8 @@ becomes less necessary as ordinary multilinear capacity grows.
   \scriptsize
   \resizebox{0.88\linewidth}{!}{\input{tables/cave_reconstruction_main.tex}}
 \end{table}
+
+\FloatBarrier
 
 Two ablations clarify what the gain means.  First,
 Table~\ref{tab:rank-lift-tucker} asks how much spatial Tucker rank is needed
@@ -114,7 +124,7 @@ a fitted Tucker reconstruction improves Tucker but remains below joint fitting
 in RMSE and SAM; the comparison and implementation details are given in
 Appendix~\ref{app:posthoc-calibration-baselines}.
 
-\begin{table}[t]
+\begin{table}[!htbp]
   \centering
   \caption{Rank-lifted Tucker comparison on CAVE reconstruction. The table
   reports the first fixed-channel Tucker rank that matches each NTD-PL RMSE.}
@@ -123,10 +133,12 @@ Appendix~\ref{app:posthoc-calibration-baselines}.
   \resizebox{\linewidth}{!}{\input{tables/rank_lift_tucker_full_sweep.tex}}
 \end{table}
 
+\FloatBarrier
+
 \subsection{External HSI Validity and Boundary Cases}
 \label{subsec:external-hsi-validity}
 
-\begin{table}[t]
+\begin{table}[!htbp]
   \centering
   \caption{External HSI reconstruction and completion. Columns report RMSE;
   gains are relative RMSE reductions over Tucker, and positive \(\Delta\)SAM
@@ -145,3 +157,5 @@ scoped claim: NTD-PL is most useful under a tight rank budget when the linear
 Tucker residual is coherent enough to be modeled by a shared nonlinear link.
 Additional cross-domain checks are in
 Appendix~\ref{app:cross-domain-real-tensors}.
+
+\FloatBarrier

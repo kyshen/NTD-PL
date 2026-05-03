@@ -27,17 +27,24 @@ METHOD_ORDER = ("Tucker", "CP", "TT", "TR", "NTD-PL")
 
 def _compact_method_style(method: str) -> dict:
     style = method_style(method)
-    style.update({"linewidth": 1.05, "markersize": 2.5})
+    style.update({"linewidth": 1.25, "markersize": 3.0})
     if method == "NTD-PL":
-        style.update({"linewidth": 1.55, "markersize": 3.0, "zorder": 4})
+        style.update({"linewidth": 1.85, "markersize": 3.5, "zorder": 4})
     elif method == "Tucker":
-        style.update({"linewidth": 1.25, "zorder": 3})
+        style.update({"linewidth": 1.45, "zorder": 3})
     else:
         style.update({"alpha": 0.88, "zorder": 2})
     return style
 
 
-def _plot_panel(ax: plt.Axes, panel_data, panel_key: str, *, show_ylabel: bool) -> None:
+def _plot_panel(
+    ax: plt.Axes,
+    panel_data,
+    panel_key: str,
+    *,
+    show_ylabel: bool,
+    show_xlabel: bool,
+) -> None:
     for method in METHOD_ORDER:
         sub = panel_data.loc[panel_data["method"].eq(method)].sort_values("x")
         if sub.empty:
@@ -71,40 +78,46 @@ def _plot_panel(ax: plt.Axes, panel_data, panel_key: str, *, show_ylabel: bool) 
             label=method,
         )
 
-    ax.set_title(PANEL_LABELS.get(panel_key, panel_key), pad=1.0)
+    ax.set_title(PANEL_LABELS.get(panel_key, panel_key), pad=2.0)
     ax.set_xticks([0.10, 0.20, 0.30, 0.40])
     ax.set_xticklabels([".10", ".20", ".30", ".40"])
     ax.set_ylim(-33, -2)
     ax.set_yticks([-30, -20, -10])
-    ax.set_xlabel("")
-    ax.set_ylabel("NMSE (dB)" if show_ylabel else "", labelpad=0.8)
-    ax.tick_params(axis="both", pad=0.8)
+    ax.set_xlabel(r"residual energy $\alpha$" if show_xlabel else "", labelpad=1.5)
+    ax.set_ylabel("NMSE (dB)" if show_ylabel else "", labelpad=1.5)
+    ax.tick_params(axis="both", pad=1.0)
     style_axes(ax, grid=True)
 
 
 def main() -> None:
-    apply_style("compact")
+    apply_style("single_column")
     data = aggregate_nonlinear_alpha_grid()
     panel_order = ["poly2", "poly3", "sin", "tanh"]
 
-    fig, axes = plt.subplots(1, 4, figsize=(6.95, 1.42), sharex=True, sharey=True)
-    for idx, (ax, panel_key) in enumerate(zip(axes, panel_order, strict=True)):
+    fig, axes = plt.subplots(2, 2, figsize=(5.48, 2.72), sharex=True, sharey=True)
+    flat_axes = axes.ravel()
+    for idx, (ax, panel_key) in enumerate(zip(flat_axes, panel_order, strict=True)):
         panel_data = data.loc[data["panel"].eq(panel_key)].copy()
-        _plot_panel(ax, panel_data, panel_key, show_ylabel=idx == 0)
+        _plot_panel(
+            ax,
+            panel_data,
+            panel_key,
+            show_ylabel=idx in (0, 2),
+            show_xlabel=idx in (2, 3),
+        )
 
-    handles, labels = axes[0].get_legend_handles_labels()
+    handles, labels = flat_axes[0].get_legend_handles_labels()
     fig.legend(
         handles,
         labels,
         loc="upper center",
         ncol=5,
-        bbox_to_anchor=(0.5, 1.04),
+        bbox_to_anchor=(0.5, 1.015),
         handlelength=1.5,
-        columnspacing=0.8,
+        columnspacing=0.65,
         borderaxespad=0.0,
     )
-    fig.text(0.54, 0.025, r"nonlinear residual energy $\alpha$", ha="center", va="bottom", color=PALETTE.border)
-    fig.subplots_adjust(left=0.062, right=0.995, bottom=0.26, top=0.74, wspace=0.18)
+    fig.subplots_adjust(left=0.085, right=0.995, bottom=0.12, top=0.84, wspace=0.11, hspace=0.44)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     for ext in ("pdf", "png"):

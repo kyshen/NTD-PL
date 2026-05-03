@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.13)  3 MAY 2026 21:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.13)  4 MAY 2026 02:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1018,82 +1018,68 @@ File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 (./sections/related_work.tex) (./sections/method.tex [2])
 (./sections/theory.tex [3]) (./sections/optimization.tex [4])
 (./sections/experiments.tex
-<figures/controlled_nonlinear_degree_gain_compact.pdf, id=275, 366.26712pt x 11
-6.02234pt>
-File: figures/controlled_nonlinear_degree_gain_compact.pdf Graphic file (type p
-df)
-<use figures/controlled_nonlinear_degree_gain_compact.pdf>
-Package pdftex.def Info: figures/controlled_nonlinear_degree_gain_compact.pdf  
-used on input line 43.
-(pdftex.def)             Requested size: 278.23827pt x 88.1407pt.
-<figures/controlled_nonlinear_summary_slope.pdf, id=276, 298.69496pt x 102.4721
-4pt>
-File: figures/controlled_nonlinear_summary_slope.pdf Graphic file (type pdf)
-<use figures/controlled_nonlinear_summary_slope.pdf>
-Package pdftex.def Info: figures/controlled_nonlinear_summary_slope.pdf  used o
-n input line 51.
-(pdftex.def)             Requested size: 238.49341pt x 81.81989pt.
- [5] (./tables/cave_completion_main.tex)
-(./tables/cave_reconstruction_main.tex)
-(./tables/rank_lift_tucker_full_sweep.tex)
-(./tables/real_hsi_robustness_main.tex)) [6 <./figures/controlled_nonlinear_deg
-ree_gain_compact.pdf> <./figures/controlled_nonlinear_summary_slope.pdf>]
-[7] (./sections/limitations.tex) (./sections/conclusion.tex) (./main.bbl
-[8
-
-]) (./appendix/model_details.tex [9] (./artifacts/p-tucker.tex) [10]
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 185.
-)
-(./appendix/proofs.tex [11] [12] [13]) (./appendix/experiments.tex [14]
-(./tables/controlled_linear_consistency.tex)
-<figures/controlled_nonlinear_alpha_grid.pdf, id=438, 495.62674pt x 107.05356pt
->
+<figures/controlled_nonlinear_alpha_grid.pdf, id=276, 390.4665pt x 200.6094pt>
 File: figures/controlled_nonlinear_alpha_grid.pdf Graphic file (type pdf)
 <use figures/controlled_nonlinear_alpha_grid.pdf>
 Package pdftex.def Info: figures/controlled_nonlinear_alpha_grid.pdf  used on i
-nput line 75.
-(pdftex.def)             Requested size: 397.48499pt x 85.8553pt.
-<figures/controlled_nonlinear_pmax_strip.pdf, id=439, 495.62674pt x 92.8236pt>
-File: figures/controlled_nonlinear_pmax_strip.pdf Graphic file (type pdf)
-<use figures/controlled_nonlinear_pmax_strip.pdf>
-Package pdftex.def Info: figures/controlled_nonlinear_pmax_strip.pdf  used on i
-nput line 84.
-(pdftex.def)             Requested size: 397.48499pt x 74.4431pt.
-<figures/controlled_nonlinear_step_strip.pdf, id=440, 495.97456pt x 80.02899pt>
+nput line 46.
+(pdftex.def)             Requested size: 389.53358pt x 200.14362pt.
+<figures/controlled_nonlinear_pmax_heatmap.pdf, id=277, 366.44104pt x 99.11101p
+t>
+File: figures/controlled_nonlinear_pmax_heatmap.pdf Graphic file (type pdf)
+<use figures/controlled_nonlinear_pmax_heatmap.pdf>
+Package pdftex.def Info: figures/controlled_nonlinear_pmax_heatmap.pdf  used on
+ input line 55.
+(pdftex.def)             Requested size: 389.53358pt x 105.35658pt.
+ [5] (./tables/cave_completion_main.tex)
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [6 <./figures/controlled_nonlinear_alpha_grid.pdf> <./figures/controlled_nonli
+near_pmax_heatmap.pdf>] (./tables/cave_reconstruction_main.tex)
+(./tables/rank_lift_tucker_full_sweep.tex)
+(./tables/real_hsi_robustness_main.tex)) (./sections/limitations.tex [7])
+(./sections/conclusion.tex) (./main.bbl [8]) (./appendix/model_details.tex
+[9] (./artifacts/p-tucker.tex) [10]
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
+put line 185.
+) (./appendix/proofs.tex [11] [12] [13])
+(./appendix/experiments.tex [14] (./tables/controlled_linear_consistency.tex)
+<figures/controlled_nonlinear_step_strip.pdf, id=458, 389.74135pt x 171.51814pt
+>
 File: figures/controlled_nonlinear_step_strip.pdf Graphic file (type pdf)
 <use figures/controlled_nonlinear_step_strip.pdf>
 Package pdftex.def Info: figures/controlled_nonlinear_step_strip.pdf  used on i
-nput line 92.
-(pdftex.def)             Requested size: 397.48499pt x 64.13683pt.
+nput line 71.
+(pdftex.def)             Requested size: 389.53358pt x 171.43396pt.
 
-(./tables/controlled_beta_contribution.tex)
-(./tables/cave_completion_significance.tex) [15 <./figures/controlled_nonlinear
-_alpha_grid.pdf>]
-<figures/recon_calibration_gain_plot.pdf, id=493, 354.6403pt x 91.52278pt>
+(./tables/controlled_beta_contribution.tex) [15]
+(./tables/cave_completion_significance.tex)
+<figures/recon_calibration_gain_plot.pdf, id=474, 354.6403pt x 91.52278pt>
 File: figures/recon_calibration_gain_plot.pdf Graphic file (type pdf)
 <use figures/recon_calibration_gain_plot.pdf>
 Package pdftex.def Info: figures/recon_calibration_gain_plot.pdf  used on input
- line 158.
+ line 140.
 (pdftex.def)             Requested size: 286.18967pt x 73.8593pt.
-<figures/cave_beads_recon_completion_visual.pdf, id=495, 507.73987pt x 210.3882
+ [16 <./figures/controlled_nonlinear_step_strip.pdf>]
+<figures/cave_beads_recon_completion_visual.pdf, id=499, 507.73987pt x 210.3882
 6pt>
 File: figures/cave_beads_recon_completion_visual.pdf Graphic file (type pdf)
 <use figures/cave_beads_recon_completion_visual.pdf>
 Package pdftex.def Info: figures/cave_beads_recon_completion_visual.pdf  used o
-n input line 176.
+n input line 158.
 (pdftex.def)             Requested size: 389.53358pt x 161.41196pt.
+ (./tables/real_tensor_reconstruction_main.tex))
+(./checklist.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Underfull \vbox (badness 2050) has occurred while \output is active []
 
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Underfull \vbox (badness 2050) has occurred while \output is active []
-
- [16 <./figures/controlled_nonlinear_pmax_strip.pdf> <./figures/controlled_nonl
-inear_step_strip.pdf> <./figures/recon_calibration_gain_plot.pdf>]
-(./tables/real_tensor_reconstruction_main.tex)) (./checklist.tex [17 <./figures
-/cave_beads_recon_completion_visual.pdf>]) [18] (./main.aux)
+ [17 <./figures/recon_calibration_gain_plot.pdf> <./figures/cave_beads_recon_co
+mpletion_visual.pdf>]) [18] (./main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
@@ -1102,10 +1088,10 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 6BA32EB0DD7D96EF65BD9DD3407BDA38;5611.
  ) 
 Here is how much of TeX's memory you used:
- 28941 strings out of 467525
- 525233 string characters out of 5423209
- 946290 words of memory out of 5000000
- 56830 multiletter control sequences out of 15000+600000
+ 28923 strings out of 467525
+ 524311 string characters out of 5423209
+ 945980 words of memory out of 5000000
+ 56814 multiletter control sequences out of 15000+600000
  692630 words of font info for 305 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  89i,12n,97p,1001b,942s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -1136,10 +1122,10 @@ ive/2026/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/texlive/2026/texmf-
 dist/fonts/type1/urw/times/utmb8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/u
 rw/times/utmr8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/times/utmri8a.p
 fb>
-Output written on main.pdf (18 pages, 2902254 bytes).
+Output written on main.pdf (18 pages, 2891612 bytes).
 PDF statistics:
- 765 PDF objects out of 1000 (max. 8388607)
- 593 compressed objects within 6 object streams
- 157 named destinations out of 1000 (max. 500000)
- 61224 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 726 PDF objects out of 1000 (max. 8388607)
+ 574 compressed objects within 6 object streams
+ 155 named destinations out of 1000 (max. 500000)
+ 61214 words of extra memory for PDF output out of 61914 (max. 10000000)
 
