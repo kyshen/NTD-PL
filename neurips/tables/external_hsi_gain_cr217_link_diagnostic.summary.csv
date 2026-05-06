@@ -1,0 +1,2 @@
+domain,dataset,num_units,median_cr,mean_cr,median_d_link,mean_d_link,spearman_dlink_gain,mean_gain,median_gain,low_tercile_gain,mid_tercile_gain,high_tercile_gain
+HSI,External HSI,4,218.6751822216314,219.8081375111447,0.1258341048781385,0.11963602209292623,1.0,6.254179570380076,6.135966758514443,1.5110725924561446,9.15710090860003,12.837472188007984

@@ -169,9 +169,10 @@ images, each image is treated as one tensor unit; for object-view datasets,
 each object or instance forms a multi-view tensor unit. We do not concatenate
 unrelated images or objects into a giant tensor, since \(D_{\mathrm{link}}\)
 tests whether a single shared scalar link is coherent within one unit.
-External HSI scenes are also checked as whole cubes; Jasper Ridge, Samson, and
-Urban have positive Link Refresh scores, while Cuprite is a near-zero
-\(D_{\mathrm{link}}\) boundary case.
+External HSI scenes are also checked as whole cubes using the low-capacity
+gain--CR sweep ranks closest to the CAVE reconstruction compression ratio;
+Jasper Ridge, Samson, and Urban have positive Link Refresh scores, while
+Cuprite is a near-zero \(D_{\mathrm{link}}\) boundary case.
 
 \begin{table}[!htbp]
   \centering
@@ -190,9 +191,10 @@ Urban have positive Link Refresh scores, while Cuprite is a near-zero
     Domain & Dataset & Unit & \#Units & Med. \(D_{\mathrm{link}}\) &
     Spearman & Med. gain & Low/High gain \\
     \midrule
-    HSI & CAVE completion & scene & 15 & -- & 0.889 & -- &
-    \(-1.09/13.18\)\% \\
-    HSI & External HSI & whole cube & 4 & -- & -- & -- & -- \\
+    HSI & CAVE & scene & 15 & 0.088 & 0.654 & 12.63\% &
+    \(9.27/20.63\)\% \\
+    HSI & External HSI & whole cube & 4 & 0.126 & 1.000 & 6.14\% &
+    \(1.51/12.84\)\% \\
     Natural images & CBSD68 & image & 16 & 0.075 & 0.835 & 5.77\% &
     \(3.87/12.44\)\% \\
     Natural images & CIFAR-10 & image & 1000 & 0.008 & 0.934 & 2.35\% &
@@ -206,14 +208,17 @@ Urban have positive Link Refresh scores, while Cuprite is a near-zero
 \end{table}
 
 Table~\ref{tab:cross-domain-link-diagnostic} summarizes the cross-domain
-diagnosis. Natural images show weaker shared-link yield, especially CIFAR-10,
-whose median \(D_{\mathrm{link}}\) is close to zero and whose low-yield
-tercile has almost no gain. Object-view tensors show clearer effective units:
-COIL-100 and smallNORB have larger median \(D_{\mathrm{link}}\), stronger
-rank-matched gains, and high-yield terciles with larger improvements. These
-results support the scoped claim that NTD-PL helps when the Tucker residual
-contains shared link-like structure, rather than uniformly across all visual
-tensors. Representative units selected only by \(D_{\mathrm{link}}\) are
+diagnosis on full-observation reconstruction units, using the CAVE scene-level
+reconstruction runs and compression-matched external HSI whole-cube runs for
+the HSI rows. Natural images show weaker shared-link yield, especially
+CIFAR-10, whose median \(D_{\mathrm{link}}\) is close to zero and whose
+low-yield tercile has almost no gain. Object-view tensors show clearer
+effective units: COIL-100 and smallNORB have larger median \(D_{\mathrm{link}}\),
+stronger rank-matched gains, and high-yield terciles with larger improvements.
+These results support the scoped claim that NTD-PL
+helps when the Tucker residual contains shared link-like structure, rather
+than uniformly across all visual tensors. Representative units selected only by
+\(D_{\mathrm{link}}\) are
 reported in Appendix~\ref{app:nonhsi-link-diagnostics}: high-\(D_{\mathrm{link}}\)
 object-view units such as COIL object 91 and smallNORB category 2 instance 7
 show large gains, while low-\(D_{\mathrm{link}}\) boundary units show small or
