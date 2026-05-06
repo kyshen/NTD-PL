@@ -39,7 +39,7 @@ def _mechanism_panel(ax: plt.Axes) -> None:
     ax.bar(x, panel["mean"], yerr=panel["std"], color=colors, width=0.66, capsize=3, edgecolor="white", linewidth=0.8)
     ax.set_xticks(x, ["Tucker", "+PolyCal", "NTD-PL"])
     ax.set_ylabel("Missing RMSE")
-    ax.set_title("A. Joint link beats post-hoc calibration", loc="left", fontweight="bold")
+    ax.set_title("A. Joint link beats frozen-backbone beta refresh", loc="left", fontweight="bold")
     ax.grid(axis="y", color=COLORS["grid"], linewidth=0.7)
     ax.spines[["top", "right"]].set_visible(False)
     tucker = float(panel.loc[panel["method"].eq("Tucker"), "mean"].iloc[0])
@@ -100,15 +100,15 @@ def _stress_panel(ax: plt.Axes) -> None:
 def _diagnostic_panel(ax: plt.Axes) -> None:
     data = pd.read_csv(PROJECT_ROOT / "experiment/outputs/cave-random-completion/polycal_pairwise_scene_gains.csv")
     panel = data.loc[data["missing_rate"].eq(0.5)].copy()
-    panel["d_cal"] = panel["polycal_gain_rmse"] / panel["RMSE_tucker"].clip(lower=1e-12)
+    panel["d_beta"] = panel["polycal_gain_rmse"] / panel["RMSE_tucker"].clip(lower=1e-12)
     panel["ntdpl_gain"] = (panel["RMSE_tucker"] - panel["RMSE_ntdpl"]) / panel["RMSE_tucker"].clip(lower=1e-12)
-    x = panel["d_cal"].to_numpy() * 100.0
+    x = panel["d_beta"].to_numpy() * 100.0
     y = panel["ntdpl_gain"].to_numpy() * 100.0
     ax.scatter(x, y, s=34, color=COLORS["ntdpl"], alpha=0.88, edgecolor="white", linewidth=0.5)
     coef = np.polyfit(x, y, deg=1)
     grid = np.linspace(float(np.min(x)), float(np.max(x)), 100)
     ax.plot(grid, coef[0] * grid + coef[1], color=COLORS["accent"], linewidth=1.5)
-    ax.set_xlabel("Calibration score $D_{cal}$ (%)")
+    ax.set_xlabel(r"Fixed-backbone score $D_{\beta}$ (%)")
     ax.set_ylabel("NTD-PL RMSE gain (%)")
     ax.set_title("D. Cheap diagnostic predicts where NTD-PL helps", loc="left", fontweight="bold")
     ax.text(0.05, 0.92, "Spearman = 0.67", transform=ax.transAxes, fontsize=8, color="#333333")

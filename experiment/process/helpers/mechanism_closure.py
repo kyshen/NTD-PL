@@ -101,7 +101,7 @@ def _method_param_count(*, setting_key: str, method_name: str) -> tuple[int, str
     if method_name == "tucker":
         return base, "Backbone only"
     if method_name == f"tucker_polycal_p{MAIN_POLYCAL_DEGREE}":
-        return base + (MAIN_POLYCAL_DEGREE + 1), f"Backbone + {MAIN_POLYCAL_DEGREE + 1} post-hoc coeffs"
+        return base + (MAIN_POLYCAL_DEGREE + 1), f"Backbone + {MAIN_POLYCAL_DEGREE + 1} beta coeffs"
     if method_name == "ntdpl":
         pmax = RECON_NTDPL_PMAX if setting_key == "full_reconstruction" else COMPLETION_NTDPL_PMAX
         return base + (pmax + 1), f"Joint model, $p_{{max}}={pmax}$"
@@ -380,7 +380,7 @@ def build_mechanism_closure_tables() -> tuple[pd.DataFrame, pd.DataFrame, pd.Dat
                     "band_upper": float(item[mean_col] + item[std_col]),
                     "annotation": (
                         "Params are near-matched: Tucker vs NTD-PL differ by only a few coeffs; "
-                        "PolyCal is post-hoc on Tucker outputs."
+                        "the fixed-backbone beta refresh leaves Tucker geometry frozen."
                     ),
                 }
             )

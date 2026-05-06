@@ -1,13 +1,14 @@
 \section{Conclusion}
 
-We introduced NTD-PL, a Tucker model with a shared polynomial observation
-link. Rather than replacing multilinear low-rank structure, NTD-PL adds a
-small nonlinear layer that expresses structured residuals left by a linear
-Tucker fit. The theory explains this as tied high-order Tucker interactions,
-or a structured rank lift without an independent high-rank correction.
+We introduced NTD-PL, a Tucker enhancement with a shared polynomial observation
+link. Rather than replacing multilinear low-rank structure, NTD-PL acts as a
+shared-backbone rank lift: powers of one learned latent tensor express
+structured residuals left by a linear Tucker fit without adding an independent
+high-rank correction.
 
 The experiments support the same scoped interpretation. Controlled tensors,
-held-out CAVE completion, reconstruction mechanism checks, and external HSI
-scenes show that the link helps when a shared nonlinear residual is plausible
-under a tight rank budget, while also revealing near-linear boundary cases.
-Adaptive links and broader tensor modalities are natural next steps.
+held-out CAVE completion, reconstruction mechanism checks, residual-link
+diagnostics, and external HSI scenes show that the link helps when a shared
+nonlinear residual is plausible under a tight rank budget, while also revealing
+predicted near-linear boundary cases. Adaptive links and broader tensor
+modalities are natural next steps.

@@ -8,8 +8,26 @@ import sys
 from pathlib import Path
 from urllib.request import urlopen
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 
 DATASETS = {
+    "jasper": {
+        "description": "Jasper Ridge scene mirrored from the public hyperspectral benchmark collection.",
+        "files": [
+            {
+                "url": "https://hf-mirror.com/datasets/danaroth/jasper_ridge/resolve/main/jasperRidge2_R198.img",
+                "path": Path("data/hsi/jasperRidge2_R198.img"),
+            },
+            {
+                "url": "https://hf-mirror.com/datasets/danaroth/jasper_ridge/resolve/main/jasperRidge2_R198.hdr",
+                "path": Path("data/hsi/jasperRidge2_R198.hdr"),
+            },
+        ],
+        "mat_path": Path("data/hsi/jasperRidge2_R198.mat"),
+    },
     "samson": {
         "description": "Samson scene mirrored from the public hyperspectral benchmark collection.",
         "files": [
@@ -46,6 +64,35 @@ DATASETS = {
         ],
     },
 }
+
+
+def _convert_jasper_to_mat(spec: dict[str, object], *, force: bool) -> None:
+    mat_path = Path(spec["mat_path"])  # type: ignore[index]
+    if mat_path.exists() and not force:
+        print(f"Skip {mat_path}: already exists (sha256={_sha256(mat_path)}).")
+        return
+
+    try:
+        from scipy.io import savemat
+        from src.data.hsi import _load_hsi_from_file
+    except ImportError as exc:
+        raise ImportError("Converting Jasper Ridge to .mat requires scipy and project imports.") from exc
+
+    img_path = Path("data/hsi/jasperRidge2_R198.img")
+    cube = _load_hsi_from_file(img_path).astype("float32", copy=False)
+    n_row, n_col, n_band = cube.shape
+    mat_path.parent.mkdir(parents=True, exist_ok=True)
+    savemat(
+        mat_path,
+        {
+            "V": cube.reshape(n_row * n_col, n_band).T,
+            "nRow": n_row,
+            "nCol": n_col,
+            "nBand": n_band,
+        },
+        do_compression=True,
+    )
+    print(f"Saved {mat_path} (sha256={_sha256(mat_path)})")
 
 
 def _sha256(path: Path) -> str:
@@ -123,6 +170,8 @@ def main() -> int:
             print(f"Downloading {file_spec['url']} -> {destination}")
             _download(str(file_spec["url"]), destination)
             print(f"Saved {destination} (sha256={_sha256(destination)})")
+        if "mat_path" in spec:
+            _convert_jasper_to_mat(spec, force=args.force)
 
     return 0
 

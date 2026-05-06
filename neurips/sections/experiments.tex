@@ -2,13 +2,13 @@
 \label{sec:experiments}
 
 The empirical study tests a scoped mechanism: when a Tucker backbone is kept
-low-rank, can a shared polynomial link capture residual structure that is
-invisible to a linear Tucker observation model?  The experiments are organized
-to separate this question from a broad benchmark claim.  Controlled tensors
-isolate when the link should help, masked CAVE completion tests whether the
-learned low-rank geometry generalizes to held-out entries, CAVE reconstruction
-ablations rule out simple rank-lift and post-hoc calibration explanations,
-and external HSI scenes probe transfer and boundary cases.
+low-rank, can a shared polynomial link act as a parameter-tied rank lift for
+residual structure that is invisible to a linear Tucker observation model?  The
+experiments are organized to separate this question from a broad benchmark
+claim.  Controlled tensors isolate when the link should help, masked CAVE
+completion tests whether the learned low-rank geometry generalizes to held-out
+entries, CAVE reconstruction checks parameter efficiency and joint linked
+fitting, and external HSI scenes probe transfer and predicted boundary cases.
 
 \paragraph{Protocol.}
 Unless stated otherwise, real tensors are globally max-normalized and used
@@ -88,6 +88,32 @@ conclusion.
 
 \FloatBarrier
 
+A cheap diagnostic supports the same interpretation.  For each scene, we freeze
+the Tucker backbone, fit only the scalar polynomial coefficients on the
+observed entries, and use the resulting RMSE reduction as a fixed-backbone
+\(\beta\)-refresh score.  This is exactly one restricted NTD-PL substep with
+the latent Tucker geometry held fixed, so it isolates whether the matched-rank
+Tucker residual already contains a coherent shared scalar component.
+Table~\ref{tab:ntdpl-polycal-diagnostic} shows the same pattern directly:
+across missing rates, higher-score scenes receive larger NTD-PL gains on
+average, while the scene-level Spearman correlation remains strong throughout.
+Thus the boundary condition is empirically visible before full joint fitting:
+the link helps most when a frozen Tucker backbone already exposes a consistent
+scalar residual pattern.
+
+\begin{table}[!htbp]
+  \centering
+  \caption{Fixed-backbone \(\beta\)-refresh diagnostic on CAVE completion.
+  The score is the relative RMSE reduction obtained by updating only the
+  scalar polynomial coefficients on top of a fixed Tucker backbone. Low/mid/high
+  gains report the mean NTD-PL RMSE gain over Tucker within each score group.}
+  \label{tab:ntdpl-polycal-diagnostic}
+  \scriptsize
+  \resizebox{0.94\linewidth}{!}{\input{tables/ntdpl_polycal_diagnostic.tex}}
+\end{table}
+
+\FloatBarrier
+
 \subsection{CAVE Reconstruction Mechanism Checks}
 \label{subsec:cave-reconstruction}
 
@@ -112,17 +138,16 @@ becomes less necessary as ordinary multilinear capacity grows.
 
 \FloatBarrier
 
-Two ablations clarify what the gain means.  First,
-Table~\ref{tab:rank-lift-tucker} asks how much spatial Tucker rank is needed
-before ordinary Tucker first matches the RMSE of a lower-rank NTD-PL model,
-while holding the spectral rank fixed.  Tucker can buy back part of the RMSE
-gap by increasing rank, so NTD-PL should not be read as a replacement for rank
+The next check clarifies why the reconstruction gain is a Tucker
+enhancement rather than a simple fixed-coefficient effect.  First,
+Table~\ref{tab:rank-lift-tucker} asks how much ordinary Tucker rank is needed
+before Tucker first matches the RMSE of a lower-rank NTD-PL model, while
+holding the spectral rank fixed.  Tucker can buy back part of the RMSE gap by
+increasing rank, so NTD-PL should not be read as a replacement for rank
 selection.  The spectral-angle gap, however, remains visible at the first
-RMSE-matching Tucker ranks, suggesting that the link is not merely trading for
-a slightly larger multilinear model.  Second, post-hoc scalar calibration of
-a fitted Tucker reconstruction improves Tucker but remains below joint fitting
-in RMSE and SAM; the comparison and implementation details are given in
-Appendix~\ref{app:posthoc-calibration-baselines}.
+RMSE-matching Tucker ranks.  This supports the tied rank-lift view: NTD-PL
+reaches the same intensity error with many fewer parameters and preserves a
+different spectral geometry.
 
 \begin{table}[!htbp]
   \centering
@@ -132,6 +157,12 @@ Appendix~\ref{app:posthoc-calibration-baselines}.
   \scriptsize
   \resizebox{\linewidth}{!}{\input{tables/rank_lift_tucker_full_sweep.tex}}
 \end{table}
+
+The same comparison also makes the computational tradeoff clear.  The current
+first-order NTD-PL solver is slower than the highly optimized Tucker sweep,
+but this runtime cost is separate from the representational point: matching
+the NTD-PL RMSE with ordinary Tucker requires a substantially larger parameter
+budget and still leaves higher SAM.
 
 \FloatBarrier
 
@@ -151,11 +182,30 @@ Appendix~\ref{app:posthoc-calibration-baselines}.
 Table~\ref{tab:real-hsi-robustness} asks whether the CAVE mechanism transfers
 to other hyperspectral tensors and where the shared-link assumption weakens.
 NTD-PL improves reconstruction and completion on Jasper Ridge, Samson, and
-Urban. Cuprite is the boundary case: Tucker is already strong, leaving little
-coherent residual for a shared polynomial link. Thus the evidence supports a
-scoped claim: NTD-PL is most useful under a tight rank budget when the linear
-Tucker residual is coherent enough to be modeled by a shared nonlinear link.
-Additional cross-domain checks are in
+Urban. Cuprite is the predicted boundary case: Tucker is already strong there,
+leaving little coherent residual for a shared polynomial link. Rather than
+acting as a defensive exception, this near-linear case supports the mechanism
+statement itself. Thus the evidence supports a scoped claim: NTD-PL is most
+useful under a tight rank budget when the linear Tucker residual is coherent
+enough to be modeled by a shared nonlinear link.
+
+\begin{table}[!htbp]
+  \centering
+  \caption{Real-HSI fixed-backbone \(\beta\)-refresh diagnostic. Link score is
+  the relative RMSE reduction obtained by updating only the scalar polynomial
+  coefficients on top of a fixed matched-rank Tucker backbone; residual
+  explained is measured against the Tucker residual energy.}
+  \label{tab:real-hsi-residual-link-diagnostic}
+  \scriptsize
+  \resizebox{0.82\linewidth}{!}{\input{tables/real_hsi_residual_link_diagnostic.tex}}
+\end{table}
+
+Table~\ref{tab:real-hsi-residual-link-diagnostic} makes this boundary visible
+directly. The scalar-link diagnostic is positive on the three datasets where
+NTD-PL improves reconstruction, while Cuprite has almost no fixed-Tucker
+residual explained by a scalar polynomial and is the only negative
+reconstruction case, so the diagnostic predicts the weak-gain regime before
+full joint fitting. Additional cross-domain checks are in
 Appendix~\ref{app:cross-domain-real-tensors}.
 
 \FloatBarrier

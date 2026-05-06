@@ -108,13 +108,13 @@ Wilcoxon tests for the same protocol.
   \resizebox{\linewidth}{!}{\input{tables/cave_completion_significance.tex}}
 \end{table}
 
-\subsection{Post-Hoc Calibration Implementation}
+\subsection{Fixed-Backbone Beta-Refresh Diagnostic}
 \label{app:posthoc-calibration-baselines}
 
-The calibration baselines in Figure~\ref{fig:recon-calibration} are
-post-processing models applied to a fixed Tucker reconstruction. Let
-\(\widehat{\cY}_{\mathrm{T}}\) denote the Tucker output and \(\cY\) the target
-tensor. PolyCal fits a scalar degree-four polynomial
+The diagnostic used in the main text is a restricted NTD-PL update applied to a
+fixed Tucker backbone. Let \(\widehat{\cY}_{\mathrm{T}}\) denote the Tucker
+output and \(\cY\) the target tensor. We freeze the Tucker core and factors,
+and update only the scalar polynomial coefficients by fitting
 \[
   h_{\gamma}(x)=\sum_{p=0}^{4}\gamma_p x^p
 \]
@@ -123,25 +123,32 @@ by ridge regression on pairs
 all entries are used for this fit. In completion, the fit uses only observed
 entries and is then evaluated on held-out entries. The fitted map is applied
 entrywise to \(\widehat{\cY}_{\mathrm{T}}\); the Tucker core and factors are
-never updated.
+never updated. In other words, this score measures how much of the NTD-PL
+benefit is already visible from a single \(\beta\)-only refresh before the
+backbone is allowed to move.
 
-MLPCal uses the same fixed-input protocol, but replaces the polynomial with a
-one-dimensional MLP. The input and target scalars are standardized, then a
-single-hidden-layer tanh network with a scalar skip connection is trained with
-Adam and \(\ell_2\) weight decay on the observed calibration pairs. In the CAVE
-runs we use 16 hidden units, learning rate \(10^{-3}\), weight decay \(10^{-5}\),
-batch size 8192, at most 200,000 calibration samples, and 1500 optimization
-steps. Thus both PolyCal and MLPCal test post-hoc scalar remapping of an
-already learned Tucker tensor, while NTD-PL jointly updates the latent Tucker
-geometry under the nonlinear link.
+\subsection{Joint Link-Family Smoke Test}
+\label{app:joint-link-family}
 
-\begin{figure}[ht]
+The main model uses a polynomial link because it gives a closed-form ridge
+coefficient update and a direct Veronese rank-lift interpretation. To check
+whether the improvement is tied to the polynomial basis itself, we ran a
+small joint link-family smoke test on three CAVE scenes at spatial resolution
+\(256\times256\) and backbone rank \((18,18,3)\). The spline variant replaces
+the polynomial link by a one-dimensional piecewise-linear link with eight
+knots. Its knot values are updated by ridge regression on the current latent
+entries, while the Tucker backbone is updated jointly through the link
+derivative.
+
+\begin{table}[ht]
   \centering
-  \includegraphics[width=0.72\linewidth]{figures/recon_calibration_gain_plot.pdf}
-  \caption{Post-hoc scalar calibration versus joint linked fitting on CAVE
-  reconstruction at rank \((33,33,4)\). Gains are relative to Tucker.}
-  \label{fig:recon-calibration}
-\end{figure}
+  \caption{Joint scalar-link family smoke test on CAVE reconstruction. The
+  spline link is slightly more flexible but slower; NTD-PL is the analyzable
+  polynomial member used in the main paper.}
+  \label{tab:cave-joint-link-ablation}
+  \scriptsize
+  \resizebox{0.92\linewidth}{!}{\input{tables/cave_joint_link_ablation.tex}}
+\end{table}
 
 \subsection{CAVE Beads Pseudo-RGB Visualization}
 \label{app:cave-beads-visualization}

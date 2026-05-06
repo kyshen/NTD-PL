@@ -60,7 +60,7 @@ SCALAR_MAP = {
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Collect reconstruction-only post-hoc calibration baselines on CAVE."
+        description="Collect fixed-backbone scalar-link refresh baselines on CAVE reconstruction."
     )
     parser.add_argument("--scene-ids", default="1-15")
     parser.add_argument("--hidden-units", type=int, default=MLPCAL_HIDDEN_UNITS)

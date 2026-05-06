@@ -60,10 +60,24 @@ def _parse_rank(value: Any) -> tuple[int, int, int]:
 
 
 def _resolve_state_path(path_text: str | Path) -> Path:
-    path = Path(path_text)
+    path = Path(str(_jsonish(path_text)).strip().strip('"'))
     if path.is_absolute():
         return path
     return get_env("cave-random-completion").project_root / path
+
+
+def _series_str(frame: pd.DataFrame, *names: str) -> pd.Series:
+    for name in names:
+        if name in frame.columns:
+            return frame[name].map(_jsonish).map(lambda value: "" if value is None else str(value))
+    raise KeyError(f"Missing string columns: {names!r}")
+
+
+def _series_num(frame: pd.DataFrame, *names: str) -> pd.Series:
+    for name in names:
+        if name in frame.columns:
+            return maybe_numeric(frame[name].map(_jsonish))
+    raise KeyError(f"Missing numeric columns: {names!r}")
 
 
 def _frame_value(row: Any, *keys: str) -> Any:
@@ -76,9 +90,10 @@ def _frame_value(row: Any, *keys: str) -> Any:
             continue
         if isinstance(value, float) and np.isnan(value):
             continue
-        if isinstance(value, str) and not value.strip():
+        normalized = _jsonish(value)
+        if isinstance(normalized, str) and not normalized.strip():
             continue
-        return value
+        return normalized
     return None
 
 
@@ -133,24 +148,24 @@ def load_main_runs() -> tuple[pd.DataFrame, object]:
         )
 
     frame = runs.copy()
-    frame = frame.loc[frame["ovr.data"].astype(str) == "cave_hsi"].copy()
-    frame["method_name"] = frame["ovr.method"].astype(str)
-    frame["rank"] = frame["ovr.method.rank"].map(_parse_rank)
-    frame["scene_id"] = maybe_numeric(frame["ovr.data.id"]).astype(int)
-    frame["mask_seed"] = maybe_numeric(frame["ovr.task.seed"]).astype(int)
-    frame["missing_rate"] = maybe_numeric(frame["ovr.task.missing_rate"]).astype(float)
-    frame["RMSE_all"] = maybe_numeric(frame["RMSE_all"]).astype(float)
-    frame["RMSE_missing"] = maybe_numeric(frame["RMSE_missing"]).astype(float)
-    frame["SAM_all"] = maybe_numeric(frame["SAM_all"]).astype(float)
-    frame["SAM_missing"] = maybe_numeric(frame["SAM_missing"]).astype(float)
-    frame["NMSE_dB_all"] = maybe_numeric(frame["NMSE_dB_all"]).astype(float)
-    frame["fit_time_sec"] = maybe_numeric(frame["fit_time_sec"]).astype(float)
+    frame = frame.loc[_series_str(frame, "ovr.data", "data._name").eq("cave_hsi")].copy()
+    frame["method_name"] = _series_str(frame, "ovr.method", "method._name")
+    frame["rank"] = _series_str(frame, "ovr.method.rank", "method.rank").map(_parse_rank)
+    frame["scene_id"] = _series_num(frame, "ovr.data.id", "data.id").astype(int)
+    frame["mask_seed"] = _series_num(frame, "ovr.task.seed", "task.seed").astype(int)
+    frame["missing_rate"] = _series_num(frame, "ovr.task.missing_rate", "task.missing_rate").astype(float)
+    frame["RMSE_all"] = _series_num(frame, "RMSE_all").astype(float)
+    frame["RMSE_missing"] = _series_num(frame, "RMSE_missing").astype(float)
+    frame["SAM_all"] = _series_num(frame, "SAM_all").astype(float)
+    frame["SAM_missing"] = _series_num(frame, "SAM_missing").astype(float)
+    frame["NMSE_dB_all"] = _series_num(frame, "NMSE_dB_all").astype(float)
+    frame["fit_time_sec"] = _series_num(frame, "fit_time_sec").astype(float)
     if "NMSE_dB_missing" in frame.columns:
-        frame["NMSE_dB_missing"] = maybe_numeric(frame["NMSE_dB_missing"]).astype(float)
+        frame["NMSE_dB_missing"] = _series_num(frame, "NMSE_dB_missing").astype(float)
     else:
         frame["NMSE_dB_missing"] = np.nan
-    if "ovr.method.p_max" in frame.columns:
-        frame["p_max"] = maybe_numeric(frame["ovr.method.p_max"])
+    if "ovr.method.p_max" in frame.columns or "method.p_max" in frame.columns:
+        frame["p_max"] = _series_num(frame, "ovr.method.p_max", "method.p_max")
     else:
         frame["p_max"] = np.nan
 

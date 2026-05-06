@@ -43,6 +43,11 @@ def _cpu_intensive_child_env() -> dict[str, str]:
     return env
 
 
+def _default_parallel_jobs(*, reserve: int = 2, cap: int = 12) -> int:
+    logical = os.cpu_count() or 2
+    return max(1, min(cap, logical - reserve))
+
+
 def _run_command(command: list[str], cwd: Path | None = None, env: dict[str, str] | None = None) -> None:
     subprocess.run(
         command,
@@ -586,4 +591,6 @@ def run_real_hsi_robustness(mode: str = "run") -> None:
         ntdpl_groups=ntdpl_groups,
         common=common,
         mode=mode,
+        benchmark_parallel_jobs=_default_parallel_jobs(cap=6),
+        ntdpl_parallel_jobs=_default_parallel_jobs(cap=6),
     )
