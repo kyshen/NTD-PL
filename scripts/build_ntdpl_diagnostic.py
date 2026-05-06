@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 from scipy.stats import pearsonr, spearmanr
 
@@ -12,6 +13,12 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 def _fmt_pct(value: float) -> str:
     return f"{100.0 * value:.2f}"
+
+
+def _residual_link_score(rmse_tucker: pd.Series, rmse_polycal: pd.Series) -> pd.Series:
+    ratio = (rmse_polycal.astype(float) ** 2) / (rmse_tucker.astype(float).clip(lower=1e-12) ** 2)
+    ratio = ratio.clip(lower=1e-12)
+    return 10.0 * np.log10(1.0 / ratio)
 
 
 def build_diagnostic(input_csv: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -33,13 +40,13 @@ def build_diagnostic(input_csv: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
     bin_rows: list[dict[str, float | int | str]] = []
     for missing_rate, panel in frame.groupby("missing_rate", sort=True):
         panel = panel.copy()
-        panel["beta_refresh_score"] = panel["polycal_gain_rmse"] / panel["RMSE_tucker"].clip(lower=1e-12)
+        panel["link_score_db"] = _residual_link_score(panel["RMSE_tucker"], panel["RMSE_polycal"])
         panel["ntdpl_gain"] = (panel["RMSE_tucker"] - panel["RMSE_ntdpl"]) / panel["RMSE_tucker"].clip(lower=1e-12)
         panel["joint_extra_gain"] = panel["joint_extra_gain_rmse"] / panel["RMSE_tucker"].clip(lower=1e-12)
 
         for target in ("ntdpl_gain", "joint_extra_gain"):
-            pearson = pearsonr(panel["beta_refresh_score"], panel[target])
-            spearman = spearmanr(panel["beta_refresh_score"], panel[target])
+            pearson = pearsonr(panel["link_score_db"], panel[target])
+            spearman = spearmanr(panel["link_score_db"], panel[target])
             rows.append(
                 {
                     "missing_rate": float(missing_rate),
@@ -52,13 +59,13 @@ def build_diagnostic(input_csv: Path) -> tuple[pd.DataFrame, pd.DataFrame]:
                 }
             )
 
-        panel["score_tertile"] = pd.qcut(panel["beta_refresh_score"], 3, labels=("low", "mid", "high"))
+        panel["score_tertile"] = pd.qcut(panel["link_score_db"], 3, labels=("low", "mid", "high"))
         for tertile, subset in panel.groupby("score_tertile", observed=True):
             bin_rows.append(
                 {
                     "missing_rate": float(missing_rate),
                     "score_tertile": str(tertile),
-                    "beta_refresh_score_mean": float(subset["beta_refresh_score"].mean()),
+                    "link_score_db_mean": float(subset["link_score_db"].mean()),
                     "ntdpl_gain_mean": float(subset["ntdpl_gain"].mean()),
                     "joint_extra_gain_mean": float(subset["joint_extra_gain"].mean()),
                     "n_scenes": int(subset["scene_id"].nunique()),
@@ -72,7 +79,7 @@ def write_latex(summary: pd.DataFrame, bins: pd.DataFrame, output_tex: Path) -> 
     lines = [
         r"\begin{tabular}{@{}c c c c c c@{}}",
         r"\toprule",
-        r"$\rho$ & Spearman $\rho_s$ & Low-score gain & Mid-score gain & High-score gain & Scenes\\",
+        r"$\rho$ & Spearman $\rho_s$ & Low-yield gain & Mid-yield gain & High-yield gain & Scenes\\",
         r"\midrule",
     ]
     target_summary = summary.loc[summary["target"].eq("ntdpl_gain")].copy()
@@ -92,7 +99,7 @@ def write_latex(summary: pd.DataFrame, bins: pd.DataFrame, output_tex: Path) -> 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Build a fixed-backbone beta-refresh diagnostic table for NTD-PL gains."
+        description="Build a scalar-link yield diagnostic table for NTD-PL gains."
     )
     parser.add_argument(
         "--input-csv",

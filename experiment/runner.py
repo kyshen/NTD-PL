@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime
 import os
 import shutil
 import subprocess
@@ -301,7 +302,11 @@ def _run_project(
             full_overrides = (common or []) + ["exp_mode=benchmark"] + group_overrides
             if _group_complete_from_cfgs(benchmark_cfgs, [f"exp={exp}", *full_overrides]):
                 continue
-            benchmark_commands.append(command_prefix + ["exp_mode=benchmark"] + group_overrides)
+            unique_dir = (
+                f"hydra.sweep.dir=multirun/{exp}/benchmark/"
+                f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S-%f')}"
+            )
+            benchmark_commands.append(command_prefix + [unique_dir, "exp_mode=benchmark"] + group_overrides)
         _run_commands_parallel(
             benchmark_commands,
             cwd=env.project_root,
@@ -317,7 +322,11 @@ def _run_project(
             full_overrides = (common or []) + ["exp_mode=run"] + group_overrides
             if _group_complete_from_cfgs(ntdpl_cfgs, [f"exp={exp}", *full_overrides]):
                 continue
-            ntdpl_commands.append(command_prefix + ["exp_mode=run"] + group_overrides)
+            unique_dir = (
+                f"hydra.sweep.dir=multirun/{exp}/run/"
+                f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S-%f')}"
+            )
+            ntdpl_commands.append(command_prefix + [unique_dir, "exp_mode=run"] + group_overrides)
         _run_commands_parallel(
             ntdpl_commands,
             cwd=env.project_root,
@@ -546,36 +555,11 @@ def run_real_hsi_robustness(mode: str = "run") -> None:
                 "method=tucker",
             ]
         )
-        benchmark_groups.append(
-            dataset_overrides
-            + [
-                "task=random-missing-completion",
-                "task.log_level=1",
-                "task.seed=0,1,2",
-                "task.missing_rate=0.5",
-                "method=tucker",
-            ]
-        )
         ntdpl_groups.append(
             dataset_overrides
             + [
                 "task=decompose",
                 "task.log_level=0",
-                "method=ntdpl",
-                "method.p_max=4",
-                "method.init=tucker",
-                "method.use_continuation=true",
-                "method.factor_normalize=true",
-                "method.beta_update_method=ridge_lstsq",
-            ]
-        )
-        ntdpl_groups.append(
-            dataset_overrides
-            + [
-                "task=random-missing-completion",
-                "task.log_level=1",
-                "task.seed=0,1,2",
-                "task.missing_rate=0.5",
                 "method=ntdpl",
                 "method.p_max=4",
                 "method.init=tucker",

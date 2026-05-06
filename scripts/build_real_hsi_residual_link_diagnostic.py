@@ -69,6 +69,17 @@ def _normalize_global_max(cube: np.ndarray) -> np.ndarray:
     return cube / scale
 
 
+def _compression_ratio(shape: tuple[int, int, int], rank: tuple[int, int, int]) -> float:
+    params = int(np.prod(rank)) + sum(int(dim) * int(rk) for dim, rk in zip(shape, rank))
+    return float(np.prod(shape)) / max(float(params), 1.0)
+
+
+def _residual_link_score_from_rmse(rmse_tucker: float, rmse_poly: float) -> float:
+    ratio = (float(rmse_poly) ** 2) / max(float(rmse_tucker) ** 2, 1e-12)
+    ratio = max(ratio, 1e-12)
+    return 10.0 * np.log10(1.0 / ratio)
+
+
 def _fit_tucker(cube: np.ndarray, rank: tuple[int, int, int], *, n_iter_max: int) -> np.ndarray:
     method = TuckerDecomposition(
         rank=rank,
@@ -130,21 +141,68 @@ def _load_gain_table(path: Path) -> pd.DataFrame:
 
 def _format_table(frame: pd.DataFrame) -> str:
     lines = [
-        r"\begin{tabular}{@{}l c c c c@{}}",
+        r"\begin{tabular}{@{}l c c c@{}}",
         r"\toprule",
-        r"Dataset & Beta-refresh score & Residual explained & NTD-PL gain & \(\Delta\)SAM \\",
+        r"Dataset & Residual-link score & NTD-PL gain & \(\Delta\)SAM \\",
         r"\midrule",
     ]
     for row in frame.itertuples(index=False):
         lines.append(
             f"{row.dataset_label} & "
-            f"{100.0 * row.link_score:.1f}\\% & "
-            f"{100.0 * row.residual_explained:.1f}\\% & "
+            f"{row.link_score:.2f} & "
             f"{row.ntdpl_gain_pct:.1f}\\% & "
             f"{row.delta_sam:.2f}\\\\"
         )
     lines.extend([r"\bottomrule", r"\end{tabular}"])
     return "\n".join(lines) + "\n"
+
+
+def merge_into_main_table(main_csv: Path, out_tex: Path, frame: pd.DataFrame) -> None:
+    main = pd.read_csv(main_csv).copy()
+    link = frame.loc[:, ["dataset", "link_score"]].copy()
+    merged = main.merge(link, on="dataset", how="left")
+    lines = [
+        r"\begin{tabular}{@{}l c c c c c@{}}",
+        r"\toprule",
+        r"Dataset & CR & Tucker & NTD-PL & Gain & $S_{\mathrm{link}}$ \\",
+        r"\midrule",
+    ]
+    for row in merged.itertuples(index=False):
+        dataset_name = str(row.dataset)
+        shape = tuple(int(v) for v in _load_hsi_from_file(PROJECT_ROOT / REAL_HSI_DATA_PATHS[dataset_name]).shape)
+        rank = completion_rank_for_dataset(PROJECT_ROOT, dataset_name)
+        cr = _compression_ratio(shape, rank)
+        tucker = float(row.tucker_rmse)
+        ntdpl = float(row.ntdpl_rmse)
+        gain = float(row.gain_pct)
+        link_score = float(row.link_score)
+        tucker_text = f"{tucker:.4f}"
+        ntdpl_text = f"{ntdpl:.4f}"
+        if tucker <= ntdpl:
+            tucker_text = rf"\textbf{{{tucker_text}}}"
+        else:
+            ntdpl_text = rf"\textbf{{{ntdpl_text}}}"
+        gain_text = f"{gain:.2f}\\%"
+        if gain > 0.0:
+            gain_text = rf"\textbf{{{gain_text}}}"
+        link_text = f"{link_score:.2f}"
+        if link_score > 0.0:
+            link_text = rf"\textbf{{{link_text}}}"
+        lines.append(
+            " & ".join(
+                [
+                    str(row.dataset_label),
+                    f"{cr:.1f}",
+                    tucker_text,
+                    ntdpl_text,
+                    gain_text,
+                    link_text,
+                ]
+            )
+            + r" \\"
+        )
+    lines.extend([r"\bottomrule", r"\end{tabular}"])
+    out_tex.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def _format_summary(frame: pd.DataFrame) -> str:
@@ -199,6 +257,7 @@ def _build_one(
     corrected_residual = cube - poly
     residual_energy = float(np.mean(residual**2))
     residual_explained = 1.0 - float(np.mean(corrected_residual**2)) / max(residual_energy, 1e-12)
+    link_score = _residual_link_score_from_rmse(rmse_tucker, rmse_poly)
 
     gain_row = gains.loc[gains["dataset"].eq(spec.name)].iloc[0]
     return {
@@ -209,7 +268,7 @@ def _build_one(
         "rmse_polycal_refit": rmse_poly,
         "sam_tucker_refit": sam_tucker,
         "sam_polycal_refit": sam_poly,
-        "link_score": (rmse_tucker - rmse_poly) / max(rmse_tucker, 1e-12),
+        "link_score": link_score,
         "residual_explained": residual_explained,
         "ntdpl_gain_pct": float(gain_row["gain_pct"]),
         "delta_sam": float(gain_row["delta_sam"]),
@@ -273,7 +332,7 @@ def build(
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Build real-HSI fixed-backbone beta-refresh diagnostics for NTD-PL."
+        description="Build real-HSI link-yield diagnostics for NTD-PL."
     )
     parser.add_argument("--degree", type=int, default=4)
     parser.add_argument("--lambda-reg", type=float, default=1e-6)
@@ -319,6 +378,11 @@ def main() -> None:
     frame.to_csv(out_prefix.with_suffix(".csv"), index=False)
     out_prefix.with_suffix(".tex").write_text(_format_table(frame), encoding="utf-8")
     out_prefix.with_suffix(".summary.tex").write_text(_format_summary(frame), encoding="utf-8")
+    merge_into_main_table(
+        PROJECT_ROOT / "experiment/outputs/real-hsi-robustness/real_hsi_robustness_main_table_numeric.csv",
+        PROJECT_ROOT / "neurips/tables/real_hsi_robustness_main.tex",
+        frame,
+    )
     print(f"Wrote {out_prefix}.csv, .tex, and .summary.tex")
 
 

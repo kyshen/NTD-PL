@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.13)  6 MAY 2026 21:30
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.13)  7 MAY 2026 01:18
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -832,60 +832,70 @@ Package microtype Info: Loading generic protrusion settings for font family
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 57.
  (c:/texlive/2026/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-)) (./sections/related_work.tex) (./sections/method.tex [2]) (./sections/theory.tex [3]) (./sections/optimization.tex [4]) (./sections/experiments.tex
-<figures/controlled_nonlinear_alpha_grid.pdf, id=280, 390.4665pt x 123.49731pt>
+)) (./sections/related_work.tex) (./sections/method.tex [2]) (./sections/theory.tex [3]) (./sections/optimization.tex [4]) (./sections/experiments.tex [5]
+<figures/controlled_nonlinear_alpha_grid.pdf, id=288, 386.96906pt x 123.49731pt>
 File: figures/controlled_nonlinear_alpha_grid.pdf Graphic file (type pdf)
 <use figures/controlled_nonlinear_alpha_grid.pdf>
-Package pdftex.def Info: figures/controlled_nonlinear_alpha_grid.pdf  used on input line 46.
-(pdftex.def)             Requested size: 389.53358pt x 123.21057pt.
-<figures/controlled_nonlinear_pmax_heatmap.pdf, id=281, 371.70181pt x 83.87648pt>
+Package pdftex.def Info: figures/controlled_nonlinear_alpha_grid.pdf  used on input line 60.
+(pdftex.def)             Requested size: 389.53358pt x 124.32426pt.
+<figures/controlled_nonlinear_pmax_heatmap.pdf, id=289, 377.25381pt x 83.87648pt>
 File: figures/controlled_nonlinear_pmax_heatmap.pdf Graphic file (type pdf)
 <use figures/controlled_nonlinear_pmax_heatmap.pdf>
-Package pdftex.def Info: figures/controlled_nonlinear_pmax_heatmap.pdf  used on input line 55.
-(pdftex.def)             Requested size: 389.53358pt x 87.90266pt.
- [5] (./tables/cave_completion_main.tex) (./tables/ntdpl_polycal_diagnostic.tex) [6 <./figures/controlled_nonlinear_alpha_grid.pdf> <./figures/controlled_nonlinear_pmax_heatmap.pdf>]
-<figures/cave_reconstruction_capacity.pdf, id=350, 495.29956pt x 147.48788pt>
+Package pdftex.def Info: figures/controlled_nonlinear_pmax_heatmap.pdf  used on input line 69.
+(pdftex.def)             Requested size: 389.53358pt x 86.60619pt.
+ (./tables/cave_completion_main.tex) (./tables/ntdpl_polycal_diagnostic.tex) [6 <./figures/controlled_nonlinear_alpha_grid.pdf> <./figures/controlled_nonlinear_pmax_heatmap.pdf>]
+<figures/cave_reconstruction_capacity.pdf, id=347, 500.0517pt x 147.48788pt>
 File: figures/cave_reconstruction_capacity.pdf Graphic file (type pdf)
 <use figures/cave_reconstruction_capacity.pdf>
-Package pdftex.def Info: figures/cave_reconstruction_capacity.pdf  used on input line 132.
-(pdftex.def)             Requested size: 389.53358pt x 115.99654pt.
- (./tables/rank_lift_tucker_full_sweep.tex) (./tables/real_hsi_robustness_main.tex) [7 <./figures/cave_reconstruction_capacity.pdf>] (./tables/real_hsi_residual_link_diagnostic.tex)) (./sections/limitations.tex) (./sections/conclusion.tex) [8] (./main.bbl [9]) (./appendix/model_details.tex (./artifacts/p-tucker.tex) [10] [11]
+Package pdftex.def Info: figures/cave_reconstruction_capacity.pdf  used on input line 144.
+(pdftex.def)             Requested size: 389.53358pt x 114.8938pt.
+ (./tables/rank_lift_tucker_full_sweep.tex)
+Underfull \vbox (badness 4859) has occurred while \output is active []
+
+
+Underfull \vbox (badness 4859) has occurred while \output is active []
+
+ [7 <./figures/cave_reconstruction_capacity.pdf>]
+<figures/cave_link_yield_scatter.pdf, id=373, 308.63007pt x 199.90057pt>
+File: figures/cave_link_yield_scatter.pdf Graphic file (type pdf)
+<use figures/cave_link_yield_scatter.pdf>
+Package pdftex.def Info: figures/cave_link_yield_scatter.pdf  used on input line 207.
+(pdftex.def)             Requested size: 286.18967pt x 185.3657pt.
+ (./tables/real_hsi_robustness_main.tex)) (./sections/limitations.tex) (./sections/conclusion.tex [8 <./figures/cave_link_yield_scatter.pdf>]) (./main.bbl [9]) (./appendix/model_details.tex (./artifacts/p-tucker.tex) [10] [11]
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 185.
-) (./appendix/proofs.tex [12] [13] [14]) (./appendix/experiments.tex (./tables/controlled_linear_consistency.tex)
-<figures/controlled_nonlinear_step_strip.pdf, id=468, 389.74135pt x 110.11754pt>
+) (./appendix/proofs.tex [12] [13] [14]) (./appendix/experiments.tex [15] (./tables/controlled_linear_consistency.tex)
+<figures/controlled_nonlinear_step_strip.pdf, id=529, 389.74135pt x 110.11754pt>
 File: figures/controlled_nonlinear_step_strip.pdf Graphic file (type pdf)
 <use figures/controlled_nonlinear_step_strip.pdf>
 Package pdftex.def Info: figures/controlled_nonlinear_step_strip.pdf  used on input line 71.
 (pdftex.def)             Requested size: 389.53358pt x 110.06349pt.
- (./tables/controlled_beta_contribution.tex) [15] [16 <./figures/controlled_nonlinear_step_strip.pdf>] (./tables/cave_completion_significance.tex) (./tables/cave_joint_link_ablation.tex)
-<figures/cave_beads_recon_completion_visual.pdf, id=510, 507.73987pt x 210.38826pt>
+ (./tables/controlled_beta_contribution.tex) [16 <./figures/controlled_nonlinear_step_strip.pdf>] (./tables/cave_completion_significance.tex) (./tables/cave_joint_link_ablation.tex) [17]
+<figures/cave_beads_recon_completion_visual.pdf, id=566, 507.73987pt x 210.38826pt>
 File: figures/cave_beads_recon_completion_visual.pdf Graphic file (type pdf)
 <use figures/cave_beads_recon_completion_visual.pdf>
-Package pdftex.def Info: figures/cave_beads_recon_completion_visual.pdf  used on input line 165.
+Package pdftex.def Info: figures/cave_beads_recon_completion_visual.pdf  used on input line 173.
 (pdftex.def)             Requested size: 389.53358pt x 161.41196pt.
- [17
-
-] (./tables/real_tensor_reconstruction_main.tex)) (./checklist.tex [18 <./figures/cave_beads_recon_completion_visual.pdf>]) [19] (./main.aux)
+ (./tables/real_tensor_reconstruction_main.tex)) (./checklist.tex [18 <./figures/cave_beads_recon_completion_visual.pdf>]) [19] (./main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 1E390DCB159AABCF0086089D79F076EC;5834.
+(rerunfilecheck)             Checksum: 2EA846A6FF5C771D5D10BC9F33130C10;5761.
  ) 
 Here is how much of TeX's memory you used:
- 28947 strings out of 467525
- 525143 string characters out of 5423209
- 947924 words of memory out of 5000000
- 56824 multiletter control sequences out of 15000+600000
+ 28948 strings out of 467525
+ 525163 string characters out of 5423209
+ 944571 words of memory out of 5000000
+ 56828 multiletter control sequences out of 15000+600000
  692760 words of font info for 307 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  89i,12n,97p,1041b,942s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/stmaryrd/stmary10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (19 pages, 2876945 bytes).
+Output written on main.pdf (19 pages, 2896670 bytes).
 PDF statistics:
- 732 PDF objects out of 1000 (max. 8388607)
- 582 compressed objects within 6 object streams
+ 781 PDF objects out of 1000 (max. 8388607)
+ 591 compressed objects within 6 object streams
  159 named destinations out of 1000 (max. 500000)
- 61222 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 61227 words of extra memory for PDF output out of 61914 (max. 10000000)
 

@@ -405,6 +405,30 @@ FIGURE_REGISTRY = [
     ),
     FigureJob(
         spec=LineGridSpec(
+            figure_id="gain_cr_curves",
+            family="line_grid",
+            title="Gain versus compression ratio",
+            subtitle=None,
+            export=ExportTarget(
+                section="main",
+                stem="gain_cr_curves",
+                role="double_column",
+            ),
+            latex_path="./inputs/figures/main/gain_cr_curves.pdf",
+            latex_width="\\textwidth",
+            height=2.9,
+            shared_legend=False,
+            panels=(
+                PanelSpec("CAVE", "CAVE", "Compression ratio", "RMSE gain (%)"),
+                PanelSpec("External HSI", "External HSI", "Compression ratio", "RMSE gain (%)"),
+            ),
+            method_order=("series",),
+            recommended_pairing="Main-text gain-CR sweep for CAVE and external HSI.",
+        ),
+        aggregate_key="gain_cr_curves",
+    ),
+    FigureJob(
+        spec=LineGridSpec(
             figure_id="real_hsi_robustness_overview",
             family="line_grid",
             title="Cross-dataset robustness overview on real HSI",

@@ -5,59 +5,45 @@
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
-\bibitem[Bioucas-Dias et~al.(2012)Bioucas-Dias, Plaza, Dobigeon, Parente, Du,
-  Gader, and Chanussot]{BioucasDias2012HyperspectralUnmixing}
-Jos{\'e}~M. Bioucas-Dias, Antonio Plaza, Nicolas Dobigeon, Mario Parente, Qian
-  Du, Paul Gader, and Jocelyn Chanussot.
-\newblock Hyperspectral unmixing overview: Geometrical, statistical, and sparse
-  regression-based approaches.
-\newblock \emph{IEEE Journal of Selected Topics in Applied Earth Observations
-  and Remote Sensing}, 5\penalty0 (2):\penalty0 354--379, 2012.
+\bibitem[Bioucas-Dias et~al.(2012)Bioucas-Dias, Plaza, Dobigeon, Parente, Du, Gader, and Chanussot]{BioucasDias2012HyperspectralUnmixing}
+Jos{\'e}~M. Bioucas-Dias, Antonio Plaza, Nicolas Dobigeon, Mario Parente, Qian Du, Paul Gader, and Jocelyn Chanussot.
+\newblock Hyperspectral unmixing overview: Geometrical, statistical, and sparse regression-based approaches.
+\newblock \emph{IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing}, 5\penalty0 (2):\penalty0 354--379, 2012.
 \newblock \doi{10.1109/JSTARS.2012.2194696}.
 
 \bibitem[Boyd and Chua(1985)]{Boyd1985FadingMemory}
 Stephen Boyd and Leon~O. Chua.
-\newblock Fading memory and the problem of approximating nonlinear operators
-  with volterra series.
-\newblock \emph{IEEE Transactions on Circuits and Systems}, 32\penalty0
-  (11):\penalty0 1150--1161, 1985.
+\newblock Fading memory and the problem of approximating nonlinear operators with volterra series.
+\newblock \emph{IEEE Transactions on Circuits and Systems}, 32\penalty0 (11):\penalty0 1150--1161, 1985.
 \newblock \doi{10.1109/TCS.1985.1085649}.
 
-\bibitem[De~Lathauwer et~al.(2000)De~Lathauwer, De~Moor, and
-  Vandewalle]{DeLathauwer2000MLSVD}
+\bibitem[De~Lathauwer et~al.(2000)De~Lathauwer, De~Moor, and Vandewalle]{DeLathauwer2000MLSVD}
 Lieven De~Lathauwer, Bart De~Moor, and Joos Vandewalle.
 \newblock A multilinear singular value decomposition.
-\newblock \emph{SIAM Journal on Matrix Analysis and Applications}, 21\penalty0
-  (4):\penalty0 1253--1278, 2000.
+\newblock \emph{SIAM Journal on Matrix Analysis and Applications}, 21\penalty0 (4):\penalty0 1253--1278, 2000.
 \newblock \doi{10.1137/S0895479896305696}.
 
 \bibitem[Debevec and Malik(1997)]{Debevec1997HDR}
 Paul~E. Debevec and Jitendra Malik.
 \newblock Recovering high dynamic range radiance maps from photographs.
-\newblock In \emph{Proceedings of the 24th Annual Conference on Computer
-  Graphics and Interactive Techniques}, SIGGRAPH '97, pages 369--378, 1997.
+\newblock In \emph{Proceedings of the 24th Annual Conference on Computer Graphics and Interactive Techniques}, SIGGRAPH '97, pages 369--378, 1997.
 \newblock \doi{10.1145/258734.258884}.
 
 \bibitem[Deng et~al.(2016)Deng, Liu, Batselier, Kwok, and Wong]{deng2016storm}
 Jian Deng, Haotian Liu, Kim Batselier, Yu-Kwong Kwok, and Ngai Wong.
-\newblock Storm: a nonlinear model order reduction method via symmetric tensor
-  decomposition.
-\newblock In \emph{2016 21st Asia and South Pacific design automation
-  conference (ASP-DAC)}, pages 557--562. IEEE, 2016.
+\newblock Storm: a nonlinear model order reduction method via symmetric tensor decomposition.
+\newblock In \emph{2016 21st Asia and South Pacific design automation conference (ASP-DAC)}, pages 557--562. IEEE, 2016.
 
 \bibitem[Grossberg and Nayar(2004)]{Grossberg2004CameraResponse}
 Michael~D. Grossberg and Shree~K. Nayar.
 \newblock Modeling the space of camera response functions.
-\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
-  Intelligence}, 26\penalty0 (10):\penalty0 1272--1282, 2004.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine Intelligence}, 26\penalty0 (10):\penalty0 1272--1282, 2004.
 \newblock \doi{10.1109/TPAMI.2004.88}.
 
-\bibitem[Heylen et~al.(2014)Heylen, Parente, and
-  Gader]{Heylen2014NonlinearUnmixing}
+\bibitem[Heylen et~al.(2014)Heylen, Parente, and Gader]{Heylen2014NonlinearUnmixing}
 Rob Heylen, Mario Parente, and Paul Gader.
 \newblock A review of nonlinear hyperspectral unmixing methods.
-\newblock \emph{IEEE Journal of Selected Topics in Applied Earth Observations
-  and Remote Sensing}, 7\penalty0 (6):\penalty0 1844--1868, 2014.
+\newblock \emph{IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing}, 7\penalty0 (6):\penalty0 1844--1868, 2014.
 \newblock \doi{10.1109/JSTARS.2014.2320576}.
 
 \bibitem[Hong et~al.(2020)Hong, Kolda, and Duersch]{hong2020generalized}
@@ -78,84 +64,63 @@ Bin Liu, Lirong He, Shandian Zhe, Yingmin Li, and Zenglin Xu.
 
 \bibitem[Liu et~al.(2015)Liu, Daniel, and Wong]{liu2015model}
 Haotian Liu, Luca Daniel, and Ngai Wong.
-\newblock Model reduction and simulation of nonlinear circuits via tensor
-  decomposition.
-\newblock \emph{IEEE Transactions on Computer-Aided Design of Integrated
-  Circuits and Systems}, 34\penalty0 (7):\penalty0 1059--1069, 2015.
+\newblock Model reduction and simulation of nonlinear circuits via tensor decomposition.
+\newblock \emph{IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems}, 34\penalty0 (7):\penalty0 1059--1069, 2015.
 
-\bibitem[Liu et~al.(2013)Liu, Musialski, Wonka, and
-  Ye]{Liu2013TensorCompletion}
+\bibitem[Liu et~al.(2013)Liu, Musialski, Wonka, and Ye]{Liu2013TensorCompletion}
 Ji~Liu, Przemyslaw Musialski, Peter Wonka, and Jieping Ye.
 \newblock Tensor completion for estimating missing values in visual data.
-\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
-  Intelligence}, 35\penalty0 (1):\penalty0 208--220, 2013.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine Intelligence}, 35\penalty0 (1):\penalty0 208--220, 2013.
 \newblock \doi{10.1109/TPAMI.2012.39}.
 
 \bibitem[Oseledets(2011)]{oseledets2011}
 Ivan~V. Oseledets.
 \newblock Tensor-train decomposition.
-\newblock \emph{SIAM Journal on Scientific Computing}, 33\penalty0
-  (5):\penalty0 2295--2317, 2011.
+\newblock \emph{SIAM Journal on Scientific Computing}, 33\penalty0 (5):\penalty0 2295--2317, 2011.
 
 \bibitem[Pan et~al.(2020)Pan, Wang, and Zhe]{pan2020streaming}
 Zhimeng Pan, Zheng Wang, and Shandian Zhe.
 \newblock Streaming nonlinear bayesian tensor decomposition.
-\newblock In \emph{Conference on Uncertainty in Artificial Intelligence}, pages
-  490--499. PMLR, 2020.
+\newblock In \emph{Conference on Uncertainty in Artificial Intelligence}, pages 490--499. PMLR, 2020.
 
-\bibitem[Saragadam et~al.(2024)Saragadam, Balestriero, Veeraraghavan, and
-  Baraniuk]{saragadam2024deeptensor}
-Vishwanath Saragadam, Randall Balestriero, Ashok Veeraraghavan, and Richard~G
-  Baraniuk.
+\bibitem[Saragadam et~al.(2024)Saragadam, Balestriero, Veeraraghavan, and Baraniuk]{saragadam2024deeptensor}
+Vishwanath Saragadam, Randall Balestriero, Ashok Veeraraghavan, and Richard~G Baraniuk.
 \newblock Deeptensor: Low-rank tensor decomposition with deep network priors.
-\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
-  Intelligence}, 46\penalty0 (12):\penalty0 10337--10348, 2024.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine Intelligence}, 46\penalty0 (12):\penalty0 10337--10348, 2024.
 
-\bibitem[Sidiropoulos et~al.(2017)Sidiropoulos, De~Lathauwer, Fu, Huang,
-  Papalexakis, and Faloutsos]{Sidiropoulos2017TSP}
-Nicholas~D. Sidiropoulos, Lieven De~Lathauwer, Xiao Fu, Kejun Huang,
-  Evangelos~E. Papalexakis, and Christos Faloutsos.
+\bibitem[Sidiropoulos et~al.(2017)Sidiropoulos, De~Lathauwer, Fu, Huang, Papalexakis, and Faloutsos]{Sidiropoulos2017TSP}
+Nicholas~D. Sidiropoulos, Lieven De~Lathauwer, Xiao Fu, Kejun Huang, Evangelos~E. Papalexakis, and Christos Faloutsos.
 \newblock Tensor decomposition for signal processing and machine learning.
-\newblock \emph{IEEE Transactions on Signal Processing}, 65\penalty0
-  (13):\penalty0 3551--3582, 2017.
+\newblock \emph{IEEE Transactions on Signal Processing}, 65\penalty0 (13):\penalty0 3551--3582, 2017.
 \newblock \doi{10.1109/TSP.2017.2690524}.
 
-\bibitem[Varolgunes et~al.(2023)Varolgunes, Zhou, Yu, and
-  Uddin]{varolgunes2023nmtucker}
+\bibitem[Varolgunes et~al.(2023)Varolgunes, Zhou, Yu, and Uddin]{varolgunes2023nmtucker}
 Uras Varolgunes, Dan Zhou, Dantong Yu, and Ajim Uddin.
-\newblock Nmtucker: Non-linear matryoshka tucker decomposition for financial
-  time series imputation.
-\newblock In \emph{Proceedings of the Fourth ACM International Conference on AI
-  in Finance}, pages 516--523, 2023.
+\newblock Nmtucker: Non-linear matryoshka tucker decomposition for financial time series imputation.
+\newblock In \emph{Proceedings of the Fourth ACM International Conference on AI in Finance}, pages 516--523, 2023.
 
 \bibitem[Volterra(1959)]{Volterra1959Theory}
 Vito Volterra.
-\newblock \emph{Theory of Functionals and of Integral and Integro-Differential
-  Equations}.
+\newblock \emph{Theory of Functionals and of Integral and Integro-Differential Equations}.
 \newblock Dover Publications, 1959.
 
 \bibitem[Xu et~al.(2011)Xu, Yan, et~al.]{xu2011infinite}
 Zenglin Xu, Feng Yan, et~al.
-\newblock Infinite tucker decomposition: Nonparametric bayesian models for
-  multiway data analysis.
+\newblock Infinite tucker decomposition: Nonparametric bayesian models for multiway data analysis.
 \newblock \emph{arXiv preprint arXiv:1108.6296}, 2011.
 
 \bibitem[Zhai et~al.(2024)Zhai, Chen, and Sun]{zhai2024quadratic}
 Zheng Zhai, Hengchao Chen, and Qiang Sun.
-\newblock Quadratic matrix factorization with applications to manifold
-  learning.
-\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
-  Intelligence}, 46\penalty0 (9):\penalty0 6384--6401, 2024.
+\newblock Quadratic matrix factorization with applications to manifold learning.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine Intelligence}, 46\penalty0 (9):\penalty0 6384--6401, 2024.
 
 \bibitem[Zhao et~al.(2016)Zhao, Zhou, Xie, Zhang, and Cichocki]{zhao2016tr}
 Qibin Zhao, Guoxu Zhou, Shengli Xie, Liqing Zhang, and Andrzej Cichocki.
 \newblock Tensor ring decomposition.
 \newblock \emph{arXiv preprint arXiv:1606.05535}, 2016.
 
-\bibitem[Zhe et~al.(2016)Zhe, Zhang, Wang, Lee, Xu, Qi, and
-  Ghahramani]{zhe2016distributed}
-Shandian Zhe, Kai Zhang, Pengyuan Wang, Kuang-chih Lee, Zenglin Xu, Yuan Qi,
-  and Zoubin Ghahramani.
+\bibitem[Zhe et~al.(2016)Zhe, Zhang, Wang, Lee, Xu, Qi, and Ghahramani]{zhe2016distributed}
+Shandian Zhe, Kai Zhang, Pengyuan Wang, Kuang-chih Lee, Zenglin Xu, Yuan Qi, and Zoubin Ghahramani.
 \newblock Distributed flexible nonlinear tensor factorization.
 \newblock \emph{Advances in neural information processing systems}, 29, 2016.
 

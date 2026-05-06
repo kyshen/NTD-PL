@@ -8,14 +8,14 @@ import numpy as np
 import pandas as pd
 
 from ...config import get_env
+from ...hsi_defaults import completion_rank_for_dataset
 from ...utils.io import load_run_parquets, maybe_numeric
 from src.data.hsi import _load_hsi_from_file
 
 
 MAIN_PMAX = 4
 MAIN_METHODS = ("tucker", "ntdpl")
-MAIN_TASKS = ("decompose", "random-missing-completion")
-COMPLETION_MISSING_RATE = 0.5
+MAIN_TASKS = ("decompose",)
 DATASET_ORDER = ("jasper_ridge_hsi", "samson_hsi", "urban_hsi", "cuprite_hsi")
 DATASET_LABELS = {
     "jasper_ridge_hsi": "Jasper Ridge",
@@ -31,7 +31,6 @@ DATASET_PATHS = {
 }
 TASK_LABELS = {
     "decompose": "Recon.",
-    "random-missing-completion": "Compl.",
 }
 
 
@@ -62,16 +61,23 @@ def _parse_rank(value: Any) -> tuple[int, int, int]:
     raise ValueError(f"Cannot parse rank from value: {value}")
 
 
+def _strip_quotes(series: pd.Series) -> pd.Series:
+    return series.astype(str).str.strip().str.strip('"').str.strip("'")
+
+
 def _task_metric_columns(task_name: str) -> tuple[str, str, str]:
     if task_name == "decompose":
         return ("RMSE", "NMSE_dB", "SAM")
-    if task_name == "random-missing-completion":
-        return ("RMSE_missing", "NMSE_dB_missing", "SAM_missing")
     raise ValueError(f"Unsupported task: {task_name}")
 
 
 def _rank_text(rank: tuple[int, int, int]) -> str:
     return f"({rank[0]},{rank[1]},{rank[2]})"
+
+
+def _compression_ratio(shape: tuple[int, int, int], rank: tuple[int, int, int]) -> float:
+    params = int(np.prod(rank)) + sum(int(dim) * int(rk) for dim, rk in zip(shape, rank))
+    return float(np.prod(shape)) / max(float(params), 1.0)
 
 
 def _format_pm(mean: float, std: float, digits: int) -> str:
@@ -95,7 +101,7 @@ def _dataset_metadata(project_root: Path) -> pd.DataFrame:
                 "crop_shape": "full scene",
                 "normalization": "global max",
                 "rank_rule": "auto CR-matched",
-                "completion_rate": "rho=0.5",
+                "cr_target": _compression_ratio(tuple(int(v) for v in cube.shape), completion_rank_for_dataset(project_root, dataset_name)),
             }
         )
     return pd.DataFrame(rows)
@@ -110,13 +116,13 @@ def load_main_runs() -> tuple[pd.DataFrame, pd.DataFrame, object]:
         )
 
     frame = runs.copy()
-    frame["dataset"] = frame["ovr.data"].astype(str)
-    frame["method_name"] = frame["ovr.method"].astype(str)
-    frame["task_name"] = frame["ovr.task"].astype(str)
+    frame["dataset"] = _strip_quotes(frame["ovr.data"])
+    frame["method_name"] = _strip_quotes(frame["ovr.method"])
+    frame["task_name"] = _strip_quotes(frame["ovr.task"])
     frame["rank"] = frame["ovr.method.rank"].map(_parse_rank)
     frame["fit_time_sec"] = maybe_numeric(frame["fit_time_sec"]).astype(float)
     if "ovr.method.p_max" in frame.columns:
-        frame["p_max"] = maybe_numeric(frame["ovr.method.p_max"])
+        frame["p_max"] = maybe_numeric(_strip_quotes(frame["ovr.method.p_max"]))
     else:
         frame["p_max"] = np.nan
     if "ovr.task.seed" in frame.columns:
@@ -138,14 +144,7 @@ def load_main_runs() -> tuple[pd.DataFrame, pd.DataFrame, object]:
     frame = frame.loc[
         ~frame["method_name"].eq("ntdpl") | np.isclose(frame["p_max"], float(MAIN_PMAX), atol=1e-12)
     ].copy()
-    completion_mask = frame["task_name"].eq("random-missing-completion")
-    frame = frame.loc[
-        ~completion_mask | np.isclose(frame["missing_rate"], COMPLETION_MISSING_RATE, atol=1e-12)
-    ].copy()
-
     dedup_keys: list[str] = ["dataset", "task_name", "method_name"]
-    if completion_mask.any():
-        dedup_keys.extend(["mask_seed", "missing_rate"])
     frame = frame.sort_values("run_dir").drop_duplicates(subset=dedup_keys, keep="last").reset_index(drop=True)
     metadata = _dataset_metadata(env.project_root)
     rank_summary = (
@@ -180,7 +179,7 @@ def build_summary(frame: pd.DataFrame) -> pd.DataFrame:
                         "method_name": method_name,
                         "method_label": "NTD-PL" if method_name == "ntdpl" else "Tucker",
                         "rank": _rank_text(tuple(int(v) for v in method_panel["rank"].iloc[0])),
-                        "metric_label": "RMSE*" if task_name == "random-missing-completion" else "RMSE",
+                        "metric_label": "RMSE",
                         "rmse_mean": float(method_panel[rmse_col].mean()),
                         "rmse_std": float(method_panel[rmse_col].std(ddof=0)) if len(method_panel) > 1 else 0.0,
                         "nmse_mean": float(method_panel[nmse_col].mean()),
@@ -306,7 +305,6 @@ def build_overview_figure_data(summary: pd.DataFrame) -> pd.DataFrame:
     x_map = {name: idx + 1 for idx, name in enumerate(DATASET_ORDER)}
     for task_name, panel_key, panel_title, y_label in (
         ("decompose", "reconstruction", "Reconstruction", "RMSE"),
-        ("random-missing-completion", "completion", "Completion", "RMSE*"),
     ):
         panel = summary.loc[summary["task_name"].eq(task_name)].copy()
         for method_name in MAIN_METHODS:
@@ -334,20 +332,18 @@ def build_overview_figure_data(summary: pd.DataFrame) -> pd.DataFrame:
 
 
 def main_table_latex(main_table: pd.DataFrame) -> str:
+    env = get_env("real-hsi-robustness")
     lines = [
-        r"\begin{tabular}{@{}l cccc cccc@{}}",
+        r"\begin{tabular}{@{}l c c c c c@{}}",
         r"    \toprule",
-        r"    \multirow{2}{*}{Dataset} & \multicolumn{4}{c}{Reconstruction} & \multicolumn{4}{c}{Completion} \\",
-        r"    \cmidrule(lr){2-5}\cmidrule(lr){6-9}",
-        r"    & Tucker & NTD-PL & Gain & $\Delta$SAM & Tucker & NTD-PL & Gain & $\Delta$SAM \\",
+        r"    Dataset & CR & Tucker & NTD-PL & Gain & $D_{\mathrm{link}}$ \\",
         r"    \midrule",
     ]
     for dataset_name in DATASET_ORDER:
         panel = main_table.loc[main_table["dataset"].eq(dataset_name)].copy()
         if panel.empty:
             continue
-        recon = panel.loc[panel["task_name"].eq("reconstruction")].iloc[0]
-        compl = panel.loc[panel["task_name"].eq("completion")].iloc[0]
+        recon = panel.loc[panel["task_name"].eq("decompose")].iloc[0]
 
         def _fmt_pair(tucker: float, ntdpl: float) -> tuple[str, str]:
             tucker_text = f"{tucker:.4f}"
@@ -370,27 +366,31 @@ def main_table_latex(main_table: pd.DataFrame) -> str:
                 return rf"\textbf{{{text}}}"
             return text
 
+        def _fmt_link(value: float) -> str:
+            text = f"{100.0 * value:.1f}\\%"
+            if value > 0.0:
+                return rf"\textbf{{{text}}}"
+            return text
+
         recon_tucker, recon_ntdpl = _fmt_pair(float(recon["tucker_rmse"]), float(recon["ntdpl_rmse"]))
-        compl_tucker, compl_ntdpl = _fmt_pair(float(compl["tucker_rmse"]), float(compl["ntdpl_rmse"]))
+        shape = tuple(int(v) for v in _load_hsi_from_file(env.project_root / DATASET_PATHS[dataset_name]).shape)
+        rank = _parse_rank(str(recon["rank"]))
+        cr = _compression_ratio(shape, rank)
         lines.append(
             "    "
             + " & ".join(
                 [
                     str(recon["dataset_label"]),
+                    f"{cr:.1f}",
                     recon_tucker,
                     recon_ntdpl,
                     _fmt_gain(float(recon["gain_pct"])),
-                    _fmt_positive(float(recon["delta_sam"]), 2),
-                    compl_tucker,
-                    compl_ntdpl,
-                    _fmt_gain(float(compl["gain_pct"])),
-                    _fmt_positive(float(compl["delta_sam"]), 2),
+                    _fmt_link(float(recon.get("residual_explained", 0.0))),
                 ]
             )
             + r" \\"
         )
-        lines.append(r"    \midrule")
-    lines[-1] = r"    \bottomrule"
+    lines.append(r"    \bottomrule")
     lines.append(r"\end{tabular}")
     return "\n".join(lines) + "\n"
 
@@ -438,9 +438,9 @@ def appendix_table_latex(summary: pd.DataFrame) -> str:
 
 def protocol_table_latex(metadata: pd.DataFrame) -> str:
     lines = [
-        r"\begin{tabular}{l c c c c c c}",
+        r"\begin{tabular}{l c c c c c}",
         r"    \toprule",
-        r"    Dataset & Source shape & Bands & Crop & Normalization & Rank & Completion \\",
+        r"    Dataset & Source shape & Bands & Crop & Normalization & Rank \\",
         r"    \midrule",
     ]
     for _, row in metadata.iterrows():
@@ -454,7 +454,6 @@ def protocol_table_latex(metadata: pd.DataFrame) -> str:
                     str(row["crop_shape"]),
                     str(row["normalization"]),
                     str(row["rank_rule"]),
-                    str(row["completion_rate"]),
                 ]
             )
             + r" \\"

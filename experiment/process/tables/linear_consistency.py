@@ -157,11 +157,11 @@ def _latex_table(summary: pd.DataFrame) -> str:
 
     methods = list(summary["Method"].drop_duplicates())
     lines = [
-        r"\begin{tabular}{@{}l ccc ccc@{}}",
+        r"\begin{tabular}{@{}l cc cc@{}}",
         r"\toprule",
-        rf"\multirow{{2}}{{*}}{{Method}} & \multicolumn{{3}}{{c}}{{{settings[0]}}} & \multicolumn{{3}}{{c}}{{{settings[1]}}} \\",
-        r"\cmidrule(lr){2-4}\cmidrule(l){5-7}",
-        r"& RMSE$\downarrow$ & NMSE(dB)$\downarrow$ & \(p>1\) & RMSE$\downarrow$ & NMSE(dB)$\downarrow$ & \(p>1\) \\",
+        rf"\multirow{{2}}{{*}}{{Method}} & \multicolumn{{2}}{{c}}{{{settings[0]}}} & \multicolumn{{2}}{{c}}{{{settings[1]}}} \\",
+        r"\cmidrule(lr){2-3}\cmidrule(l){4-5}",
+        r"& RMSE$\downarrow$ & \(p>1\) & RMSE$\downarrow$ & \(p>1\) \\",
         r"\midrule",
     ]
     for method in methods:
@@ -170,7 +170,6 @@ def _latex_table(summary: pd.DataFrame) -> str:
             cells.extend(
                 [
                     _cell(method, setting, "RMSE"),
-                    _cell(method, setting, "NMSE(dB)"),
                     _cell(method, setting, "HO contrib.(%)"),
                 ]
             )
@@ -196,7 +195,6 @@ def linear_consistency_table() -> None:
                 "Setting": SETTING_LABELS[spec.setting_bias],
                 "Method": spec.method_label,
                 "RMSE": _format_mean_std(subset["RMSE"], digits=6),
-                "NMSE(dB)": _format_mean_std(subset["NMSE_dB"], digits=4),
                 "HO contrib.(%)": "---"
                 if spec.method_key == "tucker"
                 else _higher_order_contribution_text(subset["state_path"]),

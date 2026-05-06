@@ -33,7 +33,7 @@ def _load_points() -> pd.DataFrame:
             "rank": main["Rank"].map(_normalize_rank),
             "method": main["Method"],
             "params": main["Params"].astype(float),
-            "nmse_db": main["NMSE(dB)"].map(_parse_mean),
+            "rmse": main["RMSE"].map(_parse_mean),
             "sam": main["SAM(deg)"].map(_parse_mean),
         }
     )
@@ -44,7 +44,7 @@ def _load_points() -> pd.DataFrame:
             "rank": low["rank"].map(_normalize_rank),
             "method": low["method"],
             "params": low["params"].astype(float),
-            "nmse_db": low["NMSE_dB_mean"].astype(float),
+            "rmse": low["RMSE_mean"].astype(float),
             "sam": low["SAM_mean"].astype(float),
         }
     )
@@ -100,9 +100,9 @@ def main() -> None:
     frame = _load_points()
 
     fig, axes = plt.subplots(1, 2, figsize=(6.95, 2.25))
-    _plot_metric(axes[0], frame, "nmse_db", "NMSE (dB)")
+    _plot_metric(axes[0], frame, "rmse", "RMSE")
     _plot_metric(axes[1], frame, "sam", "SAM")
-    axes[0].set_ylim(-22.5, -10.5)
+    axes[0].set_ylim(0.018, 0.039)
     axes[1].set_ylim(11.0, 23.5)
     axes[0].legend(loc="upper right", frameon=False, handlelength=1.8)
     fig.subplots_adjust(left=0.075, right=0.99, bottom=0.23, top=0.96, wspace=0.24)

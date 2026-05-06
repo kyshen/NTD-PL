@@ -108,7 +108,7 @@ Wilcoxon tests for the same protocol.
   \resizebox{\linewidth}{!}{\input{tables/cave_completion_significance.tex}}
 \end{table}
 
-\subsection{Fixed-Backbone Beta-Refresh Diagnostic}
+\subsection{Residual-Link Diagnostic}
 \label{app:posthoc-calibration-baselines}
 
 The diagnostic used in the main text is a restricted NTD-PL update applied to a
@@ -123,9 +123,17 @@ by ridge regression on pairs
 all entries are used for this fit. In completion, the fit uses only observed
 entries and is then evaluated on held-out entries. The fitted map is applied
 entrywise to \(\widehat{\cY}_{\mathrm{T}}\); the Tucker core and factors are
-never updated. In other words, this score measures how much of the NTD-PL
-benefit is already visible from a single \(\beta\)-only refresh before the
-backbone is allowed to move.
+never updated. We summarize this refresh by the residual-link score
+\[
+  S_{\mathrm{link}}
+  =10\log_{10}\!\left(
+  \frac{\|\cY_{\mathrm{eval}}-\widehat{\cY}_{\mathrm{T}}\|_F^2}
+  {\|\cY_{\mathrm{eval}}-\widehat{\cY}_{\mathrm{link}}\|_F^2}
+  \right),
+\]
+which measures, on a log scale, how much Tucker residual energy is removed on
+the task-specific evaluation entries. In other words, it measures how much of
+the NTD-PL benefit is already visible before the backbone is allowed to move.
 
 \subsection{Joint Link-Family Smoke Test}
 \label{app:joint-link-family}
@@ -174,20 +182,17 @@ entries in the observation panel are shown in gray.
 
 Table~\ref{tab:real-tensor-reconstruction} reports matched-rank
 reconstruction on tensors outside the main hyperspectral setting: additional
-hyperspectral scenes, natural-image collections, and object-view tensors.  We
-use NMSE(dB) as the main cross-dataset metric because it normalizes by the
-energy of each tensor and is therefore less sensitive to scale differences
-across domains.  The results are
-consistent with the scoped claim in Section~\ref{subsec:external-hsi-validity}:
-gains are clearest on hyperspectral and object-view data, while natural-image
-collections provide more modest improvements.
+hyperspectral scenes, natural-image collections, and object-view tensors. The
+results are consistent with the scoped claim in
+Section~\ref{subsec:external-hsi-validity}: gains are clearest on
+hyperspectral and object-view data, while natural-image collections provide
+more modest improvements.
 
 \begin{table}[ht]
   \centering
-  \caption{Additional matched-rank real tensor reconstruction. NMSE columns
-  are in dB; lower is better. \(\Delta\)NMSE is the Tucker-minus-NTD-PL dB
-  gap, and NMSE gain is the relative reduction in linear NMSE; positive values
-  favor NTD-PL.}
+  \caption{Additional matched-rank real tensor reconstruction. Columns report
+  RMSE; gains are relative RMSE reductions over Tucker, and positive
+  \(\Delta\)RMSE favors NTD-PL.}
   \label{tab:real-tensor-reconstruction}
   \scriptsize
   \resizebox{\linewidth}{!}{\input{tables/real_tensor_reconstruction_main.tex}}

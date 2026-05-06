@@ -34,6 +34,7 @@ EXPERIMENT_FIGURES: dict[str, tuple[str, ...]] = {
     ),
     "real-hsi-robustness": (
         "real_hsi_robustness_overview",
+        "gain_cr_curves",
     ),
 }
 

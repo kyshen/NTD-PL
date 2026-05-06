@@ -1,13 +1,10 @@
-\begin{tabular}{@{}l cccc cccc@{}}
+\begin{tabular}{@{}l c c c c c@{}}
 \toprule
-\multirow{2}{*}{Dataset} & \multicolumn{4}{c}{Reconstruction} & \multicolumn{4}{c}{Completion} \\
-\cmidrule(lr){2-5}\cmidrule(lr){6-9}
-& Tucker & NTD-PL & Gain & \(\Delta\)SAM & Tucker & NTD-PL & Gain & \(\Delta\)SAM \\
+Dataset & CR & Tucker & NTD-PL & Gain & $S_{\mathrm{link}}$ \\
 \midrule
-Jasper Ridge & 0.0462 & \textbf{0.0430} & \textbf{6.93\%} & \textbf{0.98} & 0.0471 & \textbf{0.0434} & \textbf{7.82\%} & \textbf{1.16} \\
-Samson & 0.0263 & \textbf{0.0242} & \textbf{7.95\%} & \textbf{0.06} & 0.0268 & \textbf{0.0244} & \textbf{8.86\%} & \textbf{0.31} \\
-Urban & 0.0444 & \textbf{0.0429} & \textbf{3.59\%} & \textbf{0.29} & 0.0454 & \textbf{0.0433} & \textbf{4.67\%} & \textbf{0.49} \\
-\midrule
-Cuprite & \textbf{0.0176} & 0.0177 & -0.60\% & -0.04 & 0.0179 & \textbf{0.0178} & \textbf{0.56\%} & -0.00 \\
+Jasper Ridge & 124.4 & 0.0462 & \textbf{0.0430} & \textbf{6.93\%} & \textbf{0.13} \\
+Samson & 129.6 & 0.0263 & \textbf{0.0242} & \textbf{7.95\%} & \textbf{0.06} \\
+Urban & 126.3 & 0.0444 & \textbf{0.0428} & \textbf{3.59\%} & \textbf{0.06} \\
+Cuprite & 122.4 & \textbf{0.0176} & 0.0177 & -0.60\% & \textbf{0.00} \\
 \bottomrule
 \end{tabular}

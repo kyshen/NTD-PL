@@ -18,6 +18,7 @@ FigureFamily = Literal[
     "spectra_panel",
     "geometry_evolution",
     "geometry_response_maps",
+    "gain_cr_curves",
     "heatmap_pair",
     "completion_visual_grid",
     "spatial_case_grid",

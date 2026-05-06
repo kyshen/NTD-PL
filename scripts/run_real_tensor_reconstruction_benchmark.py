@@ -206,7 +206,7 @@ def _read_existing_rows() -> dict[str, list[dict[str, Any]]]:
     if not OUT_PREFIX.with_suffix(".csv").exists():
         return {}
     frame = pd.read_csv(OUT_PREFIX.with_suffix(".csv"))
-    if "tucker_nmse_db" not in frame.columns or "ntdpl_nmse_db" not in frame.columns:
+    if "tucker_rmse" not in frame.columns or "ntdpl_rmse" not in frame.columns:
         return {}
     out: dict[str, list[dict[str, Any]]] = {}
     aliases = {
@@ -224,11 +224,6 @@ def _read_existing_rows() -> dict[str, list[dict[str, Any]]]:
         if not panel.empty:
             panel["domain_order"] = DATASET_ORDERING[key][0]
             panel["dataset_order"] = DATASET_ORDERING[key][1]
-            if "nmse_gain_pct" not in panel.columns:
-                panel["nmse_gain_pct"] = panel.apply(
-                    lambda row: _nmse_gain_pct(float(row["tucker_nmse_db"]), float(row["ntdpl_nmse_db"])),
-                    axis=1,
-                )
             out[key] = panel.to_dict("records")
     return out
 
@@ -782,7 +777,7 @@ def _to_latex(table: pd.DataFrame) -> str:
     lines = [
         r"\begin{tabular}{@{}l l c c c c c c@{}}",
         r"\toprule",
-        r"\multirow{2}{*}{Domain} & \multirow{2}{*}{Dataset} & \multirow{2}{*}{Shape} & \multirow{2}{*}{Rank} & \multicolumn{3}{c}{NMSE(dB)$\downarrow$} & \multirow{2}{*}{NMSE gain} \\",
+        r"\multirow{2}{*}{Domain} & \multirow{2}{*}{Dataset} & \multirow{2}{*}{Shape} & \multirow{2}{*}{Rank} & \multicolumn{3}{c}{RMSE$\downarrow$} & \multirow{2}{*}{Gain} \\",
         r"\cmidrule(lr){5-7}",
         r"& & & & Tucker & NTD-PL & $\Delta$ & \\",
         r"\midrule",
@@ -793,20 +788,16 @@ def _to_latex(table: pd.DataFrame) -> str:
         if last_domain is not None and domain != last_domain:
             lines.append(r"\midrule")
         last_domain = domain
-        gain = (
-            float(row["nmse_gain_pct"])
-            if "nmse_gain_pct" in row and not pd.isna(row["nmse_gain_pct"])
-            else _nmse_gain_pct(float(row["tucker_nmse_db"]), float(row["ntdpl_nmse_db"]))
-        )
-        tucker_nmse = float(row["tucker_nmse_db"])
-        ntdpl_nmse = float(row["ntdpl_nmse_db"])
-        delta_nmse = float(row["delta_nmse_db"])
+        gain = float(row["gain_pct"])
+        tucker_rmse = float(row["tucker_rmse"])
+        ntdpl_rmse = float(row["ntdpl_rmse"])
+        delta_rmse = tucker_rmse - ntdpl_rmse
         gain_text = f"{gain:.1f}\\%"
-        nmse_text = f"{delta_nmse:.2f}"
+        delta_text = f"{delta_rmse:.4f}"
         if gain > 0.0:
             gain_text = rf"\textbf{{{gain_text}}}"
-        if delta_nmse > 0.0:
-            nmse_text = rf"\textbf{{{nmse_text}}}"
+        if delta_rmse > 0.0:
+            delta_text = rf"\textbf{{{delta_text}}}"
         lines.append(
             " & ".join(
                 [
@@ -814,9 +805,9 @@ def _to_latex(table: pd.DataFrame) -> str:
                     str(row["dataset"]),
                     str(row["shape"]),
                     str(row["rank"]),
-                    f"{tucker_nmse:.2f}",
-                    f"{ntdpl_nmse:.2f}",
-                    nmse_text,
+                    f"{tucker_rmse:.4f}",
+                    f"{ntdpl_rmse:.4f}",
+                    delta_text,
                     gain_text,
                 ]
             )

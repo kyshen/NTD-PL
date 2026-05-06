@@ -26,13 +26,13 @@ PANEL_LABELS = {
 
 def _degree_gain_matrix(data, panel_order: list[str]) -> tuple[np.ndarray, list[int]]:
     wide = data.pivot_table(index=["panel", "x"], columns="method", values="mean").reset_index()
-    wide["gain_db"] = wide["Tucker"] - wide["NTD-PL"]
+    wide["gain_rmse"] = wide["Tucker"] - wide["NTD-PL"]
     degrees = sorted(int(x) for x in wide["x"].unique())
     matrix = np.full((len(panel_order), len(degrees)), np.nan, dtype=float)
     for row_idx, panel_key in enumerate(panel_order):
         panel = wide.loc[wide["panel"].eq(panel_key)]
         for col_idx, degree in enumerate(degrees):
-            value = panel.loc[panel["x"].eq(degree), "gain_db"]
+            value = panel.loc[panel["x"].eq(degree), "gain_rmse"]
             if not value.empty:
                 matrix[row_idx, col_idx] = float(value.iloc[0])
     return matrix, degrees
@@ -54,7 +54,7 @@ def main() -> None:
         aspect="auto",
         cmap=cmap,
         vmin=0.0,
-        vmax=max(1.0, float(np.nanmax(matrix))),
+        vmax=float(np.nanmax(matrix)),
     )
 
     ax.set_xticks(np.arange(len(degrees)))
@@ -72,7 +72,7 @@ def main() -> None:
     for spine in ax.spines.values():
         spine.set_visible(False)
 
-    threshold = 0.62 * float(np.nanmax(matrix))
+    threshold = 0.55 * float(np.nanmax(matrix))
     for row_idx in range(matrix.shape[0]):
         for col_idx in range(matrix.shape[1]):
             value = matrix[row_idx, col_idx]
@@ -81,17 +81,19 @@ def main() -> None:
             ax.text(
                 col_idx,
                 row_idx,
-                f"{value:.1f}",
+                f"{value:.3f}",
                 ha="center",
                 va="center",
                 color=PALETTE.white if value >= threshold else PALETTE.border,
-                fontsize=7.6,
+                fontsize=7.0,
             )
 
     cbar = fig.colorbar(image, ax=ax, fraction=0.042, pad=0.025)
-    cbar.set_label("gain over Tucker (dB)", labelpad=4.0)
+    cbar.set_label("RMSE gain over Tucker", labelpad=4.0)
     cbar.outline.set_visible(False)
     cbar.ax.tick_params(length=2.5, width=0.7, labelsize=7.4, colors=PALETTE.border)
+    cbar.formatter.set_powerlimits((-2, 2))
+    cbar.update_ticks()
     fig.subplots_adjust(left=0.13, right=0.91, bottom=0.26, top=0.96)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)

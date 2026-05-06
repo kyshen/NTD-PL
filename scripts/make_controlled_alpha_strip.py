@@ -4,6 +4,7 @@ from pathlib import Path
 import sys
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -21,7 +22,7 @@ PANEL_LABELS = {
     "tanh": r"$\tanh(\kappa s)$",
 }
 
-METHOD_ORDER = ("Tucker", "CP", "TT", "TR", "NTD-PL")
+METHOD_ORDER = ("Tucker", "CP", "TT", "NTD-PL")
 
 
 def _compact_method_style(method: str) -> dict:
@@ -43,6 +44,8 @@ def _plot_panel(
     *,
     show_ylabel: bool,
     show_xlabel: bool,
+    y_limits: tuple[float, float],
+    y_ticks: list[float],
 ) -> None:
     for method in METHOD_ORDER:
         sub = panel_data.loc[panel_data["method"].eq(method)].sort_values("x")
@@ -80,10 +83,10 @@ def _plot_panel(
     ax.set_title(PANEL_LABELS.get(panel_key, panel_key), pad=2.0)
     ax.set_xticks([0.10, 0.20, 0.30, 0.40])
     ax.set_xticklabels([".10", ".20", ".30", ".40"])
-    ax.set_ylim(-33, -2)
-    ax.set_yticks([-30, -20, -10])
+    ax.set_ylim(*y_limits)
+    ax.set_yticks(y_ticks)
     ax.set_xlabel(r"residual energy $\alpha$" if show_xlabel else "", labelpad=1.5)
-    ax.set_ylabel("NMSE (dB)" if show_ylabel else "", labelpad=1.5)
+    ax.set_ylabel("RMSE" if show_ylabel else "", labelpad=1.5)
     ax.tick_params(axis="both", pad=1.0)
     style_axes(ax, grid=True)
 
@@ -91,7 +94,15 @@ def _plot_panel(
 def main() -> None:
     apply_style("single_column")
     data = aggregate_nonlinear_alpha_grid()
+    data = data.loc[data["method"].isin(METHOD_ORDER)].copy()
     panel_order = ["poly3", "tanh", "exp"]
+    y_min = float(data["band_lower"].min())
+    y_max = float(data["band_upper"].max())
+    y_min = max(0.0, y_min - 0.01)
+    y_max = y_max + 0.01
+    tick_step = 0.1
+    y_ticks = np.arange(0.0, np.ceil(y_max / tick_step) * tick_step + 1e-9, tick_step).tolist()
+    y_limits = (0.0, y_ticks[-1] if y_ticks else y_max)
 
     fig, axes = plt.subplots(1, 3, figsize=(5.48, 1.72), sharex=True, sharey=True)
     flat_axes = axes.ravel()
@@ -103,6 +114,8 @@ def main() -> None:
             panel_key,
             show_ylabel=idx == 0,
             show_xlabel=True,
+            y_limits=y_limits,
+            y_ticks=y_ticks,
         )
 
     handles, labels = flat_axes[0].get_legend_handles_labels()
@@ -110,7 +123,7 @@ def main() -> None:
         handles,
         labels,
         loc="upper center",
-        ncol=5,
+        ncol=4,
         bbox_to_anchor=(0.5, 1.015),
         handlelength=1.5,
         columnspacing=0.65,

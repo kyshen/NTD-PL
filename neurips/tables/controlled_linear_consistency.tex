@@ -1,17 +1,17 @@
-\begin{tabular}{@{}l ccc ccc@{}}
+\begin{tabular}{@{}l cc cc@{}}
 \toprule
 \multirow{2}{*}{Method} &
-\multicolumn{3}{c}{bias \(=0\)} &
-\multicolumn{3}{c}{bias \(=0.5\)} \\
-\cmidrule(lr){2-4}\cmidrule(l){5-7}
-& RMSE$\downarrow$ & NMSE(dB)$\downarrow$ & \(p>1\) &
-  RMSE$\downarrow$ & NMSE(dB)$\downarrow$ & \(p>1\) \\
+\multicolumn{2}{c}{bias \(=0\)} &
+\multicolumn{2}{c}{bias \(=0.5\)} \\
+\cmidrule(lr){2-3}\cmidrule(l){4-5}
+& RMSE$\downarrow$ & \(p>1\) &
+  RMSE$\downarrow$ & \(p>1\) \\
 \midrule
-Tucker & \textbf{0.0114} & \textbf{-38.88} & -- &
-0.0647 & -24.05 & -- \\
-NTD-PL, \(\beta_0=0\) & 0.0116 & -38.72 & 4.19\% &
-0.0522 & -25.85 & 39.17\% \\
-NTD-PL, \(\beta_0\) free & 0.0117 & -38.65 & 3.19\% &
-\textbf{0.0118} & \textbf{-38.58} & 2.98\% \\
+Tucker & \textbf{0.0114} & -- &
+0.0647 & -- \\
+NTD-PL, \(\beta_0=0\) & 0.0116 & 4.19\% &
+0.0522 & 39.17\% \\
+NTD-PL, \(\beta_0\) free & 0.0117 & 3.19\% &
+\textbf{0.0118} & 2.98\% \\
 \bottomrule
 \end{tabular}

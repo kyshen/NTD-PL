@@ -122,7 +122,6 @@ def _nonlinear_runs() -> pd.DataFrame:
     runs["nonlinear"] = _series_str(runs, "ovr.filter.nonlinear", "filter.nonlinear")
     runs["alpha"] = _series_num(runs, "ovr.filter.alpha", "filter.alpha").astype(float)
     runs["seed"] = _series_num(runs, "ovr.data.seed", "data.seed").astype(int)
-    runs["nmse_db"] = _series_num(runs, "NMSE_dB").astype(float)
     runs["rmse"] = _series_num(runs, "RMSE").astype(float)
     runs["p_max"] = _series_num(runs, "ovr.method.p_max", "method.p_max")
     return runs
@@ -145,7 +144,7 @@ def aggregate_nonlinear_alpha_grid() -> pd.DataFrame:
                 sub = sub.loc[np.isclose(sub["p_max"], float(ntdpl_pmax), atol=1e-12)].copy()
             if sub.empty:
                 continue
-            grouped = sub.groupby(["seed", "alpha"], as_index=False)["nmse_db"].mean().rename(columns={"nmse_db": "seed_value"})
+            grouped = sub.groupby(["seed", "alpha"], as_index=False)["rmse"].mean().rename(columns={"rmse": "seed_value"})
             summary = grouped.groupby("alpha", as_index=False)["seed_value"].agg(["mean", "std"]).reset_index()
             summary["std"] = summary["std"].fillna(0.0)
             for row in summary.itertuples(index=False):
@@ -182,7 +181,7 @@ def aggregate_nonlinear_pmax_grid() -> pd.DataFrame:
                     item["p_max"] = p_value
                     replicated.append(item)
                 sub = pd.concat(replicated, ignore_index=True) if replicated else sub
-            grouped = sub.groupby(["seed", "p_max"], as_index=False)["nmse_db"].mean().rename(columns={"nmse_db": "seed_value"})
+            grouped = sub.groupby(["seed", "p_max"], as_index=False)["rmse"].mean().rename(columns={"rmse": "seed_value"})
             summary = grouped.groupby("p_max", as_index=False)["seed_value"].agg(["mean", "std"]).reset_index()
             summary["std"] = summary["std"].fillna(0.0)
             for row in summary.itertuples(index=False):
