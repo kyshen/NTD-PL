@@ -41,7 +41,7 @@ def _degree_gain_matrix(data, panel_order: list[str]) -> tuple[np.ndarray, list[
 def main() -> None:
     apply_style("single_column")
     data = aggregate_nonlinear_pmax_grid()
-    panel_order = ["poly3", "exp", "tanh"]
+    panel_order = ["poly3", "tanh", "exp"]
     matrix, degrees = _degree_gain_matrix(data, panel_order)
 
     cmap = LinearSegmentedColormap.from_list(

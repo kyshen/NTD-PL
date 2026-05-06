@@ -29,7 +29,7 @@ from experiment.process.helpers.real_hsi_robustness import (
 from experiment.utils.io import load_state_mat
 
 
-NONLINEAR_ORDER = ("poly3", "exp", "tanh")
+NONLINEAR_ORDER = ("poly3", "tanh", "exp")
 NONLINEAR_ALPHA_REF = 0.25
 NONLINEAR_STEP_PMAX = 5
 CAVE_REPR_MAIN_RANK = CAVE_RECON_MAIN_RANK

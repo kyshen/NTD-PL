@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.13)  6 MAY 2026 20:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.13)  6 MAY 2026 21:30
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -838,17 +838,17 @@ File: figures/controlled_nonlinear_alpha_grid.pdf Graphic file (type pdf)
 <use figures/controlled_nonlinear_alpha_grid.pdf>
 Package pdftex.def Info: figures/controlled_nonlinear_alpha_grid.pdf  used on input line 46.
 (pdftex.def)             Requested size: 389.53358pt x 123.21057pt.
-<figures/controlled_nonlinear_pmax_heatmap.pdf, id=281, 365.67932pt x 83.87648pt>
+<figures/controlled_nonlinear_pmax_heatmap.pdf, id=281, 371.70181pt x 83.87648pt>
 File: figures/controlled_nonlinear_pmax_heatmap.pdf Graphic file (type pdf)
 <use figures/controlled_nonlinear_pmax_heatmap.pdf>
 Package pdftex.def Info: figures/controlled_nonlinear_pmax_heatmap.pdf  used on input line 55.
-(pdftex.def)             Requested size: 389.53358pt x 89.35274pt.
+(pdftex.def)             Requested size: 389.53358pt x 87.90266pt.
  [5] (./tables/cave_completion_main.tex) (./tables/ntdpl_polycal_diagnostic.tex) [6 <./figures/controlled_nonlinear_alpha_grid.pdf> <./figures/controlled_nonlinear_pmax_heatmap.pdf>]
-<figures/cave_reconstruction_capacity.pdf, id=350, 500.0517pt x 147.48788pt>
+<figures/cave_reconstruction_capacity.pdf, id=350, 495.29956pt x 147.48788pt>
 File: figures/cave_reconstruction_capacity.pdf Graphic file (type pdf)
 <use figures/cave_reconstruction_capacity.pdf>
 Package pdftex.def Info: figures/cave_reconstruction_capacity.pdf  used on input line 132.
-(pdftex.def)             Requested size: 389.53358pt x 114.8938pt.
+(pdftex.def)             Requested size: 389.53358pt x 115.99654pt.
  (./tables/rank_lift_tucker_full_sweep.tex) (./tables/real_hsi_robustness_main.tex) [7 <./figures/cave_reconstruction_capacity.pdf>] (./tables/real_hsi_residual_link_diagnostic.tex)) (./sections/limitations.tex) (./sections/conclusion.tex) [8] (./main.bbl [9]) (./appendix/model_details.tex (./artifacts/p-tucker.tex) [10] [11]
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 185.
 ) (./appendix/proofs.tex [12] [13] [14]) (./appendix/experiments.tex (./tables/controlled_linear_consistency.tex)
@@ -882,7 +882,7 @@ Here is how much of TeX's memory you used:
  1141 hyphenation exceptions out of 8191
  89i,12n,97p,1041b,942s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/stmaryrd/stmary10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (19 pages, 2875201 bytes).
+Output written on main.pdf (19 pages, 2876945 bytes).
 PDF statistics:
  732 PDF objects out of 1000 (max. 8388607)
  582 compressed objects within 6 object streams

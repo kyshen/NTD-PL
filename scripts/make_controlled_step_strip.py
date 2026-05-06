@@ -53,7 +53,7 @@ def _plot_panel(ax: plt.Axes, data, panel_key: str, *, show_ylabel: bool) -> Non
 def main() -> None:
     apply_style("single_column")
     data = aggregate_nonlinear_step_grid()
-    panel_order = ["poly3", "exp", "tanh"]
+    panel_order = ["poly3", "tanh", "exp"]
 
     fig, axes = plt.subplots(1, 3, figsize=(5.48, 1.62), sharex=True, sharey=True)
     flat_axes = axes.ravel()
