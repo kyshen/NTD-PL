@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex main"] 1778094088.07212 "main.aux" "main.bbl" "main" 1778094104.38471 0
+["bibtex main"] 1778095564.87564 "main.aux" "main.bbl" "main" 1778095667.29546 0
   "./references.bib" 1777803733 17071 c6751bab7ba1a34d3996034b25c2797f ""
   "c:/texlive/2026/texmf-dist/bibtex/bst/natbib/plainnat.bst" 1773380545 26816 ffe5423d2019860bad9f54bc402fac15 ""
-  "main.aux" 1778094103 22181 135ce765bcc29cb665642a0ac6da7104 "pdflatex"
+  "main.aux" 1778095666 23510 f81c6d974fb1f59d14f72467b877b52b "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1778094101.81138 "c:/Users/mrkys/workspace/NTD-PL/neurips/main.tex" "main.pdf" "main" 1778094104.38514 0
-  "appendix/experiments.tex" 1778093402 8938 69d88bd2f3787295f3c7ba346de3db1b ""
+["pdflatex"] 1778095664.65005 "c:/Users/mrkys/workspace/NTD-PL/neurips/main.tex" "main.pdf" "main" 1778095667.29595 0
+  "appendix/experiments.tex" 1778095555 11152 522525ab257ae4ce15bc49012c99a0aa ""
   "appendix/model_details.tex" 1777815418 8010 ba5f06115b8f03ca538f90514c68d49e ""
   "appendix/proofs.tex" 1777740225 10703 b4828fc21c8897ab77031a284b138b32 ""
   "artifacts/p-tucker.tex" 1777810828 3360 d876e0ecf99cec7abed92cfccb5cc98b ""
@@ -270,16 +270,17 @@
   "figures/controlled_nonlinear_alpha_grid.pdf" 1778077353 17221 fee4e8101ad22634cf8ebc0233a583ca ""
   "figures/controlled_nonlinear_pmax_heatmap.pdf" 1778077353 22607 c7d6f5eb5f073ca3a75d4508cb3d3400 ""
   "figures/controlled_nonlinear_step_strip.pdf" 1778074015 66717 cac57b97df329ea51b0a0a5ccf002ccd ""
+  "figures/nonhsi_dlink_scatter.pdf" 1778094953 35701 91acda83c536999be0dcdab8527af2aa ""
   "macros.tex" 1777382205 1030 397d1ca12b8401d6595fffa6484ae98e ""
-  "main.aux" 1778094103 22181 135ce765bcc29cb665642a0ac6da7104 "pdflatex"
-  "main.bbl" 1778094088 7474 039d6c85e3de0ffe7da7b67f3ef9c219 "bibtex main"
-  "main.out" 1778094103 5744 c3231819caba35c88c72e205f006fb37 "pdflatex"
+  "main.aux" 1778095666 23510 f81c6d974fb1f59d14f72467b877b52b "pdflatex"
+  "main.bbl" 1778095565 7474 039d6c85e3de0ffe7da7b67f3ef9c219 "bibtex main"
+  "main.out" 1778095666 5972 6dd894fc25d98364b1d007496ab2fe0f "pdflatex"
   "main.tex" 1778051147 1000 e19254a3d1514610293afff1da1bbf6e ""
   "neurips_2026.sty" 1777382753 13462 818d80447f57703e59b8270885421e82 ""
   "preamble.tex" 1777809946 1161 ad8d48a02baf552aa8c1226523b6cf13 ""
   "sections/abstract.tex" 1778091968 1762 d412359698108e1310abaac34741b9d5 ""
   "sections/conclusion.tex" 1778091947 765 0496a3e45b1ce9596926f63311d41e48 ""
-  "sections/experiments.tex" 1778094075 9318 0aeaa738587a9f9afdbda803ed74a231 ""
+  "sections/experiments.tex" 1778095663 10796 c9eac7c1774e579bedfd8806b2ba6fe8 ""
   "sections/introduction.tex" 1778091947 3976 af4552cd5bd2be19346e4f4e09f6558c ""
   "sections/limitations.tex" 1778089754 796 57ef38d73383c83f49c507fc39ca4995 ""
   "sections/method.tex" 1778048457 3881 6e38f6dba771c11dc890233db94a32ee ""
@@ -293,7 +294,6 @@
   "tables/controlled_linear_consistency.tex" 1778076898 453 3f32259331d7dcbd0349baf9691c281a ""
   "tables/ntdpl_polycal_diagnostic.tex" 1778089818 405 804e0e6cc6a9c797c7d024914b4cbc41 ""
   "tables/rank_lift_tucker_full_sweep.tex" 1778089811 666 c8fbe80c6ecc21204ab200c4433d0988 ""
-  "tables/real_hsi_robustness_main.tex" 1778094075 408 f27985b1f75fdf202de8c53758971402 ""
   "tables/real_tensor_reconstruction_main.tex" 1778076954 1245 10d3e6890d819f059f38a3ba52017a3e ""
   (generated)
   "main.aux"

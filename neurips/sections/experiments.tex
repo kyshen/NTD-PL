@@ -162,32 +162,61 @@ between \(D_{\mathrm{link}}\) and NTD-PL held-out RMSE$^\ast$ gain.
   \label{fig:cave-link-yield}
 \end{figure}
 
-Figure~\ref{fig:cave-link-yield} gives the scene-level diagnostic on CAVE
-completion, where higher \(D_{\mathrm{link}}\) is associated with larger
-held-out RMSE$^\ast$ gains. We next use the same diagnostic on external HSI
-scenes. Here each dataset is treated as a whole HSI cube rather than split
-into patches, because the goal is to test whether a shared scalar link is
-coherent for the entire observed scene. Table~\ref{tab:real-hsi-robustness}
-summarizes the resulting diagnosis. Jasper Ridge and Samson have positive
-\(D_{\mathrm{link}}\) and show clear NTD-PL gains; Urban gives a more moderate
-gain; Cuprite has nearly zero \(D_{\mathrm{link}}\) and is therefore a
-predicted boundary case rather than a failure case.
+Figure~\ref{fig:cave-link-yield} first validates the diagnostic on CAVE
+completion: scenes with higher \(D_{\mathrm{link}}\) receive larger held-out
+RMSE$^\ast$ gains. We then extend the same protocol beyond HSI. For natural
+images, each image is treated as one tensor unit; for object-view datasets,
+each object or instance forms a multi-view tensor unit. We do not concatenate
+unrelated images or objects into a giant tensor, since \(D_{\mathrm{link}}\)
+tests whether a single shared scalar link is coherent within one unit.
+External HSI scenes are also checked as whole cubes; Jasper Ridge, Samson, and
+Urban have positive Link Refresh scores, while Cuprite is a near-zero
+\(D_{\mathrm{link}}\) boundary case.
 
 \begin{table}[!htbp]
   \centering
-  \caption{External HSI diagnosis with Link Refresh. Each scene is treated as a
-  whole HSI cube and fitted independently by Tucker and NTD-PL under matched
-  low-capacity Tucker backbones. \(D_{\mathrm{link}}\) is computed by one
-  frozen-backbone Link Refresh step; the table reports all external HSI scenes
-  rather than selecting them by NTD-PL gain.}
-  \label{tab:real-hsi-robustness}
+  \caption{Cross-domain Link Refresh diagnosis. Each unit is independently
+  fitted by Tucker and NTD-PL at matched backbone rank. \(D_{\mathrm{link}}\)
+  is computed by one frozen-backbone Link Refresh step and diagnostic tiers
+  are assigned from \(D_{\mathrm{link}}\), not from NTD-PL gain. Natural images
+  use per-image units; object-view datasets use per-object or per-instance
+  view tensors.}
+  \label{tab:cross-domain-link-diagnostic}
   \scriptsize
-  \resizebox{\linewidth}{!}{\input{tables/real_hsi_robustness_main.tex}}
+  \setlength{\tabcolsep}{3pt}
+  \resizebox{\linewidth}{!}{
+  \begin{tabular}{@{}l l l r c c c c@{}}
+    \toprule
+    Domain & Dataset & Unit & \#Units & Med. \(D_{\mathrm{link}}\) &
+    Spearman & Med. gain & Low/High gain \\
+    \midrule
+    HSI & CAVE completion & scene & 15 & -- & 0.889 & -- &
+    \(-1.09/13.18\)\% \\
+    HSI & External HSI & whole cube & 4 & -- & -- & -- & -- \\
+    Natural images & CBSD68 & image & 16 & 0.075 & 0.835 & 5.77\% &
+    \(3.87/12.44\)\% \\
+    Natural images & CIFAR-10 & image & 1000 & 0.008 & 0.934 & 2.35\% &
+    \(-0.01/7.85\)\% \\
+    Object-view & COIL-100 & object-view tensor & 100 & 0.208 & 0.932 &
+    5.40\% & \(2.77/9.14\)\% \\
+    Object-view & smallNORB & instance-view tensor & 25 & 0.264 & 0.945 &
+    9.84\% & \(6.92/14.16\)\% \\
+    \bottomrule
+  \end{tabular}}
 \end{table}
 
-This table is not intended as a broad benchmark over HSI datasets. Its role is
-diagnostic: \(D_{\mathrm{link}}\) identifies scenes where a shared link-like
-residual is present and separates them from near-linear or weak-yield boundary
-cases.
+Table~\ref{tab:cross-domain-link-diagnostic} summarizes the cross-domain
+diagnosis. Natural images show weaker shared-link yield, especially CIFAR-10,
+whose median \(D_{\mathrm{link}}\) is close to zero and whose low-yield
+tercile has almost no gain. Object-view tensors show clearer effective units:
+COIL-100 and smallNORB have larger median \(D_{\mathrm{link}}\), stronger
+rank-matched gains, and high-yield terciles with larger improvements. These
+results support the scoped claim that NTD-PL helps when the Tucker residual
+contains shared link-like structure, rather than uniformly across all visual
+tensors. Representative units selected only by \(D_{\mathrm{link}}\) are
+reported in Appendix~\ref{app:nonhsi-link-diagnostics}: high-\(D_{\mathrm{link}}\)
+object-view units such as COIL object 91 and smallNORB category 2 instance 7
+show large gains, while low-\(D_{\mathrm{link}}\) boundary units show small or
+negative gains.
 
 \FloatBarrier

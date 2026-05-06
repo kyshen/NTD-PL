@@ -70,10 +70,8 @@
 \def\@LN@column{1}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces CAVE completion at \(\rho \in \{0.3,0.5\}\): scene-level NTD-PL RMSE$^\ast $ gain versus Link Refresh diagnostic \(D_{\mathrm  {link}}\). The left and right panels use \(\rho =0.3\) and \(\rho =0.5\), respectively, and each panel annotates its Spearman coefficient.}}{8}{figure.caption.18}\protected@file@percent }
 \newlabel{fig:cave-link-yield}{{4}{8}{CAVE completion at \(\rho \in \{0.3,0.5\}\): scene-level NTD-PL RMSE$^\ast $ gain versus Link Refresh diagnostic \(D_{\mathrm {link}}\). The left and right panels use \(\rho =0.3\) and \(\rho =0.5\), respectively, and each panel annotates its Spearman coefficient}{figure.caption.18}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces External HSI diagnosis with Link Refresh. Each scene is treated as a whole HSI cube and fitted independently by Tucker and NTD-PL under matched low-capacity Tucker backbones. \(D_{\mathrm  {link}}\) is computed by one frozen-backbone Link Refresh step; the table reports all external HSI scenes rather than selecting them by NTD-PL gain.}}{8}{table.caption.19}\protected@file@percent }
-\newlabel{tab:real-hsi-robustness}{{3}{8}{External HSI diagnosis with Link Refresh. Each scene is treated as a whole HSI cube and fitted independently by Tucker and NTD-PL under matched low-capacity Tucker backbones. \(D_{\mathrm {link}}\) is computed by one frozen-backbone Link Refresh step; the table reports all external HSI scenes rather than selecting them by NTD-PL gain}{table.caption.19}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Limitations}{8}{section.7}\protected@file@percent }
-\newlabel{sec:limitations}{{7}{8}{Limitations}{section.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Cross-domain Link Refresh diagnosis. Each unit is independently fitted by Tucker and NTD-PL at matched backbone rank. \(D_{\mathrm  {link}}\) is computed by one frozen-backbone Link Refresh step and diagnostic tiers are assigned from \(D_{\mathrm  {link}}\), not from NTD-PL gain. Natural images use per-image units; object-view datasets use per-object or per-instance view tensors.}}{8}{table.caption.19}\protected@file@percent }
+\newlabel{tab:cross-domain-link-diagnostic}{{3}{8}{Cross-domain Link Refresh diagnosis. Each unit is independently fitted by Tucker and NTD-PL at matched backbone rank. \(D_{\mathrm {link}}\) is computed by one frozen-backbone Link Refresh step and diagnostic tiers are assigned from \(D_{\mathrm {link}}\), not from NTD-PL gain. Natural images use per-image units; object-view datasets use per-object or per-instance view tensors}{table.caption.19}{}}
 \bibstyle{plainnat}
 \bibdata{references}
 \bibcite{BioucasDias2012HyperspectralUnmixing}{{1}{2012}{{Bioucas-Dias et~al.}}{{Bioucas-Dias, Plaza, Dobigeon, Parente, Du, Gader, and Chanussot}}}
@@ -86,10 +84,12 @@
 \bibcite{hong2020generalized}{{8}{2020}{{Hong et~al.}}{{Hong, Kolda, and Duersch}}}
 \bibcite{Kolda2009Tensor}{{9}{2009}{{Kolda and Bader}}{{}}}
 \bibcite{liu2017deepcp}{{10}{2017}{{Liu et~al.}}{{Liu, He, Zhe, Li, and Xu}}}
+\def\@LN@column{1}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Limitations}{9}{section.7}\protected@file@percent }
+\newlabel{sec:limitations}{{7}{9}{Limitations}{section.7}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{9}{section.8}\protected@file@percent }
 \bibcite{liu2015model}{{11}{2015}{{Liu et~al.}}{{Liu, Daniel, and Wong}}}
 \bibcite{Liu2013TensorCompletion}{{12}{2013}{{Liu et~al.}}{{Liu, Musialski, Wonka, and Ye}}}
-\def\@LN@column{1}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{9}{section.8}\protected@file@percent }
 \bibcite{oseledets2011}{{13}{2011}{{Oseledets}}{{}}}
 \bibcite{pan2020streaming}{{14}{2020}{{Pan et~al.}}{{Pan, Wang, and Zhe}}}
 \bibcite{saragadam2024deeptensor}{{15}{2024}{{Saragadam et~al.}}{{Saragadam, Balestriero, Veeraraghavan, and Baraniuk}}}
@@ -168,7 +168,14 @@
 \newlabel{fig:cave-beads-recon-completion}{{7}{18}{CAVE beads visual comparison. Rows correspond to reconstruction and random completion at missing rate \(0.5\). Error maps show Tucker minus NTD-PL per-pixel RMSE, so positive values indicate lower NTD-PL error}{figure.caption.32}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {C.6}Cross-Domain Real Tensor Checks}{18}{subsection.C.6}\protected@file@percent }
 \newlabel{app:cross-domain-real-tensors}{{C.6}{18}{Cross-Domain Real Tensor Checks}{subsection.C.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.7}Non-HSI Link Refresh Diagnostics}{18}{subsection.C.7}\protected@file@percent }
+\newlabel{app:nonhsi-link-diagnostics}{{C.7}{18}{Non-HSI Link Refresh Diagnostics}{subsection.C.7}{}}
 \def\@LN@column{1}
 \@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Additional matched-rank real tensor reconstruction. Columns report RMSE; gains are relative RMSE reductions over Tucker, and positive \(\Delta \)RMSE favors NTD-PL.}}{19}{table.caption.33}\protected@file@percent }
 \newlabel{tab:real-tensor-reconstruction}{{9}{19}{Additional matched-rank real tensor reconstruction. Columns report RMSE; gains are relative RMSE reductions over Tucker, and positive \(\Delta \)RMSE favors NTD-PL}{table.caption.33}{}}
-\gdef \@abspage@last{19}
+\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Representative non-HSI units selected by \(D_{\mathrm  {link}}\). Boundary/effective labels are assigned before inspecting NTD-PL gain.}}{19}{table.caption.34}\protected@file@percent }
+\newlabel{tab:nonhsi-link-representatives}{{10}{19}{Representative non-HSI units selected by \(D_{\mathrm {link}}\). Boundary/effective labels are assigned before inspecting NTD-PL gain}{table.caption.34}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces \(D_{\mathrm  {link}}\) versus NTD-PL RMSE gain over non-HSI tensor units. Units are selected independently and labels are assigned from \(D_{\mathrm  {link}}\).}}{19}{figure.caption.35}\protected@file@percent }
+\newlabel{fig:nonhsi-link-scatter}{{8}{19}{\(D_{\mathrm {link}}\) versus NTD-PL RMSE gain over non-HSI tensor units. Units are selected independently and labels are assigned from \(D_{\mathrm {link}}\)}{figure.caption.35}{}}
+\def\@LN@column{1}
+\gdef \@abspage@last{20}

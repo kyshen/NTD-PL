@@ -442,9 +442,6 @@ INPUT ./figures/cave_link_yield_scatter.pdf
 INPUT ./figures/cave_link_yield_scatter.pdf
 INPUT ./figures/cave_link_yield_scatter.pdf
 INPUT ./figures/cave_link_yield_scatter.pdf
-INPUT ./tables/real_hsi_robustness_main.tex
-INPUT ./tables/real_hsi_robustness_main.tex
-INPUT tables/real_hsi_robustness_main.tex
 INPUT ./sections/limitations.tex
 INPUT ./sections/limitations.tex
 INPUT ./sections/limitations.tex
@@ -550,6 +547,11 @@ INPUT ./figures/cave_beads_recon_completion_visual.pdf
 INPUT ./tables/real_tensor_reconstruction_main.tex
 INPUT ./tables/real_tensor_reconstruction_main.tex
 INPUT tables/real_tensor_reconstruction_main.tex
+INPUT ./figures/nonhsi_dlink_scatter.pdf
+INPUT ./figures/nonhsi_dlink_scatter.pdf
+INPUT ./figures/nonhsi_dlink_scatter.pdf
+INPUT ./figures/nonhsi_dlink_scatter.pdf
+INPUT ./figures/nonhsi_dlink_scatter.pdf
 INPUT ./checklist.tex
 INPUT ./checklist.tex
 INPUT ./checklist.tex
