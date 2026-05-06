@@ -16,10 +16,9 @@ OUT_DIR = ROOT / "neurips" / "figures"
 OUT_STEM = "controlled_nonlinear_degree_gain_compact"
 
 PANEL_STYLES = {
-    "poly2": {"label": r"$s^2$", "color": PALETTE.ntdpl, "marker": "o"},
     "poly3": {"label": r"$s^2+s^3$", "color": "#C97C1A", "marker": "s"},
-    "sin": {"label": r"$\sin(\kappa s)$", "color": PALETTE.tt, "marker": "^"},
     "tanh": {"label": r"$\tanh(\kappa s)$", "color": PALETTE.tr, "marker": "D"},
+    "exp": {"label": r"$(e^{\kappa s}-1)/\kappa$", "color": PALETTE.tt, "marker": "^"},
 }
 
 

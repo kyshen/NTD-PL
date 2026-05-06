@@ -18,9 +18,8 @@ OUT_DIR = ROOT / "neurips" / "figures"
 OUT_STEM = "controlled_nonlinear_pmax_heatmap"
 
 PANEL_LABELS = {
-    "poly2": r"$s^2$",
     "poly3": r"$s^2+s^3$",
-    "sin": r"$\sin(\kappa s)$",
+    "exp": r"$(e^{\kappa s}-1)/\kappa$",
     "tanh": r"$\tanh(\kappa s)$",
 }
 
@@ -42,14 +41,14 @@ def _degree_gain_matrix(data, panel_order: list[str]) -> tuple[np.ndarray, list[
 def main() -> None:
     apply_style("single_column")
     data = aggregate_nonlinear_pmax_grid()
-    panel_order = ["poly2", "poly3", "sin", "tanh"]
+    panel_order = ["poly3", "exp", "tanh"]
     matrix, degrees = _degree_gain_matrix(data, panel_order)
 
     cmap = LinearSegmentedColormap.from_list(
         "ntdpl_degree_gain",
         [PALETTE.heat_low, PALETTE.heat_mid, PALETTE.ntdpl],
     )
-    fig, ax = plt.subplots(figsize=(5.48, 1.42))
+    fig, ax = plt.subplots(figsize=(5.48, 1.20))
     image = ax.imshow(
         matrix,
         aspect="auto",
@@ -93,7 +92,7 @@ def main() -> None:
     cbar.set_label("gain over Tucker (dB)", labelpad=4.0)
     cbar.outline.set_visible(False)
     cbar.ax.tick_params(length=2.5, width=0.7, labelsize=7.4, colors=PALETTE.border)
-    fig.subplots_adjust(left=0.13, right=0.91, bottom=0.22, top=0.96)
+    fig.subplots_adjust(left=0.13, right=0.91, bottom=0.26, top=0.96)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     for ext in ("pdf", "png"):

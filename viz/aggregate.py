@@ -29,7 +29,7 @@ from experiment.process.helpers.real_hsi_robustness import (
 from experiment.utils.io import load_state_mat
 
 
-NONLINEAR_ORDER = ("poly2", "poly3", "sin", "tanh")
+NONLINEAR_ORDER = ("poly3", "exp", "tanh")
 NONLINEAR_ALPHA_REF = 0.25
 NONLINEAR_STEP_PMAX = 5
 CAVE_REPR_MAIN_RANK = CAVE_RECON_MAIN_RANK
@@ -54,11 +54,14 @@ def _first_present(frame: pd.DataFrame, *names: str) -> str:
 
 
 def _series_str(frame: pd.DataFrame, *names: str) -> pd.Series:
-    return frame[_first_present(frame, *names)].astype(str)
+    return frame[_first_present(frame, *names)].astype(str).str.strip().str.strip('"')
 
 
 def _series_num(frame: pd.DataFrame, *names: str) -> pd.Series:
-    return io.maybe_numeric(frame[_first_present(frame, *names)])
+    series = frame[_first_present(frame, *names)]
+    if series.dtype == object:
+        series = series.astype(str).str.strip().str.strip('"')
+    return io.maybe_numeric(series)
 
 
 def _with_rank(frame: pd.DataFrame) -> pd.DataFrame:

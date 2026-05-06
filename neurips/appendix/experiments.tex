@@ -42,9 +42,9 @@ By construction, \(\langle S^\star,\widetilde R^\star\rangle=0\) and
 \(\|\widetilde R^\star\|_F=\|S^\star\|_F\), so \(\alpha\) is exactly the
 energy fraction assigned to the nonlinear residual. This keeps the total
 energy fixed while moving the observation away from the linear Tucker
-backbone. The candidate residual families are \(g(s)=s^2\),
-\(g(s)=s^2+s^3\), \(g(s)=\sin(\kappa s)\), and
-\(g(s)=\tanh(\kappa s)\), with \(\kappa\) set from the input scale.
+backbone. The candidate residual families are \(g(s)=s^2+s^3\),
+\(g(s)=(\exp(\kappa s)-1)/\kappa\), and \(g(s)=\tanh(\kappa s)\),
+with \(\kappa\) set from the input range.
 
 The main text reports the nonlinear alpha sweep and degree sweep.
 Figure~\ref{fig:controlled-training-curves} shows that degree continuation

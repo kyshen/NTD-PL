@@ -17,9 +17,8 @@ OUT_DIR = ROOT / "neurips" / "figures"
 OUT_STEM = "controlled_nonlinear_step_strip"
 
 PANEL_LABELS = {
-    "poly2": r"$s^2$",
     "poly3": r"$s^2+s^3$",
-    "sin": r"$\sin(\kappa s)$",
+    "exp": r"$(e^{\kappa s}-1)/\kappa$",
     "tanh": r"$\tanh(\kappa s)$",
 }
 
@@ -54,17 +53,17 @@ def _plot_panel(ax: plt.Axes, data, panel_key: str, *, show_ylabel: bool) -> Non
 def main() -> None:
     apply_style("single_column")
     data = aggregate_nonlinear_step_grid()
-    panel_order = ["poly2", "poly3", "sin", "tanh"]
+    panel_order = ["poly3", "exp", "tanh"]
 
-    fig, axes = plt.subplots(2, 2, figsize=(5.48, 2.46), sharex=True, sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(5.48, 1.62), sharex=True, sharey=True)
     flat_axes = axes.ravel()
     for idx, (ax, panel_key) in enumerate(zip(flat_axes, panel_order, strict=True)):
-        _plot_panel(ax, data, panel_key, show_ylabel=idx in (0, 2))
+        _plot_panel(ax, data, panel_key, show_ylabel=idx == 0)
 
-    for ax in flat_axes[2:]:
+    for ax in flat_axes:
         ax.set_xlabel("iteration", labelpad=1.5)
 
-    fig.subplots_adjust(left=0.078, right=0.995, bottom=0.13, top=0.91, wspace=0.11, hspace=0.40)
+    fig.subplots_adjust(left=0.078, right=0.995, bottom=0.20, top=0.86, wspace=0.12)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     for ext in ("pdf", "png"):

@@ -32,7 +32,7 @@ the amplitude of a raw scalar nonlinearity.
 When the source is linear, NTD-PL reduces to Tucker up to the fitted affine
 link; when nonlinear residual energy is present, the higher-order link terms
 should become useful.  Figure~\ref{fig:controlled-alpha-grid} shows this
-pattern across four residual families: NTD-PL separates from linear tensor
+pattern across three residual families: NTD-PL separates from linear tensor
 baselines as \(\alpha\) increases.  Figure~\ref{fig:controlled-pmax-strip}
 then varies the maximum polynomial degree at fixed residual energy, showing
 that the gain is tied to the expressive order of the link. Degree-continuation
@@ -120,21 +120,23 @@ scalar residual pattern.
 Full-observation reconstruction is a controlled mechanism check rather than
 the main generalization test: with all entries observed, we can ask whether
 the polynomial link consistently removes residual structure left by a
-matched-rank Tucker backbone. Table~\ref{tab:cave-reconstruction} supports
+matched-rank Tucker backbone. Figure~\ref{fig:cave-reconstruction-capacity} supports
 this interpretation. NTD-PL improves both intensity error and spectral angle
 across the rank range, while the advantage becomes smaller as the Tucker
 rank increases. This trend is the expected signature of a lightweight
 observation model: it helps most when the linear backbone is tight, and
 becomes less necessary as ordinary multilinear capacity grows.
 
-\begin{table}[!htbp]
+\begin{figure}[!htbp]
   \centering
-  \caption{CAVE full reconstruction at matched ranks. Metrics are averaged
-  over 15 scenes.}
-  \label{tab:cave-reconstruction}
-  \scriptsize
-  \resizebox{0.88\linewidth}{!}{\input{tables/cave_reconstruction_main.tex}}
-\end{table}
+  \includegraphics[width=0.98\linewidth]{figures/cave_reconstruction_capacity.pdf}
+  \caption{CAVE full-observation reconstruction as a representation-capacity
+  check. Each point averages 15 scenes at a matched Tucker backbone rank.
+  Unlike masked completion in Table~\ref{tab:lowrank-completion-main}, this
+  plot measures how much error each parameter budget can represent when all
+  entries are observed.}
+  \label{fig:cave-reconstruction-capacity}
+\end{figure}
 
 \FloatBarrier
 

@@ -33,6 +33,10 @@ class NonlinearFilter(DataFilter):
             data._dense = apply_poly2(data._dense, alpha)
         elif nonlinear == "poly3":
             data._dense = apply_poly3(data._dense, alpha)
+        elif nonlinear == "poly34":
+            data._dense = apply_poly34(data._dense, alpha)
+        elif nonlinear == "exp":
+            data._dense = apply_exp_response(data._dense, alpha)
         else:
             raise ValueError(f"Unsupported filter function: {nonlinear}")
 
@@ -55,6 +59,19 @@ def apply_poly2(x: np.ndarray, alpha: float) -> np.ndarray:
 
 def apply_poly3(x: np.ndarray, alpha: float) -> np.ndarray:
     gx = x**2 + x**3
+    r = orthogonal_nonlinear_part(x, gx)
+    return mix_with_exact_energy_ratio(x, r, alpha)
+
+
+def apply_poly34(x: np.ndarray, alpha: float) -> np.ndarray:
+    gx = x**3 + x**4
+    r = orthogonal_nonlinear_part(x, gx)
+    return mix_with_exact_energy_ratio(x, r, alpha)
+
+
+def apply_exp_response(x: np.ndarray, alpha: float) -> np.ndarray:
+    k = 1.0 / typical_scale(x)
+    gx = np.expm1(k * x) / k
     r = orthogonal_nonlinear_part(x, gx)
     return mix_with_exact_energy_ratio(x, r, alpha)
 

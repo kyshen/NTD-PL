@@ -209,7 +209,7 @@ class BiasFilterCfg(FilterCfg):
 class NonlinearFilterCfg(FilterCfg):
     _target_: str = "src.filters.NonlinearFilter"
     _name: str = "nonlinear-filter"
-    nonlinear: str = "none"  # "none" | "sin" | "tanh" | "poly2" | "poly3"
+    nonlinear: str = "none"  # "none" | "sin" | "tanh" | "poly2" | "poly3" | "poly34" | "exp"
     alpha: float = 0.0
 
     
