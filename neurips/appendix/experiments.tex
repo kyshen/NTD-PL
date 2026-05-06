@@ -108,13 +108,24 @@ Wilcoxon tests for the same protocol.
   \resizebox{\linewidth}{!}{\input{tables/cave_completion_significance.tex}}
 \end{table}
 
-\subsection{Residual-Link Diagnostic}
+\begin{table}[ht]
+  \centering
+  \caption{Link Refresh diagnostic on CAVE completion. Low/mid/high gains
+  report the mean NTD-PL RMSE$^\ast$ gain over Tucker within each
+  \(D_{\mathrm{link}}\) tercile.}
+  \label{tab:ntdpl-polycal-diagnostic}
+  \scriptsize
+  \resizebox{0.94\linewidth}{!}{\input{tables/ntdpl_polycal_diagnostic.tex}}
+\end{table}
+
+\subsection{Link Refresh Residual Diagnostic}
 \label{app:posthoc-calibration-baselines}
 
-The diagnostic used in the main text is a restricted NTD-PL update applied to a
-fixed Tucker backbone. Let \(\widehat{\cY}_{\mathrm{T}}\) denote the Tucker
-output and \(\cY\) the target tensor. We freeze the Tucker core and factors,
-and update only the scalar polynomial coefficients by fitting
+The diagnostic used in the main text reuses the Link Refresh step from
+Section~\ref{sec:optimization} as a one-round residual probe. Let
+\(\widehat{\cY}_{\mathrm{T}}\) denote the Tucker output and \(\cY\) the target
+tensor. Starting from this fitted Tucker latent tensor, we update only the
+scalar polynomial coefficients by fitting
 \[
   h_{\gamma}(x)=\sum_{p=0}^{4}\gamma_p x^p
 \]
@@ -122,18 +133,19 @@ by ridge regression on pairs
 \((\widehat Y_{\mathrm{T},\mathbf i},Y_{\mathbf i})\). In full reconstruction,
 all entries are used for this fit. In completion, the fit uses only observed
 entries and is then evaluated on held-out entries. The fitted map is applied
-entrywise to \(\widehat{\cY}_{\mathrm{T}}\); the Tucker core and factors are
-never updated. We summarize this refresh by the residual-link score
+entrywise to \(\widehat{\cY}_{\mathrm{T}}\). We summarize this cheap refresh by
+the Link Refresh diagnostic
 \[
-  S_{\mathrm{link}}
+  D_{\mathrm{link}}
   =10\log_{10}\!\left(
   \frac{\|\cY_{\mathrm{eval}}-\widehat{\cY}_{\mathrm{T}}\|_F^2}
   {\|\cY_{\mathrm{eval}}-\widehat{\cY}_{\mathrm{link}}\|_F^2}
   \right),
 \]
 which measures, on a log scale, how much Tucker residual energy is removed on
-the task-specific evaluation entries. In other words, it measures how much of
-the NTD-PL benefit is already visible before the backbone is allowed to move.
+the task-specific evaluation entries. In other words, it measures how much
+shared scalar-link yield is already present before the full NTD-PL alternating
+solver starts reshaping the Tucker parameters.
 
 \subsection{Joint Link-Family Smoke Test}
 \label{app:joint-link-family}
@@ -180,6 +192,9 @@ entries in the observation panel are shown in gray.
 \subsection{Cross-Domain Real Tensor Checks}
 \label{app:cross-domain-real-tensors}
 
+These non-HSI checks are exploratory and are not used in the main diagnostic
+table; a fuller per-unit \(D_{\mathrm{link}}\) analysis is left for a later
+revision.
 Table~\ref{tab:real-tensor-reconstruction} reports matched-rank
 reconstruction on tensors outside the main hyperspectral setting: additional
 hyperspectral scenes, natural-image collections, and object-view tensors. The

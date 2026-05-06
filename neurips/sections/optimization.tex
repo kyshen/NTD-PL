@@ -1,40 +1,93 @@
 \section{Optimization}
 \label{sec:optimization}
 
-We optimize the masked objective in Section~\ref{sec:masked-objective} with a
-simple alternating scheme. The Tucker backbone \((\cX,\{\bA^{(n)}\})\) is
-updated by first-order steps through the current polynomial link, while the
-link coefficients are updated by a small ridge-regression problem on the
-current latent entries. This gives a practical solver while keeping the
-optimization layer standard.
+We optimize the masked objective in Section~\ref{sec:masked-objective} by
+alternating between the scalar link and the Tucker backbone. The nonlinear part
+is low-dimensional once the latent Tucker tensor is fixed, while the backbone
+update remains a standard differentiable Tucker fitting step through the
+current link. We call the two stages \emph{Link Refresh} and
+\emph{Linked-Backbone Descent}.
 
-Given the current latent tensor
-\(\cS=\tucker{\cX}{\bA^{(1)},\ldots,\bA^{(N)}}\), the coefficient update for
-active degree \(Q\) solves
+\paragraph{Link Refresh.}
+Fix the current latent tensor
+\begin{equation}
+  S=\tucker{\cX}{\bA^{(1)},\ldots,\bA^{(N)}}.
+\end{equation}
+For active degree \(Q\le P\), updating the polynomial coefficients reduces to
+a small masked ridge regression,
 \begin{equation}
   \min_{\bbeta_{0:Q}}
   \frac{1}{2|\Omega|}
-  \norm{\by_\Omega-\bPhi_{\Omega,Q}(\cS)\bbeta_{0:Q}}_2^2
+  \norm{y_\Omega-\bPhi_{\Omega,Q}(S)\bbeta_{0:Q}}_2^2
   +
   \frac{\lambda_\beta}{2}\norm{\bbeta_{0:Q}}_2^2,
   \label{eq:main-beta-subproblem}
 \end{equation}
-where \(\bPhi_{\Omega,Q}(\cS)\) contains the observed powers
-\([1,s,\ldots,s^Q]\). The backbone update uses the chain rule through
-\(f_{\bbeta}\); the implementation evaluates \(f_{\bbeta}(\cS)\) and
-\(f_{\bbeta}'(\cS)\) together, then backpropagates the masked residual through
-the Tucker reconstruction.
+where \(\bPhi_{\Omega,Q}(S)\) contains the observed powers
+\([1,s,\ldots,s^Q]\). This step is cheap because it solves only a
+\((Q+1)\times(Q+1)\) linear system. It also gives an interpretable view of the
+link: once the backbone exposes a one-dimensional latent value at each entry,
+the refresh estimates the best shared scalar response on the observed entries.
 
-Training starts from the Tucker-compatible degree-one model and activates
-higher powers gradually. When a new degree is activated, its coefficient is
-initialized at zero, so the model expands from the current low-degree fit
-rather than beginning with all nonlinear terms active. We also normalize factor
-scales and absorb them into the core, which fixes a Tucker gauge without
-changing \(\cS\).
+\paragraph{Linked-Backbone Descent.}
+With \(\bbeta\) fixed, the Tucker parameters are updated through the current
+nonlinear observation map. The masked residual is first propagated to the
+latent tensor as
+\begin{equation}
+  T=
+  \frac{1}{|\Omega|}
+  \Omega\odot\left(f_{\bbeta}(S)-Y\right)\odot f'_{\bbeta}(S),
+\end{equation}
+and then backpropagated through the Tucker reconstruction to update
+\(\cX\) and \(\{\bA^{(n)}\}\). In implementation we use Adam for these
+first-order steps, but the update itself is just standard Tucker reverse
+contractions composed with the current link. The backbone is therefore not
+calibrated after fitting; it is jointly reshaped under the shared nonlinear
+link.
 
-The dominant cost is the same forward and reverse Tucker contractions used by
-standard Tucker optimization at the chosen rank. The polynomial link adds
-\(O(P|\Omega|)\) elementwise work and a \((P+1)\times(P+1)\) ridge solve, so
-for the small degrees used here its overhead is minor. Full update equations,
-stabilization details, and pseudocode are given in
-Appendix~\ref{app:optimization-details}.
+\paragraph{Stabilization.}
+Directly activating all polynomial degrees from the start is brittle, because
+higher powers of \(S\) amplify scale ambiguity. We therefore begin from the
+Tucker-compatible degree-one model and activate higher degrees gradually. When
+a new degree is switched on, its coefficient is initialized at zero, so the
+model expands from the current lower-degree solution without changing the
+prediction abruptly. We also normalize Tucker factor scales and absorb the
+corresponding scales into the core, which fixes a Tucker gauge without
+changing \(S\). For the coefficient solve, the implementation may regress on a
+centered and scaled latent variable and then map the solution back to the
+original power basis.
+
+\paragraph{Cost.}
+The dominant cost is the same Tucker forward and reverse contractions used by
+standard Tucker optimization at the chosen rank. The polynomial link adds only
+\(O(P|\Omega|)\) elementwise work for evaluating \(f_{\bbeta}(S)\) and
+\(f'_{\bbeta}(S)\), plus a small \((P+1)\times(P+1)\) ridge solve. Since the
+experiments use small \(P\), the overhead is modest relative to the Tucker
+contractions. Full gradients, stabilization details, and pseudocode are given
+in Appendix~\ref{app:optimization-details}.
+
+\paragraph{Masked-entry uniform convergence.}
+The masked objective also admits a standard sampling interpretation. Let
+\(m=|\Omega|\) and let \(\Theta\subset\R^d\) be a bounded NTD-PL parameter
+set, where \(d=\prod_{n=1}^{N}R_n+\sum_{n=1}^{N}I_nR_n+(P+1)\). If the
+entrywise losses are bounded by \(0\le \ell_{\mathbf i}(\theta)\le B_\ell\)
+and \(G\)-Lipschitz in \(\theta\), then with probability at least \(1-\delta\),
+\begin{equation}
+  \sup_{\theta\in\Theta}
+  \left|
+  \mathcal L(\theta)-\widehat{\mathcal L}_{m}(\theta)
+  \right|
+  \le
+  2G\varepsilon
+  +
+  B_\ell
+  \sqrt{
+  \frac{
+  d\log(3B_\Theta/\varepsilon)+\log(2/\delta)}
+  {2m}},
+\end{equation}
+for every \(0<\varepsilon\le B_\Theta\). This is a standard uniform
+convergence bound, not a sharp minimax result, but it clarifies that masked
+training controls the full-entry risk with a complexity term determined by the
+tied NTD-PL parameter count. The proof is given in
+Appendix~\ref{app:masked-generalization}.
