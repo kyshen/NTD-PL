@@ -56,23 +56,64 @@ def _load_points() -> pd.DataFrame:
     return frame.sort_values(["method_order", "params_k"]).reset_index(drop=True)
 
 
+def _paired_points(frame: pd.DataFrame) -> pd.DataFrame:
+    wide = frame.pivot(index="rank", columns="method", values=["params_k", "rmse", "sam"])
+    rows = []
+    for rank in frame.sort_values("params_k")["rank"].drop_duplicates():
+        tucker = wide.loc[rank, ("params_k", "Tucker")]
+        ntdpl = wide.loc[rank, ("params_k", "NTD-PL")]
+        rows.append(
+            {
+                "rank": rank,
+                "x": 0.5 * (float(tucker) + float(ntdpl)),
+                "rmse_tucker": float(wide.loc[rank, ("rmse", "Tucker")]),
+                "rmse_ntdpl": float(wide.loc[rank, ("rmse", "NTD-PL")]),
+                "sam_tucker": float(wide.loc[rank, ("sam", "Tucker")]),
+                "sam_ntdpl": float(wide.loc[rank, ("sam", "NTD-PL")]),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def _annotate_gains(ax: plt.Axes, pairs: pd.DataFrame, metric: str) -> None:
+    for _, row in pairs.iterrows():
+        tucker = float(row[f"{metric}_tucker"])
+        ntdpl = float(row[f"{metric}_ntdpl"])
+        gain = 100.0 * (tucker - ntdpl) / tucker
+        y = 0.5 * (tucker + ntdpl)
+        ax.annotate(
+            rf"$\downarrow${gain:.1f}%",
+            xy=(float(row["x"]), y),
+            xytext=(4.0, 0.0),
+            textcoords="offset points",
+            ha="left",
+            va="center",
+            fontsize=7.2,
+            color=PALETTE.ntdpl,
+            bbox={"boxstyle": "round,pad=0.12", "facecolor": PALETTE.white, "edgecolor": "none", "alpha": 0.88},
+            zorder=5,
+        )
+
+
 def _plot_metric(ax: plt.Axes, frame: pd.DataFrame, metric: str, ylabel: str) -> None:
     styles = {
         "Tucker": {
             "color": PALETTE.tucker,
             "marker": "s",
             "linestyle": "--",
-            "linewidth": 1.55,
-            "markersize": 4.0,
+            "linewidth": 1.45,
+            "markersize": 3.9,
             "label": "Tucker",
+            "alpha": 0.82,
         },
         "NTD-PL": {
             "color": PALETTE.ntdpl,
             "marker": "o",
             "linestyle": "-",
-            "linewidth": 1.75,
-            "markersize": 4.3,
+            "linewidth": 2.15,
+            "markersize": 5.0,
             "label": "NTD-PL",
+            "alpha": 0.98,
         },
     }
     for method, style in styles.items():
@@ -86,12 +127,12 @@ def _plot_metric(ax: plt.Axes, frame: pd.DataFrame, metric: str, ylabel: str) ->
             linewidth=style["linewidth"],
             markersize=style["markersize"],
             label=style["label"],
-            alpha=0.96,
+            alpha=style["alpha"],
         )
 
     ax.set_xlabel("Parameters (k)")
     ax.set_ylabel(ylabel)
-    ax.set_xlim(17.0, 51.5)
+    ax.set_xlim(17.0, 52.0)
     style_axes(ax, grid=True)
 
 
@@ -104,6 +145,9 @@ def main() -> None:
     _plot_metric(axes[1], frame, "sam", "SAM")
     axes[0].set_ylim(0.018, 0.039)
     axes[1].set_ylim(11.0, 23.5)
+    pairs = _paired_points(frame)
+    _annotate_gains(axes[0], pairs, "rmse")
+    _annotate_gains(axes[1], pairs, "sam")
     axes[0].legend(loc="upper right", frameon=False, handlelength=1.8)
     fig.subplots_adjust(left=0.075, right=0.99, bottom=0.23, top=0.96, wspace=0.24)
 
