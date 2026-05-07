@@ -105,6 +105,8 @@ def main() -> None:
             "axes.labelsize": 10.2,
             "xtick.labelsize": 8.8,
             "ytick.labelsize": 8.8,
+            "pdf.fonttype": 42,
+            "ps.fonttype": 42,
         }
     )
     frame = _load()
