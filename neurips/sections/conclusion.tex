@@ -1,18 +1,13 @@
 \section{Conclusion}
 
-This paper develops polynomial links as parameter-tied rank lifts for Tucker
-tensors. The model keeps a Tucker latent tensor as the backbone and learns a
-polynomial link, adding only scalar coefficients.
-The resulting powers of the same latent tensor act as shared-backbone
-high-order interactions rather than untied high-rank corrections.
-
-The analysis makes this rank-lift view explicit through Veronese rank
-expansion, separation from matched-rank Tucker, and approximation results for
-nonlinear links. The optimization uses a masked objective with Link
-Refresh, Linked-Backbone Descent, and degree continuation, while the experiments
-and diagnostics identify the intended regime: the link helps when
-matched-rank Tucker leaves a coherent nonlinear residual explained by a scalar
-response.
-
-Future work may consider spatially or spectrally adaptive links, scalable
-sparse implementations, and richer structured links beyond scalar polynomials.
+This paper develops NTD-PL as a Tucker enhancement with a shared polynomial
+link. The model keeps a Tucker latent tensor as the backbone, and polynomial
+powers of that same latent tensor induce parameter-tied, shared-backbone rank
+lifts rather than untied high-rank corrections. The analysis formalizes this
+view through Veronese rank expansion, an expressivity gap over matched-rank
+Tucker, and approximation results for nonlinear links. The optimizer combines
+Link Refresh, Linked-Backbone Descent, and degree continuation, while the
+experiments and diagnostics identify the scoped empirical regime: the link
+helps when matched-rank Tucker leaves a coherent nonlinear residual explained
+by a scalar response. Future work may consider adaptive links, scalable sparse
+implementations, and richer structured responses.

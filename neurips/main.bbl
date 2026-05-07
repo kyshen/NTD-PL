@@ -8,19 +8,26 @@
 \bibitem[Ahn et~al.(2024)Ahn, Saini, Papalexakis, and Payani]{ahn2024neural}
 Dawon Ahn, Uday~Singh Saini, Evangelos~E. Papalexakis, and Ali Payani.
 \newblock Neural additive tensor decomposition for sparse tensors.
-\newblock In \emph{Proceedings of the 33rd ACM International Conference on Information and Knowledge Management}, pages 14--23, 2024.
+\newblock In \emph{Proceedings of the 33rd ACM International Conference on
+  Information and Knowledge Management}, pages 14--23, 2024.
 \newblock \doi{10.1145/3627673.3679833}.
 
-\bibitem[Bioucas-Dias et~al.(2012)Bioucas-Dias, Plaza, Dobigeon, Parente, Du, Gader, and Chanussot]{BioucasDias2012HyperspectralUnmixing}
-Jos{\'e}~M. Bioucas-Dias, Antonio Plaza, Nicolas Dobigeon, Mario Parente, Qian Du, Paul Gader, and Jocelyn Chanussot.
-\newblock Hyperspectral unmixing overview: Geometrical, statistical, and sparse regression-based approaches.
-\newblock \emph{IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing}, 5\penalty0 (2):\penalty0 354--379, 2012.
+\bibitem[Bioucas-Dias et~al.(2012)Bioucas-Dias, Plaza, Dobigeon, Parente, Du,
+  Gader, and Chanussot]{BioucasDias2012HyperspectralUnmixing}
+Jos{\'e}~M. Bioucas-Dias, Antonio Plaza, Nicolas Dobigeon, Mario Parente, Qian
+  Du, Paul Gader, and Jocelyn Chanussot.
+\newblock Hyperspectral unmixing overview: Geometrical, statistical, and sparse
+  regression-based approaches.
+\newblock \emph{IEEE Journal of Selected Topics in Applied Earth Observations
+  and Remote Sensing}, 5\penalty0 (2):\penalty0 354--379, 2012.
 \newblock \doi{10.1109/JSTARS.2012.2194696}.
 
 \bibitem[Boyd and Chua(1985)]{Boyd1985FadingMemory}
 Stephen Boyd and Leon~O. Chua.
-\newblock Fading memory and the problem of approximating nonlinear operators with volterra series.
-\newblock \emph{IEEE Transactions on Circuits and Systems}, 32\penalty0 (11):\penalty0 1150--1161, 1985.
+\newblock Fading memory and the problem of approximating nonlinear operators
+  with volterra series.
+\newblock \emph{IEEE Transactions on Circuits and Systems}, 32\penalty0
+  (11):\penalty0 1150--1161, 1985.
 \newblock \doi{10.1109/TCS.1985.1085649}.
 
 \bibitem[{Columbia CAVE Laboratory}(n.d.)]{cave_multispectral_database}
@@ -29,33 +36,41 @@ Stephen Boyd and Leon~O. Chua.
 \newblock \url{https://cave.cs.columbia.edu/repository/Multispectral}, n.d.
 \newblock Accessed: 2026-04-13.
 
-\bibitem[De~Lathauwer et~al.(2000)De~Lathauwer, De~Moor, and Vandewalle]{DeLathauwer2000MLSVD}
+\bibitem[De~Lathauwer et~al.(2000)De~Lathauwer, De~Moor, and
+  Vandewalle]{DeLathauwer2000MLSVD}
 Lieven De~Lathauwer, Bart De~Moor, and Joos Vandewalle.
 \newblock A multilinear singular value decomposition.
-\newblock \emph{SIAM Journal on Matrix Analysis and Applications}, 21\penalty0 (4):\penalty0 1253--1278, 2000.
+\newblock \emph{SIAM Journal on Matrix Analysis and Applications}, 21\penalty0
+  (4):\penalty0 1253--1278, 2000.
 \newblock \doi{10.1137/S0895479896305696}.
 
 \bibitem[Debevec and Malik(1997)]{Debevec1997HDR}
 Paul~E. Debevec and Jitendra Malik.
 \newblock Recovering high dynamic range radiance maps from photographs.
-\newblock In \emph{Proceedings of the 24th Annual Conference on Computer Graphics and Interactive Techniques}, SIGGRAPH '97, pages 369--378, 1997.
+\newblock In \emph{Proceedings of the 24th Annual Conference on Computer
+  Graphics and Interactive Techniques}, SIGGRAPH '97, pages 369--378, 1997.
 \newblock \doi{10.1145/258734.258884}.
 
 \bibitem[Deng et~al.(2016)Deng, Liu, Batselier, Kwok, and Wong]{deng2016storm}
 Jian Deng, Haotian Liu, Kim Batselier, Yu-Kwong Kwok, and Ngai Wong.
-\newblock Storm: a nonlinear model order reduction method via symmetric tensor decomposition.
-\newblock In \emph{2016 21st Asia and South Pacific design automation conference (ASP-DAC)}, pages 557--562. IEEE, 2016.
+\newblock Storm: a nonlinear model order reduction method via symmetric tensor
+  decomposition.
+\newblock In \emph{2016 21st Asia and South Pacific design automation
+  conference (ASP-DAC)}, pages 557--562. IEEE, 2016.
 
 \bibitem[Grossberg and Nayar(2004)]{Grossberg2004CameraResponse}
 Michael~D. Grossberg and Shree~K. Nayar.
 \newblock Modeling the space of camera response functions.
-\newblock \emph{IEEE Transactions on Pattern Analysis and Machine Intelligence}, 26\penalty0 (10):\penalty0 1272--1282, 2004.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
+  Intelligence}, 26\penalty0 (10):\penalty0 1272--1282, 2004.
 \newblock \doi{10.1109/TPAMI.2004.88}.
 
-\bibitem[Heylen et~al.(2014)Heylen, Parente, and Gader]{Heylen2014NonlinearUnmixing}
+\bibitem[Heylen et~al.(2014)Heylen, Parente, and
+  Gader]{Heylen2014NonlinearUnmixing}
 Rob Heylen, Mario Parente, and Paul Gader.
 \newblock A review of nonlinear hyperspectral unmixing methods.
-\newblock \emph{IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing}, 7\penalty0 (6):\penalty0 1844--1868, 2014.
+\newblock \emph{IEEE Journal of Selected Topics in Applied Earth Observations
+  and Remote Sensing}, 7\penalty0 (6):\penalty0 1844--1868, 2014.
 \newblock \doi{10.1109/JSTARS.2014.2320576}.
 
 \bibitem[Hong et~al.(2020)Hong, Kolda, and Duersch]{hong2020generalized}
@@ -76,15 +91,19 @@ Alex Krizhevsky.
 
 \bibitem[LeCun et~al.(2004)LeCun, Huang, and Bottou]{LeCun2004SmallNORB}
 Yann LeCun, Fu~Jie Huang, and L{\'e}on Bottou.
-\newblock Learning methods for generic object recognition with invariance to pose and lighting.
-\newblock In \emph{Proceedings of the 2004 IEEE Computer Society Conference on Computer Vision and Pattern Recognition}, volume~2, pages 97--104, 2004.
+\newblock Learning methods for generic object recognition with invariance to
+  pose and lighting.
+\newblock In \emph{Proceedings of the 2004 IEEE Computer Society Conference on
+  Computer Vision and Pattern Recognition}, volume~2, pages 97--104, 2004.
 \newblock \doi{10.1109/CVPR.2004.1315150}.
 
 \bibitem[Liu and Moitra(2020)]{LiuMoitra2020TensorCompletion}
 Allen Liu and Ankur Moitra.
 \newblock Tensor completion made practical.
-\newblock In \emph{Advances in Neural Information Processing Systems}, volume~33, pages 18905--18916, 2020.
-\newblock URL \url{https://proceedings.neurips.cc/paper/2020/hash/dab1263d1e6a88c9ba5e7e294def5e8b-Abstract.html}.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~33, pages 18905--18916, 2020.
+\newblock URL
+  \url{https://proceedings.neurips.cc/paper/2020/hash/dab1263d1e6a88c9ba5e7e294def5e8b-Abstract.html}.
 
 \bibitem[Liu et~al.(2017)Liu, He, Zhe, Li, and Xu]{liu2017deepcp}
 Bin Liu, Lirong He, Shandian Zhe, Yingmin Li, and Zenglin Xu.
@@ -93,31 +112,43 @@ Bin Liu, Lirong He, Shandian Zhe, Yingmin Li, and Zenglin Xu.
 
 \bibitem[Liu et~al.(2015)Liu, Daniel, and Wong]{liu2015model}
 Haotian Liu, Luca Daniel, and Ngai Wong.
-\newblock Model reduction and simulation of nonlinear circuits via tensor decomposition.
-\newblock \emph{IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems}, 34\penalty0 (7):\penalty0 1059--1069, 2015.
+\newblock Model reduction and simulation of nonlinear circuits via tensor
+  decomposition.
+\newblock \emph{IEEE Transactions on Computer-Aided Design of Integrated
+  Circuits and Systems}, 34\penalty0 (7):\penalty0 1059--1069, 2015.
 
-\bibitem[Liu et~al.(2013)Liu, Musialski, Wonka, and Ye]{Liu2013TensorCompletion}
+\bibitem[Liu et~al.(2013)Liu, Musialski, Wonka, and
+  Ye]{Liu2013TensorCompletion}
 Ji~Liu, Przemyslaw Musialski, Peter Wonka, and Jieping Ye.
 \newblock Tensor completion for estimating missing values in visual data.
-\newblock \emph{IEEE Transactions on Pattern Analysis and Machine Intelligence}, 35\penalty0 (1):\penalty0 208--220, 2013.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
+  Intelligence}, 35\penalty0 (1):\penalty0 208--220, 2013.
 \newblock \doi{10.1109/TPAMI.2012.39}.
 
-\bibitem[Luo et~al.(2022)Luo, Zhao, Jiang, Chang, Ng, and Li]{Luo2022SelfSupervisedTNN}
+\bibitem[Luo et~al.(2022)Luo, Zhao, Jiang, Chang, Ng, and
+  Li]{Luo2022SelfSupervisedTNN}
 Yi-Si Luo, Xi-Le Zhao, Tai-Xiang Jiang, Yi~Chang, Michael~K. Ng, and Chao Li.
-\newblock Self-supervised nonlinear transform-based tensor nuclear norm for multi-dimensional image recovery.
-\newblock \emph{IEEE Transactions on Image Processing}, 31:\penalty0 3793--3808, 2022.
+\newblock Self-supervised nonlinear transform-based tensor nuclear norm for
+  multi-dimensional image recovery.
+\newblock \emph{IEEE Transactions on Image Processing}, 31:\penalty0
+  3793--3808, 2022.
 \newblock \doi{10.1109/TIP.2022.3176220}.
 
 \bibitem[Luo et~al.(2024)Luo, Zhao, Li, Ng, and Meng]{Luo2024LRTFR}
 Yisi Luo, Xile Zhao, Zhemin Li, Michael~K. Ng, and Deyu Meng.
-\newblock Low-rank tensor function representation for multi-dimensional data recovery.
-\newblock \emph{IEEE Transactions on Pattern Analysis and Machine Intelligence}, 46\penalty0 (5):\penalty0 3351--3369, 2024.
+\newblock Low-rank tensor function representation for multi-dimensional data
+  recovery.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
+  Intelligence}, 46\penalty0 (5):\penalty0 3351--3369, 2024.
 \newblock \doi{10.1109/TPAMI.2023.3341688}.
 
-\bibitem[Martin et~al.(2001)Martin, Fowlkes, Tal, and Malik]{martin2001database}
+\bibitem[Martin et~al.(2001)Martin, Fowlkes, Tal, and
+  Malik]{martin2001database}
 David Martin, Charless Fowlkes, Doron Tal, and Jitendra Malik.
-\newblock A database of human segmented natural images and its application to evaluating segmentation algorithms and measuring ecological statistics.
-\newblock In \emph{Proceedings of the IEEE International Conference on Computer Vision}, pages 416--423, 2001.
+\newblock A database of human segmented natural images and its application to
+  evaluating segmentation algorithms and measuring ecological statistics.
+\newblock In \emph{Proceedings of the IEEE International Conference on Computer
+  Vision}, pages 416--423, 2001.
 
 \bibitem[Nene et~al.(1996)Nene, Nayar, and Murase]{nene1996coil100}
 Sameer~A. Nene, Shree~K. Nayar, and Hiroshi Murase.
@@ -127,104 +158,142 @@ Sameer~A. Nene, Shree~K. Nayar, and Hiroshi Murase.
 \bibitem[Oseledets(2011)]{oseledets2011}
 Ivan~V. Oseledets.
 \newblock Tensor-train decomposition.
-\newblock \emph{SIAM Journal on Scientific Computing}, 33\penalty0 (5):\penalty0 2295--2317, 2011.
+\newblock \emph{SIAM Journal on Scientific Computing}, 33\penalty0
+  (5):\penalty0 2295--2317, 2011.
 
 \bibitem[Pan et~al.(2020)Pan, Wang, and Zhe]{pan2020streaming}
 Zhimeng Pan, Zheng Wang, and Shandian Zhe.
 \newblock Streaming nonlinear bayesian tensor decomposition.
-\newblock In \emph{Conference on Uncertainty in Artificial Intelligence}, pages 490--499. PMLR, 2020.
+\newblock In \emph{Conference on Uncertainty in Artificial Intelligence}, pages
+  490--499. PMLR, 2020.
 
 \bibitem[Ruegamer(2024)]{Ruegamer2024AISTATS}
 David Ruegamer.
 \newblock Scalable higher-order tensor product spline models.
-\newblock In \emph{Proceedings of The 27th International Conference on Artificial Intelligence and Statistics}, volume 238 of \emph{Proceedings of Machine Learning Research}, pages 1--9. PMLR, 2024.
+\newblock In \emph{Proceedings of The 27th International Conference on
+  Artificial Intelligence and Statistics}, volume 238 of \emph{Proceedings of
+  Machine Learning Research}, pages 1--9. PMLR, 2024.
 \newblock URL \url{https://proceedings.mlr.press/v238/ruegamer24a.html}.
 
-\bibitem[Saragadam et~al.(2024)Saragadam, Balestriero, Veeraraghavan, and Baraniuk]{saragadam2024deeptensor}
-Vishwanath Saragadam, Randall Balestriero, Ashok Veeraraghavan, and Richard~G Baraniuk.
+\bibitem[Saragadam et~al.(2024)Saragadam, Balestriero, Veeraraghavan, and
+  Baraniuk]{saragadam2024deeptensor}
+Vishwanath Saragadam, Randall Balestriero, Ashok Veeraraghavan, and Richard~G
+  Baraniuk.
 \newblock Deeptensor: Low-rank tensor decomposition with deep network priors.
-\newblock \emph{IEEE Transactions on Pattern Analysis and Machine Intelligence}, 46\penalty0 (12):\penalty0 10337--10348, 2024.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
+  Intelligence}, 46\penalty0 (12):\penalty0 10337--10348, 2024.
 
-\bibitem[Schein et~al.(2016)Schein, Zhou, Blei, and Wallach]{schein2016bayesian}
+\bibitem[Schein et~al.(2016)Schein, Zhou, Blei, and
+  Wallach]{schein2016bayesian}
 Aaron Schein, Mingyuan Zhou, David Blei, and Hanna Wallach.
-\newblock Bayesian poisson tucker decomposition for learning the structure of international relations.
-\newblock In \emph{International Conference on Machine Learning}, pages 2810--2819. PMLR, 2016.
+\newblock Bayesian poisson tucker decomposition for learning the structure of
+  international relations.
+\newblock In \emph{International Conference on Machine Learning}, pages
+  2810--2819. PMLR, 2016.
 
-\bibitem[Schuldt et~al.(2004)Schuldt, Laptev, and Caputo]{Schuldt2004KTHActions}
+\bibitem[Schuldt et~al.(2004)Schuldt, Laptev, and
+  Caputo]{Schuldt2004KTHActions}
 Christian Schuldt, Ivan Laptev, and Barbara Caputo.
 \newblock Recognizing human actions: A local {SVM} approach.
-\newblock In \emph{Proceedings of the 17th International Conference on Pattern Recognition}, volume~3, pages 32--36, 2004.
+\newblock In \emph{Proceedings of the 17th International Conference on Pattern
+  Recognition}, volume~3, pages 32--36, 2004.
 \newblock \doi{10.1109/ICPR.2004.1334462}.
 
-\bibitem[Sidiropoulos et~al.(2017)Sidiropoulos, De~Lathauwer, Fu, Huang, Papalexakis, and Faloutsos]{Sidiropoulos2017TSP}
-Nicholas~D. Sidiropoulos, Lieven De~Lathauwer, Xiao Fu, Kejun Huang, Evangelos~E. Papalexakis, and Christos Faloutsos.
+\bibitem[Sidiropoulos et~al.(2017)Sidiropoulos, De~Lathauwer, Fu, Huang,
+  Papalexakis, and Faloutsos]{Sidiropoulos2017TSP}
+Nicholas~D. Sidiropoulos, Lieven De~Lathauwer, Xiao Fu, Kejun Huang,
+  Evangelos~E. Papalexakis, and Christos Faloutsos.
 \newblock Tensor decomposition for signal processing and machine learning.
-\newblock \emph{IEEE Transactions on Signal Processing}, 65\penalty0 (13):\penalty0 3551--3582, 2017.
+\newblock \emph{IEEE Transactions on Signal Processing}, 65\penalty0
+  (13):\penalty0 3551--3582, 2017.
 \newblock \doi{10.1109/TSP.2017.2690524}.
 
 \bibitem[Soomro et~al.(2012)Soomro, Zamir, and Shah]{Soomro2012UCF101}
 Khurram Soomro, Amir~Roshan Zamir, and Mubarak Shah.
-\newblock {UCF101}: A dataset of 101 human action classes from videos in the wild.
+\newblock {UCF101}: A dataset of 101 human action classes from videos in the
+  wild.
 \newblock Technical Report CRCV-TR-12-01, University of Central Florida, 2012.
-\newblock URL \url{https://www.crcv.ucf.edu/wp-content/uploads/2019/03/UCF101_CRCV-TR-12-01.pdf}.
+\newblock URL
+  \url{https://www.crcv.ucf.edu/wp-content/uploads/2019/03/UCF101_CRCV-TR-12-01.pdf}.
 
-\bibitem[Varolgunes et~al.(2023)Varolgunes, Zhou, Yu, and Uddin]{varolgunes2023nmtucker}
+\bibitem[Varolgunes et~al.(2023)Varolgunes, Zhou, Yu, and
+  Uddin]{varolgunes2023nmtucker}
 Uras Varolgunes, Dan Zhou, Dantong Yu, and Ajim Uddin.
-\newblock Nmtucker: Non-linear matryoshka tucker decomposition for financial time series imputation.
-\newblock In \emph{Proceedings of the Fourth ACM International Conference on AI in Finance}, pages 516--523, 2023.
+\newblock Nmtucker: Non-linear matryoshka tucker decomposition for financial
+  time series imputation.
+\newblock In \emph{Proceedings of the Fourth ACM International Conference on AI
+  in Finance}, pages 516--523, 2023.
 
 \bibitem[Volterra(1959)]{Volterra1959Theory}
 Vito Volterra.
-\newblock \emph{Theory of Functionals and of Integral and Integro-Differential Equations}.
+\newblock \emph{Theory of Functionals and of Integral and Integro-Differential
+  Equations}.
 \newblock Dover Publications, 1959.
 
-\bibitem[Wang et~al.(2021)Wang, Huang, Zhao, Jiang, and Ng]{Wang2021CoupledTransform}
+\bibitem[Wang et~al.(2021)Wang, Huang, Zhao, Jiang, and
+  Ng]{Wang2021CoupledTransform}
 Jian-Li Wang, Ting-Zhu Huang, Xi-Le Zhao, Tai-Xiang Jiang, and Michael~K. Ng.
-\newblock Multi-dimensional visual data completion via low-rank tensor representation under coupled transform.
-\newblock \emph{IEEE Transactions on Image Processing}, 30:\penalty0 3581--3596, 2021.
+\newblock Multi-dimensional visual data completion via low-rank tensor
+  representation under coupled transform.
+\newblock \emph{IEEE Transactions on Image Processing}, 30:\penalty0
+  3581--3596, 2021.
 \newblock \doi{10.1109/TIP.2021.3062995}.
 
 \bibitem[Wang et~al.(2024)Wang, Huang, Zhao, Luo, and Jiang]{Wang2024CoNoT}
 Jian-Li Wang, Ting-Zhu Huang, Xi-Le Zhao, Yi-Si Luo, and Tai-Xiang Jiang.
-\newblock {CoNoT}: Coupled nonlinear transform-based low-rank tensor representation for multidimensional image completion.
-\newblock \emph{IEEE Transactions on Neural Networks and Learning Systems}, 35\penalty0 (7):\penalty0 8969--8983, 2024.
+\newblock {CoNoT}: Coupled nonlinear transform-based low-rank tensor
+  representation for multidimensional image completion.
+\newblock \emph{IEEE Transactions on Neural Networks and Learning Systems},
+  35\penalty0 (7):\penalty0 8969--8983, 2024.
 \newblock \doi{10.1109/TNNLS.2022.3217198}.
 
 \bibitem[Xu et~al.(2024)Xu, Peng, Ji, Cao, Sun, Fei, and Meng]{xu2024stacked}
-Shuang Xu, Jiangjun Peng, Teng-Yu Ji, Xiangyong Cao, Kai Sun, Rongrong Fei, and Deyu Meng.
-\newblock Stacked tucker decomposition with multi-nonlinear products for remote sensing imagery inpainting.
-\newblock \emph{IEEE Transactions on Geoscience and Remote Sensing}, 62:\penalty0 1--13, 2024.
+Shuang Xu, Jiangjun Peng, Teng-Yu Ji, Xiangyong Cao, Kai Sun, Rongrong Fei, and
+  Deyu Meng.
+\newblock Stacked tucker decomposition with multi-nonlinear products for remote
+  sensing imagery inpainting.
+\newblock \emph{IEEE Transactions on Geoscience and Remote Sensing},
+  62:\penalty0 1--13, 2024.
 
 \bibitem[Xu et~al.(2011)Xu, Yan, et~al.]{xu2011infinite}
 Zenglin Xu, Feng Yan, et~al.
-\newblock Infinite tucker decomposition: Nonparametric bayesian models for multiway data analysis.
+\newblock Infinite tucker decomposition: Nonparametric bayesian models for
+  multiway data analysis.
 \newblock \emph{arXiv preprint arXiv:1108.6296}, 2011.
 
 \bibitem[Yasuma et~al.(2010)Yasuma, Mitsunaga, Iso, and Nayar]{yasuma2010gapc}
 Fumihito Yasuma, Tomoo Mitsunaga, Daisuke Iso, and Shree~K. Nayar.
-\newblock Generalized assorted pixel camera: Postcapture control of resolution, dynamic range, and spectrum.
-\newblock \emph{IEEE Transactions on Image Processing}, 19\penalty0 (9):\penalty0 2241--2253, 2010.
+\newblock Generalized assorted pixel camera: Postcapture control of resolution,
+  dynamic range, and spectrum.
+\newblock \emph{IEEE Transactions on Image Processing}, 19\penalty0
+  (9):\penalty0 2241--2253, 2010.
 \newblock \doi{10.1109/TIP.2010.2046811}.
 
 \bibitem[Zhai et~al.(2024)Zhai, Chen, and Sun]{zhai2024quadratic}
 Zheng Zhai, Hengchao Chen, and Qiang Sun.
-\newblock Quadratic matrix factorization with applications to manifold learning.
-\newblock \emph{IEEE Transactions on Pattern Analysis and Machine Intelligence}, 46\penalty0 (9):\penalty0 6384--6401, 2024.
+\newblock Quadratic matrix factorization with applications to manifold
+  learning.
+\newblock \emph{IEEE Transactions on Pattern Analysis and Machine
+  Intelligence}, 46\penalty0 (9):\penalty0 6384--6401, 2024.
 
 \bibitem[Zhao et~al.(2016)Zhao, Zhou, Xie, Zhang, and Cichocki]{zhao2016tr}
 Qibin Zhao, Guoxu Zhou, Shengli Xie, Liqing Zhang, and Andrzej Cichocki.
 \newblock Tensor ring decomposition.
 \newblock \emph{arXiv preprint arXiv:1606.05535}, 2016.
 
-\bibitem[Zhe et~al.(2016)Zhe, Zhang, Wang, Lee, Xu, Qi, and Ghahramani]{zhe2016distributed}
-Shandian Zhe, Kai Zhang, Pengyuan Wang, Kuang-chih Lee, Zenglin Xu, Yuan Qi, and Zoubin Ghahramani.
+\bibitem[Zhe et~al.(2016)Zhe, Zhang, Wang, Lee, Xu, Qi, and
+  Ghahramani]{zhe2016distributed}
+Shandian Zhe, Kai Zhang, Pengyuan Wang, Kuang-chih Lee, Zenglin Xu, Yuan Qi,
+  and Zoubin Ghahramani.
 \newblock Distributed flexible nonlinear tensor factorization.
 \newblock \emph{Advances in neural information processing systems}, 29, 2016.
 
 \bibitem[Zheng et~al.(2021)Zheng, Huang, Zhao, Zhao, and Jiang]{Zheng2021FCTN}
 Yu-Bang Zheng, Ting-Zhu Huang, Xi-Le Zhao, Qibin Zhao, and Tai-Xiang Jiang.
-\newblock Fully-connected tensor network decomposition and its application to higher-order tensor completion.
-\newblock In \emph{Proceedings of the AAAI Conference on Artificial Intelligence}, volume~35, pages 11071--11078, 2021.
+\newblock Fully-connected tensor network decomposition and its application to
+  higher-order tensor completion.
+\newblock In \emph{Proceedings of the AAAI Conference on Artificial
+  Intelligence}, volume~35, pages 11071--11078, 2021.
 \newblock \doi{10.1609/aaai.v35i12.17321}.
 
 \end{thebibliography}

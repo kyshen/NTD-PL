@@ -1,29 +1,21 @@
 \section{Limitations}
 \label{sec:limitations}
 
-NTD-PL assumes that a common nonlinear response explains a coherent
-part of the residual left by matched-rank Tucker. This scalar link may be
-less effective when nonlinearities vary strongly across spatial regions,
-spectral bands, modes, or samples. In such cases, a single polynomial response
-can underfit the domain variation even if the Tucker backbone is appropriate.
-
-NTD-PL enhances a fixed Tucker rank budget by changing the measurement map on
-top of the latent tensor. When the remaining error is ordinary multilinear
+NTD-PL assumes that a common nonlinear response explains a coherent part of the
+residual left by matched-rank Tucker. A single scalar link may be less
+effective when nonlinearities vary strongly across spatial regions, spectral
+bands, modes, or samples; when the remaining error is ordinary multilinear
 structure rather than a scalar response, increasing Tucker rank remains the
 more direct modeling choice.
 
-Polynomial degree introduces a second tradeoff. Higher degrees increase the
-approximation capacity of the link, but they can amplify Tucker scale
-ambiguity and numerical conditioning issues in the power basis. This motivates
-the ridge-regularized Link Refresh step, factor normalization, and degree
-continuation used in the optimizer.
+Polynomial degree adds approximation capacity but can amplify Tucker scale
+ambiguity and conditioning issues in the power basis, motivating the
+ridge-regularized Link Refresh step, factor normalization, and degree
+continuation. The joint problem also remains nonconvex: Link Refresh is a
+small ridge regression with fixed latent tensor, but the backbone and link are
+learned jointly, and we do not claim global optimality.
 
-Finally, the joint problem remains nonconvex. The Link Refresh subproblem is a
-small ridge regression once the latent tensor is fixed, but the Tucker backbone
-and polynomial link are learned jointly through a nonconvex objective. We do not
-claim global optimality.
-
-Our strongest empirical evidence is currently from controlled nonlinear
-residuals and hyperspectral reconstruction and completion. Broader validation
-on large sparse tensors, temporal or multimodal tensors, and domain-varying
-nonlinear responses is left for future work.
+Our strongest empirical evidence is from controlled nonlinear residuals and
+hyperspectral reconstruction and completion. Broader validation on large sparse
+tensors, temporal or multimodal tensors, and domain-varying nonlinear
+responses is left for future work.
