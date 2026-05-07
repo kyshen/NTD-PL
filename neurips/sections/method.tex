@@ -1,9 +1,9 @@
 \section{Model}
 \label{sec:model}
 
-\subsection{Model and Observation Assumption}
+\subsection{Model and Measurement Assumption}
 
-Let \(\cY \in \R^{I_1 \times \cdots \times I_N}\) be an observed tensor and let
+Let \(\cY \in \R^{I_1 \times \cdots \times I_N}\) be a measured tensor and let
 \begin{equation}
   \cS =
   \tucker{\cX}{\bA^{(1)}, \ldots, \bA^{(N)}},
@@ -13,7 +13,7 @@ Let \(\cY \in \R^{I_1 \times \cdots \times I_N}\) be an observed tensor and let
   \bA^{(n)} \in \R^{I_n \times R_n}.
 \end{equation}
 NTD-PL treats \(\cS\) as a shared low-rank latent tensor and models each
-observed entry through a scalar polynomial response:
+measured entry through a scalar polynomial response:
 \begin{equation}
   Y_{\mathbf i}
   =

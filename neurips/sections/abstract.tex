@@ -1,21 +1,21 @@
 \begin{abstract}
-Tucker decomposition is a compact model for multiway data, but its observation
-map is linear in the reconstructed latent tensor. Nonlinear sensing and
+Tucker decomposition is a compact model for multiway data, but it fits measured
+entries through a linear entry-generation map. Nonlinear sensing and
 imaging responses can therefore make a low-rank latent tensor appear
-higher-rank in the observed domain. We propose Nonlinear Tucker Decomposition
+higher-rank in the measured tensor. We propose Nonlinear Tucker Decomposition
 with Polynomial Links (NTD-PL), a Tucker enhancement that learns a shared
-entrywise polynomial observation link jointly with a Tucker backbone. NTD-PL
+entrywise polynomial link jointly with a Tucker backbone. NTD-PL
 keeps the backbone ranks fixed and adds only scalar link coefficients. Its
 polynomial powers induce a parameter-tied rank lift: each degree forms
 Veronese-lifted Tucker factors tied to the same latent tensor, rather than an
 untied high-rank correction.
 
 We analyze this structure through Veronese rank expansion, separation from
-matched-rank Tucker, and approximation results for shared nonlinear
-observation maps. We optimize a masked reconstruction and completion objective
+matched-rank Tucker, and approximation results for shared entrywise nonlinear
+responses. We optimize a masked reconstruction and completion objective
 by alternating Link Refresh, a small ridge update for the scalar link, with
 Linked-Backbone Descent and degree continuation. Experiments on controlled
-tensors, CAVE hyperspectral reconstruction and completion, rank-lift and Link
+tensors, hyperspectral reconstruction and completion, rank-lift and Link
 Refresh diagnostics, and external cross-domain cases show scoped gains:
 NTD-PL helps when the residual left by matched-rank Tucker is coherent with a
 shared entrywise nonlinear response, and is not intended to replace rank

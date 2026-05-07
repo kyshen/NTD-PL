@@ -544,9 +544,6 @@ INPUT ./figures/cave_beads_recon_completion_visual.pdf
 INPUT ./figures/cave_beads_recon_completion_visual.pdf
 INPUT ./figures/cave_beads_recon_completion_visual.pdf
 INPUT ./figures/cave_beads_recon_completion_visual.pdf
-INPUT ./tables/real_tensor_reconstruction_main.tex
-INPUT ./tables/real_tensor_reconstruction_main.tex
-INPUT tables/real_tensor_reconstruction_main.tex
 INPUT ./figures/nonhsi_dlink_scatter_3domain.pdf
 INPUT ./figures/nonhsi_dlink_scatter_3domain.pdf
 INPUT ./figures/nonhsi_dlink_scatter_3domain.pdf
@@ -566,6 +563,7 @@ INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb
 INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
 INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
 INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb
+INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb
 INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb
 INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb
 INPUT c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb

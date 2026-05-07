@@ -19,7 +19,7 @@ means the Tucker residual is more compatible with a shared nonlinear link.
 \label{subsec:controlled-experiments}
 
 This section isolates the mechanism on synthetic tensors. We generate
-observations as
+measured tensors as
 \[
 Y_\alpha=\sqrt{1-\alpha}S^\star+\sqrt{\alpha}\widetilde{R}^\star,
 \]
@@ -59,11 +59,11 @@ reports the linear consistency negative control.
 \label{subsec:lowrank-completion}
 
 This section asks whether NTD-PL enhances a Tucker backbone on real
-hyperspectral tensors, both when all entries are observed and when evaluation
+hyperspectral tensors, both when all entries are measured and when evaluation
 is performed on held-out missing entries.
 
 \paragraph{Representation enhancement.}
-Full-observation reconstruction is a representation-capacity check, not a
+Full-entry reconstruction is a representation-capacity check, not a
 generalization test. Figure~\ref{fig:cave-reconstruction-capacity} shows that
 NTD-PL improves both RMSE and SAM on CAVE at matched Tucker backbone rank and
 similar parameter budget. The advantage shrinks as Tucker rank increases,
@@ -80,12 +80,12 @@ tied to joint scalar-link fitting rather than to the polynomial basis alone.
 \begin{figure}[!htbp]
   \centering
   \includegraphics[width=0.98\linewidth]{figures/cave_reconstruction_capacity.pdf}
-  \caption{CAVE full-observation reconstruction as a representation-capacity
+  \caption{CAVE full-entry reconstruction as a representation-capacity
   check. Each point averages 15 scenes at a matched Tucker backbone rank. The
   plotted backbone ranks are \((18,18,3)\), \((24,24,4)\), \((33,33,4)\), and
   \((40,40,5)\).
   Unlike completion, this measures representational error when all entries are
-  observed.}
+  measured.}
   \label{fig:cave-reconstruction-capacity}
 \end{figure}
 
@@ -207,7 +207,7 @@ coherent within one unit.
 \end{table}
 
 Table~\ref{tab:cross-domain-link-diagnostic} summarizes the non-HSI diagnosis
-on full-observation reconstruction units. Natural images show weaker
+on full-entry reconstruction units. Natural images show weaker
 shared-link yield, especially CIFAR-10, whose median \(D_{\mathrm{link}}\) is
 close to zero and whose low-yield tercile has almost no gain. Object-view
 tensors show clearer effective units: COIL-100 and smallNORB have larger

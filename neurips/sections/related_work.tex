@@ -8,7 +8,7 @@ DeLathauwer2000MLSVD,oseledets2011,zhao2016tr}. Tucker is the closest baseline
 for NTD-PL because it uses the same core-factor multilinear backbone. NTD-PL
 does not primarily compete by changing the rank tuple, replacing the factor
 topology, or moving to another tensor-network format. Instead, it keeps the
-Tucker backbone and multilinear ranks fixed and changes the observation map on
+Tucker backbone and multilinear ranks fixed and changes the entry-generation map on
 top of the Tucker latent tensor.
 
 \paragraph{Nonlinear tensor factorization and neural/kernel decoders.}
@@ -41,7 +41,7 @@ high-order interactions and Veronese-style shared-backbone rank lifts.
 Existing nonlinear tensor models either use broad nonlinear decoders, modify
 likelihoods or kernels, or explicitly parameterize high-order interactions.
 What is less developed is a Tucker-preserving, low-dimensional, analyzable
-polynomial observation link that yields a parameter-tied rank lift and supports
+entrywise polynomial link that yields a parameter-tied rank lift and supports
 masked learning. NTD-PL trades general nonlinear flexibility for structure,
 interpretability, and a direct finite-dimensional rank-lift view. Its expected
 benefit is therefore scoped to settings where matched-rank Tucker leaves a

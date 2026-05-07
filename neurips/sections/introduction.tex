@@ -3,9 +3,10 @@
 Tensor decompositions provide compact models for multiway data in scientific
 sensing, imaging, and signal processing \citep{Kolda2009Tensor,
 Sidiropoulos2017TSP,Liu2013TensorCompletion}. Tucker decomposition is a
-standard choice because it separates a small core from mode-wise factors. Its
-observation map, however, is linear: the reconstructed Tucker entry is fitted
-directly to the measured entry. This assumption is natural for many data sets,
+standard choice because it separates a small core from mode-wise factors. It
+fits measured entries through a linear entry-generation map: the reconstructed
+Tucker entry is fitted directly to the measured entry. This assumption is
+natural for many data sets,
 but it can be mismatched to sensing and imaging pipelines with response curves,
 saturation, calibration effects, or material-dependent nonlinearities
 \citep{Debevec1997HDR,Grossberg2004CameraResponse,
@@ -30,7 +31,7 @@ Boyd1985FadingMemory}. Let
 \[
 \cS = \tucker{\cX}{\bA^{(1)}, \ldots, \bA^{(N)}}
 \]
-be a Tucker latent tensor. Instead of fitting the observation directly by
+be a Tucker latent tensor. Instead of fitting measured entries directly by
 \(\cS\), we model
 \[
 \widehat{\cY} = f_{\bbeta}(\cS) = \sum_{p=0}^{P} \beta_p \cS^{\odot p},
@@ -47,10 +48,10 @@ enhancement and shared-backbone rank lift, not as a generic nonlinear decoder. A
 degree-\(p\) power of the latent tensor behaves like an ordinary Tucker tensor
 whose factors are polynomial feature lifts of the original factors, but those
 lifted features remain tied to one learned backbone. The new degrees therefore
-reshape the low-rank geometry through a shared observation link, rather than
+reshape the low-rank geometry through a shared entrywise link, rather than
 adding an untied high-rank tensor block. This is also why the link is not a
 post-hoc calibration layer: the Tucker backbone is learned through the
-polynomial observation map, and the latent tensor is reshaped jointly with the
+polynomial entry-generation map, and the latent tensor is reshaped jointly with the
 scalar response, rather than fitting Tucker first and calibrating a fixed
 output.
 
@@ -62,10 +63,10 @@ more specific: the residual left by matched-rank Tucker should be coherent with
 a shared entrywise nonlinear response.
 
 The paper develops this regime from four angles. Section~\ref{sec:model}
-defines the shared polynomial observation link and its tied high-order Tucker
+defines the shared entrywise polynomial link and its tied high-order Tucker
 channels. Section~\ref{sec:theory} proves Veronese rank expansion, a separation
 from matched-rank Tucker, and approximation results for shared nonlinear
-observation maps. Section~\ref{sec:optimization} gives the masked objective and
+entrywise responses. Section~\ref{sec:optimization} gives the masked objective and
 an alternating solver with Link Refresh, Linked-Backbone Descent, and degree
 continuation. Section~\ref{sec:experiments} tests the mechanism on controlled
 tensors, CAVE hyperspectral reconstruction and completion, rank-lift and Link
@@ -76,12 +77,12 @@ failure modes and scope in Section~\ref{sec:limitations}.
 We make the following contributions.
 \begin{itemize}[leftmargin=*,itemsep=2pt,topsep=2pt]
   \item \textbf{Model.} We propose NTD-PL, a Tucker enhancement with a shared
-  polynomial observation link on a Tucker latent tensor. It keeps the Tucker
+  entrywise polynomial link on a Tucker latent tensor. It keeps the Tucker
   backbone and multilinear ranks fixed while adding only scalar coefficients
   for a parameter-tied, entrywise response.
   \item \textbf{Theory.} We characterize the induced model class through
   Veronese rank expansion, separation from matched-rank Tucker, and
-  approximation results for shared nonlinear observation maps.
+  approximation results for shared entrywise nonlinear responses.
   \item \textbf{Optimization.} We derive a masked objective for reconstruction
   and completion, and optimize it with Link Refresh, Linked-Backbone Descent,
   and degree continuation.
