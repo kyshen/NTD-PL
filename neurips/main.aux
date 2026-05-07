@@ -2,20 +2,22 @@
 \providecommand\hyper@newdestlabel[2]{}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
-\citation{Kolda2009Tensor,Sidiropoulos2017TSP,Liu2013TensorCompletion}
-\citation{Debevec1997HDR,Grossberg2004CameraResponse,BioucasDias2012HyperspectralUnmixing,Heylen2014NonlinearUnmixing}
-\citation{xu2011infinite,zhe2016distributed,liu2017deepcp,saragadam2024deeptensor}
+\citation{Kolda2009Tensor,Sidiropoulos2017TSP,Liu2013TensorCompletion,LiuMoitra2020TensorCompletion}
+\citation{Debevec1997HDR,Grossberg2004CameraResponse,BioucasDias2012HyperspectralUnmixing,Heylen2014NonlinearUnmixing,Luo2024LRTFR}
+\citation{xu2011infinite,zhe2016distributed,liu2017deepcp,saragadam2024deeptensor,ahn2024neural}
 \def\@LN@column{1}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
 \citation{Kolda2009Tensor,Sidiropoulos2017TSP,DeLathauwer2000MLSVD,oseledets2011,zhao2016tr}
-\citation{hong2020generalized,schein2016bayesian,xu2011infinite,zhe2016distributed,liu2017deepcp,pan2020streaming,saragadam2024deeptensor,varolgunes2023nmtucker}
+\citation{LiuMoitra2020TensorCompletion,Wang2021CoupledTransform,Zheng2021FCTN}
+\citation{hong2020generalized,schein2016bayesian,xu2011infinite,zhe2016distributed,liu2017deepcp,pan2020streaming,saragadam2024deeptensor,varolgunes2023nmtucker,ahn2024neural,Luo2024LRTFR}
+\citation{Luo2022SelfSupervisedTNN,Wang2024CoNoT,xu2024stacked}
 \def\@LN@column{1}
 \@writefile{toc}{\contentsline {paragraph}{Contributions.}{2}{section*.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2}Related Work}{2}{section.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Low-rank tensor models and Tucker backbones.}{2}{section*.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Nonlinear tensor factorization and neural/kernel decoders.}{2}{section*.4}\protected@file@percent }
 \citation{Volterra1959Theory,Boyd1985FadingMemory}
-\citation{zhai2024quadratic,liu2015model,deng2016storm}
+\citation{zhai2024quadratic,Ruegamer2024AISTATS,liu2015model,deng2016storm}
 \def\@LN@column{1}
 \@writefile{toc}{\contentsline {paragraph}{Polynomial feature lifts and high-order interactions.}{3}{section*.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Positioning.}{3}{section*.6}\protected@file@percent }
@@ -41,17 +43,18 @@
 \@writefile{toc}{\contentsline {paragraph}{Link Refresh.}{5}{section*.7}\protected@file@percent }
 \newlabel{eq:main-beta-subproblem}{{10}{5}{Link Refresh}{equation.10}{}}
 \@writefile{toc}{\contentsline {paragraph}{Linked-Backbone Descent.}{5}{section*.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Stabilization.}{5}{section*.9}\protected@file@percent }
 \def\@LN@column{1}
+\@writefile{toc}{\contentsline {paragraph}{Stabilization.}{6}{section*.9}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Masked uniform convergence.}{6}{section*.10}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {6}Experiments}{6}{section.6}\protected@file@percent }
 \newlabel{sec:experiments}{{6}{6}{Experiments}{section.6}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Controlled Nonlinear Residuals}{6}{subsection.6.1}\protected@file@percent }
 \newlabel{subsec:controlled-experiments}{{6.1}{6}{Controlled Nonlinear Residuals}{subsection.6.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Controlled nonlinear residual sweep. NTD-PL stays Tucker-like near the linear regime and separates as \(\alpha \), the nonlinear residual energy, increases. Lower RMSE is better.}}{6}{figure.caption.11}\protected@file@percent }
-\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:controlled-alpha-grid}{{1}{6}{Controlled nonlinear residual sweep. NTD-PL stays Tucker-like near the linear regime and separates as \(\alpha \), the nonlinear residual energy, increases. Lower RMSE is better}{figure.caption.11}{}}
+\citation{cave_multispectral_database,yasuma2010gapc}
 \def\@LN@column{1}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Controlled nonlinear residual sweep. NTD-PL stays Tucker-like near the linear regime and separates as \(\alpha \), the nonlinear residual energy, increases. Lower RMSE is better.}}{7}{figure.caption.11}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:controlled-alpha-grid}{{1}{7}{Controlled nonlinear residual sweep. NTD-PL stays Tucker-like near the linear regime and separates as \(\alpha \), the nonlinear residual energy, increases. Lower RMSE is better}{figure.caption.11}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Degree-dependent gains at \(\alpha =0.25\). Cell values are Tucker minus NTD-PL RMSE; gains appear when the active degree is sufficient for the response complexity.}}{7}{figure.caption.12}\protected@file@percent }
 \newlabel{fig:controlled-pmax-strip}{{2}{7}{Degree-dependent gains at \(\alpha =0.25\). Cell values are Tucker minus NTD-PL RMSE; gains appear when the active degree is sufficient for the response complexity}{figure.caption.12}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Tucker Enhancement on Real Hyperspectral Tensors}{7}{subsection.6.2}\protected@file@percent }
@@ -59,10 +62,10 @@
 \@writefile{toc}{\contentsline {paragraph}{Representation enhancement.}{7}{section*.13}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces CAVE full reconstruction as a representation-capacity check. At matched Tucker backbone rank, NTD-PL reduces RMSE and SAM; annotations show paired relative gains over Tucker at each rank. The gap shrinks as Tucker rank increases, consistent with fixed-rank enhancement. Each point averages 15 scenes.}}{7}{figure.caption.14}\protected@file@percent }
 \newlabel{fig:cave-reconstruction-capacity}{{3}{7}{CAVE full reconstruction as a representation-capacity check. At matched Tucker backbone rank, NTD-PL reduces RMSE and SAM; annotations show paired relative gains over Tucker at each rank. The gap shrinks as Tucker rank increases, consistent with fixed-rank enhancement. Each point averages 15 scenes}{figure.caption.14}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Rank-lifted Tucker comparison on CAVE reconstruction. For each NTD-PL backbone rank, we increase Tucker's spatial ranks while keeping the spectral rank fixed and report the first Tucker rank that matches NTD-PL RMSE, along with the extra Tucker parameters required.}}{7}{table.caption.15}\protected@file@percent }
-\newlabel{tab:rank-lift-tucker}{{1}{7}{Rank-lifted Tucker comparison on CAVE reconstruction. For each NTD-PL backbone rank, we increase Tucker's spatial ranks while keeping the spectral rank fixed and report the first Tucker rank that matches NTD-PL RMSE, along with the extra Tucker parameters required}{table.caption.15}{}}
 \@writefile{toc}{\contentsline {paragraph}{Held-out enhancement.}{7}{section*.16}\protected@file@percent }
 \def\@LN@column{1}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Rank-lifted Tucker comparison on CAVE reconstruction. For each NTD-PL backbone rank, we increase Tucker's spatial ranks while keeping the spectral rank fixed and report the first Tucker rank that matches NTD-PL RMSE, along with the extra Tucker parameters required.}}{8}{table.caption.15}\protected@file@percent }
+\newlabel{tab:rank-lift-tucker}{{1}{8}{Rank-lifted Tucker comparison on CAVE reconstruction. For each NTD-PL backbone rank, we increase Tucker's spatial ranks while keeping the spectral rank fixed and report the first Tucker rank that matches NTD-PL RMSE, along with the extra Tucker parameters required}{table.caption.15}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Held-out CAVE completion at rank \((33,33,4)\) under random masks. RMSE$^\ast $ and SAM$^\ast $ are computed only on missing entries. Columns report mean \(\pm \) standard deviation over scenes; gains are paired relative improvements over matched-rank Tucker.}}{8}{table.caption.17}\protected@file@percent }
 \newlabel{tab:lowrank-completion-main}{{2}{8}{Held-out CAVE completion at rank \((33,33,4)\) under random masks. RMSE$^\ast $ and SAM$^\ast $ are computed only on missing entries. Columns report mean \(\pm \) standard deviation over scenes; gains are paired relative improvements over matched-rank Tucker}{table.caption.17}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Diagnosing Nonlinear Low-Rank Structure Across Data}{8}{subsection.6.3}\protected@file@percent }
@@ -70,99 +73,125 @@
 \@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces CAVE completion diagnostic. Scenes are grouped by \(D_{\mathrm  {link}}\) terciles, and entries report mean NTD-PL RMSE$^\ast $ gains over matched-rank Tucker. Larger \(D_{\mathrm  {link}}\) consistently corresponds to larger held-out gains across missing rates.}}{8}{table.caption.18}\protected@file@percent }
 \newlabel{tab:cave-link-yield-summary}{{3}{8}{CAVE completion diagnostic. Scenes are grouped by \(D_{\mathrm {link}}\) terciles, and entries report mean NTD-PL RMSE$^\ast $ gains over matched-rank Tucker. Larger \(D_{\mathrm {link}}\) consistently corresponds to larger held-out gains across missing rates}{table.caption.18}{}}
 \def\@LN@column{1}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Per-unit non-HSI diagnostic correlation. Each panel plots \(D_{\mathrm  {link}}\) against NTD-PL RMSE gain over independently fitted tensor units. \(D_{\mathrm  {link}}\) is computed by frozen-backbone Link Refresh, and diagnostic labels are assigned from \(D_{\mathrm  {link}}\), not from NTD-PL gain. The figure shows domain-dependent but positive diagnostic structure.}}{9}{figure.caption.19}\protected@file@percent }
-\newlabel{fig:nonhsi-link-scatter}{{4}{9}{Per-unit non-HSI diagnostic correlation. Each panel plots \(D_{\mathrm {link}}\) against NTD-PL RMSE gain over independently fitted tensor units. \(D_{\mathrm {link}}\) is computed by frozen-backbone Link Refresh, and diagnostic labels are assigned from \(D_{\mathrm {link}}\), not from NTD-PL gain. The figure shows domain-dependent but positive diagnostic structure}{figure.caption.19}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Per-unit cross-domain diagnostic correlation. Each panel plots \(D_{\mathrm  {link}}\) against NTD-PL RMSE gain over independently fitted tensor units. }}{9}{figure.caption.19}\protected@file@percent }
+\newlabel{fig:nonhsi-link-scatter}{{4}{9}{Per-unit cross-domain diagnostic correlation. Each panel plots \(D_{\mathrm {link}}\) against NTD-PL RMSE gain over independently fitted tensor units}{figure.caption.19}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {7}Limitations}{9}{section.7}\protected@file@percent }
 \newlabel{sec:limitations}{{7}{9}{Limitations}{section.7}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{9}{section.8}\protected@file@percent }
 \bibstyle{plainnat}
 \bibdata{references}
-\bibcite{BioucasDias2012HyperspectralUnmixing}{{1}{2012}{{Bioucas-Dias et~al.}}{{Bioucas-Dias, Plaza, Dobigeon, Parente, Du, Gader, and Chanussot}}}
-\bibcite{Boyd1985FadingMemory}{{2}{1985}{{Boyd and Chua}}{{}}}
-\bibcite{DeLathauwer2000MLSVD}{{3}{2000}{{De~Lathauwer et~al.}}{{De~Lathauwer, De~Moor, and Vandewalle}}}
-\bibcite{Debevec1997HDR}{{4}{1997}{{Debevec and Malik}}{{}}}
-\bibcite{deng2016storm}{{5}{2016}{{Deng et~al.}}{{Deng, Liu, Batselier, Kwok, and Wong}}}
-\bibcite{Grossberg2004CameraResponse}{{6}{2004}{{Grossberg and Nayar}}{{}}}
-\bibcite{Heylen2014NonlinearUnmixing}{{7}{2014}{{Heylen et~al.}}{{Heylen, Parente, and Gader}}}
-\bibcite{hong2020generalized}{{8}{2020}{{Hong et~al.}}{{Hong, Kolda, and Duersch}}}
-\bibcite{Kolda2009Tensor}{{9}{2009}{{Kolda and Bader}}{{}}}
-\bibcite{liu2017deepcp}{{10}{2017}{{Liu et~al.}}{{Liu, He, Zhe, Li, and Xu}}}
-\bibcite{liu2015model}{{11}{2015}{{Liu et~al.}}{{Liu, Daniel, and Wong}}}
-\bibcite{Liu2013TensorCompletion}{{12}{2013}{{Liu et~al.}}{{Liu, Musialski, Wonka, and Ye}}}
-\bibcite{oseledets2011}{{13}{2011}{{Oseledets}}{{}}}
-\bibcite{pan2020streaming}{{14}{2020}{{Pan et~al.}}{{Pan, Wang, and Zhe}}}
-\bibcite{saragadam2024deeptensor}{{15}{2024}{{Saragadam et~al.}}{{Saragadam, Balestriero, Veeraraghavan, and Baraniuk}}}
-\bibcite{schein2016bayesian}{{16}{2016}{{Schein et~al.}}{{Schein, Zhou, Blei, and Wallach}}}
+\bibcite{ahn2024neural}{{1}{2024}{{Ahn et~al.}}{{Ahn, Saini, Papalexakis, and Payani}}}
+\bibcite{BioucasDias2012HyperspectralUnmixing}{{2}{2012}{{Bioucas-Dias et~al.}}{{Bioucas-Dias, Plaza, Dobigeon, Parente, Du, Gader, and Chanussot}}}
+\bibcite{Boyd1985FadingMemory}{{3}{1985}{{Boyd and Chua}}{{}}}
+\bibcite{cave_multispectral_database}{{4}{n.d.}{{Columbia CAVE Laboratory}}{{}}}
+\bibcite{DeLathauwer2000MLSVD}{{5}{2000}{{De~Lathauwer et~al.}}{{De~Lathauwer, De~Moor, and Vandewalle}}}
+\bibcite{Debevec1997HDR}{{6}{1997}{{Debevec and Malik}}{{}}}
+\bibcite{deng2016storm}{{7}{2016}{{Deng et~al.}}{{Deng, Liu, Batselier, Kwok, and Wong}}}
+\bibcite{Grossberg2004CameraResponse}{{8}{2004}{{Grossberg and Nayar}}{{}}}
+\bibcite{Heylen2014NonlinearUnmixing}{{9}{2014}{{Heylen et~al.}}{{Heylen, Parente, and Gader}}}
+\bibcite{hong2020generalized}{{10}{2020}{{Hong et~al.}}{{Hong, Kolda, and Duersch}}}
+\bibcite{Kolda2009Tensor}{{11}{2009}{{Kolda and Bader}}{{}}}
+\bibcite{krizhevsky2009learning}{{12}{2009}{{Krizhevsky}}{{}}}
+\bibcite{LeCun2004SmallNORB}{{13}{2004}{{LeCun et~al.}}{{LeCun, Huang, and Bottou}}}
+\bibcite{LiuMoitra2020TensorCompletion}{{14}{2020}{{Liu and Moitra}}{{}}}
+\bibcite{liu2017deepcp}{{15}{2017}{{Liu et~al.}}{{Liu, He, Zhe, Li, and Xu}}}
+\bibcite{liu2015model}{{16}{2015}{{Liu et~al.}}{{Liu, Daniel, and Wong}}}
 \def\@LN@column{1}
-\bibcite{Sidiropoulos2017TSP}{{17}{2017}{{Sidiropoulos et~al.}}{{Sidiropoulos, De~Lathauwer, Fu, Huang, Papalexakis, and Faloutsos}}}
-\bibcite{varolgunes2023nmtucker}{{18}{2023}{{Varolgunes et~al.}}{{Varolgunes, Zhou, Yu, and Uddin}}}
-\bibcite{Volterra1959Theory}{{19}{1959}{{Volterra}}{{}}}
-\bibcite{xu2011infinite}{{20}{2011}{{Xu et~al.}}{{Xu, Yan, et~al.}}}
-\bibcite{zhai2024quadratic}{{21}{2024}{{Zhai et~al.}}{{Zhai, Chen, and Sun}}}
-\bibcite{zhao2016tr}{{22}{2016}{{Zhao et~al.}}{{Zhao, Zhou, Xie, Zhang, and Cichocki}}}
-\bibcite{zhe2016distributed}{{23}{2016}{{Zhe et~al.}}{{Zhe, Zhang, Wang, Lee, Xu, Qi, and Ghahramani}}}
+\bibcite{Liu2013TensorCompletion}{{17}{2013}{{Liu et~al.}}{{Liu, Musialski, Wonka, and Ye}}}
+\bibcite{Luo2022SelfSupervisedTNN}{{18}{2022}{{Luo et~al.}}{{Luo, Zhao, Jiang, Chang, Ng, and Li}}}
+\bibcite{Luo2024LRTFR}{{19}{2024}{{Luo et~al.}}{{Luo, Zhao, Li, Ng, and Meng}}}
+\bibcite{martin2001database}{{20}{2001}{{Martin et~al.}}{{Martin, Fowlkes, Tal, and Malik}}}
+\bibcite{nene1996coil100}{{21}{1996}{{Nene et~al.}}{{Nene, Nayar, and Murase}}}
+\bibcite{oseledets2011}{{22}{2011}{{Oseledets}}{{}}}
+\bibcite{pan2020streaming}{{23}{2020}{{Pan et~al.}}{{Pan, Wang, and Zhe}}}
+\bibcite{Ruegamer2024AISTATS}{{24}{2024}{{Ruegamer}}{{}}}
+\bibcite{saragadam2024deeptensor}{{25}{2024}{{Saragadam et~al.}}{{Saragadam, Balestriero, Veeraraghavan, and Baraniuk}}}
+\bibcite{schein2016bayesian}{{26}{2016}{{Schein et~al.}}{{Schein, Zhou, Blei, and Wallach}}}
+\bibcite{Schuldt2004KTHActions}{{27}{2004}{{Schuldt et~al.}}{{Schuldt, Laptev, and Caputo}}}
+\bibcite{Sidiropoulos2017TSP}{{28}{2017}{{Sidiropoulos et~al.}}{{Sidiropoulos, De~Lathauwer, Fu, Huang, Papalexakis, and Faloutsos}}}
+\bibcite{Soomro2012UCF101}{{29}{2012}{{Soomro et~al.}}{{Soomro, Zamir, and Shah}}}
+\bibcite{varolgunes2023nmtucker}{{30}{2023}{{Varolgunes et~al.}}{{Varolgunes, Zhou, Yu, and Uddin}}}
+\bibcite{Volterra1959Theory}{{31}{1959}{{Volterra}}{{}}}
+\bibcite{Wang2021CoupledTransform}{{32}{2021}{{Wang et~al.}}{{Wang, Huang, Zhao, Jiang, and Ng}}}
 \def\@LN@column{1}
-\@writefile{toc}{\contentsline {section}{\numberline {A}Additional Model Details}{11}{appendix.A}\protected@file@percent }
-\newlabel{app:model-details}{{A}{11}{Additional Model Details}{appendix.A}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}Explicit \(p\)-Fold Tucker Motivation}{11}{subsection.A.1}\protected@file@percent }
-\newlabel{app:pfold-tucker-motivation}{{A.1}{11}{\texorpdfstring {Explicit \(p\)-Fold Tucker Motivation}{Explicit p-Fold Tucker Motivation}}{subsection.A.1}{}}
-\newlabel{eq:appendix-explicit-pfold-tucker}{{13}{11}{\texorpdfstring {Explicit \(p\)-Fold Tucker Motivation}{Explicit p-Fold Tucker Motivation}}{equation.13}{}}
-\newlabel{eq:appendix-shared-projection-tying}{{14}{11}{\texorpdfstring {Explicit \(p\)-Fold Tucker Motivation}{Explicit p-Fold Tucker Motivation}}{equation.14}{}}
+\bibcite{Wang2024CoNoT}{{33}{2024}{{Wang et~al.}}{{Wang, Huang, Zhao, Luo, and Jiang}}}
+\bibcite{xu2024stacked}{{34}{2024}{{Xu et~al.}}{{Xu, Peng, Ji, Cao, Sun, Fei, and Meng}}}
+\bibcite{xu2011infinite}{{35}{2011}{{Xu et~al.}}{{Xu, Yan, et~al.}}}
+\bibcite{yasuma2010gapc}{{36}{2010}{{Yasuma et~al.}}{{Yasuma, Mitsunaga, Iso, and Nayar}}}
+\bibcite{zhai2024quadratic}{{37}{2024}{{Zhai et~al.}}{{Zhai, Chen, and Sun}}}
+\bibcite{zhao2016tr}{{38}{2016}{{Zhao et~al.}}{{Zhao, Zhou, Xie, Zhang, and Cichocki}}}
+\bibcite{zhe2016distributed}{{39}{2016}{{Zhe et~al.}}{{Zhe, Zhang, Wang, Lee, Xu, Qi, and Ghahramani}}}
+\bibcite{Zheng2021FCTN}{{40}{2021}{{Zheng et~al.}}{{Zheng, Huang, Zhao, Zhao, and Jiang}}}
 \def\@LN@column{1}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Tensor-network view of a formal \(p\)-fold Tucker extension. The construction keeps the Tucker idea of mode-wise generation, but lets each mode projection couple multiple latent index tuples.}}{12}{figure.caption.21}\protected@file@percent }
-\newlabel{fig:pfold-tucker-network}{{5}{12}{Tensor-network view of a formal \(p\)-fold Tucker extension. The construction keeps the Tucker idea of mode-wise generation, but lets each mode projection couple multiple latent index tuples}{figure.caption.21}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Optimization Details}{12}{subsection.A.2}\protected@file@percent }
-\newlabel{app:optimization-details}{{A.2}{12}{Optimization Details}{subsection.A.2}{}}
-\newlabel{app:optimization-algorithm}{{A.2}{12}{Optimization Details}{subsection.A.2}{}}
-\@writefile{toc}{\contentsline {paragraph}{Backbone gradients.}{12}{section*.22}\protected@file@percent }
-\newlabel{eq:appendix-latent-gradient}{{16}{12}{Backbone gradients}{equation.16}{}}
-\@writefile{toc}{\contentsline {paragraph}{Link update.}{12}{section*.23}\protected@file@percent }
-\newlabel{eq:appendix-beta-ridge-update}{{20}{12}{Link update}{equation.20}{}}
-\@writefile{toc}{\contentsline {paragraph}{Stabilization and continuation.}{12}{section*.24}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A}Additional Model Details}{12}{appendix.A}\protected@file@percent }
+\newlabel{app:model-details}{{A}{12}{Additional Model Details}{appendix.A}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}Explicit \(p\)-Fold Tucker Motivation}{12}{subsection.A.1}\protected@file@percent }
+\newlabel{app:pfold-tucker-motivation}{{A.1}{12}{\texorpdfstring {Explicit \(p\)-Fold Tucker Motivation}{Explicit p-Fold Tucker Motivation}}{subsection.A.1}{}}
+\newlabel{eq:appendix-explicit-pfold-tucker}{{13}{12}{\texorpdfstring {Explicit \(p\)-Fold Tucker Motivation}{Explicit p-Fold Tucker Motivation}}{equation.13}{}}
 \def\@LN@column{1}
-\@writefile{toc}{\contentsline {paragraph}{Cost.}{13}{section*.25}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Masked NTD-PL optimization}}{13}{algorithm.1}\protected@file@percent }
-\newlabel{alg:ntdpl}{{1}{13}{Masked NTD-PL optimization}{algorithm.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {B}Additional Proofs}{13}{appendix.B}\protected@file@percent }
-\newlabel{app:proofs}{{B}{13}{Additional Proofs}{appendix.B}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.1}Polynomial and Analytic Approximation}{13}{subsection.B.1}\protected@file@percent }
-\newlabel{lem:scalar-to-tensor}{{1}{13}{Scalar-to-tensor approximation}{lemma.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Tensor-network view of a formal \(p\)-fold Tucker extension. The construction keeps the Tucker idea of mode-wise generation, but lets each mode projection couple multiple latent index tuples.}}{13}{figure.caption.21}\protected@file@percent }
+\newlabel{fig:pfold-tucker-network}{{5}{13}{Tensor-network view of a formal \(p\)-fold Tucker extension. The construction keeps the Tucker idea of mode-wise generation, but lets each mode projection couple multiple latent index tuples}{figure.caption.21}{}}
+\newlabel{eq:appendix-shared-projection-tying}{{14}{13}{\texorpdfstring {Explicit \(p\)-Fold Tucker Motivation}{Explicit p-Fold Tucker Motivation}}{equation.14}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Optimization Details}{13}{subsection.A.2}\protected@file@percent }
+\newlabel{app:optimization-details}{{A.2}{13}{Optimization Details}{subsection.A.2}{}}
+\newlabel{app:optimization-algorithm}{{A.2}{13}{Optimization Details}{subsection.A.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{Backbone gradients.}{13}{section*.22}\protected@file@percent }
+\newlabel{eq:appendix-latent-gradient}{{16}{13}{Backbone gradients}{equation.16}{}}
 \def\@LN@column{1}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.2}Rank Expansion}{14}{subsection.B.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.3}Separation}{14}{subsection.B.3}\protected@file@percent }
-\newlabel{lem:veronese-full-rank}{{2}{14}{Full-rank Veronese evaluations}{lemma.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{Link update.}{14}{section*.23}\protected@file@percent }
+\newlabel{eq:appendix-beta-ridge-update}{{20}{14}{Link update}{equation.20}{}}
+\@writefile{toc}{\contentsline {paragraph}{Stabilization and continuation.}{14}{section*.24}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Cost.}{14}{section*.25}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Masked NTD-PL optimization}}{14}{algorithm.1}\protected@file@percent }
+\newlabel{alg:ntdpl}{{1}{14}{Masked NTD-PL optimization}{algorithm.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Additional Proofs}{14}{appendix.B}\protected@file@percent }
+\newlabel{app:proofs}{{B}{14}{Additional Proofs}{appendix.B}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.1}Polynomial and Analytic Approximation}{14}{subsection.B.1}\protected@file@percent }
 \def\@LN@column{1}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.4}Masked Generalization}{15}{subsection.B.4}\protected@file@percent }
-\newlabel{app:masked-generalization}{{B.4}{15}{Masked Generalization}{subsection.B.4}{}}
-\newlabel{thm:masked-generalization}{{4}{15}{Masked-entry uniform convergence}{theorem.4}{}}
+\newlabel{lem:scalar-to-tensor}{{1}{15}{Scalar-to-tensor approximation}{lemma.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.2}Rank Expansion}{15}{subsection.B.2}\protected@file@percent }
 \def\@LN@column{1}
-\@writefile{toc}{\contentsline {section}{\numberline {C}Additional Experiments}{16}{appendix.C}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.1}Controlled Synthetic Mechanism Checks}{16}{subsection.C.1}\protected@file@percent }
-\newlabel{app:controlled-synthetic}{{C.1}{16}{Controlled Synthetic Mechanism Checks}{subsection.C.1}{}}
-\newlabel{eq:controlled-orthogonal-residual}{{45}{16}{Controlled Synthetic Mechanism Checks}{equation.45}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.3}Separation}{16}{subsection.B.3}\protected@file@percent }
+\newlabel{lem:veronese-full-rank}{{2}{16}{Full-rank Veronese evaluations}{lemma.2}{}}
 \def\@LN@column{1}
-\newlabel{eq:controlled-normalized-residual}{{46}{17}{Controlled Synthetic Mechanism Checks}{equation.46}{}}
-\newlabel{eq:controlled-residual-mixture}{{47}{17}{Controlled Synthetic Mechanism Checks}{equation.47}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Linear consistency on synthetic Tucker tensors. In the linear negative control, effective \(p>1\) contributions remain small except for the intended affine offset case.}}{17}{table.caption.26}\protected@file@percent }
-\newlabel{tab:linear-consistency-controlled}{{4}{17}{Linear consistency on synthetic Tucker tensors. In the linear negative control, effective \(p>1\) contributions remain small except for the intended affine offset case}{table.caption.26}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces NTD-PL training curves for controlled nonlinear mechanism checks at \(\alpha =0.25\) and \(P=5\). Dashed vertical lines mark degree activations, which produce systematic drops when the activated degree matches the response structure.}}{17}{figure.caption.27}\protected@file@percent }
-\newlabel{fig:controlled-training-curves}{{6}{17}{NTD-PL training curves for controlled nonlinear mechanism checks at \(\alpha =0.25\) and \(P=5\). Dashed vertical lines mark degree activations, which produce systematic drops when the activated degree matches the response structure}{figure.caption.27}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Effective NTD-PL term contributions under moderate nonlinearity, reported as percentages over ten seeds. Polynomial targets concentrate mass at matching nonlinear degrees, while odd smooth links place most nonlinear mass on odd powers.}}{17}{table.caption.28}\protected@file@percent }
-\newlabel{tab:controlled-beta-contribution}{{5}{17}{Effective NTD-PL term contributions under moderate nonlinearity, reported as percentages over ten seeds. Polynomial targets concentrate mass at matching nonlinear degrees, while odd smooth links place most nonlinear mass on odd powers}{table.caption.28}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.2}CAVE Completion Significance and Robustness}{17}{subsection.C.2}\protected@file@percent }
-\newlabel{app:single-rank-completion}{{C.2}{17}{CAVE Completion Significance and Robustness}{subsection.C.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.4}Masked Generalization}{17}{subsection.B.4}\protected@file@percent }
+\newlabel{app:masked-generalization}{{B.4}{17}{Masked Generalization}{subsection.B.4}{}}
+\newlabel{thm:masked-generalization}{{4}{17}{Masked-entry uniform convergence}{theorem.4}{}}
 \def\@LN@column{1}
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Paired significance tests for full-resolution CAVE completion at rank \((33,33,4)\). Metrics are computed only on missing entries.}}{18}{table.caption.29}\protected@file@percent }
-\newlabel{tab:cave-completion-significance}{{6}{18}{Paired significance tests for full-resolution CAVE completion at rank \((33,33,4)\). Metrics are computed only on missing entries}{table.caption.29}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.3}Link Refresh Residual Diagnostic}{18}{subsection.C.3}\protected@file@percent }
-\newlabel{app:posthoc-calibration-baselines}{{C.3}{18}{Link Refresh Residual Diagnostic}{subsection.C.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.4}CAVE Completion Scene Diagnostics}{18}{subsection.C.4}\protected@file@percent }
-\newlabel{app:cave-completion-scene-diagnostics}{{C.4}{18}{CAVE Completion Scene Diagnostics}{subsection.C.4}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Scene-level supplement for the CAVE completion diagnostic table. Missing rates 0.3 and 0.5 are shown; \(D_{\mathrm  {link}}\) from frozen- backbone Link Refresh predicts larger held-out RMSE$^\ast $ gains.}}{18}{figure.caption.30}\protected@file@percent }
-\newlabel{fig:cave-link-yield-scatter-appendix}{{7}{18}{Scene-level supplement for the CAVE completion diagnostic table. Missing rates 0.3 and 0.5 are shown; \(D_{\mathrm {link}}\) from frozen- backbone Link Refresh predicts larger held-out RMSE$^\ast $ gains}{figure.caption.30}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5}Non-HSI Link Refresh Diagnostics}{18}{subsection.C.5}\protected@file@percent }
-\newlabel{app:nonhsi-link-diagnostics}{{C.5}{18}{Non-HSI Link Refresh Diagnostics}{subsection.C.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {C}Additional Experiments}{18}{appendix.C}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.1}Controlled Synthetic Mechanism Checks}{18}{subsection.C.1}\protected@file@percent }
+\newlabel{app:controlled-synthetic}{{C.1}{18}{Controlled Synthetic Mechanism Checks}{subsection.C.1}{}}
+\newlabel{eq:controlled-orthogonal-residual}{{45}{18}{Controlled Synthetic Mechanism Checks}{equation.45}{}}
+\newlabel{eq:controlled-normalized-residual}{{46}{18}{Controlled Synthetic Mechanism Checks}{equation.46}{}}
+\newlabel{eq:controlled-residual-mixture}{{47}{18}{Controlled Synthetic Mechanism Checks}{equation.47}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Linear consistency on synthetic Tucker tensors. In the linear negative control, effective \(p>1\) contributions remain small except for the intended affine offset case.}}{18}{table.caption.26}\protected@file@percent }
+\newlabel{tab:linear-consistency-controlled}{{4}{18}{Linear consistency on synthetic Tucker tensors. In the linear negative control, effective \(p>1\) contributions remain small except for the intended affine offset case}{table.caption.26}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces NTD-PL training curves for controlled nonlinear mechanism checks at \(\alpha =0.25\) and \(P=5\). Dashed vertical lines mark degree activations, which produce systematic drops when the activated degree matches the response structure.}}{18}{figure.caption.27}\protected@file@percent }
+\newlabel{fig:controlled-training-curves}{{6}{18}{NTD-PL training curves for controlled nonlinear mechanism checks at \(\alpha =0.25\) and \(P=5\). Dashed vertical lines mark degree activations, which produce systematic drops when the activated degree matches the response structure}{figure.caption.27}{}}
+\citation{martin2001database}
+\citation{krizhevsky2009learning}
+\citation{nene1996coil100}
+\citation{LeCun2004SmallNORB}
+\citation{Schuldt2004KTHActions}
+\citation{Soomro2012UCF101}
 \def\@LN@column{1}
-\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Exact per-dataset statistics behind the main non-HSI scatter figure. Each unit is independently fitted by Tucker and NTD-PL at matched backbone rank. \(D_{\mathrm  {link}}\) is computed by frozen-backbone Link Refresh; diagnostic tiers are assigned from \(D_{\mathrm  {link}}\), not from NTD-PL gain.}}{19}{table.caption.31}\protected@file@percent }
-\newlabel{tab:nonhsi-link-summary-appendix}{{7}{19}{Exact per-dataset statistics behind the main non-HSI scatter figure. Each unit is independently fitted by Tucker and NTD-PL at matched backbone rank. \(D_{\mathrm {link}}\) is computed by frozen-backbone Link Refresh; diagnostic tiers are assigned from \(D_{\mathrm {link}}\), not from NTD-PL gain}{table.caption.31}{}}
-\gdef \@abspage@last{19}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Effective NTD-PL term contributions under moderate nonlinearity, reported as percentages over ten seeds. Polynomial targets concentrate mass at matching nonlinear degrees, while odd smooth links place most nonlinear mass on odd powers.}}{19}{table.caption.28}\protected@file@percent }
+\newlabel{tab:controlled-beta-contribution}{{5}{19}{Effective NTD-PL term contributions under moderate nonlinearity, reported as percentages over ten seeds. Polynomial targets concentrate mass at matching nonlinear degrees, while odd smooth links place most nonlinear mass on odd powers}{table.caption.28}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.2}CAVE Completion Significance and Robustness}{19}{subsection.C.2}\protected@file@percent }
+\newlabel{app:single-rank-completion}{{C.2}{19}{CAVE Completion Significance and Robustness}{subsection.C.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Paired significance tests for full-resolution CAVE completion at rank \((33,33,4)\). Metrics are computed only on missing entries.}}{19}{table.caption.29}\protected@file@percent }
+\newlabel{tab:cave-completion-significance}{{6}{19}{Paired significance tests for full-resolution CAVE completion at rank \((33,33,4)\). Metrics are computed only on missing entries}{table.caption.29}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.3}Link Refresh Residual Diagnostic}{19}{subsection.C.3}\protected@file@percent }
+\newlabel{app:posthoc-calibration-baselines}{{C.3}{19}{Link Refresh Residual Diagnostic}{subsection.C.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.4}CAVE Completion Scene Diagnostics}{19}{subsection.C.4}\protected@file@percent }
+\newlabel{app:cave-completion-scene-diagnostics}{{C.4}{19}{CAVE Completion Scene Diagnostics}{subsection.C.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5}Non-HSI Link Refresh Diagnostics}{19}{subsection.C.5}\protected@file@percent }
+\newlabel{app:nonhsi-link-diagnostics}{{C.5}{19}{Non-HSI Link Refresh Diagnostics}{subsection.C.5}{}}
+\def\@LN@column{1}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Scene-level supplement for the CAVE completion diagnostic table. Missing rates 0.3 and 0.5 are shown; \(D_{\mathrm  {link}}\) from frozen- backbone Link Refresh predicts larger held-out RMSE$^\ast $ gains.}}{20}{figure.caption.30}\protected@file@percent }
+\newlabel{fig:cave-link-yield-scatter-appendix}{{7}{20}{Scene-level supplement for the CAVE completion diagnostic table. Missing rates 0.3 and 0.5 are shown; \(D_{\mathrm {link}}\) from frozen- backbone Link Refresh predicts larger held-out RMSE$^\ast $ gains}{figure.caption.30}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Dataset-level statistics behind the non-HSI diagnostic scatter in Figure~\ref {fig:nonhsi-link-scatter}. The gain columns report mean NTD-PL RMSE improvement over independently fitted matched-rank Tucker within \(D_{\mathrm  {link}}\) terciles.}}{20}{table.caption.31}\protected@file@percent }
+\newlabel{tab:nonhsi-link-diagnostic-stats}{{7}{20}{Dataset-level statistics behind the non-HSI diagnostic scatter in Figure~\ref {fig:nonhsi-link-scatter}. The gain columns report mean NTD-PL RMSE improvement over independently fitted matched-rank Tucker within \(D_{\mathrm {link}}\) terciles}{table.caption.31}{}}
+\def\@LN@column{1}
+\def\@LN@column{1}
+\gdef \@abspage@last{22}

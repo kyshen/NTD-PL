@@ -58,9 +58,10 @@ the data's nonlinear structure.
 This section tests whether the same fixed-rank enhancement appears on real
 hyperspectral tensors, both when the tensor is fully measured and when
 evaluation is performed on held-out missing entries.
-We use CAVE dataset because it offers multiple real scenes with rich spectral and
-spatial structure, making it a reasonable mechanism check rather than a
-toy-sized tensor.
+We use the CAVE multispectral dataset
+\citep{cave_multispectral_database,yasuma2010gapc} because it offers multiple
+real scenes with rich spectral and spatial structure, making it a reasonable
+mechanism check rather than a toy-sized tensor.
 
 \paragraph{Representation enhancement.}
 Full reconstruction is a representation-capacity check, not a generalization
@@ -155,7 +156,7 @@ scene-level scatter plots.
   gains over matched-rank Tucker. Larger \(D_{\mathrm{link}}\) consistently
   corresponds to larger held-out gains across missing rates.}
   \label{tab:cave-link-yield-summary}
-  \scriptsize
+  \small
   \input{tables/ntdpl_polycal_diagnostic.tex}
 \end{table}
 
@@ -172,20 +173,17 @@ intermediate pattern.
 \begin{figure}[!htbp]
   \centering
   \includegraphics[width=\linewidth]{figures/nonhsi_dlink_scatter_3domain.pdf}
-  \caption{Per-unit non-HSI diagnostic correlation. Each panel plots
+  \caption{Per-unit cross-domain diagnostic correlation. Each panel plots
   \(D_{\mathrm{link}}\) against NTD-PL RMSE gain over independently fitted
-  tensor units. \(D_{\mathrm{link}}\) is computed by frozen-backbone Link
-  Refresh, and diagnostic labels are assigned from \(D_{\mathrm{link}}\), not
-  from NTD-PL gain. The figure shows domain-dependent but positive diagnostic
-  structure.}
+  tensor units. }
   \label{fig:nonhsi-link-scatter}
 \end{figure}
 
 These results support the scoped claim that NTD-PL helps when matched-rank
 Tucker leaves link-like residual structure, not uniformly across all visual
-tensors. Appendix Figure~\ref{fig:cave-link-yield-scatter-appendix} gives the
-CAVE scene-level scatter supplement, and Appendix
-Table~\ref{tab:nonhsi-link-summary-appendix} gives the exact non-HSI numeric
-statistics.
+tensors. Appendix Table~\ref{tab:nonhsi-link-diagnostic-stats} gives the
+numeric statistics behind Figure~\ref{fig:nonhsi-link-scatter}, and
+Appendix Figure~\ref{fig:cave-link-yield-scatter-appendix} gives the CAVE
+scene-level scatter supplement.
 
 \FloatBarrier

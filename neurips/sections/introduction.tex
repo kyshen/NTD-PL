@@ -1,8 +1,9 @@
 \section{Introduction}
 
 Tensor decompositions provide compact models for multiway data in scientific
-data analysis and signal processing \citep{Kolda2009Tensor,
-Sidiropoulos2017TSP,Liu2013TensorCompletion}. Tucker decomposition is a
+data analysis, signal processing, and masked multiway learning
+\citep{Kolda2009Tensor,Sidiropoulos2017TSP,Liu2013TensorCompletion,
+LiuMoitra2020TensorCompletion}. Tucker decomposition is a
 standard choice because it separates a small core from mode-wise factors. It
 uses a linear map from the Tucker latent tensor to the measured tensor: the
 reconstructed Tucker value is fitted directly to the measurement. This
@@ -11,10 +12,10 @@ but it can be mismatched to measurement or data-generation pipelines with
 response curves, saturation, calibration effects, or material-dependent
 nonlinearities
 \citep{Debevec1997HDR,Grossberg2004CameraResponse,
-BioucasDias2012HyperspectralUnmixing,Heylen2014NonlinearUnmixing}. In such
-settings, the latent signal may be well organized by a low-rank Tucker tensor
-while the measured tensor appears to have larger multilinear rank after a
-nonlinear response.
+BioucasDias2012HyperspectralUnmixing,Heylen2014NonlinearUnmixing,
+Luo2024LRTFR}. In such settings, the latent signal may be well organized by a
+low-rank Tucker tensor while the measured tensor appears to have larger
+multilinear rank after a nonlinear response.
 
 A direct remedy is to increase Tucker rank, but this changes the multilinear
 budget and expands the core and factors throughout the model. More flexible
@@ -22,9 +23,9 @@ nonlinear tensor decoders based on kernels, Gaussian processes, or neural
 networks can also be useful, but they address a broader problem and often make
 the relation to a Tucker backbone less explicit
 \citep{xu2011infinite,zhe2016distributed,liu2017deepcp,
-saragadam2024deeptensor}. We ask a narrower question: can a Tucker model keep
-its chosen backbone ranks fixed while learning a response that
-explains coherent nonlinear residuals left by matched-rank Tucker?
+saragadam2024deeptensor,ahn2024neural}. We ask a narrower question: can a
+Tucker model keep its chosen backbone ranks fixed while learning a response
+that explains coherent nonlinear residuals left by matched-rank Tucker?
 
 We instantiate this idea with a polynomial link. Let
 \[
