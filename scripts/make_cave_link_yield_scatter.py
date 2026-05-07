@@ -51,18 +51,21 @@ def _plot_panel(ax: plt.Axes, frame: pd.DataFrame, missing_rate: float) -> float
 
     ax.scatter(x, y, color=PALETTE.ntdpl, s=28, alpha=0.92, zorder=3)
     ax.plot(x_line, y_line, color=PALETTE.tucker, linewidth=1.6, linestyle="--", zorder=2)
-    for row in panel.itertuples(index=False):
+    label_offsets = [(-0.025, 0.18), (0.025, 0.18), (-0.025, -0.22), (0.025, -0.22)]
+    for idx, row in enumerate(panel.itertuples(index=False)):
+        dx, dy = label_offsets[idx % len(label_offsets)]
         ax.text(
-            float(row.link_score_db) + 0.01,
-            float(row.ntdpl_gain_pct) + 0.15,
+            float(row.link_score_db) + dx,
+            float(row.ntdpl_gain_pct) + dy,
             str(row.scene_label),
             fontsize=6.6,
             color=PALETTE.border,
+            bbox=dict(facecolor="white", edgecolor="none", alpha=0.72, pad=0.2),
         )
 
     ax.axhline(0.0, color=PALETTE.border, linewidth=0.8, linestyle="--", alpha=0.8)
-    ax.set_title(fr"$\rho={missing_rate:.1f}$", fontsize=8.5, pad=2)
-    ax.set_xlabel(r"Residual-link score $S_{\mathrm{link}}$ (dB)")
+    ax.set_title(fr"Missing rate {missing_rate:.1f}", fontsize=8.5, pad=2)
+    ax.set_xlabel(r"$D_{\mathrm{link}}$ (dB)")
     ax.set_ylabel("NTD-PL RMSE$^\\ast$ gain (%)")
     style_axes(ax, grid=True)
     ax.text(

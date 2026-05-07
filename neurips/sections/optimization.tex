@@ -57,16 +57,7 @@ changing \(S\). For the coefficient solve, the implementation may regress on a
 centered and scaled latent variable and then map the solution back to the
 original power basis. Appendix Figure~\ref{fig:controlled-training-curves}
 shows representative training curves where activating the relevant higher
-degrees produces systematic loss drops.
-
-\paragraph{Cost.}
-The dominant cost is the same Tucker forward and reverse contractions used by
-standard Tucker optimization at the chosen rank. The polynomial link adds only
-\(O(P|\Omega|)\) elementwise work for evaluating \(f_{\bbeta}(S)\) and
-\(f'_{\bbeta}(S)\), plus a small \((P+1)\times(P+1)\) ridge solve. Since the
-experiments use small \(P\), the overhead is modest relative to the Tucker
-contractions. Full gradients, stabilization details, and pseudocode are given
-in Appendix~\ref{app:optimization-details}.
+degrees produces systematic loss drops. Full gradients, stabilization details, costs analysis and pseudocode are given in Appendix~\ref{app:optimization-details}.
 
 \paragraph{Masked uniform convergence.}
 The masked objective also admits a standard sampling interpretation. Let

@@ -48,7 +48,7 @@ with \(\kappa\) set from the input range.
 
 The main text reports the nonlinear alpha sweep and degree sweep.
 Figure~\ref{fig:controlled-training-curves} shows that degree continuation
-activates higher powers without destabilizing the fit.
+activates higher powers with systematic loss drops at relevant degrees.
 Table~\ref{tab:controlled-beta-contribution} complements those figures with a
 small but consistent term-mass concentration effect: the dominant contribution
 usually lands on the degree that matches the injected response, while smooth
@@ -56,8 +56,9 @@ odd links spread mass across nearby odd orders.
 
 \begin{table}[ht]
   \centering
-  \caption{Linear consistency on synthetic Tucker tensors. The \(p>1\)
-  columns report effective higher-order NTD-PL contribution.}
+  \caption{Linear consistency on synthetic Tucker tensors. In the linear
+  negative control, effective \(p>1\) contributions remain small except for
+  the intended affine offset case.}
   \label{tab:linear-consistency-controlled}
   {\small
   \setlength{\tabcolsep}{4.5pt}
@@ -69,18 +70,19 @@ odd links spread mass across nearby odd orders.
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.98\linewidth]{figures/controlled_nonlinear_step_strip.pdf}
-  \caption{NTD-PL training curves for the controlled nonlinear mechanism
-  checks at \(\alpha=0.25\) and \(P=5\). Dashed vertical lines mark
-  degree-activation events.}
+  \caption{NTD-PL training curves for controlled nonlinear mechanism checks at
+  \(\alpha=0.25\) and \(P=5\). Dashed vertical lines mark degree activations,
+  which produce systematic drops when the activated degree matches the
+  response structure.}
   \label{fig:controlled-training-curves}
 \end{figure}
 
 \begin{table}[ht]
   \centering
-  \caption{Representative effective NTD-PL term contributions under moderate
-  nonlinearity, reported as percentages over ten seeds. Polynomial targets
-  concentrate mass at the matching nonlinear degrees, while odd smooth links
-  place most nonlinear mass on odd powers.}
+  \caption{Effective NTD-PL term contributions under moderate nonlinearity,
+  reported as percentages over ten seeds. Polynomial targets concentrate mass
+  at matching nonlinear degrees, while odd smooth links place most nonlinear
+  mass on odd powers.}
   \label{tab:controlled-beta-contribution}
   {\small
   \setlength{\tabcolsep}{4pt}
@@ -101,8 +103,8 @@ Wilcoxon tests for the same protocol.
 
 \begin{table}[ht]
   \centering
-  \caption{Significance tests for full-resolution CAVE completion at rank
-  \((33,33,4)\). Metrics are computed on missing entries.}
+  \caption{Paired significance tests for full-resolution CAVE completion at
+  rank \((33,33,4)\). Metrics are computed only on missing entries.}
   \label{tab:cave-completion-significance}
   \scriptsize
   \resizebox{\linewidth}{!}{\input{tables/cave_completion_significance.tex}}
@@ -110,9 +112,9 @@ Wilcoxon tests for the same protocol.
 
 \begin{table}[ht]
   \centering
-  \caption{Link Refresh diagnostic on CAVE completion. Low/mid/high gains
-  report the mean NTD-PL RMSE$^\ast$ gain over Tucker within each
-  \(D_{\mathrm{link}}\) tercile.}
+  \caption{Link Refresh diagnostic on CAVE completion. Low/mid/high groups are
+  \(D_{\mathrm{link}}\) terciles, and gains report mean NTD-PL RMSE$^\ast$
+  improvement over matched-rank Tucker within each tercile.}
   \label{tab:ntdpl-polycal-diagnostic}
   \scriptsize
   \resizebox{0.94\linewidth}{!}{\input{tables/ntdpl_polycal_diagnostic.tex}}
@@ -147,29 +149,6 @@ the task-specific evaluation entries. In other words, it measures how much
 shared scalar-link yield is already present before the full NTD-PL alternating
 solver starts reshaping the Tucker parameters.
 
-\subsection{Joint Link-Family Smoke Test}
-\label{app:joint-link-family}
-
-The main model uses a polynomial link because it gives a closed-form ridge
-coefficient update and a direct Veronese rank-lift interpretation. To check
-whether the improvement is tied to the polynomial basis itself, we ran a
-small joint link-family smoke test on three CAVE scenes at spatial resolution
-\(256\times256\) and backbone rank \((18,18,3)\). The spline variant replaces
-the polynomial link by a one-dimensional piecewise-linear link with eight
-knots. Its knot values are updated by ridge regression on the current latent
-entries, while the Tucker backbone is updated jointly through the link
-derivative.
-
-\begin{table}[ht]
-  \centering
-  \caption{Joint scalar-link family smoke test on CAVE reconstruction. The
-  spline link is slightly more flexible but slower; NTD-PL is the analyzable
-  polynomial member used in the main paper.}
-  \label{tab:cave-joint-link-ablation}
-  \scriptsize
-  \resizebox{0.92\linewidth}{!}{\input{tables/cave_joint_link_ablation.tex}}
-\end{table}
-
 \subsection{CAVE Beads Pseudo-RGB Visualization}
 \label{app:cave-beads-visualization}
 
@@ -183,8 +162,8 @@ entries in the observation panel are shown in gray.
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.98\linewidth]{figures/cave_beads_recon_completion_visual.pdf}
-  \caption{CAVE beads visual comparison. Rows correspond to reconstruction
-  and random completion at missing rate \(0.5\). Error maps show Tucker minus
+  \caption{CAVE beads visual comparison. Rows show full reconstruction and
+  random completion at missing rate \(0.5\). Error maps show Tucker minus
   NTD-PL per-pixel RMSE, so positive values indicate lower NTD-PL error.}
   \label{fig:cave-beads-recon-completion}
 \end{figure}
@@ -214,9 +193,9 @@ independently, and diagnostic labels are assigned only from
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\linewidth]{figures/nonhsi_dlink_scatter_3domain.pdf}
-  \caption{\(D_{\mathrm{link}}\) versus NTD-PL RMSE gain over non-HSI tensor
-  units, shown as per-dataset panels for natural-image, object-view, and
-  action-video settings. Units are selected independently and labels are assigned from
-  \(D_{\mathrm{link}}\).}
+  \caption{Per-unit non-HSI diagnostic correlation. \(D_{\mathrm{link}}\)
+  from frozen-backbone Link Refresh is plotted against NTD-PL RMSE gain for
+  natural-image, object-view, and action-video units; labels are assigned from
+  \(D_{\mathrm{link}}\), not from NTD-PL gain.}
   \label{fig:nonhsi-link-scatter}
 \end{figure}
