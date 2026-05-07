@@ -1,20 +1,19 @@
 \section{Limitations}
 \label{sec:limitations}
 
-NTD-PL assumes that a common entrywise nonlinear response explains a coherent
-part of the residual left by matched-rank Tucker. This shared scalar link may be
+NTD-PL assumes that a common nonlinear response explains a coherent
+part of the residual left by matched-rank Tucker. This scalar link may be
 less effective when nonlinearities vary strongly across spatial regions,
 spectral bands, modes, or samples. In such cases, a single polynomial response
 can underfit the domain variation even if the Tucker backbone is appropriate.
 
-The method also does not remove rank selection. NTD-PL enhances a fixed Tucker
-rank budget by changing the entry-generation map on top of the latent tensor; it
-should not be interpreted as eliminating the need for larger ranks when the
-residual is ordinary multilinear structure. Increasing Tucker rank remains an
-important baseline and model-selection choice.
+NTD-PL enhances a fixed Tucker rank budget by changing the measurement map on
+top of the latent tensor. When the remaining error is ordinary multilinear
+structure rather than a scalar response, increasing Tucker rank remains the
+more direct modeling choice.
 
 Polynomial degree introduces a second tradeoff. Higher degrees increase the
-approximation capacity of the shared link, but they can amplify Tucker scale
+approximation capacity of the link, but they can amplify Tucker scale
 ambiguity and numerical conditioning issues in the power basis. This motivates
 the ridge-regularized Link Refresh step, factor normalization, and degree
 continuation used in the optimizer.

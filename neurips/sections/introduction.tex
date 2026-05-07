@@ -1,19 +1,20 @@
 \section{Introduction}
 
 Tensor decompositions provide compact models for multiway data in scientific
-sensing, imaging, and signal processing \citep{Kolda2009Tensor,
+data analysis and signal processing \citep{Kolda2009Tensor,
 Sidiropoulos2017TSP,Liu2013TensorCompletion}. Tucker decomposition is a
 standard choice because it separates a small core from mode-wise factors. It
-fits measured entries through a linear entry-generation map: the reconstructed
-Tucker entry is fitted directly to the measured entry. This assumption is
-natural for many data sets,
-but it can be mismatched to sensing and imaging pipelines with response curves,
-saturation, calibration effects, or material-dependent nonlinearities
+uses a linear map from the Tucker latent tensor to the measured tensor: the
+reconstructed Tucker value is fitted directly to the measurement. This
+assumption is natural for many data sets,
+but it can be mismatched to measurement or data-generation pipelines with
+response curves, saturation, calibration effects, or material-dependent
+nonlinearities
 \citep{Debevec1997HDR,Grossberg2004CameraResponse,
 BioucasDias2012HyperspectralUnmixing,Heylen2014NonlinearUnmixing}. In such
-settings, the latent scene may be well organized by a low-rank Tucker tensor
+settings, the latent signal may be well organized by a low-rank Tucker tensor
 while the measured tensor appears to have larger multilinear rank after a
-shared entrywise response.
+nonlinear response.
 
 A direct remedy is to increase Tucker rank, but this changes the multilinear
 budget and expands the core and factors throughout the model. More flexible
@@ -22,21 +23,19 @@ networks can also be useful, but they address a broader problem and often make
 the relation to a Tucker backbone less explicit
 \citep{xu2011infinite,zhe2016distributed,liu2017deepcp,
 saragadam2024deeptensor}. We ask a narrower question: can a Tucker model keep
-its chosen backbone ranks fixed while learning a shared entrywise response that
+its chosen backbone ranks fixed while learning a response that
 explains coherent nonlinear residuals left by matched-rank Tucker?
 
-We instantiate this idea with a polynomial link, a classical low-dimensional
-tool for modeling nonlinear responses \citep{Volterra1959Theory,
-Boyd1985FadingMemory}. Let
+We instantiate this idea with a polynomial link. Let
 \[
 \cS = \tucker{\cX}{\bA^{(1)}, \ldots, \bA^{(N)}}
 \]
-be a Tucker latent tensor. Instead of fitting measured entries directly by
+be a Tucker latent tensor. Instead of fitting the measured tensor directly by
 \(\cS\), we model
 \[
 \widehat{\cY} = f_{\bbeta}(\cS) = \sum_{p=0}^{P} \beta_p \cS^{\odot p},
 \]
-where powers are entrywise. We call the model Nonlinear Tucker Decomposition
+where \(\odot p\) denotes the Hadamard power. We call the model Nonlinear Tucker Decomposition
 with Polynomial Links (NTD-PL). It contains Tucker as the degree-one case,
 keeps the Tucker backbone and multilinear ranks fixed, and adds only \(P+1\)
 scalar link coefficients. The higher powers \(\cS^{\odot p}\) induce
@@ -48,41 +47,28 @@ enhancement and shared-backbone rank lift, not as a generic nonlinear decoder. A
 degree-\(p\) power of the latent tensor behaves like an ordinary Tucker tensor
 whose factors are polynomial feature lifts of the original factors, but those
 lifted features remain tied to one learned backbone. The new degrees therefore
-reshape the low-rank geometry through a shared entrywise link, rather than
+reshape the low-rank geometry through the polynomial link, rather than
 adding an untied high-rank tensor block. This is also why the link is not a
-post-hoc calibration layer: the Tucker backbone is learned through the
-polynomial entry-generation map, and the latent tensor is reshaped jointly with the
-scalar response, rather than fitting Tucker first and calibrating a fixed
-output.
+post-hoc calibration layer.
 
-Our claims are intentionally scoped. NTD-PL is not meant to replace rank
-selection, and increasing Tucker rank remains the right comparison when the
-residual is ordinary multilinear structure. Nor do we claim to dominate neural,
-kernel, or other nonlinear tensor factorization methods. The intended regime is
-more specific: the residual left by matched-rank Tucker should be coherent with
-a shared entrywise nonlinear response.
+Our claims are intentionally scoped. Increasing Tucker rank remains the right
+comparison when the residual is ordinary multilinear structure, and we do not
+claim to dominate neural, kernel, or other nonlinear tensor factorization
+methods. The intended regime is more specific: the residual left by
+matched-rank Tucker should be coherent with a nonlinear response.
 
-The paper develops this regime from four angles. Section~\ref{sec:model}
-defines the shared entrywise polynomial link and its tied high-order Tucker
-channels. Section~\ref{sec:theory} proves Veronese rank expansion, a separation
-from matched-rank Tucker, and approximation results for shared nonlinear
-entrywise responses. Section~\ref{sec:optimization} gives the masked objective and
-an alternating solver with Link Refresh, Linked-Backbone Descent, and degree
-continuation. Section~\ref{sec:experiments} tests the mechanism on controlled
-tensors, CAVE hyperspectral reconstruction and completion, rank-lift and Link
-Refresh diagnostics, and external cross-domain boundary cases. We discuss
-failure modes and scope in Section~\ref{sec:limitations}.
+This scoped regime is also supported empirically. In controlled tensors, the gain grows with the injected nonlinear residual energy and with the degree needed to approximate the response. On real hyperspectral tensors, NTD-PL improves matched-rank Tucker in both full reconstruction and held-out completion. More importantly, a one-step Link Refresh diagnostic predicts when NTD-PL will help: across HSI scenes and non-HSI tensor units, larger diagnostic reduction is associated with larger NTD-PL gains, while low-yield units show little or no benefit. These results suggest that nonlinear responses are identifiable structure in several real tensor families.
 
 \paragraph{Contributions.}
 We make the following contributions.
 \begin{itemize}[leftmargin=*,itemsep=2pt,topsep=2pt]
-  \item \textbf{Model.} We propose NTD-PL, a Tucker enhancement with a shared
-  entrywise polynomial link on a Tucker latent tensor. It keeps the Tucker
+  \item \textbf{Model.} We propose NTD-PL, a Tucker enhancement with a
+  polynomial link on a Tucker latent tensor. It keeps the Tucker
   backbone and multilinear ranks fixed while adding only scalar coefficients
-  for a parameter-tied, entrywise response.
+  for a parameter-tied response.
   \item \textbf{Theory.} We characterize the induced model class through
   Veronese rank expansion, separation from matched-rank Tucker, and
-  approximation results for shared entrywise nonlinear responses.
+  approximation results for nonlinear responses.
   \item \textbf{Optimization.} We derive a masked objective for reconstruction
   and completion, and optimize it with Link Refresh, Linked-Backbone Descent,
   and degree continuation.

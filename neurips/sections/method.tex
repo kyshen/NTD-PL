@@ -12,8 +12,9 @@ Let \(\cY \in \R^{I_1 \times \cdots \times I_N}\) be a measured tensor and let
   \quad
   \bA^{(n)} \in \R^{I_n \times R_n}.
 \end{equation}
-NTD-PL treats \(\cS\) as a shared low-rank latent tensor and models each
-measured entry through a scalar polynomial response:
+Our measurement assumption is that the measured tensor is generated from this
+low-rank Tucker latent tensor through a scalar response, up to noise. NTD-PL
+models this response by a polynomial:
 \begin{equation}
   Y_{\mathbf i}
   =
@@ -37,10 +38,10 @@ The constant term \(\beta_0\) captures affine response shifts, the linear term
 \(\beta_1\cS\) is the usual Tucker channel, and terms with \(p\ge2\) activate
 nonlinear channels on the same latent tensor. Standard Tucker is recovered by
 setting \(\beta_1=1\) and \(\beta_p=0\) for \(p\neq 1\). Thus NTD-PL changes
-the entry-generation map while leaving the Tucker backbone and its
+the measurement map while leaving the Tucker backbone and its
 multilinear ranks fixed.
 
-\subsection{Shared-Backbone High-Order Interactions}
+\subsection{Backbone-Tied High-Order Interactions}
 \label{sec:shared-backbone-interactions}
 
 Although \(f_{\bbeta}\) is scalar, the term \(\cS^{\odot p}\) is not merely an
@@ -50,7 +51,7 @@ mode-\(n\) projection is a higher-order tensor
 \(\cA^{(n,p)}\in\R^{I_n\times R_n^p}\) that couples \(p\) latent indices. The
 case \(p=1\) is ordinary Tucker, while \(p=2\) gives a quadratic Tucker-style
 interaction between two latent Tucker tuples. Appendix~\ref{app:pfold-tucker-motivation}
-gives the formal entrywise construction and tensor-network view.
+gives the formal construction and tensor-network view.
 
 The explicit construction is a reference model, not the parameterization we
 train. Its projection tensors grow as \(I_nR_n^p\), and each degree would add a

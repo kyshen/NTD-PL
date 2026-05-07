@@ -2,17 +2,17 @@
 
 This paper develops polynomial links as parameter-tied rank lifts for Tucker
 tensors. The model keeps a Tucker latent tensor as the backbone and learns a
-shared entrywise polynomial link, adding only scalar coefficients.
+polynomial link, adding only scalar coefficients.
 The resulting powers of the same latent tensor act as shared-backbone
 high-order interactions rather than untied high-rank corrections.
 
 The analysis makes this rank-lift view explicit through Veronese rank
 expansion, separation from matched-rank Tucker, and approximation results for
-shared nonlinear links. The optimization uses a masked objective with Link
+nonlinear links. The optimization uses a masked objective with Link
 Refresh, Linked-Backbone Descent, and degree continuation, while the experiments
 and diagnostics identify the intended regime: the link helps when
-matched-rank Tucker leaves a coherent nonlinear residual explained by a shared
-entrywise response.
+matched-rank Tucker leaves a coherent nonlinear residual explained by a scalar
+response.
 
 Future work may consider spatially or spectrally adaptive links, scalable
 sparse implementations, and richer structured links beyond scalar polynomials.

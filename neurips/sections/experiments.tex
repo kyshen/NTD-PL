@@ -12,8 +12,8 @@ mainly against Tucker at the same multilinear rank, except in the explicit
 rank-lift ablation. We also use a Link Refresh diagnostic score,
 \(D_{\mathrm{link}}\): after fitting Tucker, run the cheap scalar Link Refresh
 ridge solve once on the Tucker latent tensor, and measure the residual
-reduction on task-specific evaluation entries. Larger \(D_{\mathrm{link}}\)
-means the Tucker residual is more compatible with a shared nonlinear link.
+reduction on task-specific evaluation samples. Larger \(D_{\mathrm{link}}\)
+means the Tucker residual is more compatible with a nonlinear link.
 
 \subsection{Controlled Nonlinear Residuals}
 \label{subsec:controlled-experiments}
@@ -59,11 +59,11 @@ reports the linear consistency negative control.
 \label{subsec:lowrank-completion}
 
 This section asks whether NTD-PL enhances a Tucker backbone on real
-hyperspectral tensors, both when all entries are measured and when evaluation
+hyperspectral tensors, both when the tensor is fully measured and when evaluation
 is performed on held-out missing entries.
 
 \paragraph{Representation enhancement.}
-Full-entry reconstruction is a representation-capacity check, not a
+Full reconstruction is a representation-capacity check, not a
 generalization test. Figure~\ref{fig:cave-reconstruction-capacity} shows that
 NTD-PL improves both RMSE and SAM on CAVE at matched Tucker backbone rank and
 similar parameter budget. The advantage shrinks as Tucker rank increases,
@@ -72,7 +72,7 @@ tensor. The rank-lifted Tucker ablation in Table~\ref{tab:rank-lift-tucker}
 clarifies the mechanism further. Tucker can buy back part of the RMSE gap by
 spending more rank, so the gain is not explained by a small ordinary rank
 increase alone. These results support the view that NTD-PL improves a tight
-Tucker backbone through a jointly fitted shared entrywise link. The joint
+Tucker backbone through a jointly fitted link. The joint
 link-family smoke test
 in Appendix~\ref{app:joint-link-family} further suggests that the effect is
 tied to joint scalar-link fitting rather than to the polynomial basis alone.
@@ -80,12 +80,12 @@ tied to joint scalar-link fitting rather than to the polynomial basis alone.
 \begin{figure}[!htbp]
   \centering
   \includegraphics[width=0.98\linewidth]{figures/cave_reconstruction_capacity.pdf}
-  \caption{CAVE full-entry reconstruction as a representation-capacity
+  \caption{CAVE full reconstruction as a representation-capacity
   check. Each point averages 15 scenes at a matched Tucker backbone rank. The
   plotted backbone ranks are \((18,18,3)\), \((24,24,4)\), \((33,33,4)\), and
   \((40,40,5)\).
-  Unlike completion, this measures representational error when all entries are
-  measured.}
+  Unlike completion, this measures representational error when the tensor is
+  fully measured.}
   \label{fig:cave-reconstruction-capacity}
 \end{figure}
 
@@ -128,12 +128,12 @@ scene by scene.
 \label{subsec:external-hsi-validity}
 
 NTD-PL is not expected to help uniformly on all tensors. Its gain should appear
-when a matched-rank Tucker fit leaves a coherent residual that a shared scalar
-entrywise link can reduce. We denote this diagnostic by \(D_{\mathrm{link}}\): after
+when a matched-rank Tucker fit leaves a coherent residual that a scalar
+link can reduce. We denote this diagnostic by \(D_{\mathrm{link}}\): after
 fitting Tucker, we freeze the Tucker backbone, run one scalar Link Refresh
 ridge solve, and measure the residual-energy reduction on the relevant
-evaluation entries. Larger \(D_{\mathrm{link}}\) indicates a stronger shared
-entrywise nonlinear residual:
+evaluation samples. Larger \(D_{\mathrm{link}}\) indicates a stronger
+nonlinear residual:
 \[
 D_{\mathrm{link}}
 =
@@ -170,7 +170,7 @@ datasets, each object or instance forms a multi-view tensor unit; for action
 video, each KTH segment or UCF101 clip is treated as one action-clip tensor
 unit.
 We do not concatenate unrelated images, objects, or clips into a giant tensor,
-since \(D_{\mathrm{link}}\) tests whether a single shared scalar link is
+since \(D_{\mathrm{link}}\) tests whether a single scalar link is
 coherent within one unit.
 
 \begin{table}[!htbp]
@@ -207,17 +207,17 @@ coherent within one unit.
 \end{table}
 
 Table~\ref{tab:cross-domain-link-diagnostic} summarizes the non-HSI diagnosis
-on full-entry reconstruction units. Natural images show weaker
-shared-link yield, especially CIFAR-10, whose median \(D_{\mathrm{link}}\) is
+on full reconstruction units. Natural images show weaker
+link yield, especially CIFAR-10, whose median \(D_{\mathrm{link}}\) is
 close to zero and whose low-yield tercile has almost no gain. Object-view
 tensors show clearer effective units: COIL-100 and smallNORB have larger
 median \(D_{\mathrm{link}}\), stronger rank-matched gains, and high-yield
-terciles with larger improvements. Action-video clips show moderate shared-link
+terciles with larger improvements. Action-video clips show moderate link
 yield: KTH-Action is stronger than UCF101, but both datasets retain high
 diagnostic correlation and visibly larger gains in their high-yield terciles
 than in their low-yield terciles.
 These results support the scoped claim that NTD-PL
-helps when the Tucker residual contains shared link-like structure, rather
+helps when the Tucker residual contains link-like structure, rather
 than uniformly across all visual tensors. Representative units selected only by
 \(D_{\mathrm{link}}\) are
 reported in Appendix~\ref{app:nonhsi-link-diagnostics}: high-\(D_{\mathrm{link}}\)
