@@ -141,8 +141,7 @@ D_{\mathrm{link}}
 where \(\widehat{Y}_{T}\) is the Tucker output and
 \(\widehat{Y}_{\mathrm{link}}\) is the output after the one-step refresh.
 
-For HSI, we use natural scene-level tensor units rather than artificial
-patches. For the CAVE completion task, Table~\ref{tab:cave-link-yield-summary} groups
+For the CAVE completion, Table~\ref{tab:cave-link-yield-summary} groups
 scenes by \(D_{\mathrm{link}}\) tercile. Higher \(D_{\mathrm{link}}\)
 consistently corresponds to larger held-out RMSE$^\ast$ gains across missing
 rates, with Spearman correlations around 0.829--0.889. Appendix
@@ -157,7 +156,7 @@ scene-level scatter plots.
   corresponds to larger held-out gains across missing rates.}
   \label{tab:cave-link-yield-summary}
   \scriptsize
-  \resizebox{0.94\linewidth}{!}{\input{tables/ntdpl_polycal_diagnostic.tex}}
+  \input{tables/ntdpl_polycal_diagnostic.tex}
 \end{table}
 
 We then apply the same per-unit protocol beyond HSI. Each natural image is one

@@ -79,7 +79,7 @@ def write_latex(summary: pd.DataFrame, bins: pd.DataFrame, output_tex: Path) -> 
     lines = [
         r"\begin{tabular}{@{}c c c c c c@{}}",
         r"\toprule",
-        r"$\rho$ & Spearman $\rho_s$ & Low-yield gain & Mid-yield gain & High-yield gain & Scenes\\",
+        r"$\rho$ & Spearman $\rho_s$ & Low $D_{\mathrm{link}}$ & Mid $D_{\mathrm{link}}$ & High $D_{\mathrm{link}}$ & Scenes\\",
         r"\midrule",
     ]
     target_summary = summary.loc[summary["target"].eq("ntdpl_gain")].copy()
