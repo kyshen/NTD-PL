@@ -148,70 +148,51 @@ where \(\widehat{Y}_{T}\) is the Tucker output and
 \(\widehat{Y}_{\mathrm{link}}\) is the output after the one-step refresh.
 
 For HSI, we use natural scene-level tensor units rather than artificial
-patches. CAVE already provides multiple scene tensors, so
-Figure~\ref{fig:cave-link-yield} evaluates whether higher
-\(D_{\mathrm{link}}\) predicts larger held-out RMSE$^\ast$ gains.
-
-\begin{figure}[!htbp]
-  \centering
-  \includegraphics[width=0.95\linewidth]{figures/cave_link_yield_scatter.pdf}
-  \caption{CAVE completion diagnostic. Scene-level \(D_{\mathrm{link}}\) from
-  frozen-backbone Link Refresh predicts larger held-out RMSE$^\ast$ gains at
-  missing rates 0.3 and 0.5; panels annotate Spearman correlations.}
-  \label{fig:cave-link-yield}
-\end{figure}
-
-Figure~\ref{fig:cave-link-yield} first validates the diagnostic on CAVE
-completion: scenes with higher \(D_{\mathrm{link}}\) receive larger held-out
-RMSE$^\ast$ gains. We then apply the same per-unit protocol beyond HSI. Each
-natural image is one tensor unit; each object or instance forms an object-view
-tensor; each KTH segment or UCF101 clip is an action-video tensor. We do not
-concatenate unrelated images, objects, or clips, because \(D_{\mathrm{link}}\)
-tests whether one scalar link is coherent within a unit.
+patches. For the CAVE completion task, Table~\ref{tab:cave-link-yield-summary} groups
+scenes by \(D_{\mathrm{link}}\) tercile. Higher \(D_{\mathrm{link}}\)
+consistently corresponds to larger held-out RMSE$^\ast$ gains across missing
+rates, with Spearman correlations around 0.829--0.889. Appendix
+Figure~\ref{fig:cave-link-yield-scatter-appendix} shows the corresponding
+scene-level scatter plots.
 
 \begin{table}[!htbp]
   \centering
-  \caption{Cross-domain Link Refresh diagnosis. Each unit is independently
-  fitted by Tucker and NTD-PL at matched backbone rank. \(D_{\mathrm{link}}\)
-  is computed by one frozen-backbone Link Refresh step; diagnostic tiers are
-  assigned from \(D_{\mathrm{link}}\), not from NTD-PL gain, avoiding circular
-  selection.}
-  \label{tab:cross-domain-link-diagnostic}
+  \caption{CAVE completion diagnostic. Scenes are grouped by
+  \(D_{\mathrm{link}}\) terciles, and entries report mean NTD-PL RMSE$^\ast$
+  gains over matched-rank Tucker. Larger \(D_{\mathrm{link}}\) consistently
+  corresponds to larger held-out gains across missing rates.}
+  \label{tab:cave-link-yield-summary}
   \scriptsize
-  \setlength{\tabcolsep}{3pt}
-  \resizebox{\linewidth}{!}{
-  \begin{tabular}{@{}l l l r c c c c@{}}
-    \toprule
-    Domain & Dataset & Unit & \#Units & Med. \(D_{\mathrm{link}}\) &
-    Spearman & Med. gain & Low/High gain \\
-    \midrule
-    Natural images & CBSD68 & image & 16 & 0.075 & 0.835 & 5.77\% &
-    \(3.87/12.44\)\% \\
-    Natural images & CIFAR-10 & image & 1000 & 0.008 & 0.934 & 2.35\% &
-    \(-0.01/7.85\)\% \\
-    Object-view & COIL-100 & object-view tensor & 100 & 0.208 & 0.932 &
-    5.40\% & \(2.77/9.14\)\% \\
-    Object-view & smallNORB & instance-view tensor & 25 & 0.264 & 0.945 &
-    9.84\% & \(6.92/14.16\)\% \\
-    Action video & KTH-Action & action clip & 240 & 0.107 & 0.884 &
-    4.32\% & \(2.74/10.87\)\% \\
-    Action video & UCF101 & action clip & 240 & 0.065 & 0.890 &
-    2.89\% & \(1.44/5.89\)\% \\
-    \bottomrule
-  \end{tabular}}
+  \resizebox{0.94\linewidth}{!}{\input{tables/ntdpl_polycal_diagnostic.tex}}
 \end{table}
 
-Table~\ref{tab:cross-domain-link-diagnostic} summarizes the non-HSI diagnosis
-on full reconstruction units. Natural images show weaker diagnostic yield,
-especially CIFAR-10, whose median \(D_{\mathrm{link}}\) is close to zero and
-whose low-yield tercile has almost no gain. Object-view tensors show clearer
-yield: COIL-100 and smallNORB have larger median \(D_{\mathrm{link}}\),
-stronger rank-matched gains, and larger high-yield tercile improvements.
-Action-video clips are intermediate; KTH-Action is stronger than UCF101, but
-both retain positive diagnostic correlation and larger high-yield gains. These
-results support the scoped claim: NTD-PL helps when the Tucker residual
-contains link-like structure, not uniformly across all visual tensors.
-Representative units selected only by \(D_{\mathrm{link}}\) are reported in
-Appendix~\ref{app:nonhsi-link-diagnostics}.
+We then apply the same per-unit protocol beyond HSI. Each natural image is one
+tensor unit; each object or instance forms an object-view tensor; each KTH
+segment or UCF101 clip is an action-video tensor. Figure~
+\ref{fig:nonhsi-link-scatter} plots \(D_{\mathrm{link}}\) against NTD-PL RMSE
+gain across these independently fitted units. Diagnostic labels and terciles
+are assigned from \(D_{\mathrm{link}}\), not from NTD-PL gain, and the
+relationship is domain-dependent but positive: natural images show weaker
+link yield, object-view tensors clearer yield, and action-video clips an
+intermediate pattern.
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=\linewidth]{figures/nonhsi_dlink_scatter_3domain.pdf}
+  \caption{Per-unit non-HSI diagnostic correlation. Each panel plots
+  \(D_{\mathrm{link}}\) against NTD-PL RMSE gain over independently fitted
+  tensor units. \(D_{\mathrm{link}}\) is computed by frozen-backbone Link
+  Refresh, and diagnostic labels are assigned from \(D_{\mathrm{link}}\), not
+  from NTD-PL gain. The figure shows domain-dependent but positive diagnostic
+  structure.}
+  \label{fig:nonhsi-link-scatter}
+\end{figure}
+
+These results support the scoped claim that NTD-PL helps when matched-rank
+Tucker leaves link-like residual structure, not uniformly across all visual
+tensors. Appendix Figure~\ref{fig:cave-link-yield-scatter-appendix} gives the
+CAVE scene-level scatter supplement, and Appendix
+Table~\ref{tab:nonhsi-link-summary-appendix} gives the exact non-HSI numeric
+statistics.
 
 \FloatBarrier

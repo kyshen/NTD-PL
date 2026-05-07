@@ -110,16 +110,6 @@ Wilcoxon tests for the same protocol.
   \resizebox{\linewidth}{!}{\input{tables/cave_completion_significance.tex}}
 \end{table}
 
-\begin{table}[ht]
-  \centering
-  \caption{Link Refresh diagnostic on CAVE completion. Low/mid/high groups are
-  \(D_{\mathrm{link}}\) terciles, and gains report mean NTD-PL RMSE$^\ast$
-  improvement over matched-rank Tucker within each tercile.}
-  \label{tab:ntdpl-polycal-diagnostic}
-  \scriptsize
-  \resizebox{0.94\linewidth}{!}{\input{tables/ntdpl_polycal_diagnostic.tex}}
-\end{table}
-
 \subsection{Link Refresh Residual Diagnostic}
 \label{app:posthoc-calibration-baselines}
 
@@ -149,23 +139,22 @@ the task-specific evaluation entries. In other words, it measures how much
 shared scalar-link yield is already present before the full NTD-PL alternating
 solver starts reshaping the Tucker parameters.
 
-\subsection{CAVE Beads Pseudo-RGB Visualization}
-\label{app:cave-beads-visualization}
+\subsection{CAVE Completion Scene Diagnostics}
+\label{app:cave-completion-scene-diagnostics}
 
-Figure~\ref{fig:cave-beads-recon-completion} visualizes the CAVE beads scene
-under the reconstruction and random-completion protocols. Each 31-band tensor
-is rendered as pseudo-RGB by selecting three representative spectral bands
-near \(75\%\), \(50\%\), and \(20\%\) of the wavelength index range and applying
-a shared linear intensity scaling within each task. For completion, unobserved
-entries in the observation panel are shown in gray.
+Figure~\ref{fig:cave-link-yield-scatter-appendix} supplements the main CAVE
+diagnostic table with the scene-level scatter plots used to visualize the link
+yield across missing rates. The plots show the same diagnostic relationship
+between \(D_{\mathrm{link}}\) and held-out RMSE$^\ast$ gain, now at the scene
+level.
 
-\begin{figure}[H]
+\begin{figure}[ht]
   \centering
-  \includegraphics[width=0.98\linewidth]{figures/cave_beads_recon_completion_visual.pdf}
-  \caption{CAVE beads visual comparison. Rows show full reconstruction and
-  random completion at missing rate \(0.5\). Error maps show Tucker minus
-  NTD-PL per-pixel RMSE, so positive values indicate lower NTD-PL error.}
-  \label{fig:cave-beads-recon-completion}
+  \includegraphics[width=0.95\linewidth]{figures/cave_link_yield_scatter.pdf}
+  \caption{Scene-level supplement for the CAVE completion diagnostic table.
+  Missing rates 0.3 and 0.5 are shown; \(D_{\mathrm{link}}\) from frozen-
+  backbone Link Refresh predicts larger held-out RMSE$^\ast$ gains.}
+  \label{fig:cave-link-yield-scatter-appendix}
 \end{figure}
 
 \subsection{Cross-Domain Real Tensor Checks}
@@ -190,12 +179,15 @@ view tensor with rank \((12,24,24,2)\). All units are max-normalized
 independently, and diagnostic labels are assigned only from
 \(D_{\mathrm{link}}\), not from NTD-PL gain.
 
-\begin{figure}[ht]
+\begin{table}[ht]
   \centering
-  \includegraphics[width=\linewidth]{figures/nonhsi_dlink_scatter_3domain.pdf}
-  \caption{Per-unit non-HSI diagnostic correlation. \(D_{\mathrm{link}}\)
-  from frozen-backbone Link Refresh is plotted against NTD-PL RMSE gain for
-  natural-image, object-view, and action-video units; labels are assigned from
-  \(D_{\mathrm{link}}\), not from NTD-PL gain.}
-  \label{fig:nonhsi-link-scatter}
-\end{figure}
+  \caption{Exact per-dataset statistics behind the main non-HSI scatter
+  figure. Each unit is independently fitted by Tucker and NTD-PL at matched
+  backbone rank. \(D_{\mathrm{link}}\) is computed by frozen-backbone Link
+  Refresh; diagnostic tiers are assigned from \(D_{\mathrm{link}}\), not from
+  NTD-PL gain.}
+  \label{tab:nonhsi-link-summary-appendix}
+  \scriptsize
+  \setlength{\tabcolsep}{3pt}
+  \resizebox{\linewidth}{!}{\input{tables/ntdpl_polycal_diagnostic.tex}}
+\end{table}

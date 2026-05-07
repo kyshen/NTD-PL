@@ -67,11 +67,11 @@
 \newlabel{tab:lowrank-completion-main}{{2}{8}{Held-out CAVE completion at rank \((33,33,4)\) under random masks. RMSE$^\ast $ and SAM$^\ast $ are computed only on missing entries. Columns report mean \(\pm \) standard deviation over scenes; gains are paired relative improvements over matched-rank Tucker}{table.caption.17}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Diagnosing Nonlinear Low-Rank Structure Across Data}{8}{subsection.6.3}\protected@file@percent }
 \newlabel{subsec:external-hsi-validity}{{6.3}{8}{Diagnosing Nonlinear Low-Rank Structure Across Data}{subsection.6.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces CAVE completion diagnostic. Scene-level \(D_{\mathrm  {link}}\) from frozen-backbone Link Refresh predicts larger held-out RMSE$^\ast $ gains at missing rates 0.3 and 0.5; panels annotate Spearman correlations.}}{8}{figure.caption.18}\protected@file@percent }
-\newlabel{fig:cave-link-yield}{{4}{8}{CAVE completion diagnostic. Scene-level \(D_{\mathrm {link}}\) from frozen-backbone Link Refresh predicts larger held-out RMSE$^\ast $ gains at missing rates 0.3 and 0.5; panels annotate Spearman correlations}{figure.caption.18}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces CAVE completion diagnostic. Scenes are grouped by \(D_{\mathrm  {link}}\) terciles, and entries report mean NTD-PL RMSE$^\ast $ gains over matched-rank Tucker. Larger \(D_{\mathrm  {link}}\) consistently corresponds to larger held-out gains across missing rates.}}{8}{table.caption.18}\protected@file@percent }
+\newlabel{tab:cave-link-yield-summary}{{3}{8}{CAVE completion diagnostic. Scenes are grouped by \(D_{\mathrm {link}}\) terciles, and entries report mean NTD-PL RMSE$^\ast $ gains over matched-rank Tucker. Larger \(D_{\mathrm {link}}\) consistently corresponds to larger held-out gains across missing rates}{table.caption.18}{}}
 \def\@LN@column{1}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Cross-domain Link Refresh diagnosis. Each unit is independently fitted by Tucker and NTD-PL at matched backbone rank. \(D_{\mathrm  {link}}\) is computed by one frozen-backbone Link Refresh step; diagnostic tiers are assigned from \(D_{\mathrm  {link}}\), not from NTD-PL gain, avoiding circular selection.}}{9}{table.caption.19}\protected@file@percent }
-\newlabel{tab:cross-domain-link-diagnostic}{{3}{9}{Cross-domain Link Refresh diagnosis. Each unit is independently fitted by Tucker and NTD-PL at matched backbone rank. \(D_{\mathrm {link}}\) is computed by one frozen-backbone Link Refresh step; diagnostic tiers are assigned from \(D_{\mathrm {link}}\), not from NTD-PL gain, avoiding circular selection}{table.caption.19}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Per-unit non-HSI diagnostic correlation. Each panel plots \(D_{\mathrm  {link}}\) against NTD-PL RMSE gain over independently fitted tensor units. \(D_{\mathrm  {link}}\) is computed by frozen-backbone Link Refresh, and diagnostic labels are assigned from \(D_{\mathrm  {link}}\), not from NTD-PL gain. The figure shows domain-dependent but positive diagnostic structure.}}{9}{figure.caption.19}\protected@file@percent }
+\newlabel{fig:nonhsi-link-scatter}{{4}{9}{Per-unit non-HSI diagnostic correlation. Each panel plots \(D_{\mathrm {link}}\) against NTD-PL RMSE gain over independently fitted tensor units. \(D_{\mathrm {link}}\) is computed by frozen-backbone Link Refresh, and diagnostic labels are assigned from \(D_{\mathrm {link}}\), not from NTD-PL gain. The figure shows domain-dependent but positive diagnostic structure}{figure.caption.19}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {7}Limitations}{9}{section.7}\protected@file@percent }
 \newlabel{sec:limitations}{{7}{9}{Limitations}{section.7}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{9}{section.8}\protected@file@percent }
@@ -118,8 +118,8 @@
 \newlabel{eq:appendix-latent-gradient}{{16}{12}{Backbone gradients}{equation.16}{}}
 \@writefile{toc}{\contentsline {paragraph}{Link update.}{12}{section*.23}\protected@file@percent }
 \newlabel{eq:appendix-beta-ridge-update}{{20}{12}{Link update}{equation.20}{}}
-\@writefile{toc}{\contentsline {paragraph}{Stabilization and continuation.}{12}{section*.24}\protected@file@percent }
 \def\@LN@column{1}
+\@writefile{toc}{\contentsline {paragraph}{Stabilization and continuation.}{13}{section*.24}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Cost.}{13}{section*.25}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Masked NTD-PL optimization}}{13}{algorithm.1}\protected@file@percent }
 \newlabel{alg:ntdpl}{{1}{13}{Masked NTD-PL optimization}{algorithm.1}{}}
@@ -129,9 +129,9 @@
 \newlabel{lem:scalar-to-tensor}{{1}{13}{Scalar-to-tensor approximation}{lemma.1}{}}
 \def\@LN@column{1}
 \@writefile{toc}{\contentsline {subsection}{\numberline {B.2}Rank Expansion}{14}{subsection.B.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.3}Separation}{14}{subsection.B.3}\protected@file@percent }
-\newlabel{lem:veronese-full-rank}{{2}{14}{Full-rank Veronese evaluations}{lemma.2}{}}
 \def\@LN@column{1}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.3}Separation}{15}{subsection.B.3}\protected@file@percent }
+\newlabel{lem:veronese-full-rank}{{2}{15}{Full-rank Veronese evaluations}{lemma.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {B.4}Masked Generalization}{15}{subsection.B.4}\protected@file@percent }
 \newlabel{app:masked-generalization}{{B.4}{15}{Masked Generalization}{subsection.B.4}{}}
 \newlabel{thm:masked-generalization}{{4}{15}{Masked-entry uniform convergence}{theorem.4}{}}
@@ -139,8 +139,8 @@
 \@writefile{toc}{\contentsline {section}{\numberline {C}Additional Experiments}{16}{appendix.C}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {C.1}Controlled Synthetic Mechanism Checks}{16}{subsection.C.1}\protected@file@percent }
 \newlabel{app:controlled-synthetic}{{C.1}{16}{Controlled Synthetic Mechanism Checks}{subsection.C.1}{}}
-\newlabel{eq:controlled-orthogonal-residual}{{45}{16}{Controlled Synthetic Mechanism Checks}{equation.45}{}}
 \def\@LN@column{1}
+\newlabel{eq:controlled-orthogonal-residual}{{45}{17}{Controlled Synthetic Mechanism Checks}{equation.45}{}}
 \newlabel{eq:controlled-normalized-residual}{{46}{17}{Controlled Synthetic Mechanism Checks}{equation.46}{}}
 \newlabel{eq:controlled-residual-mixture}{{47}{17}{Controlled Synthetic Mechanism Checks}{equation.47}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Linear consistency on synthetic Tucker tensors. In the linear negative control, effective \(p>1\) contributions remain small except for the intended affine offset case.}}{17}{table.caption.26}\protected@file@percent }
@@ -149,25 +149,22 @@
 \newlabel{fig:controlled-training-curves}{{6}{17}{NTD-PL training curves for controlled nonlinear mechanism checks at \(\alpha =0.25\) and \(P=5\). Dashed vertical lines mark degree activations, which produce systematic drops when the activated degree matches the response structure}{figure.caption.27}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Effective NTD-PL term contributions under moderate nonlinearity, reported as percentages over ten seeds. Polynomial targets concentrate mass at matching nonlinear degrees, while odd smooth links place most nonlinear mass on odd powers.}}{17}{table.caption.28}\protected@file@percent }
 \newlabel{tab:controlled-beta-contribution}{{5}{17}{Effective NTD-PL term contributions under moderate nonlinearity, reported as percentages over ten seeds. Polynomial targets concentrate mass at matching nonlinear degrees, while odd smooth links place most nonlinear mass on odd powers}{table.caption.28}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.2}CAVE Completion Significance and Robustness}{17}{subsection.C.2}\protected@file@percent }
-\newlabel{app:single-rank-completion}{{C.2}{17}{CAVE Completion Significance and Robustness}{subsection.C.2}{}}
 \def\@LN@column{1}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.2}CAVE Completion Significance and Robustness}{18}{subsection.C.2}\protected@file@percent }
+\newlabel{app:single-rank-completion}{{C.2}{18}{CAVE Completion Significance and Robustness}{subsection.C.2}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Paired significance tests for full-resolution CAVE completion at rank \((33,33,4)\). Metrics are computed only on missing entries.}}{18}{table.caption.29}\protected@file@percent }
 \newlabel{tab:cave-completion-significance}{{6}{18}{Paired significance tests for full-resolution CAVE completion at rank \((33,33,4)\). Metrics are computed only on missing entries}{table.caption.29}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Link Refresh diagnostic on CAVE completion. Low/mid/high groups are \(D_{\mathrm  {link}}\) terciles, and gains report mean NTD-PL RMSE$^\ast $ improvement over matched-rank Tucker within each tercile.}}{18}{table.caption.30}\protected@file@percent }
-\newlabel{tab:ntdpl-polycal-diagnostic}{{7}{18}{Link Refresh diagnostic on CAVE completion. Low/mid/high groups are \(D_{\mathrm {link}}\) terciles, and gains report mean NTD-PL RMSE$^\ast $ improvement over matched-rank Tucker within each tercile}{table.caption.30}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {C.3}Link Refresh Residual Diagnostic}{18}{subsection.C.3}\protected@file@percent }
 \newlabel{app:posthoc-calibration-baselines}{{C.3}{18}{Link Refresh Residual Diagnostic}{subsection.C.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.4}CAVE Beads Pseudo-RGB Visualization}{18}{subsection.C.4}\protected@file@percent }
-\newlabel{app:cave-beads-visualization}{{C.4}{18}{CAVE Beads Pseudo-RGB Visualization}{subsection.C.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.4}CAVE Completion Scene Diagnostics}{18}{subsection.C.4}\protected@file@percent }
+\newlabel{app:cave-completion-scene-diagnostics}{{C.4}{18}{CAVE Completion Scene Diagnostics}{subsection.C.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Scene-level supplement for the CAVE completion diagnostic table. Missing rates 0.3 and 0.5 are shown; \(D_{\mathrm  {link}}\) from frozen- backbone Link Refresh predicts larger held-out RMSE$^\ast $ gains.}}{18}{figure.caption.30}\protected@file@percent }
+\newlabel{fig:cave-link-yield-scatter-appendix}{{7}{18}{Scene-level supplement for the CAVE completion diagnostic table. Missing rates 0.3 and 0.5 are shown; \(D_{\mathrm {link}}\) from frozen- backbone Link Refresh predicts larger held-out RMSE$^\ast $ gains}{figure.caption.30}{}}
 \def\@LN@column{1}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces CAVE beads visual comparison. Rows show full reconstruction and random completion at missing rate \(0.5\). Error maps show Tucker minus NTD-PL per-pixel RMSE, so positive values indicate lower NTD-PL error.}}{19}{figure.caption.31}\protected@file@percent }
-\newlabel{fig:cave-beads-recon-completion}{{7}{19}{CAVE beads visual comparison. Rows show full reconstruction and random completion at missing rate \(0.5\). Error maps show Tucker minus NTD-PL per-pixel RMSE, so positive values indicate lower NTD-PL error}{figure.caption.31}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {C.5}Cross-Domain Real Tensor Checks}{19}{subsection.C.5}\protected@file@percent }
 \newlabel{app:cross-domain-real-tensors}{{C.5}{19}{Cross-Domain Real Tensor Checks}{subsection.C.5}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {C.6}Non-HSI Link Refresh Diagnostics}{19}{subsection.C.6}\protected@file@percent }
 \newlabel{app:nonhsi-link-diagnostics}{{C.6}{19}{Non-HSI Link Refresh Diagnostics}{subsection.C.6}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Per-unit non-HSI diagnostic correlation. \(D_{\mathrm  {link}}\) from frozen-backbone Link Refresh is plotted against NTD-PL RMSE gain for natural-image, object-view, and action-video units; labels are assigned from \(D_{\mathrm  {link}}\), not from NTD-PL gain.}}{19}{figure.caption.32}\protected@file@percent }
-\newlabel{fig:nonhsi-link-scatter}{{8}{19}{Per-unit non-HSI diagnostic correlation. \(D_{\mathrm {link}}\) from frozen-backbone Link Refresh is plotted against NTD-PL RMSE gain for natural-image, object-view, and action-video units; labels are assigned from \(D_{\mathrm {link}}\), not from NTD-PL gain}{figure.caption.32}{}}
-\def\@LN@column{1}
-\gdef \@abspage@last{20}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Exact per-dataset statistics behind the main non-HSI scatter figure. Each unit is independently fitted by Tucker and NTD-PL at matched backbone rank. \(D_{\mathrm  {link}}\) is computed by frozen-backbone Link Refresh; diagnostic tiers are assigned from \(D_{\mathrm  {link}}\), not from NTD-PL gain.}}{19}{table.caption.31}\protected@file@percent }
+\newlabel{tab:nonhsi-link-summary-appendix}{{7}{19}{Exact per-dataset statistics behind the main non-HSI scatter figure. Each unit is independently fitted by Tucker and NTD-PL at matched backbone rank. \(D_{\mathrm {link}}\) is computed by frozen-backbone Link Refresh; diagnostic tiers are assigned from \(D_{\mathrm {link}}\), not from NTD-PL gain}{table.caption.31}{}}
+\gdef \@abspage@last{19}

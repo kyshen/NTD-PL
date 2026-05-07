@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex main"] 1778136938.04983 "main.aux" "main.bbl" "main" 1778136941.0623 0
+["bibtex main"] 1778137767.3792 "main.aux" "main.bbl" "main" 1778137770.22846 0
   "./references.bib" 1777803733 17071 c6751bab7ba1a34d3996034b25c2797f ""
   "c:/texlive/2026/texmf-dist/bibtex/bst/natbib/plainnat.bst" 1773380545 26816 ffe5423d2019860bad9f54bc402fac15 ""
-  "main.aux" 1778136940 22022 9b8981aaba616eb0598a42aa2106720b "pdflatex"
+  "main.aux" 1778137769 21733 f9446481f072c4b2a18ec930c4f6a799 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1778136938.51193 "c:/Users/mrkys/workspace/NTD-PL/neurips/main.tex" "main.pdf" "main" 1778136941.06277 0
-  "appendix/experiments.tex" 1778136072 8481 7a811daa9347dae05af747a6247a486a ""
+["pdflatex"] 1778137767.84424 "c:/Users/mrkys/workspace/NTD-PL/neurips/main.tex" "main.pdf" "main" 1778137770.22891 0
+  "appendix/experiments.tex" 1778137621 8036 9bf305ee6c7e1bf588717cf33dafa8cf ""
   "appendix/model_details.tex" 1777815418 8010 ba5f06115b8f03ca538f90514c68d49e ""
   "appendix/proofs.tex" 1777740225 10703 b4828fc21c8897ab77031a284b138b32 ""
   "artifacts/p-tucker.tex" 1777810828 3360 d876e0ecf99cec7abed92cfccb5cc98b ""
@@ -265,7 +265,6 @@
   "c:/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt" 1773383399 3636414 c5ea26d38c3219c5fc06ff03a6ce5573 ""
   "c:/texlive/2026/texmf.cnf" 1773383176 713 e69b156964470283e0530f5060668171 ""
   "checklist.tex" 1778127104 1491 662dc85e5e0d0e9f70cbd494beb47815 ""
-  "figures/cave_beads_recon_completion_visual.pdf" 1777785620 2350676 b0b37277f290ac53fd9a51ba54b1e739 ""
   "figures/cave_link_yield_scatter.pdf" 1778136904 26745 d93784a1d54209c1d2ae2c607a1d23be ""
   "figures/cave_reconstruction_capacity.pdf" 1778074973 9919 e3632fbe940d5c18b10f0e24eef91a69 ""
   "figures/controlled_nonlinear_alpha_grid.pdf" 1778077353 17221 fee4e8101ad22634cf8ebc0233a583ca ""
@@ -273,15 +272,15 @@
   "figures/controlled_nonlinear_step_strip.pdf" 1778074015 66717 cac57b97df329ea51b0a0a5ccf002ccd ""
   "figures/nonhsi_dlink_scatter_3domain.pdf" 1778126844 51424 2646c88b14bb0144b354c83161bcf6eb ""
   "macros.tex" 1777382205 1030 397d1ca12b8401d6595fffa6484ae98e ""
-  "main.aux" 1778136940 22022 9b8981aaba616eb0598a42aa2106720b "pdflatex"
-  "main.bbl" 1778136938 7745 76ba570de9880dbd12f031b922a25e2b "bibtex main"
-  "main.out" 1778136940 5802 e036900f197a02a2fc783846de2fafde "pdflatex"
+  "main.aux" 1778137769 21733 f9446481f072c4b2a18ec930c4f6a799 "pdflatex"
+  "main.bbl" 1778137767 7745 76ba570de9880dbd12f031b922a25e2b "bibtex main"
+  "main.out" 1778137769 5792 9a5d5588564a02350d73c48b8cc5355e "pdflatex"
   "main.tex" 1778124831 995 6f55d9358359baef18dd6f5728f28ed1 ""
   "neurips_2026.sty" 1777382753 13462 818d80447f57703e59b8270885421e82 ""
   "preamble.tex" 1777809946 1161 ad8d48a02baf552aa8c1226523b6cf13 ""
   "sections/abstract.tex" 1778130106 1290 d0a6bda766342aaf03662da047eb078c ""
   "sections/conclusion.tex" 1778130118 969 6258d1e27753ff806a98b31f5b7c0cfc ""
-  "sections/experiments.tex" 1778136848 10374 718eb55404fd570292edc307384efb97 ""
+  "sections/experiments.tex" 1778137707 9502 1aed67925f58fdd61b1dcd54cf3ed376 ""
   "sections/introduction.tex" 1778132283 4940 0dab2256ebf2c5475134966f74c55f51 ""
   "sections/limitations.tex" 1778130106 1552 638ea7cf4f394d34e89b8211ff76edce ""
   "sections/method.tex" 1778132477 3918 f1059ac2ff33c06d110e7544f35da63a ""
