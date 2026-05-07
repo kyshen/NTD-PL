@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex main"] 1778095564.87564 "main.aux" "main.bbl" "main" 1778096298.09343 0
+["bibtex main"] 1778120980.01189 "main.aux" "main.bbl" "main" 1778120983.069 0
   "./references.bib" 1777803733 17071 c6751bab7ba1a34d3996034b25c2797f ""
   "c:/texlive/2026/texmf-dist/bibtex/bst/natbib/plainnat.bst" 1773380545 26816 ffe5423d2019860bad9f54bc402fac15 ""
-  "main.aux" 1778096297 23510 f81c6d974fb1f59d14f72467b877b52b "pdflatex"
+  "main.aux" 1778120982 23607 fd989634fc94cd20f308be4e7720c62f "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1778096295.47173 "c:/Users/mrkys/workspace/NTD-PL/neurips/main.tex" "main.pdf" "main" 1778096298.09397 0
+["pdflatex"] 1778120980.54335 "c:/Users/mrkys/workspace/NTD-PL/neurips/main.tex" "main.pdf" "main" 1778120983.06981 0
   "appendix/experiments.tex" 1778095555 11152 522525ab257ae4ce15bc49012c99a0aa ""
   "appendix/model_details.tex" 1777815418 8010 ba5f06115b8f03ca538f90514c68d49e ""
   "appendix/proofs.tex" 1777740225 10703 b4828fc21c8897ab77031a284b138b32 ""
@@ -272,15 +272,15 @@
   "figures/controlled_nonlinear_step_strip.pdf" 1778074015 66717 cac57b97df329ea51b0a0a5ccf002ccd ""
   "figures/nonhsi_dlink_scatter.pdf" 1778094953 35701 91acda83c536999be0dcdab8527af2aa ""
   "macros.tex" 1777382205 1030 397d1ca12b8401d6595fffa6484ae98e ""
-  "main.aux" 1778096297 23510 f81c6d974fb1f59d14f72467b877b52b "pdflatex"
-  "main.bbl" 1778095565 7474 039d6c85e3de0ffe7da7b67f3ef9c219 "bibtex main"
-  "main.out" 1778096297 5972 6dd894fc25d98364b1d007496ab2fe0f "pdflatex"
+  "main.aux" 1778120982 23607 fd989634fc94cd20f308be4e7720c62f "pdflatex"
+  "main.bbl" 1778120980 7404 786d1c7e8501c73dec6b5ff48c17f51a "bibtex main"
+  "main.out" 1778120982 5972 6dd894fc25d98364b1d007496ab2fe0f "pdflatex"
   "main.tex" 1778051147 1000 e19254a3d1514610293afff1da1bbf6e ""
   "neurips_2026.sty" 1777382753 13462 818d80447f57703e59b8270885421e82 ""
   "preamble.tex" 1777809946 1161 ad8d48a02baf552aa8c1226523b6cf13 ""
   "sections/abstract.tex" 1778091968 1762 d412359698108e1310abaac34741b9d5 ""
   "sections/conclusion.tex" 1778091947 765 0496a3e45b1ce9596926f63311d41e48 ""
-  "sections/experiments.tex" 1778096294 11076 8e445773b97fa041b4d9c5a9e93168e2 ""
+  "sections/experiments.tex" 1778120946 11730 841718f7d3b63d37660888c88b6a6d37 ""
   "sections/introduction.tex" 1778091947 3976 af4552cd5bd2be19346e4f4e09f6558c ""
   "sections/limitations.tex" 1778089754 796 57ef38d73383c83f49c507fc39ca4995 ""
   "sections/method.tex" 1778048457 3881 6e38f6dba771c11dc890233db94a32ee ""

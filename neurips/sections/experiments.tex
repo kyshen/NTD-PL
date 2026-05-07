@@ -181,7 +181,7 @@ Cuprite is a near-zero \(D_{\mathrm{link}}\) boundary case.
   is computed by one frozen-backbone Link Refresh step and diagnostic tiers
   are assigned from \(D_{\mathrm{link}}\), not from NTD-PL gain. Natural images
   use per-image units; object-view datasets use per-object or per-instance
-  view tensors.}
+  view tensors; BRDF and Harvard HS use per-material and per-scene units.}
   \label{tab:cross-domain-link-diagnostic}
   \scriptsize
   \setlength{\tabcolsep}{3pt}
@@ -203,6 +203,10 @@ Cuprite is a near-zero \(D_{\mathrm{link}}\) boundary case.
     5.40\% & \(2.77/9.14\)\% \\
     Object-view & smallNORB & instance-view tensor & 25 & 0.264 & 0.945 &
     9.84\% & \(6.92/14.16\)\% \\
+    Material reflectance & BRDF & material BRDF & 100 & 0.028 & 0.806 &
+    1.02\% & \(-1.44/8.42\)\% \\
+    Spectral scenes & Harvard HS & spectral scene & 27 & 0.005 & 0.904 &
+    -1.09\% & \(-6.42/3.86\)\% \\
     \bottomrule
   \end{tabular}}
 \end{table}
@@ -215,6 +219,12 @@ CIFAR-10, whose median \(D_{\mathrm{link}}\) is close to zero and whose
 low-yield tercile has almost no gain. Object-view tensors show clearer
 effective units: COIL-100 and smallNORB have larger median \(D_{\mathrm{link}}\),
 stronger rank-matched gains, and high-yield terciles with larger improvements.
+The new material and spectral-scene rows are more mixed: BRDF has a modest
+median \(D_{\mathrm{link}}\) but a much stronger high-yield tercile, while
+Harvard HS is mostly boundary/modest overall despite a positive high-yield
+tercile. Light-field calibration data were inspected but not included because
+the local Stanford LF folder did not contain decoded sub-aperture scene
+tensors.
 These results support the scoped claim that NTD-PL
 helps when the Tucker residual contains shared link-like structure, rather
 than uniformly across all visual tensors. Representative units selected only by
