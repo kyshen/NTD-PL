@@ -3,23 +3,26 @@
 Tensor decompositions provide compact models for multiway data in scientific
 sensing, imaging, and signal processing \citep{Kolda2009Tensor,
 Sidiropoulos2017TSP,Liu2013TensorCompletion}. Tucker decomposition is a
-standard choice because it separates a small core from mode-wise factors, but
-its observation model is linear in the reconstructed latent entry. This can be
-too restrictive when a low-rank latent signal passes through saturation,
-response curves, calibration effects, or material-dependent nonlinearities
-before it is measured \citep{Debevec1997HDR,Grossberg2004CameraResponse,
-BioucasDias2012HyperspectralUnmixing,Heylen2014NonlinearUnmixing}. After such
-an entry-level response, a simple latent Tucker tensor may appear higher-rank in
-the observed domain.
+standard choice because it separates a small core from mode-wise factors. Its
+observation map, however, is linear: the reconstructed Tucker entry is fitted
+directly to the measured entry. This assumption is natural for many data sets,
+but it can be mismatched to sensing and imaging pipelines with response curves,
+saturation, calibration effects, or material-dependent nonlinearities
+\citep{Debevec1997HDR,Grossberg2004CameraResponse,
+BioucasDias2012HyperspectralUnmixing,Heylen2014NonlinearUnmixing}. In such
+settings, the latent scene may be well organized by a low-rank Tucker tensor
+while the measured tensor appears to have larger multilinear rank after a
+shared entrywise response.
 
-A direct remedy is to increase Tucker rank, but this expands the core and
-factors throughout the model. More flexible nonlinear tensor decoders based on
-kernels, Gaussian processes, or neural networks can also help, but they often
-make the relation to the Tucker backbone less transparent
+A direct remedy is to increase Tucker rank, but this changes the multilinear
+budget and expands the core and factors throughout the model. More flexible
+nonlinear tensor decoders based on kernels, Gaussian processes, or neural
+networks can also be useful, but they address a broader problem and often make
+the relation to a Tucker backbone less explicit
 \citep{xu2011infinite,zhe2016distributed,liu2017deepcp,
-saragadam2024deeptensor}. We ask a narrower question: can a small observation
-link, learned jointly with the Tucker factors, make a tight multilinear rank
-budget more effective when the dominant residual is shared and entrywise?
+saragadam2024deeptensor}. We ask a narrower question: can a Tucker model keep
+its chosen backbone ranks fixed while learning a shared entrywise response that
+explains coherent nonlinear residuals left by matched-rank Tucker?
 
 We instantiate this idea with a polynomial link, a classical low-dimensional
 tool for modeling nonlinear responses \citep{Volterra1959Theory,
@@ -33,11 +36,11 @@ be a Tucker latent tensor. Instead of fitting the observation directly by
 \widehat{\cY} = f_{\bbeta}(\cS) = \sum_{p=0}^{P} \beta_p \cS^{\odot p},
 \]
 where powers are entrywise. We call the model Nonlinear Tucker Decomposition
-with Polynomial Links (NTD-PL). It contains Tucker as the degree-one case and
-adds only \(P+1\) scalar coefficients, while the powers \(\cS^{\odot p}\) induce
-tied high-order interactions among the same core and factors. Thus the link is
-not an independent high-rank correction; it is a compact way to expose
-nonlinear structure already organized by the Tucker backbone.
+with Polynomial Links (NTD-PL). It contains Tucker as the degree-one case,
+keeps the Tucker backbone and multilinear ranks fixed, and adds only \(P+1\)
+scalar link coefficients. The higher powers \(\cS^{\odot p}\) induce
+high-order interactions among the same core and factors, so the added
+expressivity is parameter-tied to one learned latent tensor.
 
 This viewpoint is central to the paper. NTD-PL is best understood as a Tucker
 enhancement and shared-backbone rank lift, not as a generic nonlinear decoder. A
@@ -45,27 +48,44 @@ degree-\(p\) power of the latent tensor behaves like an ordinary Tucker tensor
 whose factors are polynomial feature lifts of the original factors, but those
 lifted features remain tied to one learned backbone. The new degrees therefore
 reshape the low-rank geometry through a shared observation link, rather than
-adding an untied high-rank tensor block.
+adding an untied high-rank tensor block. This is also why the link is not a
+post-hoc calibration layer: the Tucker backbone is learned through the
+polynomial observation map, and the latent tensor is reshaped jointly with the
+scalar response, rather than fitting Tucker first and calibrating a fixed
+output.
 
 Our claims are intentionally scoped. NTD-PL is not meant to replace rank
-selection or general nonlinear tensor decoders. It targets settings where a
-shared entry-level response explains coherent residual structure left by a
-low-rank Tucker model.
+selection, and increasing Tucker rank remains the right comparison when the
+residual is ordinary multilinear structure. Nor do we claim to dominate neural,
+kernel, or other nonlinear tensor factorization methods. The intended regime is
+more specific: the residual left by matched-rank Tucker should be coherent with
+a shared entrywise nonlinear response.
+
+The paper develops this regime from four angles. Section~\ref{sec:model}
+defines the shared polynomial observation link and its tied high-order Tucker
+channels. Section~\ref{sec:theory} proves Veronese rank expansion, a separation
+from matched-rank Tucker, and approximation results for shared nonlinear
+observation maps. Section~\ref{sec:optimization} gives the masked objective and
+an alternating solver with Link Refresh, Linked-Backbone Descent, and degree
+continuation. Section~\ref{sec:experiments} tests the mechanism on controlled
+tensors, CAVE hyperspectral reconstruction and completion, rank-lift and Link
+Refresh diagnostics, and external cross-domain boundary cases. We discuss
+failure modes and scope in Section~\ref{sec:limitations}.
 
 \paragraph{Contributions.}
 We make the following contributions.
 \begin{itemize}[leftmargin=*,itemsep=2pt,topsep=2pt]
-  \item We propose NTD-PL, a Tucker model with a jointly learned polynomial
-  observation link. Standard Tucker is recovered as the degree-one case, while
-  higher degrees act as a Tucker enhancement and shared-backbone rank lift of
-  the same backbone.
-  \item We characterize the model class through Veronese rank-expansion,
-  separation from standard Tucker at the same backbone rank, and approximation
-  results for shared nonlinear observation maps.
-  \item We derive a masked learning objective for reconstruction and
-  completion, and use an alternating solver with a closed-form ridge update for
-  the link coefficients.
-  \item We evaluate the mechanism on controlled tensors and hyperspectral data,
-  including completion, reconstruction, rank-lift, and Link Refresh
-  residual-yield diagnostics, including predicted boundary cases.
+  \item \textbf{Model.} We propose NTD-PL, a Tucker enhancement with a shared
+  polynomial observation link on a Tucker latent tensor. It keeps the Tucker
+  backbone and multilinear ranks fixed while adding only scalar coefficients
+  for a parameter-tied, entrywise response.
+  \item \textbf{Theory.} We characterize the induced model class through
+  Veronese rank expansion, separation from matched-rank Tucker, and
+  approximation results for shared nonlinear observation maps.
+  \item \textbf{Optimization.} We derive a masked objective for reconstruction
+  and completion, and optimize it with Link Refresh, Linked-Backbone Descent,
+  and degree continuation.
+  \item \textbf{Experiments.} We evaluate controlled nonlinear residuals,
+  hyperspectral reconstruction and completion, rank-lift and Link Refresh
+  diagnostics, and external cross-domain boundary cases.
 \end{itemize}

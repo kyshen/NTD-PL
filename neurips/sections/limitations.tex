@@ -1,14 +1,30 @@
 \section{Limitations}
 \label{sec:limitations}
 
-The diagnostic experiments in Section~\ref{sec:experiments} also expose the main limitation.
-NTD-PL assumes that the residual left by a low-rank Tucker backbone is well
-described by a shared entry-level nonlinear response. It is therefore not a
-universal tensor model: when Tucker already fits well at the chosen rank, or
-when residual nonlinearities vary strongly across space, spectra, or modes, a
-single scalar link may add little.
+NTD-PL assumes that a common entrywise nonlinear response explains a coherent
+part of the residual left by matched-rank Tucker. This shared scalar link may be
+less effective when nonlinearities vary strongly across spatial regions,
+spectral bands, modes, or samples. In such cases, a single polynomial response
+can underfit the domain variation even if the Tucker backbone is appropriate.
 
-The method also does not remove rank selection. Increasing Tucker rank can
-recover part of the RMSE gap, and NTD-PL inherits Tucker's nonconvexity and
-initialization sensitivity. Although the link adds few parameters, evaluating
-it over all observed entries still increases runtime relative to plain Tucker.
+The method also does not remove rank selection. NTD-PL enhances a fixed Tucker
+rank budget by changing the observation map on top of the latent tensor; it
+should not be interpreted as eliminating the need for larger ranks when the
+residual is ordinary multilinear structure. Increasing Tucker rank remains an
+important baseline and model-selection choice.
+
+Polynomial degree introduces a second tradeoff. Higher degrees increase the
+approximation capacity of the shared link, but they can amplify Tucker scale
+ambiguity and numerical conditioning issues in the power basis. This motivates
+the ridge-regularized Link Refresh step, factor normalization, and degree
+continuation used in the optimizer.
+
+Finally, the joint problem remains nonconvex. The Link Refresh subproblem is a
+small ridge regression once the latent tensor is fixed, but the Tucker backbone
+and polynomial link are learned jointly through a nonconvex objective. We do not
+claim global optimality.
+
+Our strongest empirical evidence is currently from controlled nonlinear
+residuals and hyperspectral reconstruction and completion. Broader validation
+on large sparse tensors, temporal or multimodal tensors, and domain-varying
+nonlinear responses is left for future work.

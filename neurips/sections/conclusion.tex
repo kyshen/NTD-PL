@@ -1,14 +1,18 @@
 \section{Conclusion}
 
-We introduced NTD-PL, a Tucker enhancement with a shared polynomial observation
-link. Rather than replacing multilinear low-rank structure, NTD-PL acts as a
-shared-backbone rank lift: powers of one learned latent tensor express
-structured residuals left by a linear Tucker fit without adding an independent
-high-rank correction.
+This paper develops polynomial links as parameter-tied rank lifts for Tucker
+tensors. The model keeps a Tucker latent tensor as the backbone and learns a
+shared entrywise polynomial observation link, adding only scalar coefficients.
+The resulting powers of the same latent tensor act as shared-backbone
+high-order interactions rather than untied high-rank corrections.
 
-The experiments support the same scoped interpretation. Controlled tensors,
-held-out CAVE completion, reconstruction mechanism checks, Link Refresh
-diagnostics, and external HSI scenes show that the link helps when a shared
-nonlinear residual is plausible under a tight rank budget, while also revealing
-predicted near-linear boundary cases. Adaptive links and broader tensor
-modalities are natural next steps.
+The analysis makes this rank-lift view explicit through Veronese rank
+expansion, separation from matched-rank Tucker, and approximation results for
+shared nonlinear links. The optimization uses a masked objective with Link
+Refresh, Linked-Backbone Descent, and degree continuation, while the experiments
+and diagnostics identify the intended regime: the link helps when
+matched-rank Tucker leaves a coherent nonlinear residual explained by a shared
+entrywise response.
+
+Future work may consider spatially or spectrally adaptive links, scalable
+sparse implementations, and richer structured links beyond scalar polynomials.

@@ -71,8 +71,9 @@ which is expected: ordinary multilinear capacity already explains more of the
 tensor. The rank-lifted Tucker ablation in Table~\ref{tab:rank-lift-tucker}
 clarifies the mechanism further. Tucker can buy back part of the RMSE gap by
 spending more rank, so the gain is not explained by a small ordinary rank
-increase alone. They support the view that NTD-PL improves a tight Tucker
-backbone through a jointly fitted shared link. The joint link-family smoke test
+increase alone. These results support the view that NTD-PL improves a tight
+Tucker backbone through a jointly fitted shared entrywise link. The joint
+link-family smoke test
 in Appendix~\ref{app:joint-link-family} further suggests that the effect is
 tied to joint scalar-link fitting rather than to the polynomial basis alone.
 
@@ -82,7 +83,7 @@ tied to joint scalar-link fitting rather than to the polynomial basis alone.
   \caption{CAVE full-observation reconstruction as a representation-capacity
   check. Each point averages 15 scenes at a matched Tucker backbone rank. The
   plotted backbone ranks are \((18,18,3)\), \((24,24,4)\), \((33,33,4)\), and
-  \((40,40,5)\). % TODO: verify the intended fourth backbone rank for Figure 3 against the camera-ready target.
+  \((40,40,5)\).
   Unlike completion, this measures representational error when all entries are
   observed.}
   \label{fig:cave-reconstruction-capacity}
@@ -128,11 +129,11 @@ scene by scene.
 
 NTD-PL is not expected to help uniformly on all tensors. Its gain should appear
 when a matched-rank Tucker fit leaves a coherent residual that a shared scalar
-link can reduce. We denote this diagnostic by \(D_{\mathrm{link}}\): after
+entrywise link can reduce. We denote this diagnostic by \(D_{\mathrm{link}}\): after
 fitting Tucker, we freeze the Tucker backbone, run one scalar Link Refresh
 ridge solve, and measure the residual-energy reduction on the relevant
 evaluation entries. Larger \(D_{\mathrm{link}}\) indicates a stronger shared
-entry-level nonlinear residual:
+entrywise nonlinear residual:
 \[
 D_{\mathrm{link}}
 =
@@ -158,21 +159,19 @@ between \(D_{\mathrm{link}}\) and NTD-PL held-out RMSE$^\ast$ gain.
   RMSE$^\ast$ gain versus Link Refresh diagnostic \(D_{\mathrm{link}}\). The
   left and right panels use \(\rho=0.3\) and \(\rho=0.5\), respectively, and
   each panel annotates its Spearman coefficient.}
-  % TODO: regenerate Figure 4 with x-axis label \(D_{\mathrm{link}}\).
   \label{fig:cave-link-yield}
 \end{figure}
 
 Figure~\ref{fig:cave-link-yield} first validates the diagnostic on CAVE
 completion: scenes with higher \(D_{\mathrm{link}}\) receive larger held-out
-RMSE$^\ast$ gains. We then extend the same protocol beyond HSI. For natural
-images, each image is treated as one tensor unit; for object-view datasets,
-each object or instance forms a multi-view tensor unit. We do not concatenate
-unrelated images or objects into a giant tensor, since \(D_{\mathrm{link}}\)
-tests whether a single shared scalar link is coherent within one unit.
-External HSI scenes are also checked as whole cubes using the low-capacity
-gain--CR sweep ranks closest to the CAVE reconstruction compression ratio;
-Jasper Ridge, Samson, and Urban have positive Link Refresh scores, while
-Cuprite is a near-zero \(D_{\mathrm{link}}\) boundary case.
+RMSE$^\ast$ gains. We then extend the same protocol to non-HSI units. For
+natural images, each image is treated as one tensor unit; for object-view
+datasets, each object or instance forms a multi-view tensor unit; for action
+video, each KTH segment or UCF101 clip is treated as one action-clip tensor
+unit.
+We do not concatenate unrelated images, objects, or clips into a giant tensor,
+since \(D_{\mathrm{link}}\) tests whether a single shared scalar link is
+coherent within one unit.
 
 \begin{table}[!htbp]
   \centering
@@ -181,7 +180,7 @@ Cuprite is a near-zero \(D_{\mathrm{link}}\) boundary case.
   is computed by one frozen-backbone Link Refresh step and diagnostic tiers
   are assigned from \(D_{\mathrm{link}}\), not from NTD-PL gain. Natural images
   use per-image units; object-view datasets use per-object or per-instance
-  view tensors; BRDF and Harvard HS use per-material and per-scene units.}
+  view tensors; action-video datasets use per-clip units.}
   \label{tab:cross-domain-link-diagnostic}
   \scriptsize
   \setlength{\tabcolsep}{3pt}
@@ -191,10 +190,6 @@ Cuprite is a near-zero \(D_{\mathrm{link}}\) boundary case.
     Domain & Dataset & Unit & \#Units & Med. \(D_{\mathrm{link}}\) &
     Spearman & Med. gain & Low/High gain \\
     \midrule
-    HSI & CAVE & scene & 15 & 0.088 & 0.654 & 12.63\% &
-    \(9.27/20.63\)\% \\
-    HSI & External HSI & whole cube & 4 & 0.126 & 1.000 & 6.14\% &
-    \(1.51/12.84\)\% \\
     Natural images & CBSD68 & image & 16 & 0.075 & 0.835 & 5.77\% &
     \(3.87/12.44\)\% \\
     Natural images & CIFAR-10 & image & 1000 & 0.008 & 0.934 & 2.35\% &
@@ -203,28 +198,24 @@ Cuprite is a near-zero \(D_{\mathrm{link}}\) boundary case.
     5.40\% & \(2.77/9.14\)\% \\
     Object-view & smallNORB & instance-view tensor & 25 & 0.264 & 0.945 &
     9.84\% & \(6.92/14.16\)\% \\
-    Material reflectance & BRDF & material BRDF & 100 & 0.028 & 0.806 &
-    1.02\% & \(-1.44/8.42\)\% \\
-    Spectral scenes & Harvard HS & spectral scene & 27 & 0.005 & 0.904 &
-    -1.09\% & \(-6.42/3.86\)\% \\
+    Action video & KTH-Action & action clip & 240 & 0.107 & 0.884 &
+    4.32\% & \(2.74/10.87\)\% \\
+    Action video & UCF101 & action clip & 240 & 0.065 & 0.890 &
+    2.89\% & \(1.44/5.89\)\% \\
     \bottomrule
   \end{tabular}}
 \end{table}
 
-Table~\ref{tab:cross-domain-link-diagnostic} summarizes the cross-domain
-diagnosis on full-observation reconstruction units, using the CAVE scene-level
-reconstruction runs and compression-matched external HSI whole-cube runs for
-the HSI rows. Natural images show weaker shared-link yield, especially
-CIFAR-10, whose median \(D_{\mathrm{link}}\) is close to zero and whose
-low-yield tercile has almost no gain. Object-view tensors show clearer
-effective units: COIL-100 and smallNORB have larger median \(D_{\mathrm{link}}\),
-stronger rank-matched gains, and high-yield terciles with larger improvements.
-The new material and spectral-scene rows are more mixed: BRDF has a modest
-median \(D_{\mathrm{link}}\) but a much stronger high-yield tercile, while
-Harvard HS is mostly boundary/modest overall despite a positive high-yield
-tercile. Light-field calibration data were inspected but not included because
-the local Stanford LF folder did not contain decoded sub-aperture scene
-tensors.
+Table~\ref{tab:cross-domain-link-diagnostic} summarizes the non-HSI diagnosis
+on full-observation reconstruction units. Natural images show weaker
+shared-link yield, especially CIFAR-10, whose median \(D_{\mathrm{link}}\) is
+close to zero and whose low-yield tercile has almost no gain. Object-view
+tensors show clearer effective units: COIL-100 and smallNORB have larger
+median \(D_{\mathrm{link}}\), stronger rank-matched gains, and high-yield
+terciles with larger improvements. Action-video clips show moderate shared-link
+yield: KTH-Action is stronger than UCF101, but both datasets retain high
+diagnostic correlation and visibly larger gains in their high-yield terciles
+than in their low-yield terciles.
 These results support the scoped claim that NTD-PL
 helps when the Tucker residual contains shared link-like structure, rather
 than uniformly across all visual tensors. Representative units selected only by

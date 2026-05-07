@@ -1,4 +1,4 @@
-\begin{thebibliography}{22}
+\begin{thebibliography}{23}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -87,6 +87,11 @@ Zhimeng Pan, Zheng Wang, and Shandian Zhe.
 Vishwanath Saragadam, Randall Balestriero, Ashok Veeraraghavan, and Richard~G Baraniuk.
 \newblock Deeptensor: Low-rank tensor decomposition with deep network priors.
 \newblock \emph{IEEE Transactions on Pattern Analysis and Machine Intelligence}, 46\penalty0 (12):\penalty0 10337--10348, 2024.
+
+\bibitem[Schein et~al.(2016)Schein, Zhou, Blei, and Wallach]{schein2016bayesian}
+Aaron Schein, Mingyuan Zhou, David Blei, and Hanna Wallach.
+\newblock Bayesian poisson tucker decomposition for learning the structure of international relations.
+\newblock In \emph{International Conference on Machine Learning}, pages 2810--2819. PMLR, 2016.
 
 \bibitem[Sidiropoulos et~al.(2017)Sidiropoulos, De~Lathauwer, Fu, Huang, Papalexakis, and Faloutsos]{Sidiropoulos2017TSP}
 Nicholas~D. Sidiropoulos, Lieven De~Lathauwer, Xiao Fu, Kejun Huang, Evangelos~E. Papalexakis, and Christos Faloutsos.

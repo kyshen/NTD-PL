@@ -47,24 +47,28 @@ DOMAINS = {
     "lightfield": "Light-field",
     "harvard": "Spectral natural scenes",
     "kth": "Action video",
+    "ucf101": "Action video",
 }
 DATASET_LABELS = {
     "brdf": "BRDF",
     "lightfield": "Stanford LF",
     "harvard": "Harvard HS",
     "kth": "KTH-Action",
+    "ucf101": "UCF101",
 }
 RANKS = {
     "brdf": (12, 12, 16, 2),
     "lightfield": (4, 4, 16, 16, 2),
     "harvard": (32, 32, 8),
     "kth": (12, 18, 18, 3),
+    "ucf101": (12, 18, 18, 3),
 }
 PROCESSED_SHAPES = {
     "brdf": (32, 32, 64, 3),
     "lightfield": (7, 7, 96, 96, 3),
     "harvard": (128, 128, 31),
     "kth": (24, 72, 96, 3),
+    "ucf101": (24, 72, 96, 3),
 }
 PER_UNIT_COLUMNS = [
     "domain",
@@ -316,6 +320,32 @@ def _find_kth_units(root: Path, limit: int) -> tuple[list[UnitSpec], list[str]]:
     return units, notes
 
 
+def _find_ucf101_units(root: Path, split: str, limit: int) -> tuple[list[UnitSpec], list[str]]:
+    csv_path = root / f"{split}.csv"
+    if not csv_path.exists():
+        raise FileNotFoundError(f"UCF101 split CSV not found: {csv_path}")
+    frame = pd.read_csv(csv_path)
+    needed = {"clip_name", "clip_path", "label"}
+    if not needed.issubset(set(frame.columns)):
+        raise ValueError(f"UCF101 CSV {csv_path} missing required columns {needed}")
+    units: list[UnitSpec] = []
+    for row in frame.itertuples(index=False):
+        rel = str(row.clip_path).lstrip("/\\")
+        video_path = root / rel
+        unit_id = f"ucf101_{Path(str(row.clip_name)).stem}"
+        label = f"{row.label}:{Path(str(row.clip_name)).stem}"
+        notes = f"split={split}; action={row.label}"
+        units.append(UnitSpec("ucf101", unit_id, label, str(video_path), notes=notes))
+    units = sorted(units, key=lambda spec: spec.unit_id)
+    total = len(units)
+    if limit > 0:
+        units = units[:limit]
+    notes = [
+        f"UCF101 root={root}; split={split}; csv_units={total}; units_selected={len(units)}; processed_shape=24x72x96x3; rank=(12,18,18,3)."
+    ]
+    return units, notes
+
+
 def inspect_datasets(args: argparse.Namespace) -> tuple[list[UnitSpec], list[str]]:
     selected = {item.strip().lower() for item in args.datasets.split(",") if item.strip()}
     specs: list[UnitSpec] = []
@@ -356,10 +386,16 @@ def inspect_datasets(args: argparse.Namespace) -> tuple[list[UnitSpec], list[str
         kth_specs, kth_notes = _find_kth_units(root, kth_limit)
         specs.extend(kth_specs)
         notes.extend(kth_notes)
+    if "ucf101" in selected or "ucf" in selected:
+        root = _resolve_root(args.ucf101_root, "data/UCF101")
+        ucf_limit = int(args.limit_ucf101) if int(args.limit_ucf101) > 0 else 0
+        ucf_specs, ucf_notes = _find_ucf101_units(root, str(args.ucf101_split), ucf_limit)
+        specs.extend(ucf_specs)
+        notes.extend(ucf_notes)
     if args.mode == "smoke":
         rng = np.random.default_rng(int(args.seed))
         picked: list[UnitSpec] = []
-        for key in ("brdf", "lightfield", "harvard", "kth"):
+        for key in ("brdf", "lightfield", "harvard", "kth", "ucf101"):
             panel = [spec for spec in specs if spec.dataset_key == key]
             if not panel:
                 continue
@@ -435,6 +471,34 @@ def _load_kth_clip(spec: UnitSpec, target_shape: tuple[int, int, int, int]) -> t
     return _normalize_max(resized), raw_shape, notes
 
 
+def _load_ucf101_clip(spec: UnitSpec, target_shape: tuple[int, int, int, int]) -> tuple[np.ndarray, str, str]:
+    video_path = Path(spec.source_path)
+    frames = iio.imread(video_path, index=None)
+    if frames.ndim != 4:
+        raise ValueError(f"Expected video tensor with 4 dims, got {frames.shape}")
+    raw_shape = "x".join(str(v) for v in frames.shape)
+    clip = np.asarray(frames, dtype=np.float32)
+    total, _, _, _ = clip.shape
+    t, h, w, c = target_shape
+    frame_idx = _sample_axis(clip.shape[0], min(t, clip.shape[0]))
+    clip = clip[frame_idx]
+    if clip.shape[0] < t:
+        pad = np.repeat(clip[-1:], t - clip.shape[0], axis=0)
+        clip = np.concatenate([clip, pad], axis=0)
+    resized = np.empty((t, h, w, c), dtype=np.float32)
+    for i in range(t):
+        frame = clip[i]
+        if frame.ndim == 2:
+            frame = np.repeat(frame[..., None], 3, axis=-1)
+        if frame.shape[-1] > c:
+            frame = frame[..., :c]
+        if frame.max(initial=0.0) > 1.5:
+            frame = frame / 255.0
+        resized[i] = downsample_image_to_shape(frame, (h, w))[..., :c]
+    notes = f"{spec.notes}; raw_frames={total}; sampled_frames={t}"
+    return _normalize_max(resized), raw_shape, notes
+
+
 def _load_unit(spec: UnitSpec) -> tuple[np.ndarray, str, str]:
     path = Path(spec.source_path)
     if spec.dataset_key == "brdf":
@@ -445,6 +509,8 @@ def _load_unit(spec: UnitSpec) -> tuple[np.ndarray, str, str]:
         return _load_harvard(path, PROCESSED_SHAPES["harvard"])
     if spec.dataset_key == "kth":
         return _load_kth_clip(spec, PROCESSED_SHAPES["kth"])
+    if spec.dataset_key == "ucf101":
+        return _load_ucf101_clip(spec, PROCESSED_SHAPES["ucf101"])
     raise ValueError(f"Unknown dataset key {spec.dataset_key}")
 
 
@@ -654,7 +720,7 @@ def _tercile_mean_gain(panel: pd.DataFrame, which: str) -> float:
 def build_summary(frame: pd.DataFrame, specs: list[UnitSpec], selected_keys: set[str] | None = None) -> pd.DataFrame:
     rows: list[dict[str, Any]] = []
     dataset_keys: list[str] = []
-    for key in ("brdf", "lightfield", "harvard", "kth"):
+    for key in ("brdf", "lightfield", "harvard", "kth", "ucf101"):
         if (selected_keys and key in selected_keys) or any(spec.dataset_key == key for spec in specs):
             dataset_keys.append(key)
     for key in dataset_keys:
@@ -726,8 +792,8 @@ def build_representatives(frame: pd.DataFrame) -> pd.DataFrame:
 def write_scatter(frame: pd.DataFrame, outdir: Path) -> None:
     ok = frame.loc[frame["status"].eq("ok")].copy()
     fig, ax = plt.subplots(figsize=(5.3, 3.6), constrained_layout=True)
-    markers = {"BRDF": "o", "Stanford LF": "s", "Harvard HS": "^", "KTH-Action": "D"}
-    colors = {"BRDF": "#4C78A8", "Stanford LF": "#F58518", "Harvard HS": "#54A24B", "KTH-Action": "#E45756"}
+    markers = {"BRDF": "o", "Stanford LF": "s", "Harvard HS": "^", "KTH-Action": "D", "UCF101": "P"}
+    colors = {"BRDF": "#4C78A8", "Stanford LF": "#F58518", "Harvard HS": "#54A24B", "KTH-Action": "#E45756", "UCF101": "#B279A2"}
     for dataset, panel in ok.groupby("dataset", sort=False):
         ax.scatter(
             panel["d_link_db"],
@@ -828,7 +894,7 @@ def write_latex(summary: pd.DataFrame, reps: pd.DataFrame, outdir: Path) -> None
         r"Domain & Dataset & Unit & \#Units & median $D_{\mathrm{link}}$ & Spearman & Median gain & Low--High gain & Reading \\",
         r"\midrule",
     ]
-    unit_text = {"BRDF": "material BRDF", "Stanford LF": "scene LF", "Harvard HS": "spectral scene", "KTH-Action": "action clip"}
+    unit_text = {"BRDF": "material BRDF", "Stanford LF": "scene LF", "Harvard HS": "spectral scene", "KTH-Action": "action clip", "UCF101": "video clip"}
     for row in summary.itertuples(index=False):
         lines.append(
             f"{row.domain} & {row.dataset} & {unit_text.get(row.dataset, 'unit')} & {int(row.num_ok)} & "
@@ -864,6 +930,7 @@ def write_data_inspection(outdir: Path, args: argparse.Namespace, specs: list[Un
         "caldata-B5143104560": _resolve_root(args.lightfield_root, "data/caldata-B5143104560") if "lightfield" in args.datasets.lower() else None,
         "CZ_hsdbi": _resolve_root(args.harvard_root, "data/CZ_hsdbi") if "harvard" in args.datasets.lower() else None,
         "KTH-Action": _resolve_root(args.kth_root, "data/KTH-Action") if "kth" in args.datasets.lower() else None,
+        "UCF101": _resolve_root(args.ucf101_root, "data/UCF101") if "ucf101" in args.datasets.lower() or "ucf" in args.datasets.lower() else None,
     }
     for label, root in roots.items():
         if root is None:
@@ -903,6 +970,7 @@ def write_data_inspection(outdir: Path, args: argparse.Namespace, specs: list[Un
         "- Harvard loader: MATLAB reader chooses a 3D numeric cube, preferring ref/reflectances/rad/img/hypercube/cube.",
         "- Light-field loader: requires decoded sub-aperture image grids; raw calibration-only Lytro unit data are not treated as scene tensors.",
         "- KTH loader: reads AVI clips with imageio-ffmpeg, then crops to annotated action segments from 00sequences.txt.",
+        "- UCF101 loader: reads AVI clips with imageio-ffmpeg and treats each CSV-listed video clip as one unit.",
         "",
         "## Candidate Units",
         "",
@@ -945,6 +1013,7 @@ def write_report(
         "- Stanford LF: one decoded sub-aperture scene directory per unit when available; processed target 7x7x96x96x3, rank (4,4,16,16,2); no scene tensors are fabricated from calibration-only files.",
         "- Harvard HS: one hyperspectral image per unit; ref/lbl .mat cubes processed to 128x128x31, rank (32,32,8); mask pixels zeroed when lbl exists; per-scene max-normalization.",
         "- KTH-Action: one annotated action segment per unit; each clip is sampled to 24x72x96x3, rank (12,18,18,3); segments come from 00sequences.txt and are max-normalized independently.",
+        "- UCF101: one CSV-listed video clip per unit; each clip is sampled to 24x72x96x3, rank (12,18,18,3); clips are max-normalized independently.",
         "- SAM is reported as NaN for BRDF because angular spectral error is not the target reflectance diagnostic here.",
         "",
         "## Label Rule",
@@ -969,6 +1038,7 @@ def write_report(
         "- Light-field: usable only if decoded sub-aperture scene tensors are present; calibration-only data are reported as unavailable.",
         "- Harvard HS: compare median D_link and high-tercile gain with RGB natural-image baselines before adding to Table 3.",
         "- KTH-Action: treat the result as action-clip diagnosis rather than video classification; coherent temporal clips are the diagnostic unit.",
+        "- UCF101: treat the result as per-clip action-video diagnosis rather than classification; each clip is a self-contained tensor unit.",
         "- Table 3 recommendation: candidate evidence only; this script does not modify main.tex.",
         "",
         "## Reproduction Command",
@@ -976,7 +1046,7 @@ def write_report(
         "```powershell",
         "python scripts/run_phase1_crossdomain_dlink.py "
         f"--mode {args.mode} --datasets {args.datasets} "
-        f"--brdf_root {args.brdf_root} --lightfield_root {args.lightfield_root} --harvard_root {args.harvard_root} --kth_root {args.kth_root} "
+        f"--brdf_root {args.brdf_root} --lightfield_root {args.lightfield_root} --harvard_root {args.harvard_root} --kth_root {args.kth_root} --ucf101_root {args.ucf101_root} --ucf101_split {args.ucf101_split} "
         f"--seed {int(args.seed)} --n_iter_max {int(args.n_iter_max)} --tucker_n_iter_max {int(args.tucker_n_iter_max)} "
         f"--p_max {int(args.p_max)} --jobs {int(args.jobs)} --outdir {outdir}",
         "```",
@@ -1063,10 +1133,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--limit-lightfield", "--limit_lightfield", dest="limit_lightfield", type=int, default=0)
     parser.add_argument("--limit-harvard", "--limit_harvard", dest="limit_harvard", type=int, default=0)
     parser.add_argument("--limit-kth", "--limit_kth", dest="limit_kth", type=int, default=0)
+    parser.add_argument("--limit-ucf101", "--limit_ucf101", dest="limit_ucf101", type=int, default=0)
     parser.add_argument("--brdf-root", "--brdf_root", dest="brdf_root", default="BRDFDatabase")
     parser.add_argument("--lightfield-root", "--lightfield_root", dest="lightfield_root", default="caldata-B5143104560")
     parser.add_argument("--harvard-root", "--harvard_root", dest="harvard_root", default="CZ_hsdbi")
     parser.add_argument("--kth-root", "--kth_root", dest="kth_root", default="KTH-Action")
+    parser.add_argument("--ucf101-root", "--ucf101_root", dest="ucf101_root", default="UCF101")
+    parser.add_argument("--ucf101-split", "--ucf101_split", dest="ucf101_split", default="train")
     return parser.parse_args()
 
 

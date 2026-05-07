@@ -1,0 +1,2 @@
+domain,dataset,num_units,num_ok,num_failed,median_d_link,mean_d_link,spearman_dlink_gain,mean_gain,median_gain,low_tercile_gain,mid_tercile_gain,high_tercile_gain,num_effective,num_moderate,num_boundary,processed_shape,rank
+Action video,KTH-Action,240,240,0,0.1071796847707095,0.14393721029287845,0.8835118665254602,5.9590364948014365,4.323627526048668,2.7360658228682637,4.26886336090666,10.872180300629385,80,80,80,24x72x96x3,"(12,18,18,3)"
