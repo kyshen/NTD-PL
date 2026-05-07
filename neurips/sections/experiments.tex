@@ -1,20 +1,13 @@
 \section{Experiments}
 \label{sec:experiments}
 
-The experiments test three mechanism questions. First, under controlled
-nonlinear residuals, does NTD-PL behave like a parameter-tied rank lift on top
-of a fixed Tucker backbone? Second, on real tensors, does the polynomial link
-improve matched-rank Tucker in full reconstruction and held-out completion?
-Third, across broader data domains, which tensor units exhibit
-nonlinear low-rank structure, and when does that structure make NTD-PL
-meaningfully beneficial beyond a linear Tucker fit? Unless stated
-otherwise, real tensors are globally max-normalized and used without spatial
-downsampling or cropping. RMSE and SAM are used for reconstruction; RMSE$^\ast$
-and SAM$^\ast$ are computed only on held-out missing entries for completion.
-NTD-PL is compared mainly against Tucker at the same multilinear rank, except
-in the explicit rank-lift ablation. For the cross-domain question, we also use
-the diagnostic score \(D_{\mathrm{link}}\), defined in
-Section~\ref{subsec:external-hsi-validity}.
+The experiments test three mechanism questions: whether NTD-PL behaves as a parameter-tied
+rank lift under controlled nonlinear residuals; whether the polynomial link improves matched-rank
+Tucker on real reconstruction and held-out completion; and whether $D_{\mathrm{link}}$ diagnoses
+beneficial tensor units across domains. Unless stated otherwise, real tensors are globally
+max-normalized and used without spatial downsampling or cropping. We report RMSE and SAM
+for reconstruction, and $\mathrm{RMSE}^{\ast}$ and $\mathrm{SAM}^{\ast}$ only on held-out entries
+for completion. NTD-PL is compared mainly against same-rank Tucker, except in the rank-lift ablation.
 
 \subsection{Controlled Nonlinear Residuals}
 \label{subsec:controlled-experiments}

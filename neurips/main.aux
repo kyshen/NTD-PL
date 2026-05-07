@@ -48,10 +48,10 @@
 \newlabel{sec:experiments}{{6}{6}{Experiments}{section.6}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Controlled Nonlinear Residuals}{6}{subsection.6.1}\protected@file@percent }
 \newlabel{subsec:controlled-experiments}{{6.1}{6}{Controlled Nonlinear Residuals}{subsection.6.1}{}}
-\def\@LN@column{1}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Controlled nonlinear residual sweep. NTD-PL stays Tucker-like near the linear regime and separates as \(\alpha \), the nonlinear residual energy, increases. Lower RMSE is better.}}{7}{figure.caption.11}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Controlled nonlinear residual sweep. NTD-PL stays Tucker-like near the linear regime and separates as \(\alpha \), the nonlinear residual energy, increases. Lower RMSE is better.}}{6}{figure.caption.11}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:controlled-alpha-grid}{{1}{7}{Controlled nonlinear residual sweep. NTD-PL stays Tucker-like near the linear regime and separates as \(\alpha \), the nonlinear residual energy, increases. Lower RMSE is better}{figure.caption.11}{}}
+\newlabel{fig:controlled-alpha-grid}{{1}{6}{Controlled nonlinear residual sweep. NTD-PL stays Tucker-like near the linear regime and separates as \(\alpha \), the nonlinear residual energy, increases. Lower RMSE is better}{figure.caption.11}{}}
+\def\@LN@column{1}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Degree-dependent gains at \(\alpha =0.25\). Cell values are Tucker minus NTD-PL RMSE; gains appear when the active degree is sufficient for the response complexity.}}{7}{figure.caption.12}\protected@file@percent }
 \newlabel{fig:controlled-pmax-strip}{{2}{7}{Degree-dependent gains at \(\alpha =0.25\). Cell values are Tucker minus NTD-PL RMSE; gains appear when the active degree is sufficient for the response complexity}{figure.caption.12}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Tucker Enhancement on Real Hyperspectral Tensors}{7}{subsection.6.2}\protected@file@percent }
@@ -59,10 +59,10 @@
 \@writefile{toc}{\contentsline {paragraph}{Representation enhancement.}{7}{section*.13}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces CAVE full reconstruction as a representation-capacity check. At matched Tucker backbone rank, NTD-PL reduces RMSE and SAM; the gap shrinks as Tucker rank increases, consistent with fixed-rank enhancement. Each point averages 15 scenes.}}{7}{figure.caption.14}\protected@file@percent }
 \newlabel{fig:cave-reconstruction-capacity}{{3}{7}{CAVE full reconstruction as a representation-capacity check. At matched Tucker backbone rank, NTD-PL reduces RMSE and SAM; the gap shrinks as Tucker rank increases, consistent with fixed-rank enhancement. Each point averages 15 scenes}{figure.caption.14}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Rank-lifted Tucker comparison on CAVE reconstruction. For each NTD-PL backbone rank, we increase Tucker's spatial ranks while keeping the spectral rank fixed and report the first Tucker rank that matches NTD-PL RMSE, along with the extra Tucker parameters required.}}{7}{table.caption.15}\protected@file@percent }
+\newlabel{tab:rank-lift-tucker}{{1}{7}{Rank-lifted Tucker comparison on CAVE reconstruction. For each NTD-PL backbone rank, we increase Tucker's spatial ranks while keeping the spectral rank fixed and report the first Tucker rank that matches NTD-PL RMSE, along with the extra Tucker parameters required}{table.caption.15}{}}
 \@writefile{toc}{\contentsline {paragraph}{Held-out enhancement.}{7}{section*.16}\protected@file@percent }
 \def\@LN@column{1}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Rank-lifted Tucker comparison on CAVE reconstruction. For each NTD-PL backbone rank, we increase Tucker's spatial ranks while keeping the spectral rank fixed and report the first Tucker rank that matches NTD-PL RMSE, along with the extra Tucker parameters required.}}{8}{table.caption.15}\protected@file@percent }
-\newlabel{tab:rank-lift-tucker}{{1}{8}{Rank-lifted Tucker comparison on CAVE reconstruction. For each NTD-PL backbone rank, we increase Tucker's spatial ranks while keeping the spectral rank fixed and report the first Tucker rank that matches NTD-PL RMSE, along with the extra Tucker parameters required}{table.caption.15}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Held-out CAVE completion at rank \((33,33,4)\) under random masks. RMSE$^\ast $ and SAM$^\ast $ are computed only on missing entries. Columns report mean \(\pm \) standard deviation over scenes; gains are paired relative improvements over matched-rank Tucker.}}{8}{table.caption.17}\protected@file@percent }
 \newlabel{tab:lowrank-completion-main}{{2}{8}{Held-out CAVE completion at rank \((33,33,4)\) under random masks. RMSE$^\ast $ and SAM$^\ast $ are computed only on missing entries. Columns report mean \(\pm \) standard deviation over scenes; gains are paired relative improvements over matched-rank Tucker}{table.caption.17}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Diagnosing Nonlinear Low-Rank Structure Across Data}{8}{subsection.6.3}\protected@file@percent }
@@ -118,8 +118,8 @@
 \newlabel{eq:appendix-latent-gradient}{{16}{12}{Backbone gradients}{equation.16}{}}
 \@writefile{toc}{\contentsline {paragraph}{Link update.}{12}{section*.23}\protected@file@percent }
 \newlabel{eq:appendix-beta-ridge-update}{{20}{12}{Link update}{equation.20}{}}
+\@writefile{toc}{\contentsline {paragraph}{Stabilization and continuation.}{12}{section*.24}\protected@file@percent }
 \def\@LN@column{1}
-\@writefile{toc}{\contentsline {paragraph}{Stabilization and continuation.}{13}{section*.24}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Cost.}{13}{section*.25}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Masked NTD-PL optimization}}{13}{algorithm.1}\protected@file@percent }
 \newlabel{alg:ntdpl}{{1}{13}{Masked NTD-PL optimization}{algorithm.1}{}}
@@ -129,9 +129,9 @@
 \newlabel{lem:scalar-to-tensor}{{1}{13}{Scalar-to-tensor approximation}{lemma.1}{}}
 \def\@LN@column{1}
 \@writefile{toc}{\contentsline {subsection}{\numberline {B.2}Rank Expansion}{14}{subsection.B.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.3}Separation}{14}{subsection.B.3}\protected@file@percent }
+\newlabel{lem:veronese-full-rank}{{2}{14}{Full-rank Veronese evaluations}{lemma.2}{}}
 \def\@LN@column{1}
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.3}Separation}{15}{subsection.B.3}\protected@file@percent }
-\newlabel{lem:veronese-full-rank}{{2}{15}{Full-rank Veronese evaluations}{lemma.2}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {B.4}Masked Generalization}{15}{subsection.B.4}\protected@file@percent }
 \newlabel{app:masked-generalization}{{B.4}{15}{Masked Generalization}{subsection.B.4}{}}
 \newlabel{thm:masked-generalization}{{4}{15}{Masked-entry uniform convergence}{theorem.4}{}}
@@ -139,8 +139,8 @@
 \@writefile{toc}{\contentsline {section}{\numberline {C}Additional Experiments}{16}{appendix.C}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {C.1}Controlled Synthetic Mechanism Checks}{16}{subsection.C.1}\protected@file@percent }
 \newlabel{app:controlled-synthetic}{{C.1}{16}{Controlled Synthetic Mechanism Checks}{subsection.C.1}{}}
+\newlabel{eq:controlled-orthogonal-residual}{{45}{16}{Controlled Synthetic Mechanism Checks}{equation.45}{}}
 \def\@LN@column{1}
-\newlabel{eq:controlled-orthogonal-residual}{{45}{17}{Controlled Synthetic Mechanism Checks}{equation.45}{}}
 \newlabel{eq:controlled-normalized-residual}{{46}{17}{Controlled Synthetic Mechanism Checks}{equation.46}{}}
 \newlabel{eq:controlled-residual-mixture}{{47}{17}{Controlled Synthetic Mechanism Checks}{equation.47}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Linear consistency on synthetic Tucker tensors. In the linear negative control, effective \(p>1\) contributions remain small except for the intended affine offset case.}}{17}{table.caption.26}\protected@file@percent }
@@ -149,9 +149,9 @@
 \newlabel{fig:controlled-training-curves}{{6}{17}{NTD-PL training curves for controlled nonlinear mechanism checks at \(\alpha =0.25\) and \(P=5\). Dashed vertical lines mark degree activations, which produce systematic drops when the activated degree matches the response structure}{figure.caption.27}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Effective NTD-PL term contributions under moderate nonlinearity, reported as percentages over ten seeds. Polynomial targets concentrate mass at matching nonlinear degrees, while odd smooth links place most nonlinear mass on odd powers.}}{17}{table.caption.28}\protected@file@percent }
 \newlabel{tab:controlled-beta-contribution}{{5}{17}{Effective NTD-PL term contributions under moderate nonlinearity, reported as percentages over ten seeds. Polynomial targets concentrate mass at matching nonlinear degrees, while odd smooth links place most nonlinear mass on odd powers}{table.caption.28}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.2}CAVE Completion Significance and Robustness}{17}{subsection.C.2}\protected@file@percent }
+\newlabel{app:single-rank-completion}{{C.2}{17}{CAVE Completion Significance and Robustness}{subsection.C.2}{}}
 \def\@LN@column{1}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.2}CAVE Completion Significance and Robustness}{18}{subsection.C.2}\protected@file@percent }
-\newlabel{app:single-rank-completion}{{C.2}{18}{CAVE Completion Significance and Robustness}{subsection.C.2}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Paired significance tests for full-resolution CAVE completion at rank \((33,33,4)\). Metrics are computed only on missing entries.}}{18}{table.caption.29}\protected@file@percent }
 \newlabel{tab:cave-completion-significance}{{6}{18}{Paired significance tests for full-resolution CAVE completion at rank \((33,33,4)\). Metrics are computed only on missing entries}{table.caption.29}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {C.3}Link Refresh Residual Diagnostic}{18}{subsection.C.3}\protected@file@percent }
@@ -160,11 +160,9 @@
 \newlabel{app:cave-completion-scene-diagnostics}{{C.4}{18}{CAVE Completion Scene Diagnostics}{subsection.C.4}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Scene-level supplement for the CAVE completion diagnostic table. Missing rates 0.3 and 0.5 are shown; \(D_{\mathrm  {link}}\) from frozen- backbone Link Refresh predicts larger held-out RMSE$^\ast $ gains.}}{18}{figure.caption.30}\protected@file@percent }
 \newlabel{fig:cave-link-yield-scatter-appendix}{{7}{18}{Scene-level supplement for the CAVE completion diagnostic table. Missing rates 0.3 and 0.5 are shown; \(D_{\mathrm {link}}\) from frozen- backbone Link Refresh predicts larger held-out RMSE$^\ast $ gains}{figure.caption.30}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.5}Non-HSI Link Refresh Diagnostics}{18}{subsection.C.5}\protected@file@percent }
+\newlabel{app:nonhsi-link-diagnostics}{{C.5}{18}{Non-HSI Link Refresh Diagnostics}{subsection.C.5}{}}
 \def\@LN@column{1}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.5}Cross-Domain Real Tensor Checks}{19}{subsection.C.5}\protected@file@percent }
-\newlabel{app:cross-domain-real-tensors}{{C.5}{19}{Cross-Domain Real Tensor Checks}{subsection.C.5}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.6}Non-HSI Link Refresh Diagnostics}{19}{subsection.C.6}\protected@file@percent }
-\newlabel{app:nonhsi-link-diagnostics}{{C.6}{19}{Non-HSI Link Refresh Diagnostics}{subsection.C.6}{}}
 \@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Exact per-dataset statistics behind the main non-HSI scatter figure. Each unit is independently fitted by Tucker and NTD-PL at matched backbone rank. \(D_{\mathrm  {link}}\) is computed by frozen-backbone Link Refresh; diagnostic tiers are assigned from \(D_{\mathrm  {link}}\), not from NTD-PL gain.}}{19}{table.caption.31}\protected@file@percent }
 \newlabel{tab:nonhsi-link-summary-appendix}{{7}{19}{Exact per-dataset statistics behind the main non-HSI scatter figure. Each unit is independently fitted by Tucker and NTD-PL at matched backbone rank. \(D_{\mathrm {link}}\) is computed by frozen-backbone Link Refresh; diagnostic tiers are assigned from \(D_{\mathrm {link}}\), not from NTD-PL gain}{table.caption.31}{}}
 \gdef \@abspage@last{19}
