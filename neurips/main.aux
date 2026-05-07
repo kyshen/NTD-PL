@@ -117,8 +117,8 @@
 \bibcite{xu2024stacked}{{34}{2024}{{Xu et~al.}}{{Xu, Peng, Ji, Cao, Sun, Fei, and Meng}}}
 \bibcite{xu2011infinite}{{35}{2011}{{Xu et~al.}}{{Xu, Yan, et~al.}}}
 \bibcite{yasuma2010gapc}{{36}{2010}{{Yasuma et~al.}}{{Yasuma, Mitsunaga, Iso, and Nayar}}}
-\bibcite{zhai2024quadratic}{{37}{2024}{{Zhai et~al.}}{{Zhai, Chen, and Sun}}}
 \def\@LN@column{1}
+\bibcite{zhai2024quadratic}{{37}{2024}{{Zhai et~al.}}{{Zhai, Chen, and Sun}}}
 \bibcite{zhao2016tr}{{38}{2016}{{Zhao et~al.}}{{Zhao, Zhou, Xie, Zhang, and Cichocki}}}
 \bibcite{zhe2016distributed}{{39}{2016}{{Zhe et~al.}}{{Zhe, Zhang, Wang, Lee, Xu, Qi, and Ghahramani}}}
 \bibcite{Zheng2021FCTN}{{40}{2021}{{Zheng et~al.}}{{Zheng, Huang, Zhao, Zhao, and Jiang}}}
@@ -128,10 +128,10 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {A.1}Explicit \(p\)-Fold Tucker Motivation}{12}{subsection.A.1}\protected@file@percent }
 \newlabel{app:pfold-tucker-motivation}{{A.1}{12}{\texorpdfstring {Explicit \(p\)-Fold Tucker Motivation}{Explicit p-Fold Tucker Motivation}}{subsection.A.1}{}}
 \newlabel{eq:appendix-explicit-pfold-tucker}{{12}{12}{\texorpdfstring {Explicit \(p\)-Fold Tucker Motivation}{Explicit p-Fold Tucker Motivation}}{equation.12}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Tensor-network view of a formal \(p\)-fold Tucker extension. The construction keeps the Tucker idea of mode-wise generation, but lets each mode projection couple multiple latent index tuples.}}{12}{figure.caption.21}\protected@file@percent }
-\newlabel{fig:pfold-tucker-network}{{5}{12}{Tensor-network view of a formal \(p\)-fold Tucker extension. The construction keeps the Tucker idea of mode-wise generation, but lets each mode projection couple multiple latent index tuples}{figure.caption.21}{}}
+\newlabel{eq:appendix-shared-projection-tying}{{13}{12}{\texorpdfstring {Explicit \(p\)-Fold Tucker Motivation}{Explicit p-Fold Tucker Motivation}}{equation.13}{}}
 \def\@LN@column{1}
-\newlabel{eq:appendix-shared-projection-tying}{{13}{13}{\texorpdfstring {Explicit \(p\)-Fold Tucker Motivation}{Explicit p-Fold Tucker Motivation}}{equation.13}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Tensor-network view of a formal \(p\)-fold Tucker extension. The construction keeps the Tucker idea of mode-wise generation, but lets each mode projection couple multiple latent index tuples.}}{13}{figure.caption.21}\protected@file@percent }
+\newlabel{fig:pfold-tucker-network}{{5}{13}{Tensor-network view of a formal \(p\)-fold Tucker extension. The construction keeps the Tucker idea of mode-wise generation, but lets each mode projection couple multiple latent index tuples}{figure.caption.21}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {A.2}Optimization Details}{13}{subsection.A.2}\protected@file@percent }
 \newlabel{app:optimization-details}{{A.2}{13}{Optimization Details}{subsection.A.2}{}}
 \newlabel{app:optimization-algorithm}{{A.2}{13}{Optimization Details}{subsection.A.2}{}}
@@ -160,11 +160,11 @@
 \@writefile{toc}{\contentsline {section}{\numberline {C}Additional Experiments}{17}{appendix.C}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {C.1}Controlled Synthetic Mechanism Checks}{17}{subsection.C.1}\protected@file@percent }
 \newlabel{app:controlled-synthetic}{{C.1}{17}{Controlled Synthetic Mechanism Checks}{subsection.C.1}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Linear consistency on synthetic Tucker tensors. In the linear negative control, effective \(p>1\) contributions remain small except for the intended affine offset case.}}{17}{table.caption.26}\protected@file@percent }
-\newlabel{tab:linear-consistency-controlled}{{4}{17}{Linear consistency on synthetic Tucker tensors. In the linear negative control, effective \(p>1\) contributions remain small except for the intended affine offset case}{table.caption.26}{}}
 \newlabel{eq:controlled-orthogonal-residual}{{44}{17}{Controlled Synthetic Mechanism Checks}{equation.44}{}}
-\newlabel{eq:controlled-normalized-residual}{{45}{17}{Controlled Synthetic Mechanism Checks}{equation.45}{}}
 \def\@LN@column{1}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Linear consistency on synthetic Tucker tensors. In the linear negative control, effective \(p>1\) contributions remain small except for the intended affine offset case.}}{18}{table.caption.26}\protected@file@percent }
+\newlabel{tab:linear-consistency-controlled}{{4}{18}{Linear consistency on synthetic Tucker tensors. In the linear negative control, effective \(p>1\) contributions remain small except for the intended affine offset case}{table.caption.26}{}}
+\newlabel{eq:controlled-normalized-residual}{{45}{18}{Controlled Synthetic Mechanism Checks}{equation.45}{}}
 \newlabel{eq:controlled-residual-mixture}{{46}{18}{Controlled Synthetic Mechanism Checks}{equation.46}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces NTD-PL training curves for controlled nonlinear mechanism checks at \(\alpha =0.25\) and \(P=5\). Dashed vertical lines mark degree activations, which produce systematic drops when the activated degree matches the response structure.}}{18}{figure.caption.27}\protected@file@percent }
 \newlabel{fig:controlled-training-curves}{{6}{18}{NTD-PL training curves for controlled nonlinear mechanism checks at \(\alpha =0.25\) and \(P=5\). Dashed vertical lines mark degree activations, which produce systematic drops when the activated degree matches the response structure}{figure.caption.27}{}}
@@ -172,10 +172,6 @@
 \newlabel{tab:controlled-beta-contribution}{{5}{18}{Effective NTD-PL term contributions under moderate nonlinearity, reported as percentages over ten seeds. Polynomial targets concentrate mass at matching nonlinear degrees, while odd smooth links place most nonlinear mass on odd powers}{table.caption.28}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {C.2}CAVE Completion Significance and Robustness}{18}{subsection.C.2}\protected@file@percent }
 \newlabel{app:single-rank-completion}{{C.2}{18}{CAVE Completion Significance and Robustness}{subsection.C.2}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Paired significance tests for full-resolution CAVE completion at rank \((33,33,4)\). Metrics are computed only on missing entries.}}{18}{table.caption.29}\protected@file@percent }
-\newlabel{tab:cave-completion-significance}{{6}{18}{Paired significance tests for full-resolution CAVE completion at rank \((33,33,4)\). Metrics are computed only on missing entries}{table.caption.29}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.3}Link Refresh Residual Diagnostic}{18}{subsection.C.3}\protected@file@percent }
-\newlabel{app:posthoc-calibration-baselines}{{C.3}{18}{Link Refresh Residual Diagnostic}{subsection.C.3}{}}
 \citation{martin2001database}
 \citation{krizhevsky2009learning}
 \citation{nene1996coil100}
@@ -183,15 +179,33 @@
 \citation{Schuldt2004KTHActions}
 \citation{Soomro2012UCF101}
 \def\@LN@column{1}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Paired significance tests for full-resolution CAVE completion at rank \((33,33,4)\). Metrics are computed only on missing entries.}}{19}{table.caption.29}\protected@file@percent }
+\newlabel{tab:cave-completion-significance}{{6}{19}{Paired significance tests for full-resolution CAVE completion at rank \((33,33,4)\). Metrics are computed only on missing entries}{table.caption.29}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.3}Link Refresh Residual Diagnostic}{19}{subsection.C.3}\protected@file@percent }
+\newlabel{app:posthoc-calibration-baselines}{{C.3}{19}{Link Refresh Residual Diagnostic}{subsection.C.3}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {C.4}CAVE Completion Scene Diagnostics}{19}{subsection.C.4}\protected@file@percent }
 \newlabel{app:cave-completion-scene-diagnostics}{{C.4}{19}{CAVE Completion Scene Diagnostics}{subsection.C.4}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Scene-level supplement for the CAVE completion diagnostic table. The left and right panels use missing rates 0.3 and 0.5, respectively; \(D_{\mathrm  {link}}\) from frozen-backbone Link Refresh predicts larger held-out RMSE$^\ast $ gains.}}{19}{figure.caption.30}\protected@file@percent }
 \newlabel{fig:cave-link-yield-scatter-appendix}{{7}{19}{Scene-level supplement for the CAVE completion diagnostic table. The left and right panels use missing rates 0.3 and 0.5, respectively; \(D_{\mathrm {link}}\) from frozen-backbone Link Refresh predicts larger held-out RMSE$^\ast $ gains}{figure.caption.30}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {C.5}Non-HSI Link Refresh Diagnostics}{19}{subsection.C.5}\protected@file@percent }
 \newlabel{app:nonhsi-link-diagnostics}{{C.5}{19}{Non-HSI Link Refresh Diagnostics}{subsection.C.5}{}}
+\citation{cave_multispectral_database,yasuma2010gapc}
+\citation{martin2001database}
+\citation{krizhevsky2009learning}
+\citation{nene1996coil100}
+\citation{LeCun2004SmallNORB}
+\citation{Schuldt2004KTHActions}
+\citation{Soomro2012UCF101}
 \def\@LN@column{1}
 \@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Dataset-level statistics behind the non-HSI diagnostic scatter in Figure~\ref {fig:nonhsi-link-scatter}. The gain columns report mean NTD-PL RMSE improvement over independently fitted matched-rank Tucker within \(D_{\mathrm  {link}}\) terciles.}}{20}{table.caption.31}\protected@file@percent }
 \newlabel{tab:nonhsi-link-diagnostic-stats}{{7}{20}{Dataset-level statistics behind the non-HSI diagnostic scatter in Figure~\ref {fig:nonhsi-link-scatter}. The gain columns report mean NTD-PL RMSE improvement over independently fitted matched-rank Tucker within \(D_{\mathrm {link}}\) terciles}{table.caption.31}{}}
+\newlabel{app:compute-resources}{{C.5}{20}{Compute resources}{section*.32}{}}
+\@writefile{toc}{\contentsline {paragraph}{Compute resources.}{20}{section*.32}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.6}Dataset Asset and Usage Information}{20}{subsection.C.6}\protected@file@percent }
+\newlabel{app:dataset-assets}{{C.6}{20}{Dataset Asset and Usage Information}{subsection.C.6}{}}
+\def\@LN@column{1}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Dataset sources and usage notes. ``No'' in the redistribution column means that raw data files are not included in the supplement.}}{21}{table.caption.33}\protected@file@percent }
+\newlabel{tab:dataset-asset-usage}{{8}{21}{Dataset sources and usage notes. ``No'' in the redistribution column means that raw data files are not included in the supplement}{table.caption.33}{}}
 \def\@LN@column{1}
 \def\@LN@column{1}
-\gdef \@abspage@last{22}
+\gdef \@abspage@last{23}

@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex main"] 1778149558.025 "main.aux" "main.bbl" "main" 1778149635.14323 0
+["bibtex main"] 1778150689.1858 "main.aux" "main.bbl" "main" 1778150692.15542 0
   "./references.bib" 1778143491 21340 212fc4725497d3ddf56e1701fdee4031 ""
   "c:/texlive/2026/texmf-dist/bibtex/bst/natbib/plainnat.bst" 1773380545 26816 ffe5423d2019860bad9f54bc402fac15 ""
-  "main.aux" 1778149634 22357 eddcdf252ea94254156b250b2ff9b32f "pdflatex"
+  "main.aux" 1778150691 22357 2d2257d11c15a9a4196004fb52047453 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1778149632.45831 "c:/Users/mrkys/workspace/NTD-PL/neurips/main.tex" "main.pdf" "main" 1778149635.14391 0
-  "appendix/experiments.tex" 1778147970 8706 e8e3c02d94ae47a0c3eba2468f282fa4 ""
+["pdflatex"] 1778150689.64322 "c:/Users/mrkys/workspace/NTD-PL/neurips/main.tex" "main.pdf" "main" 1778150692.15591 0
+  "appendix/experiments.tex" 1778150685 8706 d5ca2c6210aa0d29cfec3604d012571c ""
   "appendix/model_details.tex" 1778147994 8212 ba5f06115b8f03ca538f90514c68d49e ""
   "appendix/proofs.tex" 1777740225 10703 b4828fc21c8897ab77031a284b138b32 ""
   "artifacts/p-tucker.tex" 1777810828 3360 d876e0ecf99cec7abed92cfccb5cc98b ""
@@ -264,7 +264,7 @@
   "c:/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1773383196 5618266 85c272d09f6df628d158699e137c8ff6 ""
   "c:/texlive/2026/texmf-var/web2c/pdftex/pdflatex.fmt" 1773383399 3636414 c5ea26d38c3219c5fc06ff03a6ce5573 ""
   "c:/texlive/2026/texmf.cnf" 1773383176 713 e69b156964470283e0530f5060668171 ""
-  "checklist.tex" 1778143648 7494 67f087ba482b23b373ce79d8bdc26e20 ""
+  "checklist.tex" 1778150626 7719 76add69c5b26373e9b15c4db49c7cc22 ""
   "figures/cave_link_yield_scatter.pdf" 1778147720 24884 aa15fef317b9a3bd5a7212b605916cba ""
   "figures/cave_reconstruction_capacity.pdf" 1778146714 11374 d5eb80c8037778cfd7f78c66afe9f4f5 ""
   "figures/controlled_nonlinear_alpha_grid.pdf" 1778146855 17232 d271b00eff16c4a9e286bc5df06009c9 ""
@@ -272,9 +272,9 @@
   "figures/controlled_nonlinear_step_strip.pdf" 1778144378 65619 366719b9d09d5867cbedf3d1b7a75146 ""
   "figures/nonhsi_dlink_scatter_3domain.pdf" 1778147370 54622 2beaf0584eecd832a9a4691ebf7c6519 ""
   "macros.tex" 1777382205 1030 397d1ca12b8401d6595fffa6484ae98e ""
-  "main.aux" 1778149634 22357 eddcdf252ea94254156b250b2ff9b32f "pdflatex"
-  "main.bbl" 1778149558 13973 d5940a8e9f8eb70b642784b77b301787 "bibtex main"
-  "main.out" 1778149634 5569 46f125ff301b35a7913923fd674e5384 "pdflatex"
+  "main.aux" 1778150691 22357 2d2257d11c15a9a4196004fb52047453 "pdflatex"
+  "main.bbl" 1778150689 13973 d5940a8e9f8eb70b642784b77b301787 "bibtex main"
+  "main.out" 1778150691 5569 46f125ff301b35a7913923fd674e5384 "pdflatex"
   "main.tex" 1778149631 1025 2d6c5bb349915a322a20d22b51a18ce7 ""
   "neurips_2026.sty" 1777382753 13462 818d80447f57703e59b8270885421e82 ""
   "preamble.tex" 1777809946 1161 ad8d48a02baf552aa8c1226523b6cf13 ""

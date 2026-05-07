@@ -159,22 +159,6 @@ level.
 \subsection{Non-HSI Link Refresh Diagnostics}
 \label{app:nonhsi-link-diagnostics}
 
-The main diagnostic figure uses per-unit non-HSI experiments rather than
-collection-level tensors. CBSD68 \citep{martin2001database}
-uses per-image units resized to \(96\times96\times3\) with rank
-\((32,32,3)\). CIFAR-10
-\citep{krizhevsky2009learning} uses 1000 class-balanced test images of shape
-\(32\times32\times3\) with rank \((20,20,3)\). COIL-100
-\citep{nene1996coil100} uses one object at a time as a
-\(36\times48\times48\times3\) view tensor with rank \((8,12,12,2)\).
-smallNORB \citep{LeCun2004SmallNORB} uses one object instance at a time as an
-\(18\times64\times64\times2\) stereo view tensor with rank
-\((12,24,24,2)\). KTH-Action \citep{Schuldt2004KTHActions} and UCF101
-\citep{Soomro2012UCF101} provide the action-video tensor units used in the
-main diagnostic scatter. All units are max-normalized independently, and
-diagnostic labels are assigned only from \(D_{\mathrm{link}}\), not from NTD-PL
-gain.
-
 \begin{table}[ht]
   \centering
   \caption{Dataset-level statistics behind the non-HSI diagnostic scatter in
@@ -198,4 +182,108 @@ gain.
   Action video & UCF101 & 240 & 0.065 & 0.89 & 1.44\% & 2.97\% & 5.89\% \\
   \bottomrule
   \end{tabular*}
+\end{table}
+
+The main diagnostic figure uses per-unit non-HSI experiments rather than
+collection-level tensors. CBSD68 \citep{martin2001database}
+uses per-image units resized to \(96\times96\times3\) with rank
+\((32,32,3)\). CIFAR-10
+\citep{krizhevsky2009learning} uses 1000 class-balanced test images of shape
+\(32\times32\times3\) with rank \((20,20,3)\). COIL-100
+\citep{nene1996coil100} uses one object at a time as a
+\(36\times48\times48\times3\) view tensor with rank \((8,12,12,2)\).
+smallNORB \citep{LeCun2004SmallNORB} uses one object instance at a time as an
+\(18\times64\times64\times2\) stereo view tensor with rank
+\((12,24,24,2)\). KTH-Action \citep{Schuldt2004KTHActions} and UCF101
+\citep{Soomro2012UCF101} provide the action-video tensor units used in the
+main diagnostic scatter. All units are max-normalized independently, and
+diagnostic labels are assigned only from \(D_{\mathrm{link}}\), not from NTD-PL
+gain.
+
+\paragraph{Compute resources.}
+\label{app:compute-resources}
+The reported runs used a CPU Python implementation based on NumPy, SciPy, and
+TensorLy on a workstation with a 13th Gen Intel Core i5-13400F CPU
+(10 physical cores, 16 logical workers), 32 GB system RAM, Windows 11, and
+Python 3.13. An NVIDIA RTX 5060 GPU with 8 GB memory was present, but the
+reported scripts do not use GPU kernels and do not require GPU memory. Sweep
+scripts cap BLAS/OpenMP threads per worker and parallelize independent jobs,
+using up to 12 workers for the main low-rank sweeps and 6 workers for the
+diagnostic batches. From the recorded runtime fields, controlled synthetic
+residual jobs were sub-second to about 1 s per configuration. Full-resolution
+CAVE reconstruction took about 10--17 s per scene for matched-rank Tucker and
+172--217 s per scene for NTD-PL in the main low-rank reconstruction sweep.
+CAVE random completion runs took about 0.9--18.6 s per scene/mask/seed
+(3.3--18.6 s for NTD-PL), while structured completion runs were about
+1.6--5.0 s. The frozen-backbone CAVE Link Refresh diagnostic itself took about
+0.12--0.59 s per fitted refresh; the associated full NTD-PL completion fits
+used for comparison were on the order of 168--258 s in the recorded diagnostic
+runs. Non-HSI diagnostic batches were run with 6 CPU workers: the
+CBSD68/CIFAR-10/COIL-100/smallNORB batch took about 77 s wall-clock, and the
+KTH-Action and UCF101 video batches took about 5--6 minutes each. Per-unit
+NTD-PL runtimes in those diagnostics ranged from about 0.07--0.28 s for image
+units, 1.2--2.7 s for object-view units, and 6.3--9.8 s for action-video
+units. Peak memory was not instrumented per run; empirically the largest
+reported CPU runs completed within the 32 GB system RAM budget.
+
+\subsection{Dataset Asset and Usage Information}
+\label{app:dataset-assets}
+
+All datasets used in the experiments are public research benchmarks. We use
+them only for reconstruction, completion, or diagnostic evaluation, and the
+anonymous supplement redistributes processed summaries and scripts rather than
+raw dataset files.
+
+\begin{table}[ht]
+  \centering
+  \caption{Dataset sources and usage notes. ``No'' in the redistribution
+  column means that raw data files are not included in the supplement.}
+  \label{tab:dataset-asset-usage}
+  \scriptsize
+  \renewcommand{\arraystretch}{1.10}
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabularx}{\linewidth}{@{}p{0.15\linewidth}p{0.25\linewidth}Xp{0.17\linewidth}@{}}
+  \toprule
+  Dataset & Source / citation & License or usage note & Redistribution / use \\
+  \midrule
+  CAVE Multispectral Image Database &
+  Columbia CAVE Laboratory repository; \citep{cave_multispectral_database,yasuma2010gapc} &
+  Official page provides public download and citation information, but does not
+  specify a standard license in the page metadata available to us. Used only for
+  research evaluation. &
+  No; CAVE reconstruction, completion, and Link Refresh diagnostics. \\
+  CBSD68 / Berkeley natural images &
+  Berkeley Segmentation Dataset page; \citep{martin2001database} &
+  Official BSDS usage statement permits use for research and non-commercial
+  purposes only and requests citation of the Berkeley dataset. &
+  No; non-HSI diagnostic evaluation. \\
+  CIFAR-10 &
+  University of Toronto CIFAR page; \citep{krizhevsky2009learning} &
+  Official page provides public research benchmark downloads and citation, but
+  does not specify a standard license in the page metadata available to us. &
+  No; non-HSI diagnostic evaluation. \\
+  COIL-100 &
+  Columbia Object Image Library page; \citep{nene1996coil100} &
+  Official page provides public download and citation information, but does not
+  specify a standard license in the page metadata available to us. Used only for
+  research evaluation. &
+  No; non-HSI diagnostic evaluation. \\
+  smallNORB &
+  NYU/Yann LeCun dataset page; \citep{LeCun2004SmallNORB} &
+  Official page states that the database is provided for research purposes,
+  cannot be sold, and should be cited when used in publications. &
+  No; non-HSI diagnostic evaluation. \\
+  KTH-Action &
+  KTH action-recognition dataset page; \citep{Schuldt2004KTHActions} &
+  Official page states that the database is publicly available for
+  non-commercial use and requests citation of the ICPR 2004 paper. &
+  No; non-HSI diagnostic evaluation. \\
+  UCF101 &
+  UCF CRCV dataset page; \citep{Soomro2012UCF101} &
+  Official page provides public benchmark downloads and citation, but does not
+  specify a standard license in the page metadata available to us. Used only for
+  research evaluation. &
+  No; non-HSI diagnostic evaluation. \\
+  \bottomrule
+  \end{tabularx}
 \end{table}

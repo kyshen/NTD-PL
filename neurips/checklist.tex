@@ -1,5 +1,7 @@
 \section*{NeurIPS Paper Checklist}
 
+\providecommand{\answerPartial}[1][]{\textcolor{orange}{[Partial]#1}}
+
 \begin{enumerate}
 
 \item {\bf Claims}
@@ -25,7 +27,7 @@
 \item {\bf Open access to data and code}
     \item[] Question: Does the paper provide open access to the data and code, with sufficient instructions to faithfully reproduce the main experimental results, as described in supplemental material?
     \item[] Answer: \answerPartial{}.
-    \item[] Justification: The anonymous supplement includes the NTD-PL implementation, baseline wrappers, command manifests, CAVE/synthetic run scripts, plotting scripts, and processed CSV summaries for the main figures and tables. Full non-HSI diagnostic reruns require separately downloading public datasets and are documented with smoke/full scripts rather than redistributed raw data.
+    \item[] Justification: The anonymous supplement provides the NTD-PL implementation, baseline wrappers, environment files, command scripts, plotting utilities, and processed CSV summaries for the controlled synthetic, CAVE reconstruction/completion, and Link Refresh diagnostic results. Public datasets are not redistributed; full non-HSI diagnostic reruns require separate dataset downloads and are documented with smoke/full scripts.
 
 \item {\bf Experimental setting/details}
     \item[] Question: Does the paper specify all the training and test details (e.g., data splits, hyperparameters, how they were chosen, type of optimizer) necessary to understand the results?
@@ -39,8 +41,8 @@
 
 \item {\bf Experiments compute resources}
     \item[] Question: For each experiment, does the paper provide sufficient information on the computer resources (type of compute workers, memory, time of execution) needed to reproduce the experiments?
-    \item[] Answer: \answerNo{}.
-    \item[] Justification: The paper reports method runtimes in several tables and gives cost analysis, but it does not specify the hardware, memory, or total compute budget used for each experiment.
+    \item[] Answer: \answerPartial{}.
+    \item[] Justification: Appendix~\ref{app:compute-resources} reports the CPU/RAM/GPU environment, CPU-only implementation note, parallel worker settings, and approximate runtime ranges from recorded fit-time and diagnostic wall-clock fields. Peak memory was not instrumented per run, so memory is reported as an observed machine-level bound rather than exact per-experiment usage.
 
 \item {\bf Code of ethics}
     \item[] Question: Does the research conducted in the paper conform, in every respect, with the NeurIPS Code of Ethics \url{https://neurips.cc/public/EthicsGuidelines}?
@@ -59,8 +61,8 @@
 
 \item {\bf Licenses for existing assets}
     \item[] Question: Are the creators or original owners of assets (e.g., code, data, models), used in the paper, properly credited and are the license and terms of use explicitly mentioned and properly respected?
-    \item[] Answer: \answerNo{}.
-    \item[] Justification: The datasets used in the experiments are cited, but the manuscript does not list license or terms-of-use details for every dataset.
+    \item[] Answer: \answerPartial{}.
+    \item[] Justification: Appendix~\ref{app:dataset-assets} lists the official source, citation, usage note or license information, redistribution status, and experimental use for each dataset. Raw datasets are not redistributed in the supplement. Some official dataset pages provide research-use or citation guidance but do not specify a standard license, so we mark this item as partial rather than full.
 
 \item {\bf New assets}
     \item[] Question: Are new assets introduced in the paper well documented and is the documentation provided alongside the assets?
