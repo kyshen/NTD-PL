@@ -8,8 +8,12 @@ import numpy as np
 import pandas as pd
 from scipy.stats import spearmanr
 
-
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from viz.style import PALETTE, apply_style, style_axes
+
 OUT_STEM = PROJECT_ROOT / "neurips" / "figures" / "nonhsi_dlink_scatter_3domain"
 
 SOURCES = [
@@ -37,12 +41,12 @@ MARKERS = {
 }
 
 COLORS = {
-    "CBSD68": "#4C78A8",
-    "CIFAR-10": "#4C78A8",
-    "COIL-100": "#59A14F",
-    "smallNORB": "#59A14F",
-    "KTH-Action": "#F28E2B",
-    "UCF101": "#F28E2B",
+    "CBSD68": PALETTE.ntdpl,
+    "CIFAR-10": PALETTE.ntdpl,
+    "COIL-100": PALETTE.tt,
+    "smallNORB": PALETTE.tt,
+    "KTH-Action": PALETTE.cp,
+    "UCF101": PALETTE.cp,
 }
 
 
@@ -78,23 +82,15 @@ def draw_fit(ax: plt.Axes, panel: pd.DataFrame, color: str) -> None:
     y = panel["rmse_gain_pct"].to_numpy(dtype=float)
     slope, intercept = np.polyfit(x, y, deg=1)
     xs = np.linspace(float(x.min()), float(x.max()), 100)
-    ax.plot(xs, slope * xs + intercept, color=color, linewidth=1.5, linestyle="--", zorder=4)
+    ax.plot(xs, slope * xs + intercept, color=color, linewidth=1.45, linestyle="--", zorder=4)
 
 
 def main() -> None:
     frame = load_frame()
+    apply_style("double_column")
+    plt.rcParams.update({"axes.titlesize": 11.0, "axes.labelsize": 9.2})
 
-    plt.rcParams.update(
-        {
-            "font.family": "DejaVu Sans",
-            "font.size": 11,
-            "axes.titlesize": 17,
-            "axes.labelsize": 14,
-            "xtick.labelsize": 11,
-            "ytick.labelsize": 11,
-        }
-    )
-    fig, axes = plt.subplots(2, 3, figsize=(12.8, 7.2), constrained_layout=True)
+    fig, axes = plt.subplots(2, 3, figsize=(6.95, 3.0), sharex=False, constrained_layout=False)
 
     for index, (domain, dataset) in enumerate(PANELS):
         row, col = divmod(index, 3)
@@ -105,7 +101,7 @@ def main() -> None:
         ax.scatter(
             panel["d_link_db"],
             panel["rmse_gain_pct"],
-            s=28,
+            s=20,
             marker=MARKERS[dataset],
             color=color,
             edgecolors="white",
@@ -114,24 +110,35 @@ def main() -> None:
             label=dataset,
         )
         draw_fit(ax, panel, color)
-        ax.axhline(0.0, color="#888888", linewidth=0.9, linestyle="--", zorder=2)
-        ax.grid(True, color="#dddddd", linewidth=0.5, alpha=0.7)
+        ax.axhline(0.0, color=PALETTE.border, linewidth=0.75, linestyle="--", alpha=0.65, zorder=2)
+        style_axes(ax, grid=True)
+        ax.xaxis.grid(True, color=PALETTE.grid, linewidth=0.55, alpha=0.50)
         ax.set_xlabel(r"$D_{\mathrm{link}}$ (dB)" if row == 1 else "")
         ax.set_ylabel("RMSE gain (%)" if col == 0 else "")
         if row == 0:
-            ax.set_title(domain, fontweight="bold", pad=10)
+            ax.set_title(domain, fontweight="bold", pad=4)
         ax.text(
-            0.02,
-            0.96,
+            0.035,
+            0.95,
             f"{dataset}, {spearman_label(panel)}",
             transform=ax.transAxes,
             ha="left",
             va="top",
-            fontsize=11,
-            color="#333333",
+            fontsize=8.0,
+            fontweight="semibold",
+            color=PALETTE.text,
+            bbox={
+                "boxstyle": "round,pad=0.18",
+                "facecolor": PALETTE.white,
+                "edgecolor": PALETTE.grid,
+                "linewidth": 0.4,
+                "alpha": 0.88,
+            },
+            zorder=20,
         )
 
     OUT_STEM.parent.mkdir(parents=True, exist_ok=True)
+    fig.subplots_adjust(left=0.075, right=0.995, bottom=0.16, top=0.90, wspace=0.28, hspace=0.35)
     fig.savefig(OUT_STEM.with_suffix(".pdf"))
     fig.savefig(OUT_STEM.with_suffix(".png"), dpi=300)
     plt.close(fig)

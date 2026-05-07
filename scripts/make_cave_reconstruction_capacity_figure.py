@@ -140,7 +140,7 @@ def main() -> None:
     apply_style("double_column")
     frame = _load_points()
 
-    fig, axes = plt.subplots(1, 2, figsize=(6.95, 2.25))
+    fig, axes = plt.subplots(1, 2, figsize=(6.95, 2.05))
     _plot_metric(axes[0], frame, "rmse", "RMSE")
     _plot_metric(axes[1], frame, "sam", "SAM")
     axes[0].set_ylim(0.018, 0.039)
@@ -149,7 +149,7 @@ def main() -> None:
     _annotate_gains(axes[0], pairs, "rmse")
     _annotate_gains(axes[1], pairs, "sam")
     axes[0].legend(loc="upper right", frameon=False, handlelength=1.8)
-    fig.subplots_adjust(left=0.075, right=0.99, bottom=0.23, top=0.96, wspace=0.24)
+    fig.subplots_adjust(left=0.075, right=0.99, bottom=0.25, top=0.96, wspace=0.24)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     for ext in ("pdf", "png"):

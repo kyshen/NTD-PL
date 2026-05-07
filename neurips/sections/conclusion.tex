@@ -1,13 +1,27 @@
 \section{Conclusion}
 
-This paper develops NTD-PL as a Tucker enhancement with a shared polynomial
-link. The model keeps a Tucker latent tensor as the backbone, and polynomial
-powers of that same latent tensor induce parameter-tied, shared-backbone rank
-lifts rather than untied high-rank corrections. The analysis formalizes this
-view through Veronese rank expansion, an expressivity gap over matched-rank
-Tucker, and approximation results for nonlinear links. The optimizer combines
-Link Refresh, Linked-Backbone Descent, and degree continuation, while the
-experiments and diagnostics identify the scoped empirical regime: the link
-helps when matched-rank Tucker leaves a coherent nonlinear residual explained
-by a scalar response. Future work may consider adaptive links, scalable sparse
-implementations, and richer structured responses.
+We asked whether a Tucker model can keep its chosen backbone ranks fixed while learning a
+structured response that explains coherent nonlinear residuals left by matched-rank Tucker.
+NTD-PL gives a positive but scoped answer. It places a polynomial link on a shared Tucker
+latent tensor, so each higher-degree channel is not an independent high-rank correction but a
+Veronese-lifted, parameter-tied rank lift of the same backbone. In this way, the model preserves
+the core--factor structure and rank budget of Tucker while adding only a small number of scalar
+link coefficients.
+
+The analysis and optimizer are built around this shared-backbone view. The theory shows how
+polynomial powers induce tied rank expansion, separates the resulting model class from
+matched-rank Tucker, and provides approximation guarantees for nonlinear measurement
+responses. The optimization procedure alternates a small Link Refresh ridge solve with
+Linked-Backbone Descent and degree continuation, making the link a jointly learned part of
+the representation rather than a post-hoc calibration layer.
+
+The experiments identify the regime in which this additional structure is useful. Controlled
+residual experiments show that NTD-PL stays close to Tucker in linear or nearly linear settings
+and gains when the residual is nonlinear and expressible by the active polynomial degrees.
+CAVE reconstruction and completion show that the same fixed-backbone enhancement improves
+both representation and held-out prediction, while the rank-lift ablation shows that the gain is
+not merely a parameter-count effect. Finally, the Link Refresh diagnostic predicts where full
+NTD-PL helps across HSI and non-HSI tensor units. These results position NTD-PL not as a
+universal nonlinear tensor decoder, but as a compact Tucker enhancement for tensors whose
+matched-rank residuals are coherent with a shared scalar response. Future work may extend this
+idea to adaptive links, mode- or region-dependent responses, and scalable sparse implementations.

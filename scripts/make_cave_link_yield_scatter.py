@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from experiment.utils.plotting import PALETTE, apply_theme, save_figure, style_axes
+from experiment.utils.plotting import save_figure
 
 
 INPUT_CSV = ROOT / "experiment" / "outputs" / "cave-random-completion" / "polycal_pairwise_scene_gains.csv"
@@ -49,8 +49,17 @@ def _plot_panel(ax: plt.Axes, frame: pd.DataFrame, missing_rate: float) -> float
     y_line = slope * x_line + intercept
     corr = spearmanr(x, y)
 
-    ax.scatter(x, y, color=PALETTE.ntdpl, s=28, alpha=0.92, zorder=3)
-    ax.plot(x_line, y_line, color=PALETTE.tucker, linewidth=1.6, linestyle="--", zorder=2)
+    ax.scatter(
+        x,
+        y,
+        color="#4C78A8",
+        edgecolors="white",
+        linewidths=0.35,
+        s=30,
+        alpha=0.96,
+        zorder=5,
+    )
+    ax.plot(x_line, y_line, color="#4C78A8", linewidth=1.7, linestyle="--", zorder=4)
     label_offsets = [(-0.025, 0.18), (0.025, 0.18), (-0.025, -0.22), (0.025, -0.22)]
     for idx, row in enumerate(panel.itertuples(index=False)):
         dx, dy = label_offsets[idx % len(label_offsets)]
@@ -58,41 +67,56 @@ def _plot_panel(ax: plt.Axes, frame: pd.DataFrame, missing_rate: float) -> float
             float(row.link_score_db) + dx,
             float(row.ntdpl_gain_pct) + dy,
             str(row.scene_label),
-            fontsize=6.6,
-            color=PALETTE.border,
-            bbox=dict(facecolor="white", edgecolor="none", alpha=0.72, pad=0.2),
+            fontsize=6.8,
+            color="#333333",
+            bbox=dict(facecolor="white", edgecolor="none", alpha=0.78, pad=0.2),
         )
 
-    ax.axhline(0.0, color=PALETTE.border, linewidth=0.8, linestyle="--", alpha=0.8)
-    ax.set_title(fr"Missing rate {missing_rate:.1f}", fontsize=8.5, pad=2)
+    ax.axhline(0.0, color="#888888", linewidth=0.9, linestyle="--", zorder=2)
+    ax.grid(True, color="#dddddd", linewidth=0.5, alpha=0.7)
     ax.set_xlabel(r"$D_{\mathrm{link}}$ (dB)")
     ax.set_ylabel("NTD-PL RMSE$^\\ast$ gain (%)")
-    style_axes(ax, grid=True)
     ax.text(
-        0.04,
-        0.93,
-        fr"Spearman $\rho_s$ = {float(corr.statistic):.3f}",
+        0.02,
+        0.96,
+        fr"$\rho_s$={float(corr.statistic):.3f}",
         transform=ax.transAxes,
-        fontsize=7.4,
-        color=PALETTE.border,
         ha="left",
         va="top",
+        fontsize=9.4,
+        fontweight="semibold",
+        color="#111111",
+        bbox={
+            "boxstyle": "round,pad=0.16",
+            "facecolor": "white",
+            "edgecolor": "#bbbbbb",
+            "linewidth": 0.4,
+            "alpha": 0.88,
+        },
     )
     return float(corr.statistic)
 
 
 def main() -> None:
-    apply_theme()
+    plt.rcParams.update(
+        {
+            "font.family": "DejaVu Sans",
+            "font.size": 9.6,
+            "axes.labelsize": 10.2,
+            "xtick.labelsize": 8.8,
+            "ytick.labelsize": 8.8,
+        }
+    )
     frame = _load()
     if frame.empty:
         raise RuntimeError("No CAVE link-yield rows found.")
 
-    fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.9), sharey=True)
+    fig, axes = plt.subplots(1, 2, figsize=(8.8, 2.85), sharey=True, constrained_layout=False)
     for ax, missing_rate in zip(axes, TARGET_MISSING_RATES, strict=True):
         _plot_panel(ax, frame, missing_rate)
 
     axes[1].set_ylabel("")
-    fig.subplots_adjust(left=0.09, right=0.99, bottom=0.18, top=0.9, wspace=0.22)
+    fig.subplots_adjust(left=0.075, right=0.995, bottom=0.20, top=0.985, wspace=0.20)
     save_figure(fig, OUT_STEM, formats=("pdf", "png"), dpi=400)
     plt.close(fig)
     print(f"Wrote {OUT_STEM.with_suffix('.pdf')}")

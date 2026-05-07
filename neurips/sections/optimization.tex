@@ -9,10 +9,7 @@ current link. We call the two stages \emph{Link Refresh} and
 \emph{Linked-Backbone Descent}.
 
 \paragraph{Link Refresh.}
-Fix the current latent tensor
-\begin{equation}
-  S=\tucker{\cX}{\bA^{(1)},\ldots,\bA^{(N)}}.
-\end{equation}
+Fix the current latent tensor $S=\tucker{\cX}{\bA^{(1)},\ldots,\bA^{(N)}}$.
 For active degree \(Q\le P\), updating the polynomial coefficients reduces to
 a small masked ridge regression,
 \begin{equation}

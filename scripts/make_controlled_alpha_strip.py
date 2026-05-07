@@ -104,7 +104,7 @@ def main() -> None:
     y_ticks = np.arange(0.0, np.ceil(y_max / tick_step) * tick_step + 1e-9, tick_step).tolist()
     y_limits = (0.0, y_ticks[-1] if y_ticks else y_max)
 
-    fig, axes = plt.subplots(1, 3, figsize=(5.48, 1.72), sharex=True, sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(5.48, 1.58), sharex=True, sharey=True)
     flat_axes = axes.ravel()
     for idx, (ax, panel_key) in enumerate(zip(flat_axes, panel_order, strict=True)):
         panel_data = data.loc[data["panel"].eq(panel_key)].copy()
@@ -129,7 +129,7 @@ def main() -> None:
         columnspacing=0.65,
         borderaxespad=0.0,
     )
-    fig.subplots_adjust(left=0.085, right=0.995, bottom=0.22, top=0.76, wspace=0.12)
+    fig.subplots_adjust(left=0.085, right=0.995, bottom=0.25, top=0.76, wspace=0.12)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     for ext in ("pdf", "png"):

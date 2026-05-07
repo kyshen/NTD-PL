@@ -9,6 +9,19 @@ a negative control: when the source is linear Tucker, NTD-PL does not improve
 by inventing nonlinear terms. The only exception is an affine offset, where
 the constant link term is the intended correction.
 
+\begin{table}[ht]
+  \centering
+  \caption{Linear consistency on synthetic Tucker tensors. In the linear
+  negative control, effective \(p>1\) contributions remain small except for
+  the intended affine offset case.}
+  \label{tab:linear-consistency-controlled}
+  {\small
+  \setlength{\tabcolsep}{4.5pt}
+  \renewcommand{\arraystretch}{1.06}
+  \input{tables/controlled_linear_consistency.tex}
+  }
+\end{table}
+
 For the nonlinear controlled tensors, the nonlinearity is introduced as an
 orthogonal residual rather than by directly setting \(Y=g(S^\star)\). Let
 \(S^\star\) be the linear low-rank Tucker backbone and let \(g\) be one of the
@@ -54,19 +67,6 @@ small but consistent term-mass concentration effect: the dominant contribution
 usually lands on the degree that matches the injected response, while smooth
 odd links spread mass across nearby odd orders.
 
-\begin{table}[ht]
-  \centering
-  \caption{Linear consistency on synthetic Tucker tensors. In the linear
-  negative control, effective \(p>1\) contributions remain small except for
-  the intended affine offset case.}
-  \label{tab:linear-consistency-controlled}
-  {\small
-  \setlength{\tabcolsep}{4.5pt}
-  \renewcommand{\arraystretch}{1.06}
-  \input{tables/controlled_linear_consistency.tex}
-  }
-\end{table}
-
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.98\linewidth]{figures/controlled_nonlinear_step_strip.pdf}
@@ -90,8 +90,6 @@ odd links spread mass across nearby odd orders.
   \input{tables/controlled_beta_contribution.tex}
   }
 \end{table}
-
-\FloatBarrier
 
 \subsection{CAVE Completion Significance and Robustness}
 \label{app:single-rank-completion}
@@ -152,8 +150,9 @@ level.
   \centering
   \includegraphics[width=0.95\linewidth]{figures/cave_link_yield_scatter.pdf}
   \caption{Scene-level supplement for the CAVE completion diagnostic table.
-  Missing rates 0.3 and 0.5 are shown; \(D_{\mathrm{link}}\) from frozen-
-  backbone Link Refresh predicts larger held-out RMSE$^\ast$ gains.}
+  The left and right panels use missing rates 0.3 and 0.5, respectively;
+  \(D_{\mathrm{link}}\) from frozen-backbone Link Refresh predicts larger
+  held-out RMSE$^\ast$ gains.}
   \label{fig:cave-link-yield-scatter-appendix}
 \end{figure}
 
@@ -183,12 +182,13 @@ gain.
   RMSE improvement over independently fitted matched-rank Tucker within
   \(D_{\mathrm{link}}\) terciles.}
   \label{tab:nonhsi-link-diagnostic-stats}
-  \scriptsize
-  \setlength{\tabcolsep}{3.4pt}
-  \begin{tabular}{@{}llrrrrrr@{}}
+  \small
+  \renewcommand{\arraystretch}{1.08}
+  \setlength{\tabcolsep}{4.2pt}
+  \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}llrrrrrr@{}}
   \toprule
-  Domain & Dataset & Units & Median \(D_{\mathrm{link}}\) &
-  Spearman \(\rho_s\) & Low gain & Mid gain & High gain \\
+  Domain & Dataset & Units & Med. \(D_{\mathrm{link}}\) &
+  \(\rho_s\) & Low & Mid & High \\
   \midrule
   Natural images & CBSD68 & 68 & 0.091 & 0.85 & 4.17\% & 8.40\% & 14.60\% \\
   Natural images & CIFAR-10 & 1000 & 0.008 & 0.93 & -0.01\% & 2.59\% & 7.85\% \\
@@ -197,5 +197,5 @@ gain.
   Action video & KTH-Action & 240 & 0.107 & 0.88 & 2.74\% & 4.27\% & 10.87\% \\
   Action video & UCF101 & 240 & 0.065 & 0.89 & 1.44\% & 2.97\% & 5.89\% \\
   \bottomrule
-  \end{tabular}
+  \end{tabular*}
 \end{table}
