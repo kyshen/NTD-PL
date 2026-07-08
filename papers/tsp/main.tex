@@ -21,23 +21,23 @@
 
 \begin{abstract}
 Many multidimensional signals are compactly represented by low-rank tensor
-models, but nonlinear measurement responses can make a low-rank latent signal
-appear higher-rank in the observed domain. This paper studies a
+models, but nonlinear measurement responses can make an underlying low-rank
+signal appear higher-rank in the observed domain. This paper studies a
 dictionary-linked Tucker model for nonlinear low-rank tensor signal recovery.
-The model keeps a fixed Tucker backbone and learns a low-dimensional scalar
-response jointly with the latent tensor, yielding a shared-backbone rank lift
-with few additional parameters. The finite-dictionary formulation allows
-different scalar response bases; this paper uses the simplest power dictionary,
-which yields the polynomial-linked model and aligns directly with the rank-lift
-analysis. We analyze the induced rank expansion, response approximation,
+The model represents the underlying signal with a Tucker core and factors, and
+learns an entrywise response function with only a few extra coefficients. With
+a power dictionary, this response can increase the apparent Tucker rank of the
+measured tensor while reusing the same low-rank signal representation. The
+finite-dictionary formulation also allows other response bases when prior
+knowledge is available. We analyze the induced rank expansion, response approximation,
 stationarity of the alternating estimator, and computational scaling. We also
-develop a frozen-backbone link diagnostic that predicts when the nonlinear
-response is likely to help.
+develop a frozen-Tucker diagnostic that predicts when the nonlinear response is
+likely to help.
 Experiments on controlled nonlinear tensors, hyperspectral reconstruction and
 completion, noisy reconstruction, and cross-domain diagnostics show that the
-link improves recovery when the residual is coherent with a shared measurement
-response, while low-diagnostic regimes clarify the operating conditions of the
-model.
+learned response improves recovery when the residual follows a common
+entrywise response pattern. Low-diagnostic regimes clarify the operating
+conditions of the model.
 \end{abstract}
 
 \begin{IEEEkeywords}

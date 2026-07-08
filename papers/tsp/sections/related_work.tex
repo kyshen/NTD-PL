@@ -11,20 +11,20 @@ Sidiropoulos2017TSP}. Tucker decomposition, in particular, represents a tensor
 by a small core and mode-wise factors \cite{DeLathauwer2000MLSVD}, making the
 multilinear rank explicit. Other structured formats, including tensor-train and
 tensor-ring decompositions \cite{oseledets2011,zhao2016tr}, control complexity
-through different network topologies. The present paper uses Tucker as the
-backbone because its mode-wise ranks give a direct way to distinguish latent
-signal rank from the effective rank of the measured tensor.
+through different network topologies. The present paper uses Tucker because
+its mode-wise ranks give a direct way to distinguish the rank of the underlying
+signal from the effective rank of the measured tensor.
 
 Tensor completion methods exploit these low-dimensional structures to recover
 missing entries. Convex and nonconvex approaches include nuclear-norm inspired
 formulations, factorized Tucker or CP objectives, and practical algorithms for
 incomplete tensors \cite{Liu2013TensorCompletion,LiuMoitra2020TensorCompletion,
 yang2016iterative}. These methods usually model the measured tensor itself as
-low-rank. Our setting is different: the latent signal is low-rank, but an
+low-rank. Our setting is different: the underlying signal is low-rank, but an
 entrywise response can lift the measured tensor outside the same rank budget.
 Increasing Tucker rank can reduce the mismatch, but doing so changes every
-mode factor and grows the core. NTD-PL instead keeps the original backbone rank
-and adds a low-dimensional response tied to that backbone.
+mode factor and grows the core. NTD-PL instead keeps the original Tucker ranks
+and adds a response function with only a few extra coefficients.
 
 \subsection{Generalized and Nonlinear Tensor Models}
 
@@ -40,16 +40,16 @@ ahn2024neural}. These approaches are valuable when the data require broad
 nonlinear expressivity, but they can make it harder to interpret how a fixed
 multilinear rank budget is being used.
 
-The dictionary-linked Tucker model uses a constrained scalar response. It
-assumes that the dominant residual left by a fixed Tucker backbone can be
+The dictionary-linked Tucker model uses a constrained entrywise response. It
+assumes that the dominant residual left by a fixed Tucker fit can be
 explained by a shared entrywise map, while preserving the interpretability of
 the Tucker ranks. This places the model between classical low-rank recovery and
 general nonlinear tensor factorization. The power-dictionary instance is
 expressive enough to approximate common smooth responses on a bounded signal
 range, while remaining structured enough to admit a rank-expansion analysis and
-a closed-form link update. Other finite scalar dictionaries could be substituted
+a closed-form response update. Other finite scalar dictionaries could be substituted
 when calibration constraints suggest a different response basis, without
-replacing the Tucker backbone.
+replacing the Tucker core and factors.
 
 \subsection{Imaging Recovery and Nonlinear Responses}
 
@@ -65,6 +65,6 @@ spectral modes, making them natural testbeds for low-rank tensor recovery.
 
 Hyperspectral reconstruction and completion provide a signal recovery setting
 where fixed-rank Tucker mismatch is observable and measurable. The proposed
-link diagnostic estimates, before full nonlinear training, whether a frozen
-Tucker residual contains structure that a scalar response can remove. This
+response diagnostic estimates, before full nonlinear training, whether a frozen
+Tucker residual contains structure that the entrywise response can remove. This
 makes the model selection criterion explicit and testable.

@@ -11,7 +11,7 @@ Let
   X_{r_1,\ldots,r_N}
   \prod_{n=1}^{N}A^{(n)}_{i_n,r_n}.
 \]
-Expanding $S_{\mathbf{i}}^p$ gives products of $p$ latent Tucker tuples. For
+Expanding $S_{\mathbf{i}}^p$ gives products of $p$ Tucker index tuples. For
 each mode $n$, the resulting mode-dependent terms are all degree-$p$ monomials
 in the row $A^{(n)}_{i_n,:}$. These monomials are indexed by multi-indices
 $\alpha\in\mathbb{N}^{R_n}$ with $|\alpha|=p$, of which there are
@@ -32,15 +32,15 @@ rank \(D\).
 
 Choose generic factor matrices
 \(\bA^{(n)}=[a_1^{(n)},\ldots,a_R^{(n)}]\in\R^{I_n\times R}\) and define the
-CP-diagonal Tucker backbone
+CP-diagonal Tucker signal
 \[
   \cS =
   \sum_{r=1}^{R} a_r^{(1)}\otimes\cdots\otimes a_r^{(N)} .
 \]
 For generic factors, each mode unfolding of \(\cS\) has rank \(R\), so the
-backbone has exact Tucker rank \((R,\ldots,R)\).
+signal has exact Tucker rank \((R,\ldots,R)\).
 
-Now set the degree-\(p\) link coefficient to one and all other coefficients to
+Now set the degree-\(p\) response coefficient to one and all other coefficients to
 zero, so \(\cY=\cS^{\od p}\). Expanding entrywise gives
 \[
   Y_{\mathbf{i}}
@@ -64,7 +64,7 @@ remaining lifted factors, with a nonsingular diagonal scaling by the positive
 coefficients \(c_\alpha\). Therefore every mode unfolding has rank \(D\). The
 exact standard Tucker rank of \(\cY\) is \((D,\ldots,D)\), while \(\cY\) is
 represented by the degree-\(p\) linked model using the rank-\((R,\ldots,R)\)
-backbone.
+Tucker signal.
 
 \subsection{Proof of Corollary~\ref{cor:tied_lift_parameters}}
 
@@ -72,17 +72,17 @@ By Proposition~\ref{prop:rank_expansion}, the degree-$p$ channel can be written
 as a Tucker tensor with ranks at most
 $D_n(p)=\binom{R_n+p-1}{p}$. A standalone Tucker parameterization has
 $\prod_n D_n(p)$ core entries and $\sum_n I_nD_n(p)$ factor entries. In
-contrast, the power-dictionary linked model reuses the latent core and factors of
-$\cS$ and adds only one scalar coefficient per channel. Summing degrees up to
-$Q$ adds $Q+1$ link coefficients, proving the stated comparison.
+contrast, the power-dictionary linked model reuses the core and factors of
+$\cS$ and adds only one response coefficient per channel. Summing degrees up to
+$Q$ adds $Q+1$ response coefficients, proving the stated comparison.
 
 \subsection{Proof of Theorem~\ref{thm:poly_generation}}
 
 If $g(s)=\sum_{p=0}^{P}\gamma_p s^p$ and $\cY=g(\cS^\star)$, choose the Tucker
-backbone of the power-dictionary linked model to be the Tucker representation of
+Tucker component of the power-dictionary linked model to be the Tucker representation of
 $\cS^\star$ and set $\beta_p=\gamma_p$ for all $p=0,\ldots,P$. Then
 $f_{\bbeta}(\cS^\star)=g(\cS^\star)=\cY$, giving exact representation with the
-same backbone rank.
+same Tucker rank.
 
 \subsection{Proof of Proposition~\ref{prop:response_approximation}}
 
@@ -103,8 +103,8 @@ which gives the stated bound after taking square roots.
 
 \subsection{Proof of Proposition~\ref{prop:monotone_descent}}
 
-For a fixed Tucker backbone, Link Refresh solves the $\bbeta$-subproblem
-exactly, hence it cannot increase $\mathcal{F}_Q$. The subsequent backbone
+For a fixed Tucker signal, Response Refresh solves the $\bbeta$-subproblem
+exactly, hence it cannot increase $\mathcal{F}_Q$. The subsequent Tucker
 update is assumed to satisfy the sufficient decrease condition
 \eqref{eq:sufficient_decrease}, and therefore also cannot increase
 $\mathcal{F}_Q$. Combining the two stages gives monotone decrease over the
@@ -123,7 +123,7 @@ Letting $K\to\infty$ proves square summability of the steps.
 \subsection{Proof of Theorem~\ref{thm:stationary_convergence}}
 
 For fixed $Q$, the objective is a polynomial function of the Tucker parameters
-and link coefficients when the monomial basis is used. For any other fixed
+and response coefficients when the monomial basis is used. For any other fixed
 polynomial basis spanning the same space, it remains polynomial after a linear
 change of coefficients. The linear-spline dictionary is piecewise polynomial
 and semi-algebraic; standard RBF dictionaries are analytic and belong to the

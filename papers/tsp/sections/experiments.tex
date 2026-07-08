@@ -2,15 +2,15 @@
 \label{sec:experiments}
 
 The experiments evaluate the proposed model through three connected questions.
-First, does the scalar link behave as predicted on controlled nonlinear
+First, does the learned response behave as predicted on controlled nonlinear
 measurements?
-Second, under the same Tucker backbone rank, does the linked response improve
+Second, under the same Tucker rank, does the learned response improve
 real tensor reconstruction and completion consistently across scenes, with
 separate stress tests for missing entries and observation noise? Third, can a
-low-cost diagnostic indicate when the link is appropriate? These questions
+low-cost diagnostic indicate when the response model is appropriate? These questions
 match the modeling claim: NTD-PL is expected to be most beneficial when a
 matched-rank Tucker model leaves residual structure consistent with a shared
-scalar response. Unless stated otherwise, percentage gains denote relative
+entrywise response. Unless stated otherwise, percentage gains denote relative
 error reduction from Tucker to NTD-PL. The main real-data evidence is based on
 all CAVE scenes under matched Tucker rank; noisy reconstruction and
 cross-domain diagnostics are used to test robustness and operating conditions.
@@ -18,10 +18,10 @@ cross-domain diagnostics are used to test robustness and operating conditions.
 \subsection{Controlled Nonlinear Tensor Recovery}
 
 The controlled experiment isolates the measurement-response mechanism without
-missing entries or observation noise. We start from a latent Tucker tensor
+missing entries or observation noise. We start from an underlying Tucker signal
 $\cS^\star$ of known rank and generate the measured tensor by adding a
 nonlinear response component that is orthogonal to the constant and linear
-channels. Let $\bar{\cS}$ denote the normalized latent tensor and let
+channels. Let $\bar{\cS}$ denote the normalized underlying signal and let
 $\bar{\cR}$ denote the normalized nonlinear residual after this projection. The
 clean measurement is generated as
 \begin{equation}
@@ -34,21 +34,21 @@ clean measurement is generated as
   \right),
 \end{equation}
 where $\alpha$ controls nonlinear residual energy after the constant and linear
-response components have been removed. This construction keeps the intended latent rank fixed while making
+response components have been removed. This construction keeps the intended Tucker rank fixed while making
 the measured tensor increasingly mismatched to a linear Tucker observation
 model.
 
 Figure~\ref{fig:controlled-alpha} shows the expected transition. When
-$\alpha$ is small, the measured tensor is close to the latent Tucker signal and
+$\alpha$ is small, the measured tensor is close to the underlying Tucker signal and
 NTD-PL stays close to matched-rank Tucker. As the nonlinear residual energy
-increases, the scalar link explains a growing part of the residual and the
-gap widens across all four target links: $s^2$, $s^2+s^3$,
+increases, the learned response explains a growing part of the residual and the
+gap widens across all four target responses: $s^2$, $s^2+s^3$,
 $\tanh(\kappa s)$, and $(e^{\kappa s}-1)/\kappa$. The
 degree-dependent behavior is reported in
 Appendix~\ref{app:controlled_details}.
 
 All experiments in the main text use the power dictionary because it is
-compact, interpretable, and directly supports the rank-lift analysis in
+compact, interpretable, and directly supports the rank-expansion analysis in
 Section~\ref{sec:theory}. Appendix~\ref{app:controlled_details} adds
 controlled details, including a linear-response case in which high-order
 channels remain inactive. These full-observation experiments serve as mechanism
@@ -58,7 +58,7 @@ subsections.
 \begin{figure*}[!t]
   \centering
   \includegraphics[width=0.92\textwidth]{figures/controlled_nonlinear_alpha_grid.pdf}
-  \caption{Controlled nonlinear residual sweep for four target links. The
+  \caption{Controlled nonlinear residual sweep for four target responses. The
   parameter $\alpha$ controls nonlinear residual energy after removing constant
   and linear components. NTD-PL remains close to Tucker in the nearly linear
   regime and separates as the nonlinear component grows.}
@@ -69,7 +69,7 @@ subsections.
 
 We next evaluate whether the same linked Tucker representation improves
 real spectral-spatial tensors. Unless otherwise stated, hyperspectral cubes are
-globally normalized, the Tucker backbone rank is fixed across Tucker and
+globally normalized, the Tucker rank is fixed across Tucker and
 NTD-PL, and completion metrics are computed only on held-out entries. We report
 root mean square error (RMSE) and spectral angle mapper (SAM); lower values are
 better for both.
@@ -79,22 +79,22 @@ better for both.
 We first use the CAVE multispectral image database \cite{cave_multispectral_database,
 yasuma2010gapc}, which provides full spectral-spatial scenes and therefore
 supports both full-observation reconstruction and masked completion. Full
-reconstruction tests whether the link adds compact representation power at a
-fixed backbone rank. Across the tested ranks, NTD-PL consistently improves
+reconstruction tests whether the learned response adds compact representation power at a
+fixed Tucker rank. Across the tested ranks, NTD-PL consistently improves
 matched-rank Tucker in both RMSE and SAM when averaged over all 15 scenes, with
 larger gains at lower ranks and smaller gains as the Tucker rank grows; the
 full capacity curves are reported in Appendix~\ref{app:hsi_protocol}. This is
-the expected behavior of a fixed-backbone enhancement: if ordinary multilinear
+the expected behavior of a fixed-rank nonlinear correction: if ordinary multilinear
 rank is already high enough to absorb the nonlinear response, the marginal
-value of the scalar link should decrease.
+value of the response should decrease.
 
 Table~\ref{tab:rank-lift-tucker} asks a complementary capacity question: how
 much ordinary Tucker rank is needed to match a lower-rank NTD-PL model? Across
 the tested ranks, Tucker needs roughly 51--60\% more parameters to match the
-NTD-PL RMSE, while NTD-PL still has lower SAM. The result supports the rank-lift
-interpretation in Section~\ref{sec:theory}: the power link reuses a shared
-low-rank backbone to express structured nonlinear residuals with a small number
-of scalar response parameters.
+NTD-PL RMSE, while NTD-PL still has lower SAM. The result supports the
+rank-expansion interpretation in Section~\ref{sec:theory}: the power response
+reuses the same low-rank Tucker signal to express structured nonlinear
+residuals with a small number of response coefficients.
 
 We then add observation noise only to the full-reconstruction setting. The
 model is fitted to clean or noisy full CAVE cubes and evaluated against the
@@ -105,8 +105,8 @@ the full table is reported in Appendix~\ref{app:hsi_protocol}.
 
 \begin{table*}[!t]
   \centering
-  \caption{Rank-lifted Tucker comparison on CAVE reconstruction. For each
-  NTD-PL backbone rank, we report the first higher-rank Tucker model matching
+  \caption{Higher-rank Tucker comparison on CAVE reconstruction. For each
+  NTD-PL Tucker rank, we report the first higher-rank Tucker model matching
   NTD-PL RMSE and the additional parameter cost.}
   \label{tab:rank-lift-tucker}
   \scriptsize
@@ -116,7 +116,7 @@ the full table is reported in Appendix~\ref{app:hsi_protocol}.
 Held-out completion tests whether the representation benefit transfers to
 unobserved entries without introducing observation noise. Table~\ref{tab:cave-completion-main}
 reports CAVE completion under random masks using all 15 scenes and three mask
-seeds per scene. At the same backbone rank, NTD-PL improves missing-entry RMSE
+seeds per scene. At the same Tucker rank, NTD-PL improves missing-entry RMSE
 by 12.5--17.7\% and missing-entry SAM by 13.4--29.3\% across the tested missing
 rates. The gains are stable across mask density, and paired scene-level
 summaries are reported in Appendix~\ref{app:hsi_protocol}.
@@ -133,8 +133,8 @@ summaries are reported in Appendix~\ref{app:hsi_protocol}.
 
 \subsection{Diagnostics and Operating Regimes}
 
-The diagnostic $\Dlink$ is computed by fitting a Tucker backbone and measuring
-the residual reduction obtained by a single frozen-backbone Link Refresh step.
+The diagnostic $\Dlink$ is computed by fitting a Tucker model and measuring
+the residual reduction obtained by refitting only the response coefficients.
 It is therefore substantially cheaper than full NTD-PL training and is used
 here as a model-selection signal for the proposed recovery model.
 Table~\ref{tab:cave-link-yield-summary} groups CAVE completion scenes
@@ -158,13 +158,14 @@ horizontal axis is $\Dlink$ measured before full NTD-PL training. Object-view
 tensors show the clearest separation, action-video tensors follow the same
 trend, and natural images occupy a lower-yield but still positive regime. These
 results reinforce the main interpretation: NTD-PL is most effective when the
-Tucker residual contains shared scalar response structure.
+Tucker residual contains structure that is shared across entries through the
+same response function.
 
 \begin{figure*}[!t]
   \centering
   \includegraphics[width=0.86\textwidth]{figures/nonhsi_dlink_scatter_3domain.pdf}
-  \caption{Cross-domain link diagnostic. Each point plots the frozen-backbone
+  \caption{Cross-domain response diagnostic. Each point plots the frozen-Tucker
   diagnostic $\Dlink$ against the RMSE gain of full NTD-PL over Tucker. Larger
-  diagnostic yield predicts larger benefit from the scalar link.}
+  diagnostic yield predicts larger benefit from the learned response.}
   \label{fig:nonhsi-link-scatter}
 \end{figure*}

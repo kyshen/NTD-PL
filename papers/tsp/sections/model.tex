@@ -4,7 +4,7 @@
 We first describe the nonlinear measurement model and then introduce the
 dictionary-linked Tucker representation used for recovery. The goal is not to
 define a new tensor task, but to make explicit a common source of model
-mismatch: the tensor that is compact in the latent signal domain may be observed
+mismatch: the tensor that is compact before measurement may be observed
 after a nonlinear response.
 
 \subsection{Nonlinear Low-Rank Signal Model}
@@ -12,16 +12,16 @@ after a nonlinear response.
 
 Let $\cY \in \R^{I_1 \times \cdots \times I_N}$ denote the measured tensor and
 let $\Omega \in \{0,1\}^{I_1 \times \cdots \times I_N}$ be the observation
-mask. We assume that the measured entries are generated from a latent tensor
-$\cS$ through a scalar response,
+mask. We assume that the measured entries are generated from an underlying
+signal $\cS$ through an entrywise response,
 \begin{equation}
   Y_{\mathbf{i}} = f(S_{\mathbf{i}}) + \varepsilon_{\mathbf{i}},
   \qquad
   \mathbf{i}=(i_1,\ldots,i_N),
   \label{eq:measurement_model}
 \end{equation}
-where $\varepsilon_{\mathbf{i}}$ denotes measurement noise. The latent tensor is
-represented by a Tucker model,
+where $\varepsilon_{\mathbf{i}}$ denotes measurement noise. The underlying
+signal is represented by a Tucker model,
 \begin{equation}
   \cS =
   \tucker{\cX}{\bA^{(1)},\ldots,\bA^{(N)}} ,
@@ -30,10 +30,10 @@ represented by a Tucker model,
 where $\cX \in \R^{R_1 \times \cdots \times R_N}$ is the core and
 $\bA^{(n)} \in \R^{I_n \times R_n}$ are mode factors.
 
-This model separates two notions of complexity. The latent signal is controlled
+This model separates two notions of complexity. The underlying signal is controlled
 by the Tucker rank $(R_1,\ldots,R_N)$, while the measured tensor may have larger
 effective multilinear rank because of the response $f$. The recovery problem is
-therefore to estimate the low-rank latent structure and the response from the
+therefore to estimate the low-rank Tucker structure and the response from the
 observed entries of $\cY$.
 
 \subsection{Scalar Link Dictionaries}
@@ -58,23 +58,23 @@ $\psi_q(s)=s^q$, which gives the polynomial-linked Tucker model
   \sum_{p=0}^{P} \beta_p \cS^{\od p}.
   \label{eq:polynomial_linked_tucker}
 \end{equation}
-For $p\ge 2$, the degree-$p$ channel $\cS^{\od p}$ corresponds to a tied
-high-order interaction among copies of the same Tucker backbone. Thus the model
-can increase effective multilinear rank without adding an independent high-rank
-tensor block. Appendix~\ref{app:pfold_tucker_motivation} gives the explicit
+For $p\ge 2$, the degree-$p$ channel $\cS^{\od p}$ uses products of entries
+from the same Tucker signal. Thus the model can increase effective
+multilinear rank without adding an independent high-rank tensor block.
+Appendix~\ref{app:pfold_tucker_motivation} gives the explicit
 \(p\)-fold Tucker construction from which this tied channel is obtained.
 
 The same estimator can also support non-power dictionaries that remain linear
 in the coefficients $\bbeta$, for example conditioned polynomial bases, radial
-basis functions, or splines. These choices change the scalar response family
-but not the Tucker backbone, the masked objective, or the link-refresh
+basis functions, or splines. These choices change the entrywise response family
+but not the Tucker core and factors, the masked objective, or the response-refresh
 subproblem. Unless otherwise stated, the remainder of the paper uses the power
 dictionary.
 
 \subsection{Masked Recovery Objective}
 
 The same formulation covers full reconstruction and completion. We estimate
-the core, factors, and link coefficients by minimizing
+the core, factors, and response coefficients by minimizing
 \begin{equation}
   \min_{\cX,\{\bA^{(n)}\},\bbeta}
   \frac{1}{2|\Omega|}
@@ -83,8 +83,8 @@ the core, factors, and link coefficients by minimizing
   \mathcal{R}(\cX,\{\bA^{(n)}\},\bbeta),
   \label{eq:masked_objective_model}
 \end{equation}
-where $\mathcal{R}$ contains regularization terms for the Tucker backbone and
-the scalar link. When $\Omega$ is the all-one tensor, \eqref{eq:masked_objective_model}
+where $\mathcal{R}$ contains regularization terms for the Tucker parameters and
+the response coefficients. When $\Omega$ is the all-one tensor, \eqref{eq:masked_objective_model}
 gives full reconstruction. When $\Omega$ selects a subset of entries, the loss
 is evaluated only on observed measurements and prediction is assessed on the
 held-out entries.

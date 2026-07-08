@@ -4,30 +4,30 @@
 
 This paper developed dictionary-linked Tucker models for nonlinear low-rank
 tensor signal recovery. The central idea is to keep the Tucker rank budget tied
-to the latent signal while modeling the measured tensor through a learned
+to the underlying signal while modeling the measured tensor through a learned
 entrywise response. The power-dictionary instance produces a compact
-shared-backbone rank lift: polynomial channels can increase the effective rank
-of the observation without introducing an independent high-rank correction.
+rank expansion: polynomial channels can increase the effective rank of the
+observation while reusing the same Tucker core and factors.
 Other finite scalar dictionaries can be used in the same formulation when
 application-specific response priors are available, but the paper uses the
-power dictionary as the default link.
+power dictionary as the default response basis.
 
 The analysis formalized this mechanism through rank expansion, response
-generation, scalar-response approximation, and nonconvex descent results. The estimator combines a
-low-dimensional ridge update for the link with gradient-based Tucker updates
-through the current nonlinear response, and the frozen-backbone diagnostic
-checks whether a signal is likely to benefit from the link before full
-nonlinear training.
+generation, response approximation, and nonconvex descent results. The
+estimator combines a small ridge update for the response coefficients with
+gradient-based Tucker updates through the current nonlinear response. The
+frozen-Tucker diagnostic checks whether a signal is likely to benefit from the
+response before full nonlinear training.
 
 Experiments support the operating regime of the model. Controlled tensors verify
 that gains appear when the residual is nonlinear and the active polynomial
 degree is expressive enough. Hyperspectral reconstruction and completion show
-that, at matched Tucker rank, the link can improve both RMSE and spectral angle
-metrics, and rank-lift comparisons show that similar RMSE can require
+that, at matched Tucker rank, the learned response can improve both RMSE and spectral angle
+metrics, and higher-rank Tucker comparisons show that similar RMSE can require
 substantially larger ordinary Tucker models. Noisy-observation experiments show
 that the improvement remains positive under perturbed measurements. Diagnostic
 stratification further clarifies the operating regime: when the residual is not
-well explained by a shared scalar response, increasing rank or changing the
+well explained by a shared entrywise response, increasing rank or changing the
 tensor prior is more appropriate.
 
 Several directions remain open. Monotone splines or physics-informed response
