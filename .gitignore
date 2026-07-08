@@ -1,40 +1,12 @@
 /data
-/artifacts/outputs/
-/artifacts/results/
-/artifacts/paper-outputs/
-/artifacts/multirun/*
-!/artifacts/multirun/*/
-/artifacts/multirun/*/*
-!/artifacts/multirun/*/runs.parquet
-!/artifacts/multirun/*/curves.parquet
+/artifacts/
 figs
 *.asv
-/papers/latex-zh/out
+/papers/*/out/
 tmp/
 
 /papers/latex-zh/inputs/cave-random-completion/advantage_maps
-/papers/latex-zh/main.aux
-/papers/latex-zh/main.bbl
-/papers/latex-zh/main.bcf
-/papers/latex-zh/main.blg
-/papers/latex-zh/main.fdb_latexmk
-/papers/latex-zh/main.fls
-/papers/latex-zh/main.log
-/papers/latex-zh/main.run.xml
-/papers/latex-zh/main.synctex.gz
-/papers/latex-zh/main.toc
-
 /papers/latex-en/inputs/cave-random-completion/advantage_maps
-/papers/latex-en/main.aux
-/papers/latex-en/main.bbl
-/papers/latex-en/main.bcf
-/papers/latex-en/main.blg
-/papers/latex-en/main.fdb_latexmk
-/papers/latex-en/main.fls
-/papers/latex-en/main.log
-/papers/latex-en/main.run.xml
-/papers/latex-en/main.synctex.gz
-/papers/latex-en/main.toc
 
 # Python cache and artifacts
 __pycache__/
@@ -75,12 +47,22 @@ docs/
 
 /papers/supplementary/
 /papers/tsp/template_source/
-/papers/*/main.aux
-/papers/*/main.bcf
-/papers/*/main.blg
-/papers/*/main.fdb_latexmk
-/papers/*/main.fls
-/papers/*/main.log
-/papers/*/main.run.xml
-/papers/*/main.synctex.gz
-/papers/*/main.toc
+
+# LaTeX build intermediates under paper projects
+/papers/**/*.aux
+/papers/**/*.bbl
+/papers/**/*.bcf
+/papers/**/*.blg
+/papers/**/*.fdb_latexmk
+/papers/**/*.fls
+/papers/**/*.log
+/papers/**/*.out
+/papers/**/*.run.xml
+/papers/**/*.synctex.gz
+/papers/**/*.toc
+/papers/**/*.lof
+/papers/**/*.lot
+/papers/**/*.nav
+/papers/**/*.snm
+/papers/**/*.vrb
+/papers/**/*.xdv

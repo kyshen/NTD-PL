@@ -1,3 +1,0 @@
-domain,dataset,num_units,num_ok,num_failed,median_d_link,mean_d_link,spearman_dlink_gain,mean_gain,median_gain,low_tercile_gain,mid_tercile_gain,high_tercile_gain,num_effective,num_moderate,num_boundary,processed_shape,rank
-Material reflectance,BRDF,3,3,0,0.02611453686323071,0.3348134028937178,1.0,7.73711924120379,0.7331227937058022,-1.1739607418496099,0.7331227937058022,23.65219567175518,1,1,1,32x32x64x3,"(12,12,16,2)"
-Spectral natural scenes,Harvard HS,3,3,0,0.002307722433855584,0.0025785206930691476,0.5,-4.546120801851233,-4.17667515266477,-8.751667633129752,-0.7100196197591756,-4.17667515266477,0,0,3,128x128x31,"(32,32,8)"

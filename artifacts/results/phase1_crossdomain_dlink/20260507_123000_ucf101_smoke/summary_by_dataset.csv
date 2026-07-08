@@ -1,2 +1,0 @@
-domain,dataset,num_units,num_ok,num_failed,median_d_link,mean_d_link,spearman_dlink_gain,mean_gain,median_gain,low_tercile_gain,mid_tercile_gain,high_tercile_gain,num_effective,num_moderate,num_boundary,processed_shape,rank
-Action video,UCF101,3,3,0,0.03152173375071677,0.059007613468834014,1.0,3.496346537681012,0.9954808470678265,0.2576232866790373,0.9954808470678265,9.235935479296174,1,1,1,24x72x96x3,"(12,18,18,3)"

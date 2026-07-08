@@ -14,6 +14,8 @@ This repository is organized around four top-level work areas:
   - `artifacts/outputs/`: per-run Hydra logs/checkpoints.
   - `artifacts/paper-outputs/`: tables and figures produced by postprocessing.
   - `artifacts/results/`: ad hoc or script-specific result folders.
+  - This directory is ignored by Git; promote selected tables or figures into
+    `papers/` only when they become paper inputs.
 
 Legacy notes and one-off command records are kept in `archive/legacy-notes/`.
 New experiments should write generated files under `artifacts/` and paper files
