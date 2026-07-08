@@ -116,7 +116,9 @@ activation. Non-nested dictionaries such as RBF and spline bases are trained wit
 the full selected dictionary from the start. After Tucker updates, factor
 columns are rescaled and the inverse scales are absorbed into the core. This
 fixes a numerical gauge without changing the represented signal $\cS$ or the
-objective value.
+objective value. It does not make the Tucker factors identifiable in a strict
+statistical sense; it only keeps the Tucker parameterization and response
+coefficients on stable numerical scales during training.
 
 \begin{algorithm}[!t]
   \footnotesize

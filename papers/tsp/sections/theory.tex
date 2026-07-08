@@ -77,16 +77,16 @@ rank observed after measurement. The next two results ask what kinds of
 entrywise responses the power dictionary can represent on top of the same
 low-rank Tucker signal.
 
-\begin{theorem}[Polynomial response generation]
-\label{thm:poly_generation}
+\begin{proposition}[Exact generation for polynomial responses]
+\label{prop:poly_generation}
 If $\cY=g(\cS^\star)$, where $\cS^\star$ has Tucker rank at most
 $(R_1,\ldots,R_N)$ and $g$ is a polynomial of degree at most $P$, then a
 degree-$P$ polynomial-linked Tucker model with the same Tucker rank can
 represent $\cY$ exactly.
-\end{theorem}
+\end{proposition}
 
-\begin{proposition}[Continuous response approximation]
-\label{prop:response_approximation}
+\begin{theorem}[Continuous response approximation]
+\label{thm:response_approximation}
 Let $\cS^\star$ have Tucker rank at most $(R_1,\ldots,R_N)$ and entries in a
 compact interval $[a,b]$. If the measurement response $f$ is continuous on
 $[a,b]$, then for every $\epsilon>0$ there exists a polynomial degree $P$ and
@@ -98,29 +98,16 @@ coefficients $\bbeta$ such that
   \qquad
   M=\prod_{n=1}^{N}I_n .
 \end{equation}
-\end{proposition}
+\end{theorem}
 
-Thus the power response is not restricted to exactly polynomial sensors. On a
-bounded signal range, it can approximate any smooth or continuous entrywise
-response to the desired uniform accuracy, while keeping the Tucker rank of the
-underlying signal fixed. The degree required for a given accuracy depends on the regularity of
-the response and the width of the signal range. This approximation result is
-the reason the power dictionary is used as the default response basis in the
-experiments.
-
-\begin{remark}[Gauge and identifiability]
-\label{rem:gauge}
-As in ordinary Tucker models, the factorization of $\cS$ is not unique: mode
-factors can be rescaled or transformed with an inverse transformation absorbed
-by the core. The response function adds another scale interaction because
-changing the scale of $\cS$ changes the natural scale of the response coefficients.
-The estimator therefore fixes a numerical gauge by normalizing factor columns
-and absorbing inverse scales into the core. This does not make the Tucker
-factors identifiable in a strict statistical sense, but it keeps the
-represented signal and response numerically well conditioned and makes
-the objective in Section~\ref{sec:estimation} a stable parameterization of the
-same fitted measurement tensor.
-\end{remark}
+The exact polynomial result is a useful special case. The approximation result
+is broader: the power response is not restricted to exactly polynomial sensors.
+On a bounded signal range, it can approximate any smooth or continuous
+entrywise response to the desired uniform accuracy, while keeping the Tucker
+rank of the underlying signal fixed. The degree required for a given accuracy
+depends on the regularity of the response and the width of the signal range.
+This approximation result is the reason the power dictionary is used as the
+default response basis in the experiments.
 
 \subsection{Descent and Stationarity}
 
