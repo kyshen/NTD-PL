@@ -131,6 +131,109 @@ summaries are reported in Appendix~\ref{app:hsi_protocol}.
   \input{tables/cave_completion_main.tex}
 \end{table*}
 
+\subsection{Rank-Inflation Evidence}
+\label{sec:exp-rank-inflation}
+
+The reconstruction and completion tables show that the linked model improves
+standard accuracy metrics. We next ask whether this improvement is accompanied
+by the rank-inflation behavior predicted by the analysis. For this mechanism
+view, we use the full CAVE scenes at their native $512\times512$ spatial
+resolution and fix the Tucker rank to $(12,12,4)$ for both Tucker and NTD-PL.
+We sweep the maximum power degree $P$ and compute the spatial-mode spectra of
+the learned Tucker signal, the final prediction, and the response component
+$f_{\bbeta}(\cS)-\cS$.
+
+Figure~\ref{fig:mechanism-rank-inflation} shows two complementary summaries.
+Increasing $P$ raises both the reconstruction gain and the effective rank of
+the response component, while the learned Tucker signal itself remains at the
+prescribed rank. Moreover, the fraction of the measured tensor's spatial tail
+energy captured by the NTD-PL prediction is strongly aligned with the RMSE
+gain across scenes and degrees. The Spearman correlation between spatial tail
+capture and RMSE gain is $0.94$ in this sweep. Table~\ref{tab:rank-inflation-mechanism}
+reports the corresponding degree-wise summary.
+
+\begin{figure*}[!t]
+  \centering
+  \includegraphics[width=0.92\textwidth]{figures/mechanism_rank_inflation.pdf}
+  \caption{Rank-inflation evidence on full-size CAVE reconstruction at Tucker
+  rank $(12,12,4)$. Left: increasing the polynomial degree raises the
+  response-component rank and reconstruction gain. Right: scene-level tail
+  capture by the NTD-PL prediction tracks RMSE gain.}
+  \label{fig:mechanism-rank-inflation}
+\end{figure*}
+
+\input{tables/mechanism_rank_inflation.tex}
+
+\subsection{Learned Response Curves}
+\label{sec:exp-learned-response}
+
+The previous experiment measures rank inflation in the tensor domain. We now
+look directly at the learned scalar response. For each full-size CAVE scene, we
+fit NTD-PL at rank $(12,12,4)$ and evaluate the learned map
+$s\mapsto f_{\bbeta}(s)$ on percentiles of the learned Tucker signal. Because
+Tucker factors have scale and sign gauges, each curve is plotted after endpoint
+normalization on the central percentile range; the curve shape, rather than the
+absolute latent scale, is the object of interest.
+
+Figure~\ref{fig:mechanism-learned-response} shows that the learned response is
+not an arbitrary high-degree oscillation. The mean curve is consistently
+nonlinear and mostly monotone, and the shape changes little after moderate
+degree. The numerical summary in Table~\ref{tab:learned-response-mechanism}
+matches this visual pattern: moving from $P=1$ to $P=4$ increases both the
+nonlinear deviation from the best affine fit and the RMSE gain, while the
+additional change from $P=4$ to $P=6$ is smaller. This provides a direct
+response-level view of the same mechanism: the model does not replace the
+low-rank signal by a separate high-rank tensor, but learns a shared scalar
+calibration of that signal.
+
+\begin{figure*}[!t]
+  \centering
+  \includegraphics[width=0.92\textwidth]{figures/mechanism_learned_response.pdf}
+  \caption{Learned response curves on full-size CAVE reconstruction at Tucker
+  rank $(12,12,4)$. Left: endpoint-normalized response curves for $P=6$; thin
+  lines are scenes and the thick line is their mean. Right: nonlinear deviation
+  and gain over the linear response increase with degree and then stabilize.}
+  \label{fig:mechanism-learned-response}
+\end{figure*}
+
+\input{tables/mechanism_learned_response.tex}
+
+\subsection{Spectral-Regime Error Analysis}
+\label{sec:exp-error-regime}
+
+Finally, we ask where the reconstruction error is reduced in the observed
+tensor. Entries are grouped by their normalized observed value and by spectral
+band. This is an observed-domain analysis: the intensity bins are bins of
+entries of the normalized measured tensor, not bins of RGB brightness or
+spatial pixel averages. The analysis connects the learned response curve to
+observable error behavior by showing which response ranges receive the largest
+correction.
+
+Figure~\ref{fig:mechanism-error-regime} shows that the gain is not spread
+uniformly over the cube. The largest relative improvements occur in low-to-mid
+intensity deciles, whereas one high-intensity decile is nearly neutral. At the
+same time, the highest-intensity decile contributes a large share of the total
+MSE reduction because its baseline error energy is large. The spectral view
+shows stronger gains in the green-to-red regimes than at the shortest
+wavelengths. Table~\ref{tab:error-regime-mechanism} gives the regime-level
+summary: the 510--600 nm and 610--700 nm regimes account for most of the MSE
+reduction in this full-size CAVE setting. These patterns support the response
+interpretation from another angle: NTD-PL changes the effective calibration of
+specific intensity and spectral regimes rather than applying a uniform
+improvement everywhere.
+
+\begin{figure*}[!t]
+  \centering
+  \includegraphics[width=0.96\textwidth]{figures/mechanism_error_regime.pdf}
+  \caption{Observed-domain error regimes on full-size CAVE reconstruction at
+  Tucker rank $(12,12,4)$ and $P=6$. Left: RMSE gain by normalized-intensity
+  decile. Middle: gain by spectral band. Right: joint intensity--spectral
+  regimes. Positive values indicate lower error for NTD-PL than Tucker.}
+  \label{fig:mechanism-error-regime}
+\end{figure*}
+
+\input{tables/mechanism_error_regime.tex}
+
 \subsection{Diagnostics and Operating Regimes}
 
 The diagnostic $\Dlink$ is computed by fitting a Tucker model and measuring
