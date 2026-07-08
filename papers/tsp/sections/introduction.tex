@@ -65,13 +65,13 @@ model. It keeps the Tucker ranks fixed and adds only the response coefficients
 $\bbeta=(\beta_0,\ldots,\beta_Q)$. Different finite dictionaries can be used
 when response priors are available. In this paper, we use the simplest power dictionary
 $\psi_q(s)=s^q$, which gives the polynomial-linked model and makes the
-rank-expansion mechanism explicit. The model is therefore not an unrestricted
+rank-inflation mechanism explicit. The model is therefore not an unrestricted
 nonlinear decoder and not a post-hoc calibration of a fixed Tucker fit. The
 underlying signal and the response are estimated together, so the Tucker core
 and factors are shaped by the nonlinear measurement model during recovery.
 
 The key structural point is most explicit for the polynomial dictionary, where
-the response creates rank expansion tied to the same Tucker factors. The degree-$p$ term
+the response creates rank inflation tied to the same Tucker factors. The degree-$p$ term
 $\cS^{\od p}$ can be viewed as a Tucker tensor whose factors are polynomial
 feature lifts of the original factors. Thus higher-degree channels can increase
 the effective multilinear rank of the measured tensor, but they remain tied to
@@ -96,9 +96,9 @@ nonlinear training: does this signal contain residual structure that is likely
 to benefit from a shared entrywise response?
 
 The resulting study is organized around the full signal-recovery pipeline:
-representation, estimation, diagnosis, and validation. On the representation
-side, we characterize when an entrywise response creates efficient rank expansion and
-when ordinary Tucker rank expansion is the more direct explanation. On the
+modeling, estimation, diagnosis, and validation. On the rank side, we
+characterize when an entrywise response creates efficient rank inflation and
+when increasing ordinary Tucker rank is the more direct explanation. On the
 estimation side, we use the special structure of the response update to keep the nonlinear
 part low-dimensional. On the experimental side, we evaluate both high- and
 low-diagnostic regimes to clarify the operating conditions of the model.
@@ -118,12 +118,12 @@ The main contributions are summarized as follows.
   a compact polynomial response tied to the same Tucker core and factors.
 
   \item We analyze the resulting model class and estimation procedure,
-  including induced rank expansion, parameter economy relative to explicit
+  including induced rank inflation, parameter economy relative to explicit
   higher-rank Tucker models, response approximation, descent properties, diagnostic
   interpretation, and computational scaling.
 
   \item We evaluate the model on controlled nonlinear tensor signals and
-  hyperspectral recovery tasks, with rank-expansion comparisons,
+  hyperspectral recovery tasks, with rank-inflation comparisons,
   noisy-observation robustness tests, and diagnostic stratification that
   identifies when the nonlinear response is useful.
 \end{itemize}

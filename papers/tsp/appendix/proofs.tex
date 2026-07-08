@@ -1,7 +1,7 @@
 \section{Proofs}
 \label{app:proofs}
 
-\subsection{Proof of Proposition~\ref{prop:rank_expansion}}
+\subsection{Proof of Proposition~\ref{prop:rank_inflation}}
 
 Let
 \[
@@ -68,7 +68,7 @@ Tucker signal.
 
 \subsection{Proof of Corollary~\ref{cor:tied_lift_parameters}}
 
-By Proposition~\ref{prop:rank_expansion}, the degree-$p$ channel can be written
+By Proposition~\ref{prop:rank_inflation}, the degree-$p$ channel can be written
 as a Tucker tensor with ranks at most
 $D_n(p)=\binom{R_n+p-1}{p}$. A standalone Tucker parameterization has
 $\prod_n D_n(p)$ core entries and $\sum_n I_nD_n(p)$ factor entries. In
@@ -78,7 +78,7 @@ $Q$ adds $Q+1$ response coefficients, proving the stated comparison.
 
 \subsection{Proof of Theorem~\ref{thm:poly_generation}}
 
-If $g(s)=\sum_{p=0}^{P}\gamma_p s^p$ and $\cY=g(\cS^\star)$, choose the Tucker
+If $g(s)=\sum_{p=0}^{P}\gamma_p s^p$ and $\cY=g(\cS^\star)$, choose the
 Tucker component of the power-dictionary linked model to be the Tucker representation of
 $\cS^\star$ and set $\beta_p=\gamma_p$ for all $p=0,\ldots,P$. Then
 $f_{\bbeta}(\cS^\star)=g(\cS^\star)=\cY$, giving exact representation with the

@@ -1,14 +1,27 @@
 \section{Analysis}
 \label{sec:theory}
 
-This section summarizes the structural, optimization, and computational
-properties of dictionary-linked Tucker models. The rank results are stated for
-the power dictionary, where the rank expansion has an explicit algebraic form.
-The optimization results apply to any differentiable finite dictionary
-whose response is linear in the response coefficients.
+This section gives rank, optimization, and computational results for
+dictionary-linked Tucker models. It addresses three questions:
+how an entrywise response changes the Tucker rank seen in the measured tensor,
+what response functions can be generated or approximated by the power
+dictionary, and what descent and computational guarantees hold for the
+alternating estimator. The rank results are stated for the power dictionary,
+where response-induced rank inflation has an explicit algebraic form. The
+optimization results apply to any differentiable finite dictionary whose
+response is linear in the response coefficients.
 
-\begin{proposition}[Tied Tucker rank expansion]
-\label{prop:rank_expansion}
+\subsection{Rank Inflation Under Nonlinear Observation}
+
+We begin with the rank effect of the response. These results compare the
+Tucker rank of the underlying signal with the Tucker rank that may appear
+after entrywise nonlinear measurement. They do not claim that the proposed
+model is a general substitute for arbitrary higher-rank Tucker models; rather,
+they identify the special rank inflation that can be explained by one shared
+response function.
+
+\begin{proposition}[Response-induced Tucker rank inflation]
+\label{prop:rank_inflation}
 Let $\cS$ have Tucker rank at most $(R_1,\ldots,R_N)$. For every $p \ge 1$,
 $\cS^{\od p}$ admits a Tucker representation with mode ranks at most
 \begin{equation}
@@ -23,10 +36,10 @@ with lifted factors, but those lifted factors remain tied to the same original
 factors. This is the structural difference between the proposed model and an
 untied higher-rank correction.
 
-\begin{corollary}[Parameter economy of tied polynomial channels]
+\begin{corollary}[Parameter cost of response-induced rank inflation]
 \label{cor:tied_lift_parameters}
 Let $D_n(p)=\binom{R_n+p-1}{p}$. A Tucker model that explicitly represents the
-degree-$p$ channel in Proposition~\ref{prop:rank_expansion} may require
+degree-$p$ channel in Proposition~\ref{prop:rank_inflation} may require
 \begin{equation}
   d_{\mathrm{lift}}(p)=\prod_{n=1}^{N}D_n(p)+\sum_{n=1}^{N}I_nD_n(p)
 \end{equation}
@@ -52,10 +65,17 @@ exact standard Tucker rank is \((D,\ldots,D)\).
 The theorem gives a strict algebraic separation: the power response does more than
 post-calibrate an already fitted tensor. It can generate tensors whose
 ordinary multilinear ranks match the Veronese-lifted ranks in
-Proposition~\ref{prop:rank_expansion}, while the trainable Tucker signal remains at
+Proposition~\ref{prop:rank_inflation}, while the trainable Tucker signal remains at
 rank \((R,\ldots,R)\). This is an existence result for response-generated
 high-rank structure, not a claim that the linked model spans all tensors of the
 larger Tucker rank.
+
+\subsection{Response Generation and Approximation}
+
+The previous results explain how a polynomial response can inflate the Tucker
+rank observed after measurement. The next two results ask what kinds of
+entrywise responses the power dictionary can represent on top of the same
+low-rank Tucker signal.
 
 \begin{theorem}[Polynomial response generation]
 \label{thm:poly_generation}
@@ -229,7 +249,7 @@ for every \(0<\varepsilon\le B_\Theta\).
 This bound is not intended as a sharp sample-complexity result. Its role is to
 make clear which complexity enters the masked recovery problem: the covering
 dimension is the tied dictionary-linked parameter count, rather than the
-parameter count of an untied Veronese-rank Tucker expansion.
+parameter count of an untied Tucker model with Veronese ranks.
 
 \subsection{Computational Scaling}
 
@@ -239,7 +259,7 @@ model requires
 \begin{equation}
   d_{\mathrm{NTD}}=d_{\mathrm{Tucker}}+(Q+1)
 \end{equation}
-parameters. A rank-expanded Tucker model that explicitly matches the degree-$Q$
+parameters. A higher-rank Tucker model that explicitly matches the degree-$Q$
 Veronese lift may require mode ranks
 $D_n=\binom{R_n+Q-1}{Q}$ for the degree-$Q$ channel, with core size
 $\prod_n D_n$ and factor size $\sum_n I_nD_n$. The proposed model keeps the

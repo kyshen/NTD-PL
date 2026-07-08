@@ -44,7 +44,7 @@ There is also a matrix literature in which low-rank structure is observed
 through non-Gaussian losses or an unknown entrywise transfer function
 \cite{Udell2016GLRM,Ganti2015SingleIndex}. This viewpoint is close in spirit
 to our setting, but the present work focuses on multilinear Tucker structure,
-rank expansion under polynomial responses, and tensor recovery diagnostics.
+rank inflation under polynomial responses, and tensor recovery diagnostics.
 
 The dictionary-linked Tucker model uses a constrained entrywise response. It
 assumes that the dominant residual left by a fixed Tucker fit can be
@@ -52,7 +52,7 @@ explained by a shared entrywise map, while preserving the interpretability of
 the Tucker ranks. This places the model between classical low-rank recovery and
 general nonlinear tensor factorization. The power-dictionary instance is
 expressive enough to approximate common smooth responses on a bounded signal
-range, while remaining structured enough to admit a rank-expansion analysis and
+range, while remaining structured enough to admit a rank-inflation analysis and
 a closed-form response update. Other finite scalar dictionaries could be substituted
 when calibration constraints suggest a different response basis, without
 replacing the Tucker core and factors.

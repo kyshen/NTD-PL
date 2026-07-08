@@ -6,13 +6,13 @@ This paper developed dictionary-linked Tucker models for nonlinear low-rank
 tensor signal recovery. The central idea is to keep the Tucker rank budget tied
 to the underlying signal while modeling the measured tensor through a learned
 entrywise response. The power-dictionary instance produces a compact
-rank expansion: polynomial channels can increase the effective rank of the
+rank inflation: polynomial channels can increase the effective rank of the
 observation while reusing the same Tucker core and factors.
 Other finite scalar dictionaries can be used in the same formulation when
 application-specific response priors are available, but the paper uses the
 power dictionary as the default response basis.
 
-The analysis formalized this mechanism through rank expansion, response
+The analysis formalized this mechanism through rank inflation, response
 generation, response approximation, and nonconvex descent results. The
 estimator combines a small ridge update for the response coefficients with
 gradient-based Tucker updates through the current nonlinear response. The

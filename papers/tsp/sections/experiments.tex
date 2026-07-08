@@ -48,7 +48,7 @@ degree-dependent behavior is reported in
 Appendix~\ref{app:controlled_details}.
 
 All experiments in the main text use the power dictionary because it is
-compact, interpretable, and directly supports the rank-expansion analysis in
+compact, interpretable, and directly supports the rank-inflation analysis in
 Section~\ref{sec:theory}. Appendix~\ref{app:controlled_details} adds
 controlled details, including a linear-response case in which high-order
 channels remain inactive. These full-observation experiments serve as mechanism
@@ -79,7 +79,7 @@ better for both.
 We first use the CAVE multispectral image database \cite{cave_multispectral_database,
 yasuma2010gapc}, which provides full spectral-spatial scenes and therefore
 supports both full-observation reconstruction and masked completion. Full
-reconstruction tests whether the learned response adds compact representation power at a
+reconstruction tests whether the learned response adds a compact correction at a
 fixed Tucker rank. Across the tested ranks, NTD-PL consistently improves
 matched-rank Tucker in both RMSE and SAM when averaged over all 15 scenes, with
 larger gains at lower ranks and smaller gains as the Tucker rank grows; the
@@ -92,7 +92,7 @@ Table~\ref{tab:rank-lift-tucker} asks a complementary capacity question: how
 much ordinary Tucker rank is needed to match a lower-rank NTD-PL model? Across
 the tested ranks, Tucker needs roughly 51--60\% more parameters to match the
 NTD-PL RMSE, while NTD-PL still has lower SAM. The result supports the
-rank-expansion interpretation in Section~\ref{sec:theory}: the power response
+rank-inflation interpretation in Section~\ref{sec:theory}: the power response
 reuses the same low-rank Tucker signal to express structured nonlinear
 residuals with a small number of response coefficients.
 
@@ -113,7 +113,7 @@ the full table is reported in Appendix~\ref{app:hsi_protocol}.
   \input{tables/rank_lift_tucker_full_sweep.tex}
 \end{table*}
 
-Held-out completion tests whether the representation benefit transfers to
+Held-out completion tests whether the fixed-rank benefit transfers to
 unobserved entries without introducing observation noise. Table~\ref{tab:cave-completion-main}
 reports CAVE completion under random masks using all 15 scenes and three mask
 seeds per scene. At the same Tucker rank, NTD-PL improves missing-entry RMSE
