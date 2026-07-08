@@ -13,13 +13,14 @@ from viz.aggregate import aggregate_nonlinear_alpha_grid
 from viz.style import PALETTE, apply_style, method_style, style_axes
 
 
-OUT_DIR = ROOT / "neurips" / "figures"
+OUT_DIR = ROOT / "papers" / "tsp" / "figures"
 OUT_STEM = "controlled_nonlinear_alpha_grid"
 
 PANEL_LABELS = {
+    "poly2": r"$s^2$",
     "poly3": r"$s^2+s^3$",
-    "exp": r"$(e^{\kappa s}-1)/\kappa$",
     "tanh": r"$\tanh(\kappa s)$",
+    "exp": r"$(e^{\kappa s}-1)/\kappa$",
 }
 
 METHOD_ORDER = ("Tucker", "CP", "TT", "NTD-PL")
@@ -95,7 +96,10 @@ def main() -> None:
     apply_style("single_column")
     data = aggregate_nonlinear_alpha_grid()
     data = data.loc[data["method"].isin(METHOD_ORDER)].copy()
-    panel_order = ["poly3", "tanh", "exp"]
+    panel_order = ["poly2", "poly3", "tanh", "exp"]
+    missing = [panel for panel in panel_order if panel not in set(data["panel"])]
+    if missing:
+        raise RuntimeError(f"Missing controlled nonlinear panels: {missing}")
     y_min = float(data["band_lower"].min())
     y_max = float(data["band_upper"].max())
     y_min = max(0.0, y_min - 0.01)
@@ -104,7 +108,7 @@ def main() -> None:
     y_ticks = np.arange(0.0, np.ceil(y_max / tick_step) * tick_step + 1e-9, tick_step).tolist()
     y_limits = (0.0, y_ticks[-1] if y_ticks else y_max)
 
-    fig, axes = plt.subplots(1, 3, figsize=(5.48, 1.58), sharex=True, sharey=True)
+    fig, axes = plt.subplots(1, 4, figsize=(7.16, 1.58), sharex=True, sharey=True)
     flat_axes = axes.ravel()
     for idx, (ax, panel_key) in enumerate(zip(flat_axes, panel_order, strict=True)):
         panel_data = data.loc[data["panel"].eq(panel_key)].copy()
@@ -129,7 +133,7 @@ def main() -> None:
         columnspacing=0.65,
         borderaxespad=0.0,
     )
-    fig.subplots_adjust(left=0.085, right=0.995, bottom=0.25, top=0.76, wspace=0.12)
+    fig.subplots_adjust(left=0.065, right=0.995, bottom=0.25, top=0.76, wspace=0.14)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     for ext in ("pdf", "png"):

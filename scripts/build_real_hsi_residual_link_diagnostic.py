@@ -348,12 +348,12 @@ def main() -> None:
         "--gain-csv",
         type=Path,
         default=PROJECT_ROOT
-        / "experiment/outputs/real-hsi-robustness/real_hsi_robustness_main_table_numeric.csv",
+        / "artifacts/paper-outputs/real-hsi-robustness/real_hsi_robustness_main_table_numeric.csv",
     )
     parser.add_argument(
         "--out-prefix",
         type=Path,
-        default=PROJECT_ROOT / "neurips/tables/real_hsi_residual_link_diagnostic",
+        default=PROJECT_ROOT / "papers/neurips/tables/real_hsi_residual_link_diagnostic",
     )
     parser.add_argument(
         "--jobs",
@@ -379,8 +379,8 @@ def main() -> None:
     out_prefix.with_suffix(".tex").write_text(_format_table(frame), encoding="utf-8")
     out_prefix.with_suffix(".summary.tex").write_text(_format_summary(frame), encoding="utf-8")
     merge_into_main_table(
-        PROJECT_ROOT / "experiment/outputs/real-hsi-robustness/real_hsi_robustness_main_table_numeric.csv",
-        PROJECT_ROOT / "neurips/tables/real_hsi_robustness_main.tex",
+        PROJECT_ROOT / "artifacts/paper-outputs/real-hsi-robustness/real_hsi_robustness_main_table_numeric.csv",
+        PROJECT_ROOT / "papers/neurips/tables/real_hsi_robustness_main.tex",
         frame,
     )
     print(f"Wrote {out_prefix}.csv, .tex, and .summary.tex")

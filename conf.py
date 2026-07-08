@@ -230,11 +230,11 @@ class NTDPLDecompositionCfg(MethodCfg):
     _name: str = "ntdpl"
     init_n_iter_max: int = 50
     init: str = "tucker"
-    solver_variant: str = "optimized"  # "optimized" | "base"
     stable_beta_update: bool = True
     beta_update_stage: str = "before_grad"  # "before_grad" | "after_grad"
     random_state: int = 0
     p_max: int = 2
+    link_kind: str = "power"  # "power" | "chebyshev" | "rbf" | "spline"
     allow_constant_term: bool = True
     use_continuation: bool = True
     factor_normalize: bool = True
@@ -314,9 +314,9 @@ class Config:
     filter: FilterCfg = MISSING
 
     hydra: HydraConf = field(default_factory=lambda: HydraConf(
-        run=RunDir(dir="outputs/${exp}/${exp_mode}"),
+        run=RunDir(dir="artifacts/outputs/${exp}/${exp_mode}"),
         sweep=SweepDir(
-            dir="multirun/${exp}/${exp_mode}/${now:%Y-%m-%d_%H-%M-%S}",
+            dir="artifacts/multirun/${exp}/${exp_mode}/${now:%Y-%m-%d_%H-%M-%S}",
             subdir="${hydra.job.num}"
         ),
         output_subdir=".hydra",

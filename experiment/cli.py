@@ -154,7 +154,7 @@ def main() -> None:
             if args.verbose:
                 print(
                     f"{spec.name}: {spec.category} | section={spec.paper_section} "
-                    f"| multirun/{spec.multirun_dir} | {spec.description}"
+                    f"| artifacts/multirun/{spec.multirun_dir} | {spec.description}"
                 )
             else:
                 print(spec.name)

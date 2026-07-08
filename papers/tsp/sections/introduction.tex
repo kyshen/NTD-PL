@@ -1,0 +1,127 @@
+\section{Introduction}
+\label{sec:introduction}
+
+\IEEEPARstart{M}{ultidimensional} signals often contain strong structure across
+space, spectrum, time, view, or acquisition mode. Low-rank tensor models exploit
+this structure by representing a signal through a small number of coupled
+latent factors, and have become standard tools for signal representation,
+denoising, completion, and recovery \cite{Kolda2009Tensor,Sidiropoulos2017TSP,
+Liu2013TensorCompletion,LiuMoitra2020TensorCompletion}. Tucker decomposition is
+especially useful in this setting because it separates a compact core from
+mode-wise factors and provides an explicit multilinear rank budget. In the
+classical Tucker model, however, the reconstructed tensor is fitted directly to
+the measured tensor. This amounts to assuming that the map from the latent
+low-rank signal to the observed measurements is linear.
+
+This linear measurement assumption is often an idealization. Imaging and
+sensing pipelines may include camera response curves, radiometric calibration
+effects, saturation, reflectance nonlinearities, or other response mechanisms
+between the latent physical quantity and the stored measurement
+\cite{Debevec1997HDR,Grossberg2004CameraResponse,
+BioucasDias2012HyperspectralUnmixing,Heylen2014NonlinearUnmixing}. When such a
+response acts entrywise on a low-rank latent tensor, the measured tensor need
+not remain low-rank in the same Tucker sense. A low-rank latent signal can
+therefore appear to require a substantially larger multilinear rank after
+measurement. From a signal recovery perspective, this creates a model mismatch:
+the rank budget selected for the latent signal may be appropriate, while the
+linear Tucker observation model is not.
+
+One way to reduce this mismatch is to increase the Tucker rank. This is often
+effective, but it changes the entire multilinear representation: the core grows
+rapidly, each mode factor gains additional degrees of freedom, and the
+interpretation of a fixed latent rank budget is lost. A second approach is to
+replace the multilinear model with a more flexible nonlinear tensor model, such
+as a kernel, Gaussian-process, generalized-link, or neural tensor decoder
+\cite{Luo2024LRTFR,saragadam2024deeptensor,ahn2024neural}. Such methods are
+powerful, but their flexibility can obscure the relation between the recovered
+signal and a chosen Tucker backbone, and may introduce additional training and
+model-selection burdens.
+
+This paper studies a narrower and more structured alternative. We assume that
+the latent signal is well represented by a Tucker tensor, but that the
+measurements are generated from that latent tensor through an unknown scalar
+response. We approximate this response in a finite scalar dictionary and learn
+the response jointly with the Tucker backbone. If
+\begin{equation}
+  \cS =
+  \tucker{\cX}{\bA^{(1)},\ldots,\bA^{(N)}}
+\end{equation}
+is the latent Tucker signal, the measured tensor is modeled as
+\begin{equation}
+  \widehat{\cY}
+  =
+  f_{\bbeta}(\cS),
+  \label{eq:intro_ntdpl}
+\end{equation}
+where $f_{\bbeta}(s)=\sum_{q=0}^{Q}\beta_q\psi_q(s)$ for a chosen scalar
+dictionary $\{\psi_q\}_{q=0}^{Q}$. We call this a dictionary-linked Tucker
+model. It keeps the Tucker backbone ranks fixed and adds only the scalar link
+coefficients $\bbeta=(\beta_0,\ldots,\beta_Q)$. Different finite scalar
+dictionaries can be used in this formulation when response priors are
+available. In this paper, we use the simplest power dictionary
+$\psi_q(s)=s^q$, which gives the polynomial-linked model and makes the
+rank-lift mechanism explicit. The model is therefore not an unrestricted
+nonlinear decoder and not a post-hoc calibration of a fixed Tucker fit. The
+latent tensor and the response are estimated together, so the Tucker backbone
+is shaped by the nonlinear measurement model during recovery.
+
+The key structural point is most explicit for the polynomial dictionary, where
+the link creates a shared-backbone rank lift. The degree-$p$ term
+$\cS^{\od p}$ can be viewed as a Tucker tensor whose factors are polynomial
+feature lifts of the original factors. Thus higher-degree channels can increase
+the effective multilinear rank of the measured tensor, but they remain tied to
+one latent Tucker backbone. More general dictionaries keep the same modeling
+principle: the additional expressivity must be explainable by a shared scalar
+response acting on the latent signal. This constraint is precisely what makes
+the model useful in the intended regime and limited outside it. If the
+remaining residual is ordinary multilinear structure, increasing Tucker rank is
+the appropriate remedy; if the residual is coherent with a measurement
+response, a scalar link can provide a compact correction.
+
+We develop this idea for masked tensor signal recovery, covering both full
+reconstruction and tensor completion. The estimation procedure alternates
+between a small ridge-regression update for the scalar link and
+gradient-based updates of the Tucker backbone. To improve numerical stability,
+the implementation uses normalized features and continuation when the selected
+dictionary is nested.
+We also introduce a frozen-backbone link diagnostic that measures how much
+residual energy can be removed by one link update after a linear Tucker fit.
+This diagnostic is designed to answer a practical question before full
+nonlinear training: does this signal contain residual structure that is likely
+to benefit from a shared scalar response?
+
+The resulting study is organized around the full signal-recovery pipeline:
+representation, estimation, diagnosis, and validation. On the representation
+side, we characterize when a scalar response creates an efficient rank lift and
+when ordinary Tucker rank expansion is the more direct explanation. On the
+estimation side, we use the special structure of the link to keep the nonlinear
+part low-dimensional. On the experimental side, we evaluate both high- and
+low-diagnostic regimes to clarify the operating conditions of the model.
+
+\subsection{Contributions}
+\label{subsec:contributions}
+
+The main contributions are summarized as follows.
+\begin{itemize}
+  \item We formulate nonlinear low-rank tensor recovery under an unknown
+  entrywise measurement response, separating the rank of the latent signal from
+  the rank inflation observed after measurement.
+
+  \item We propose a dictionary-linked Tucker model that keeps a fixed Tucker
+  backbone while learning a low-dimensional scalar response. The estimator is
+  instantiated with a power dictionary, yielding a compact polynomial link tied
+  to the same latent backbone.
+
+  \item We analyze the resulting model class and estimation procedure,
+  including induced rank expansion, parameter economy relative to explicit
+  lifted Tucker models, response approximation, descent properties, diagnostic
+  interpretation, and computational scaling.
+
+  \item We evaluate the model on controlled nonlinear tensor signals and
+  hyperspectral recovery tasks, with rank-lift comparisons,
+  noisy-observation robustness tests, and diagnostic stratification that
+  identifies when the nonlinear response is useful.
+\end{itemize}
+
+The remainder of the paper develops the model, analysis, estimation algorithm,
+diagnostic score, and experimental validation in this order.

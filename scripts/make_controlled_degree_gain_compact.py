@@ -12,10 +12,11 @@ from viz.aggregate import aggregate_nonlinear_pmax_grid
 from viz.style import PALETTE, apply_style, style_axes
 
 
-OUT_DIR = ROOT / "neurips" / "figures"
+OUT_DIR = ROOT / "papers" / "tsp" / "figures"
 OUT_STEM = "controlled_nonlinear_degree_gain_compact"
 
 PANEL_STYLES = {
+    "poly2": {"label": r"$s^2$", "color": PALETTE.tucker, "marker": "s"},
     "poly3": {"label": r"$s^2+s^3$", "color": "#C97C1A", "marker": "s"},
     "tanh": {"label": r"$\tanh(\kappa s)$", "color": PALETTE.tr, "marker": "D"},
     "exp": {"label": r"$(e^{\kappa s}-1)/\kappa$", "color": PALETTE.tt, "marker": "^"},

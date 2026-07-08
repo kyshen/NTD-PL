@@ -94,7 +94,7 @@ def _remove_file(path: Path) -> None:
 
 def _remove_results_dir(exp_name: str, exp_mode: str | None = None) -> None:
     env = get_env(exp_name)
-    results_dir_base = env.project_root / "multirun" / exp_name
+    results_dir_base = env.project_root / "artifacts" / "multirun" / exp_name
     if exp_mode:
         results_dir = results_dir_base / exp_mode
     else:
@@ -303,7 +303,7 @@ def _run_project(
             if _group_complete_from_cfgs(benchmark_cfgs, [f"exp={exp}", *full_overrides]):
                 continue
             unique_dir = (
-                f"hydra.sweep.dir=multirun/{exp}/benchmark/"
+                f"hydra.sweep.dir=artifacts/multirun/{exp}/benchmark/"
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S-%f')}"
             )
             benchmark_commands.append(command_prefix + [unique_dir, "exp_mode=benchmark"] + group_overrides)
@@ -323,7 +323,7 @@ def _run_project(
             if _group_complete_from_cfgs(ntdpl_cfgs, [f"exp={exp}", *full_overrides]):
                 continue
             unique_dir = (
-                f"hydra.sweep.dir=multirun/{exp}/run/"
+                f"hydra.sweep.dir=artifacts/multirun/{exp}/run/"
                 f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S-%f')}"
             )
             ntdpl_commands.append(command_prefix + [unique_dir, "exp_mode=run"] + group_overrides)
@@ -377,7 +377,7 @@ def run_linear_consistency(mode: str = "run") -> None:
 
 def run_nonlinear_approx(mode: str = "run") -> None:
     filter_alpha = "filter.alpha=0.1,0.15,0.2,0.25,0.3,0.35,0.4"
-    filter_nonlinear = "filter.nonlinear=poly3,exp,tanh"
+    filter_nonlinear = "filter.nonlinear=poly2,poly3,tanh,exp"
     _run_project(
         exp="nonlinear-approx",
         benchmark_groups=[

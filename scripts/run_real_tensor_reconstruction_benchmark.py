@@ -36,7 +36,7 @@ from src.types import LogCallback, Tensor
 from src.utils.image_ops import downsample_image_to_shape
 
 
-OUT_PREFIX = PROJECT_ROOT / "neurips" / "tables" / "real_tensor_reconstruction_main"
+OUT_PREFIX = PROJECT_ROOT / "papers" / "neurips" / "tables" / "real_tensor_reconstruction_main"
 
 
 DATASET_ORDERING: dict[str, tuple[int, int]] = {

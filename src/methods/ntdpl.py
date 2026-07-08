@@ -27,7 +27,7 @@ from src.types import Tensor
 from src.utils.completion_ops import mask_to_bool, mean_fill_missing
 
 # 从分解的 ntdpl 模块导入
-from src.ntdpl import poly, ntdpl as ntdpl_base, ntdpl_optimized
+from src.ntdpl import make_link, ntdpl as ntdpl_solver
 
 
 # ============================================================
@@ -44,6 +44,8 @@ class _NTDPLStateMixin:
     core: np.ndarray
     factors: List[np.ndarray]
     beta: np.ndarray
+    link_kind: str
+    link_state: Dict[str, Any]
     fit_mask: Optional[np.ndarray]
 
     def reconstruct(self) -> Tensor:
@@ -58,10 +60,8 @@ class _NTDPLStateMixin:
         if not self.fitted:
             raise ValueError("Model must be fitted before reconstruction.")
         S = tucker_to_tensor((self.core, self.factors))
-        # `core_optim` converts solved coefficients back to the original
-        # power basis of S before returning beta, so inference must use S
-        # directly here to stay compatible with v0 behavior.
-        dense = np.array(poly(np.asarray(S, dtype=np.float32), self.beta), dtype=np.float32)
+        link = make_link(getattr(self, "link_kind", "power"), getattr(self, "link_state", None))
+        dense = np.array(link.value(np.asarray(S, dtype=np.float32), self.beta), dtype=np.float32)
         return Tensor(shape=dense.shape, dense=dense)
 
     def get_num_params(self) -> int:
@@ -96,6 +96,8 @@ class _NTDPLStateMixin:
             "core": np.array(self.core, copy=True),
             "factors": [np.array(f, copy=True) for f in self.factors],
             "beta": np.array(self.beta, copy=True),
+            "link_kind": str(getattr(self, "link_kind", "power")),
+            "link_state": dict(getattr(self, "link_state", {"kind": "power"})),
             "fitted": self.fitted,
         }
         if self.fit_mask is not None:
@@ -114,6 +116,8 @@ class _NTDPLStateMixin:
         self.core = np.array(state_dict["core"], dtype=np.float32, copy=True)
         self.factors = [np.array(f, dtype=np.float32, copy=True) for f in state_dict["factors"]]
         self.beta = np.array(state_dict["beta"], dtype=np.float32, copy=True)
+        self.link_kind = str(state_dict.get("link_kind", "power"))
+        self.link_state = dict(state_dict.get("link_state", {"kind": self.link_kind}))
         fit_mask = state_dict.get("fit_mask", None)
         self.fit_mask = None if fit_mask is None else np.array(fit_mask, dtype=bool, copy=True)
         self.fitted = bool(state_dict.get("fitted", True))
@@ -137,6 +141,8 @@ class NTDPLDecomposition(_NTDPLStateMixin, BaseDecomposeMethod):
         self.cfg = method_cfg
         self.fitted = False
         self.fit_mask = None
+        self.link_kind = str(method_cfg.get("link_kind", "power"))
+        self.link_state = {"kind": self.link_kind}
 
     def fit(self, data, mask, logcallback) -> None:
         """拟合 NTDPL 模型"""
@@ -152,17 +158,12 @@ class NTDPLDecomposition(_NTDPLStateMixin, BaseDecomposeMethod):
             'init', 'random_state', 'beta_update_interval'
         ]}
 
-        solver_variant = str(self.cfg.get("solver_variant", "optimized")).lower()
-        if solver_variant == "optimized":
-            solver = ntdpl_optimized
-            cfg_params["stable_beta_update"] = bool(self.cfg.get("stable_beta_update", True))
-            cfg_params["beta_update_stage"] = str(self.cfg.get("beta_update_stage", "before_grad"))
-        elif solver_variant == "base":
-            solver = ntdpl_base
-        else:
-            raise ValueError(f"Unknown NTD-PL solver variant: {solver_variant}")
+        cfg_params["stable_beta_update"] = bool(self.cfg.get("stable_beta_update", True))
+        cfg_params["beta_update_stage"] = str(self.cfg.get("beta_update_stage", "before_grad"))
+        cfg_params["link_kind"] = str(self.cfg.get("link_kind", "power"))
+        cfg_params["return_link_state"] = True
 
-        ret = solver(
+        ret = ntdpl_solver(
             X=X_fit,
             mask=mask_bool,
             return_history=return_history,
@@ -170,16 +171,18 @@ class NTDPLDecomposition(_NTDPLStateMixin, BaseDecomposeMethod):
         )
 
         if return_history:
-            (core, factors, beta), history = ret  # type: ignore
+            (core, factors, beta, link_state), history = ret  # type: ignore
             for item in history:
                 if isinstance(item, dict):
                     logcallback.addlog(item)
         else:
-            core, factors, beta = ret  # type: ignore
+            core, factors, beta, link_state = ret  # type: ignore
 
         self.core = np.array(core, dtype=np.float32, copy=True)
         self.factors = [np.array(f, dtype=np.float32, copy=True) for f in factors]
         self.beta = np.array(beta, dtype=np.float32, copy=True)
+        self.link_state = dict(link_state)
+        self.link_kind = str(self.link_state.get("kind", cfg_params["link_kind"]))
         self.fit_mask = None if mask_bool is None else np.array(mask_bool, dtype=bool, copy=True)
         self.fitted = True
         return None

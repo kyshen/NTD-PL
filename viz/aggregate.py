@@ -29,7 +29,7 @@ from experiment.process.helpers.real_hsi_robustness import (
 from experiment.utils.io import load_state_mat
 
 
-NONLINEAR_ORDER = ("poly3", "tanh", "exp")
+NONLINEAR_ORDER = ("poly2", "poly3", "tanh", "exp")
 NONLINEAR_ALPHA_REF = 0.25
 NONLINEAR_STEP_PMAX = 5
 CAVE_REPR_MAIN_RANK = CAVE_RECON_MAIN_RANK
@@ -799,7 +799,7 @@ def _build_advantage_quartile_tables(
         .sort_values("boundary_bin")
         .reset_index(drop=True)
     )
-    output_dir = io.LEGACY_OUTPUT_ROOT / "cave-random-completion"
+    output_dir = io.PAPER_OUTPUT_ROOT / "cave-random-completion"
     output_dir.mkdir(parents=True, exist_ok=True)
     scene_df.to_csv(output_dir / "advantage_heatmap_scene_stats_missing_only.csv", index=False)
     summary_df.to_csv(output_dir / "advantage_heatmap_summary_missing_only.csv", index=False)
@@ -839,7 +839,7 @@ def aggregate_cave_random_completion_advantage_spatial_case() -> pd.DataFrame:
     top_boundary = maps["boundary_bins"] == (ADVANTAGE_QUARTILE_COUNT - 1)
     overlap = top_difficulty & top_boundary
 
-    output_dir = io.LEGACY_OUTPUT_ROOT / "cave-random-completion"
+    output_dir = io.PAPER_OUTPUT_ROOT / "cave-random-completion"
     output_dir.mkdir(parents=True, exist_ok=True)
     pd.DataFrame(
         [

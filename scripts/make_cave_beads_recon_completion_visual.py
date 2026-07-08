@@ -15,7 +15,7 @@ from experiment.process.helpers import cave_representation_original_space as rec
 from experiment.utils.plotting import apply_theme
 
 
-OUT_DIR = PROJECT_ROOT / "neurips" / "figures"
+OUT_DIR = PROJECT_ROOT / "papers" / "neurips" / "figures"
 SCENE_ID = 2  # CAVE beads
 MISSING_RATE = 0.5
 

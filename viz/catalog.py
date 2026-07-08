@@ -56,8 +56,8 @@ FIGURE_REGISTRY = [
             panels=(
                 PanelSpec("poly2", "poly2", r"$P$", "NMSE (dB)", (1, 2, 3, 4, 5, 6)),
                 PanelSpec("poly3", "poly3", r"$P$", "NMSE (dB)", (1, 2, 3, 4, 5, 6)),
-                PanelSpec("sin", "sin", r"$P$", "NMSE (dB)", (1, 2, 3, 4, 5, 6)),
                 PanelSpec("tanh", "tanh", r"$P$", "NMSE (dB)", (1, 2, 3, 4, 5, 6)),
+                PanelSpec("exp", "exp", r"$P$", "NMSE (dB)", (1, 2, 3, 4, 5, 6)),
             ),
             method_order=("Tucker", "NTD-PL"),
             recommended_pairing="Keep alone or pair with the alpha sweep in a consecutive float block.",
@@ -82,8 +82,8 @@ FIGURE_REGISTRY = [
             panels=(
                 PanelSpec("poly2", "poly2", r"$\alpha$", "NMSE (dB)", (0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40)),
                 PanelSpec("poly3", "poly3", r"$\alpha$", "NMSE (dB)", (0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40)),
-                PanelSpec("sin", "sin", r"$\alpha$", "NMSE (dB)", (0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40)),
                 PanelSpec("tanh", "tanh", r"$\alpha$", "NMSE (dB)", (0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40)),
+                PanelSpec("exp", "exp", r"$\alpha$", "NMSE (dB)", (0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40)),
             ),
             method_order=("Tucker", "CP", "TT", "TR", "NTD-PL"),
             recommended_pairing="Keep alone or pair with the P sweep in a consecutive float block.",
@@ -108,8 +108,8 @@ FIGURE_REGISTRY = [
             panels=(
                 PanelSpec("poly2", "poly2", "Iteration", "RMSE"),
                 PanelSpec("poly3", "poly3", "Iteration", "RMSE"),
-                PanelSpec("sin", "sin", "Iteration", "RMSE"),
                 PanelSpec("tanh", "tanh", "Iteration", "RMSE"),
+                PanelSpec("exp", "exp", "Iteration", "RMSE"),
             ),
             method_order=("NTD-PL",),
             recommended_pairing="Standalone main-text trend figure.",

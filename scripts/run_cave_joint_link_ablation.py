@@ -225,11 +225,18 @@ def _fit_tucker(cube: np.ndarray, rank: tuple[int, int, int], n_iter_max: int) -
     return np.asarray(model.reconstruct().dense, dtype=np.float32), elapsed, model.get_num_params()
 
 
-def _fit_ntdpl(cube: np.ndarray, rank: tuple[int, int, int], n_iter_max: int) -> tuple[np.ndarray, float, int]:
+def _fit_ntdpl(
+    cube: np.ndarray,
+    rank: tuple[int, int, int],
+    n_iter_max: int,
+    *,
+    link_kind: str = "power",
+    p_max: int = 4,
+) -> tuple[np.ndarray, float, int]:
     model = NTDPLDecomposition(
         rank=rank,
         init_n_iter_max=50,
-        p_max=4,
+        p_max=p_max,
         allow_constant_term=True,
         n_iter_max=n_iter_max,
         use_continuation=True,
@@ -246,6 +253,7 @@ def _fit_ntdpl(cube: np.ndarray, rank: tuple[int, int, int], n_iter_max: int) ->
         solver_variant="optimized",
         stable_beta_update=True,
         beta_update_stage="before_grad",
+        link_kind=link_kind,
     )
     tensor = Tensor(shape=cube.shape, dense=cube)
     start = perf_counter()
@@ -261,7 +269,7 @@ def _run_scene(scene_id: int, target_shape: tuple[int, int], rank: tuple[int, in
     for method_name, fit_fn in (
         ("tucker", lambda x: _fit_tucker(x, rank, n_iter_max)),
         ("ntdpl", lambda x: _fit_ntdpl(x, rank, n_iter_max)),
-        ("spline", lambda x: (*SplineLinkedTucker(rank=rank, n_iter_max=n_iter_max).fit(x), _spline_param_count(x.shape, rank, 8))),
+        ("spline", lambda x: _fit_ntdpl(x, rank, n_iter_max, link_kind="spline", p_max=7)),
     ):
         recon, fit_time, params = fit_fn(cube)
         row = {
@@ -343,7 +351,7 @@ def main() -> None:
     parser.add_argument("--rank", default="18,18,3")
     parser.add_argument("--n-iter-max", type=int, default=120)
     parser.add_argument("--jobs", type=int, default=max(1, min(3, (os.cpu_count() or 2) // 4)))
-    parser.add_argument("--out-prefix", default="neurips/tables/cave_joint_link_ablation")
+    parser.add_argument("--out-prefix", default="papers/neurips/tables/cave_joint_link_ablation")
     args = parser.parse_args()
 
     scene_ids = _parse_scene_ids(args.scene_ids)

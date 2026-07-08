@@ -75,7 +75,7 @@ def _command(
         f"method={method}",
         _rank_override(CAVE_RECON_MAIN_RANK),
         f"method.n_iter_max={n_iter_max}",
-        f"hydra.sweep.dir=multirun/{EXP}/{exp_mode}/{run_slug}",
+        f"hydra.sweep.dir=artifacts/multirun/{EXP}/{exp_mode}/{run_slug}",
         "hydra.sweep.subdir=.",
     ]
     if method == "ntdpl":

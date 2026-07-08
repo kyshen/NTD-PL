@@ -12,9 +12,9 @@ from src.filters.bias import BiasFilter
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-MULTIRUN_ROOT = PROJECT_ROOT / "multirun"
-LEGACY_OUTPUT_ROOT = PROJECT_ROOT / "experiment" / "outputs"
-FIGURE_ROOT = LEGACY_OUTPUT_ROOT / "figures"
+MULTIRUN_ROOT = PROJECT_ROOT / "artifacts" / "multirun"
+PAPER_OUTPUT_ROOT = PROJECT_ROOT / "artifacts" / "paper-outputs"
+FIGURE_ROOT = PAPER_OUTPUT_ROOT / "figures"
 
 
 def maybe_numeric(series: pd.Series) -> pd.Series:
@@ -33,11 +33,11 @@ def load_curves(exp_name: str) -> pd.DataFrame:
 
 
 def load_output_csv(exp_name: str, file_name: str) -> pd.DataFrame:
-    return pd.read_csv(LEGACY_OUTPUT_ROOT / exp_name / file_name)
+    return pd.read_csv(PAPER_OUTPUT_ROOT / exp_name / file_name)
 
 
 def load_output_text(exp_name: str, file_name: str) -> str:
-    return (LEGACY_OUTPUT_ROOT / exp_name / file_name).read_text(encoding="utf-8")
+    return (PAPER_OUTPUT_ROOT / exp_name / file_name).read_text(encoding="utf-8")
 
 
 def load_npz(path: str | Path) -> dict[str, np.ndarray]:

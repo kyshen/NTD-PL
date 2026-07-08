@@ -121,7 +121,7 @@ def _read_json(path: Path) -> dict:
 
 
 def _run_dirs(exp: str) -> list[Path]:
-    root = PROJECT_ROOT / "multirun" / exp
+    root = PROJECT_ROOT / "artifacts" / "multirun" / exp
     if not root.exists():
         return []
     return [path.parent.parent for path in root.rglob(".hydra/config.yaml")]
@@ -182,7 +182,7 @@ def _command(exp: str, scene_id: int, rank: tuple[int, int, int], n_iter_max: in
         "method=tucker",
         _rank_override(rank),
         f"method.n_iter_max={n_iter_max}",
-        f"hydra.sweep.dir=multirun/{exp}/benchmark/{rank_slug}_{scene_slug}",
+        f"hydra.sweep.dir=artifacts/multirun/{exp}/benchmark/{rank_slug}_{scene_slug}",
         "hydra.sweep.subdir=.",
     ]
 
@@ -283,7 +283,7 @@ def main() -> None:
     parser.add_argument("--max-parallel", type=int, default=2)
     parser.add_argument("--n-iter-max", type=int, default=300)
     parser.add_argument("--collect-only", action="store_true")
-    parser.add_argument("--out-prefix", default="neurips/tables/cave_tucker_rank_sweep")
+    parser.add_argument("--out-prefix", default="papers/neurips/tables/cave_tucker_rank_sweep")
     args = parser.parse_args()
 
     scene_ids = _parse_int_set(args.scene_ids)

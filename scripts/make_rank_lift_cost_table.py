@@ -6,10 +6,10 @@ import pandas as pd
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TUCKER_SWEEP = ROOT / "neurips/tables/cave_tucker_rank_sweep.summary.csv"
-CAVE_RECON_MAIN = ROOT / "experiment/outputs/cave-representation/recon_summary.csv"
-CAVE_RECON_LOW = ROOT / "neurips/tables/cave_reconstruction_lowrank.summary.csv"
-OUT_PREFIX = ROOT / "neurips/tables/rank_lift_cost"
+TUCKER_SWEEP = ROOT / "papers/neurips/tables/cave_tucker_rank_sweep.summary.csv"
+CAVE_RECON_MAIN = ROOT / "artifacts/paper-outputs/cave-representation/recon_summary.csv"
+CAVE_RECON_LOW = ROOT / "papers/neurips/tables/cave_reconstruction_lowrank.summary.csv"
+OUT_PREFIX = ROOT / "papers/neurips/tables/rank_lift_cost"
 
 
 MATCHES = [
@@ -42,7 +42,7 @@ def _load_ntdpl() -> pd.DataFrame:
     main["SAM_mean"] = main["SAM(deg)"].map(_parse_mean)
     main["fit_time_mean"] = pd.NA
 
-    runs = pd.read_parquet(ROOT / "multirun/cave-representation/runs.parquet")
+    runs = pd.read_parquet(ROOT / "artifacts/multirun/cave-representation/runs.parquet")
     runs = runs.loc[runs["method._name"].eq("ntdpl")].copy()
     runs["rank"] = runs["method.rank"].map(_norm_rank)
     times = runs.groupby("rank", as_index=False)["fit_time_sec"].mean().rename(columns={"fit_time_sec": "fit_time_mean"})

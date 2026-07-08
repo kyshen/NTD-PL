@@ -26,17 +26,17 @@ class ExperimentEnv:
 
     @property
     def results_dir(self) -> Path:
-        return self.project_root / "multirun" / self.multirun_name
+        return self.project_root / "artifacts" / "multirun" / self.multirun_name
 
     @property
     def artifacts_dir(self) -> Path:
-        path = self.experiments_root / "outputs" / self.exp_name
+        path = self.project_root / "artifacts" / "paper-outputs" / self.exp_name
         path.mkdir(parents=True, exist_ok=True)
         return path
 
     @property
     def latex_root(self) -> Path:
-        return self.project_root / "latex-zh"
+        return self.project_root / "papers" / "latex-zh"
 
     @property
     def latex_inputs_dir(self) -> Path:

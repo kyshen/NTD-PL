@@ -103,9 +103,9 @@ def main() -> None:
     )
     parser.add_argument(
         "--input-csv",
-        default="experiment/outputs/cave-random-completion/polycal_pairwise_scene_gains.csv",
+        default="artifacts/paper-outputs/cave-random-completion/polycal_pairwise_scene_gains.csv",
     )
-    parser.add_argument("--out-prefix", default="neurips/tables/ntdpl_polycal_diagnostic")
+    parser.add_argument("--out-prefix", default="papers/neurips/tables/ntdpl_polycal_diagnostic")
     args = parser.parse_args()
 
     summary, bins = build_diagnostic(PROJECT_ROOT / args.input_csv)

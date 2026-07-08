@@ -31,7 +31,7 @@ POLY_GROUP = NonlinearApproxGroup(
 
 NONPOLY_GROUP = NonlinearApproxGroup(
     name="nonpoly",
-    nonlinears=("sin", "tanh"),
+    nonlinears=("tanh", "exp"),
     table_artifact="nonpoly_table.tex",
     results_artifact="nonpoly_results.csv",
 )

@@ -19,7 +19,7 @@ from experiment.utils.io import load_state_mat
 
 
 TARGET_MISSING_RATES = (0.3, 0.5)
-MULTIRUN_ROOT = PROJECT_ROOT / "multirun" / "cave-random-completion"
+MULTIRUN_ROOT = PROJECT_ROOT / "artifacts" / "multirun" / "cave-random-completion"
 
 
 def _jsonish(value):
@@ -318,7 +318,7 @@ def main() -> None:
     parser.add_argument("--n-folds", type=int, default=3)
     parser.add_argument("--n-knots", type=int, default=5)
     parser.add_argument("--lambda-reg", type=float, default=1e-6)
-    parser.add_argument("--out-prefix", default="neurips/tables/cv_nonlinear_residual_diagnostic")
+    parser.add_argument("--out-prefix", default="papers/neurips/tables/cv_nonlinear_residual_diagnostic")
     args = parser.parse_args()
 
     run_frame, merged, summary = build(

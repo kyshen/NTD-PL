@@ -71,7 +71,7 @@ def main() -> None:
     parser.add_argument("--missing-rate", type=float, default=0.5)
     parser.add_argument("--max-iter", type=int, default=MLPCAL_MAX_ITER)
     parser.add_argument("--max-train-samples", type=int, default=MLPCAL_MAX_TRAIN_SAMPLES)
-    parser.add_argument("--out-prefix", default="neurips/tables/mlpcal_subset_seed0_mr05")
+    parser.add_argument("--out-prefix", default="papers/neurips/tables/mlpcal_subset_seed0_mr05")
     args = parser.parse_args()
 
     scene_ids = _parse_scene_ids(args.scene_ids)

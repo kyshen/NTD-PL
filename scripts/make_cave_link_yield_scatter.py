@@ -16,7 +16,7 @@ from experiment.utils.plotting import save_figure
 
 
 INPUT_CSV = ROOT / "experiment" / "outputs" / "cave-random-completion" / "polycal_pairwise_scene_gains.csv"
-OUT_STEM = ROOT / "neurips" / "figures" / "cave_link_yield_scatter"
+OUT_STEM = ROOT / "papers" / "neurips" / "figures" / "cave_link_yield_scatter"
 TARGET_MISSING_RATES = (0.3, 0.5)
 
 

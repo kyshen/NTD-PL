@@ -1,0 +1,67 @@
+\documentclass[journal]{IEEEtran}
+
+\input{preamble}
+\input{macros}
+
+\title{Dictionary-Linked Tucker Models for Nonlinear Low-Rank Tensor Signal Recovery}
+
+\author{First~Author,
+        Second~Author,
+        and~Third~Author%
+\thanks{This work was supported in part by ...}
+\thanks{The authors are with ... (e-mail: ...).}
+}
+
+\markboth{IEEE Transactions on Signal Processing,~Vol.~XX, No.~XX, 2026}%
+{First Author \MakeLowercase{\textit{et al.}}: Dictionary-Linked Tucker Models}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Many multidimensional signals are compactly represented by low-rank tensor
+models, but nonlinear measurement responses can make a low-rank latent signal
+appear higher-rank in the observed domain. This paper studies a
+dictionary-linked Tucker model for nonlinear low-rank tensor signal recovery.
+The model keeps a fixed Tucker backbone and learns a low-dimensional scalar
+response jointly with the latent tensor, yielding a shared-backbone rank lift
+with few additional parameters. The finite-dictionary formulation allows
+different scalar response bases; this paper uses the simplest power dictionary,
+which yields the polynomial-linked model and aligns directly with the rank-lift
+analysis. We analyze the induced rank expansion, response approximation,
+stationarity of the alternating estimator, and computational scaling. We also
+develop a frozen-backbone link diagnostic that predicts when the nonlinear
+response is likely to help.
+Experiments on controlled nonlinear tensors, hyperspectral reconstruction and
+completion, noisy reconstruction, and cross-domain diagnostics show that the
+link improves recovery when the residual is coherent with a shared measurement
+response, while low-diagnostic regimes clarify the operating conditions of the
+model.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Tensor decomposition, Tucker decomposition, low-rank tensor recovery,
+nonlinear measurements, tensor completion, hyperspectral imaging.
+\end{IEEEkeywords}
+
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/model}
+\input{sections/estimation}
+\input{sections/theory}
+\input{sections/experiments}
+\input{sections/conclusion}
+
+\appendices
+\input{appendix/model_details}
+\input{appendix/proofs}
+\input{appendix/experimental_details}
+
+\section*{Acknowledgment}
+The authors would like to thank ...
+
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,references}
+
+\end{document}

@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-OUT_DIR = PROJECT_ROOT / "neurips" / "figures"
+OUT_DIR = PROJECT_ROOT / "papers" / "neurips" / "figures"
 
 
 COLORS = {
@@ -29,7 +29,7 @@ def _save(fig: plt.Figure, name: str) -> None:
 
 
 def _mechanism_panel(ax: plt.Axes) -> None:
-    data = pd.read_csv(PROJECT_ROOT / "experiment/outputs/cave-random-completion/mechanism_closure_main_figure_data.csv")
+    data = pd.read_csv(PROJECT_ROOT / "artifacts/paper-outputs/cave-random-completion/mechanism_closure_main_figure_data.csv")
     panel = data.loc[data["panel"].eq("C")].copy()
     order = ["Tucker", "Tucker + PolyCal", "NTD-PL"]
     panel["method"] = pd.Categorical(panel["method"], categories=order, ordered=True)
@@ -49,7 +49,7 @@ def _mechanism_panel(ax: plt.Axes) -> None:
 
 
 def _rank_panel(ax: plt.Axes) -> None:
-    sweep = pd.read_csv(PROJECT_ROOT / "neurips/tables/cave_tucker_rank_sweep.summary.csv")
+    sweep = pd.read_csv(PROJECT_ROOT / "papers/neurips/tables/cave_tucker_rank_sweep.summary.csv")
     ax.plot(
         sweep["params"] / 1000.0,
         sweep["RMSE_mean"],
@@ -77,8 +77,8 @@ def _rank_panel(ax: plt.Axes) -> None:
 
 
 def _stress_panel(ax: plt.Axes) -> None:
-    block = pd.read_csv(PROJECT_ROOT / "neurips/tables/cave_structured_missing_lowrank_block.summary.csv")
-    kodak = pd.read_csv(PROJECT_ROOT / "neurips/tables/kodak_completion_lowrank_p3.summary.csv")
+    block = pd.read_csv(PROJECT_ROOT / "papers/neurips/tables/cave_structured_missing_lowrank_block.summary.csv")
+    kodak = pd.read_csv(PROJECT_ROOT / "papers/neurips/tables/kodak_completion_lowrank_p3.summary.csv")
     t_block = float(block.loc[block["method"].eq("tucker"), "RMSE_missing_mean"].iloc[0])
     n_block = float(block.loc[block["method"].eq("ntdpl"), "RMSE_missing_mean"].iloc[0])
     t_kodak = float(kodak.loc[kodak["method"].eq("tucker"), "RMSE_missing_mean"].iloc[0])
@@ -98,7 +98,7 @@ def _stress_panel(ax: plt.Axes) -> None:
 
 
 def _diagnostic_panel(ax: plt.Axes) -> None:
-    data = pd.read_csv(PROJECT_ROOT / "experiment/outputs/cave-random-completion/polycal_pairwise_scene_gains.csv")
+    data = pd.read_csv(PROJECT_ROOT / "artifacts/paper-outputs/cave-random-completion/polycal_pairwise_scene_gains.csv")
     panel = data.loc[data["missing_rate"].eq(0.5)].copy()
     panel["d_beta"] = panel["polycal_gain_rmse"] / panel["RMSE_tucker"].clip(lower=1e-12)
     panel["ntdpl_gain"] = (panel["RMSE_tucker"] - panel["RMSE_ntdpl"]) / panel["RMSE_tucker"].clip(lower=1e-12)

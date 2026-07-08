@@ -40,7 +40,7 @@ python -m experiment nonlinear-approx run
 python -m experiment postprocess nonlinear-approx
 ```
 
-Artifacts/figures are written under `experiment/outputs/`. Some commands also sync paper inputs into `latex-zh/inputs/`.
+Artifacts/figures are written under `artifacts/paper-outputs/`. Some commands also sync paper inputs into `papers/latex-zh/inputs/`.
 
 ## Experiment catalog
 

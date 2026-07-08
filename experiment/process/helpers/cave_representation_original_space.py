@@ -153,7 +153,7 @@ def _load_runs() -> tuple[pd.DataFrame, object]:
     if runs.empty:
         raise RuntimeError(
             "No runs found for cave-representation. Expected migrated original-space results under "
-            "`multirun/cave-representation/runs.parquet`."
+            "`artifacts/multirun/cave-representation/runs.parquet`."
         )
 
     frame = runs.copy()

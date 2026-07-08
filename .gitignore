@@ -1,39 +1,40 @@
 /data
-/outputs
-/multirun/*
-!/multirun/*/
-/multirun/*/*
-!/multirun/*/runs.parquet
-!/multirun/*/curves.parquet
+/artifacts/outputs/
+/artifacts/results/
+/artifacts/paper-outputs/
+/artifacts/multirun/*
+!/artifacts/multirun/*/
+/artifacts/multirun/*/*
+!/artifacts/multirun/*/runs.parquet
+!/artifacts/multirun/*/curves.parquet
 figs
 *.asv
-/latex-zh/out
+/papers/latex-zh/out
 tmp/
-/experiment/outputs/
 
-/latex-zh/inputs/cave-random-completion/advantage_maps
-/latex-zh/main.aux
-/latex-zh/main.bbl
-/latex-zh/main.bcf
-/latex-zh/main.blg
-/latex-zh/main.fdb_latexmk
-/latex-zh/main.fls
-/latex-zh/main.log
-/latex-zh/main.run.xml
-/latex-zh/main.synctex.gz
-/latex-zh/main.toc
+/papers/latex-zh/inputs/cave-random-completion/advantage_maps
+/papers/latex-zh/main.aux
+/papers/latex-zh/main.bbl
+/papers/latex-zh/main.bcf
+/papers/latex-zh/main.blg
+/papers/latex-zh/main.fdb_latexmk
+/papers/latex-zh/main.fls
+/papers/latex-zh/main.log
+/papers/latex-zh/main.run.xml
+/papers/latex-zh/main.synctex.gz
+/papers/latex-zh/main.toc
 
-/latex-en/inputs/cave-random-completion/advantage_maps
-/latex-en/main.aux
-/latex-en/main.bbl
-/latex-en/main.bcf
-/latex-en/main.blg
-/latex-en/main.fdb_latexmk
-/latex-en/main.fls
-/latex-en/main.log
-/latex-en/main.run.xml
-/latex-en/main.synctex.gz
-/latex-en/main.toc
+/papers/latex-en/inputs/cave-random-completion/advantage_maps
+/papers/latex-en/main.aux
+/papers/latex-en/main.bbl
+/papers/latex-en/main.bcf
+/papers/latex-en/main.blg
+/papers/latex-en/main.fdb_latexmk
+/papers/latex-en/main.fls
+/papers/latex-en/main.log
+/papers/latex-en/main.run.xml
+/papers/latex-en/main.synctex.gz
+/papers/latex-en/main.toc
 
 # Python cache and artifacts
 __pycache__/
@@ -72,4 +73,14 @@ Thumbs.db
 
 docs/
 
-supplementary/
+/papers/supplementary/
+/papers/tsp/template_source/
+/papers/*/main.aux
+/papers/*/main.bcf
+/papers/*/main.blg
+/papers/*/main.fdb_latexmk
+/papers/*/main.fls
+/papers/*/main.log
+/papers/*/main.run.xml
+/papers/*/main.synctex.gz
+/papers/*/main.toc

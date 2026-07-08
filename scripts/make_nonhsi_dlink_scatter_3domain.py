@@ -14,7 +14,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from viz.style import PALETTE, apply_style, style_axes
 
-OUT_STEM = PROJECT_ROOT / "neurips" / "figures" / "nonhsi_dlink_scatter_3domain"
+OUT_STEM = PROJECT_ROOT / "papers" / "neurips" / "figures" / "nonhsi_dlink_scatter_3domain"
 
 SOURCES = [
     PROJECT_ROOT / "results" / "nonhsi_dlink_diagnostic" / "20260507_000000_full68" / "per_unit_results.csv",

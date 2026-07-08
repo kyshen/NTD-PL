@@ -14,13 +14,14 @@ from viz.aggregate import aggregate_nonlinear_pmax_grid
 from viz.style import PALETTE, apply_style
 
 
-OUT_DIR = ROOT / "neurips" / "figures"
+OUT_DIR = ROOT / "papers" / "tsp" / "figures"
 OUT_STEM = "controlled_nonlinear_pmax_heatmap"
 
 PANEL_LABELS = {
+    "poly2": r"$s^2$",
     "poly3": r"$s^2+s^3$",
-    "exp": r"$(e^{\kappa s}-1)/\kappa$",
     "tanh": r"$\tanh(\kappa s)$",
+    "exp": r"$(e^{\kappa s}-1)/\kappa$",
 }
 
 
@@ -41,14 +42,17 @@ def _degree_gain_matrix(data, panel_order: list[str]) -> tuple[np.ndarray, list[
 def main() -> None:
     apply_style("single_column")
     data = aggregate_nonlinear_pmax_grid()
-    panel_order = ["poly3", "tanh", "exp"]
+    panel_order = ["poly2", "poly3", "tanh", "exp"]
+    missing = [panel for panel in panel_order if panel not in set(data["panel"])]
+    if missing:
+        raise RuntimeError(f"Missing controlled nonlinear panels: {missing}")
     matrix, degrees = _degree_gain_matrix(data, panel_order)
 
     cmap = LinearSegmentedColormap.from_list(
         "ntdpl_degree_gain",
         [PALETTE.heat_low, PALETTE.heat_mid, PALETTE.ntdpl],
     )
-    fig, ax = plt.subplots(figsize=(5.48, 1.20))
+    fig, ax = plt.subplots(figsize=(7.16, 1.34))
     image = ax.imshow(
         matrix,
         aspect="auto",
@@ -89,12 +93,12 @@ def main() -> None:
             )
 
     cbar = fig.colorbar(image, ax=ax, fraction=0.042, pad=0.025)
-    cbar.set_label("RMSE gain over Tucker", labelpad=4.0)
+    cbar.set_label("RMSE gain", labelpad=4.0)
     cbar.outline.set_visible(False)
     cbar.ax.tick_params(length=2.5, width=0.7, labelsize=7.4, colors=PALETTE.border)
     cbar.formatter.set_powerlimits((-2, 2))
     cbar.update_ticks()
-    fig.subplots_adjust(left=0.13, right=0.91, bottom=0.26, top=0.96)
+    fig.subplots_adjust(left=0.11, right=0.92, bottom=0.26, top=0.96)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     for ext in ("pdf", "png"):

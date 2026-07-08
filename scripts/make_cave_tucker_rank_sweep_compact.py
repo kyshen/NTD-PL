@@ -12,8 +12,8 @@ sys.path.insert(0, str(ROOT))
 from viz.style import PALETTE, apply_style, style_axes
 
 
-SUMMARY_PATH = ROOT / "neurips" / "tables" / "cave_tucker_rank_sweep.summary.csv"
-OUT_DIR = ROOT / "neurips" / "figures"
+SUMMARY_PATH = ROOT / "papers" / "neurips" / "tables" / "cave_tucker_rank_sweep.summary.csv"
+OUT_DIR = ROOT / "papers" / "neurips" / "figures"
 OUT_STEM = "cave_tucker_rank_sweep_compact"
 
 NTDPL_REFS = [

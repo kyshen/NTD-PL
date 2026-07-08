@@ -1,0 +1,162 @@
+\section{Estimation Algorithm and Link Diagnostic}
+\label{sec:estimation}
+
+Let $m=|\Omega|$ and let
+$\theta=(\cX,\{\bA^{(n)}\}_{n=1}^{N},\bbeta)$ collect all trainable
+parameters. For an active link dictionary of size $Q+1$, we minimize
+\begin{equation}
+\begin{aligned}
+  \mathcal{F}_Q(\theta)
+  =
+  \frac{1}{2|\Omega|}
+  \norm{\Omega \od \left(\cY - f_{\bbeta}(\cS)\right)}_F^2
+  +
+  \frac{\lambda_X}{2}\norm{\cX}_F^2 \\
+  \quad
+  +
+  \sum_{n=1}^{N}\frac{\lambda_n}{2}\norm{\bA^{(n)}}_F^2
+  +
+  \frac{\lambda_\beta}{2}\norm{\bbeta}_2^2,
+\end{aligned}
+  \label{eq:estimation_objective}
+\end{equation}
+where $f_{\bbeta}(s)=\sum_{q=0}^{Q}\beta_q\psi_q(s)$ and
+$\{\psi_q\}_{q=0}^{Q}$ is the selected scalar link dictionary. The monomial
+basis $\psi_q(s)=s^q$ gives \eqref{eq:polynomial_linked_tucker}; in
+implementation, the same polynomial space may be represented by centered,
+Chebyshev, or otherwise conditioned bases. Non-polynomial choices such as RBF
+or spline dictionaries use the same objective as long as the response remains
+linear in $\bbeta$. The experiments use the monomial power dictionary. The
+estimation alternates between an exact low-dimensional link update and a
+descent step for the Tucker backbone.
+
+\subsection{Link Refresh as a Ridge Subproblem}
+
+Fix the latent tensor $\cS$ and list the observed entries as
+$y_\Omega\in\R^m$ and $s_\Omega\in\R^m$. Define the feature matrix
+$\bPhi_{\Omega,Q}(\cS)\in\R^{m\times(Q+1)}$ by
+\begin{equation}
+  [\bPhi_{\Omega,Q}(\cS)]_{j,q}=\psi_q([s_\Omega]_j),
+  \qquad
+  q=0,\ldots,Q.
+\end{equation}
+The link update is the ridge regression
+\begin{equation}
+  \bbeta^+
+  =
+  \argmin_{\bbeta\in\R^{Q+1}}
+  \frac{1}{2m}
+  \norm{y_\Omega-\bPhi_{\Omega,Q}(\cS)\bbeta}_2^2
+  +
+  \frac{\lambda_\beta}{2}\norm{\bbeta}_2^2,
+  \label{eq:link_refresh_problem}
+\end{equation}
+with closed-form solution
+\begin{equation}
+  \bbeta^+
+  =
+  \left(
+  \frac{1}{m}\bPhi_{\Omega,Q}^{T}\bPhi_{\Omega,Q}
+  +\lambda_\beta \bI
+  \right)^{-1}
+  \frac{1}{m}\bPhi_{\Omega,Q}^{T}y_\Omega.
+  \label{eq:link_refresh_solution}
+\end{equation}
+This step solves only a $(Q+1)\times(Q+1)$ system. It is therefore cheap
+relative to reconstructing or differentiating through the Tucker tensor, and
+because it solves the $\bbeta$-subproblem exactly, it never increases
+$\mathcal{F}_Q$ for the current backbone.
+
+\subsection{Linked-Backbone Descent}
+
+With $\bbeta$ fixed, the residual is backpropagated through the scalar response
+and then through the Tucker map. The gradient with respect to the latent tensor
+is
+\begin{equation}
+  \bG_{\cS}
+  =
+  \frac{1}{m}
+  \Omega\od
+  \left(f_{\bbeta}(\cS)-\cY\right)
+  \od f_{\bbeta}'(\cS).
+  \label{eq:latent_gradient}
+\end{equation}
+The Tucker gradients are standard reverse contractions:
+\begin{align}
+  \nabla_{\cX}\mathcal{F}_Q
+  &=
+  \bG_{\cS}
+  \times_1 (\bA^{(1)})^T
+  \cdots
+  \times_N (\bA^{(N)})^T
+  +\lambda_X\cX, \\
+  \nabla_{\bA^{(n)}}\mathcal{F}_Q
+  &=
+  [\bG_{\cS}]_{(n)}
+  \bZ_n^T
+  +
+  \lambda_n\bA^{(n)},
+  \label{eq:factor_gradient}
+\end{align}
+where
+$\bZ_n=(\bA^{(N)}\otimes\cdots\otimes\bA^{(n+1)}\otimes
+\bA^{(n-1)}\otimes\cdots\otimes\bA^{(1)})\cX_{(n)}^T$.
+The backbone update can use a line-search gradient step, a block coordinate
+gradient step, or an adaptive first-order implementation, provided the step
+satisfies the sufficient decrease condition used in Section~\ref{sec:theory}.
+
+\subsection{Dictionary Continuation and Normalization}
+
+Large or high-order link dictionaries can amplify Tucker scale ambiguity. For
+nested dictionaries, such as the power or Chebyshev bases, we use continuation:
+training starts with the Tucker-compatible identity response and activates
+additional channels gradually. When a new channel is introduced, its coefficient
+is initialized at zero, so the prediction is unchanged at the moment of
+expansion. Non-nested dictionaries such as RBF and spline bases are trained with
+the full selected dictionary from the start. After backbone updates, factor
+columns are rescaled and the inverse scales are absorbed into the core. This
+fixes a numerical gauge without changing the latent tensor $\cS$ or the
+objective value.
+
+\subsection{Alternating Recovery Scheme}
+
+One outer iteration consists of:
+\begin{enumerate}
+  \item fixing the current Tucker backbone and refreshing $\bbeta$ by
+  \eqref{eq:link_refresh_solution};
+  \item updating $\cX$ and $\{\bA^{(n)}\}$ by a descent step using
+  \eqref{eq:latent_gradient}--\eqref{eq:factor_gradient};
+  \item normalizing the Tucker gauge and, when the dictionary is nested,
+  increasing the active dictionary size according to a continuation schedule.
+\end{enumerate}
+This procedure treats the link as part of the fitted representation: the
+backbone update is computed through the current nonlinear measurement map.
+
+\subsection{Link Diagnostic}
+
+The link diagnostic measures whether the residual of a linear Tucker fit is
+coherent with a scalar response. Let $\cS_T$ be a fitted Tucker reconstruction
+and let $\bbeta_T=(0,1,0,\ldots,0)$ denote the identity link. The frozen-backbone
+diagnostic is
+\begin{align}
+  E_{\mathrm{lin}}
+  &=
+  \norm{y_\Omega-\bPhi_{\Omega,1}(\cS_T)\bbeta_T}_2^2, \\
+  E_{\mathrm{link}}
+  &=
+  \min_{\bbeta}
+  \left[
+  \norm{y_\Omega-\bPhi_{\Omega,Q}(\cS_T)\bbeta}_2^2
+  +m\lambda_\beta\norm{\bbeta}_2^2
+  \right], \\
+  \Dlink
+  &=
+  \frac{E_{\mathrm{lin}}-E_{\mathrm{link}}}{E_{\mathrm{lin}}}.
+  \label{eq:dlink}
+\end{align}
+Large $\Dlink$ means that a low-dimensional scalar response can already remove
+substantial residual energy without changing the Tucker backbone. We use this
+score as a model-selection and interpretation tool: high diagnostic yield
+suggests that the nonlinear link is aligned with the residual structure,
+whereas low diagnostic yield suggests that increasing multilinear rank or
+changing the tensor prior may be more appropriate.

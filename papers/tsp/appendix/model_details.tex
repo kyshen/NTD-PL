@@ -1,0 +1,53 @@
+\section{Additional Model Details}
+\label{app:model_details}
+
+\subsection{Explicit \(p\)-Fold Tucker Motivation}
+\label{app:pfold_tucker_motivation}
+
+The power-dictionary channel in \eqref{eq:polynomial_linked_tucker} can be
+viewed as a tied version of an explicit high-order Tucker interaction. This
+construction is useful because it separates two ideas: the high-order
+interaction pattern that a polynomial channel represents, and the parameter
+sharing that makes the proposed model compact.
+
+For a Tucker backbone, a formal \(p\)-fold Tucker channel may be written as
+\begin{equation}
+  \widetilde{Y}^{(p)}_{\mathbf{i}}
+  =
+  \sum_{\mathbf{r}^{(1)},\ldots,\mathbf{r}^{(p)}}
+  \left(
+  \prod_{q=1}^{p}
+  X_{r_1^{(q)},\ldots,r_N^{(q)}}
+  \right)
+  \prod_{n=1}^{N}
+  \mathcal{A}^{(n,p)}_{i_n,r_n^{(1)},\ldots,r_n^{(p)}} .
+  \label{eq:app_explicit_pfold_tucker}
+\end{equation}
+For \(p=1\), this is the ordinary Tucker entry formula. For \(p=2\), each
+mode projection couples two latent Tucker index tuples, giving a quadratic
+Tucker-style channel. More generally, \eqref{eq:app_explicit_pfold_tucker}
+is the tensor analogue of augmenting a linear map with polynomial interactions
+among latent coordinates.
+
+The explicit construction is not the parameterization used by the estimator:
+each mode projection \(\mathcal{A}^{(n,p)}\) has \(I_nR_n^p\) entries and a
+separate set of such projections would be needed for every active degree.
+Dictionary-linked Tucker keeps the same interaction pattern but ties each
+\(p\)-fold projection to the original Tucker factor,
+\begin{equation}
+  \mathcal{A}^{(n,p)}_{i_n,r_n^{(1)},\ldots,r_n^{(p)}}
+  =
+  \prod_{q=1}^{p} A^{(n)}_{i_n,r_n^{(q)}} .
+  \label{eq:app_shared_projection_tying}
+\end{equation}
+Substituting \eqref{eq:app_shared_projection_tying} into
+\eqref{eq:app_explicit_pfold_tucker} gives exactly
+\(\cS^{\od p}\), where
+\(\cS=\tucker{\cX}{\bA^{(1)},\ldots,\bA^{(N)}}\). Thus a degree-\(p\)
+power-link channel is a shared-projection \(p\)-fold Tucker interaction: it
+couples \(p\) latent Tucker tuples while reusing the same mode factors.
+
+This viewpoint explains why the model can behave like a rank-lifted tensor
+representation without storing an untied high-order tensor block. The
+additional trainable variables are the scalar link coefficients, while the
+high-order features are induced by repeated use of the same backbone.

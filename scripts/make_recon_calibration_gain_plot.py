@@ -13,8 +13,8 @@ sys.path.insert(0, str(ROOT))
 from viz.style import PALETTE, apply_style, style_axes
 
 
-SUMMARY_PATH = ROOT / "neurips" / "tables" / "recon_calibration_baselines.summary.csv"
-OUT_DIR = ROOT / "neurips" / "figures"
+SUMMARY_PATH = ROOT / "papers" / "neurips" / "tables" / "recon_calibration_baselines.summary.csv"
+OUT_DIR = ROOT / "papers" / "neurips" / "figures"
 OUT_STEM = "recon_calibration_gain_plot"
 
 METHOD_LABELS = {

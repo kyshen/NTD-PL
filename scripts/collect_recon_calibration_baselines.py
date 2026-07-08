@@ -69,7 +69,7 @@ def main() -> None:
     parser.add_argument("--batch-size", type=int, default=MLPCAL_BATCH_SIZE)
     parser.add_argument("--max-iter", type=int, default=MLPCAL_MAX_ITER)
     parser.add_argument("--max-train-samples", type=int, default=MLPCAL_MAX_TRAIN_SAMPLES)
-    parser.add_argument("--out-prefix", default="neurips/tables/recon_calibration_baselines")
+    parser.add_argument("--out-prefix", default="papers/neurips/tables/recon_calibration_baselines")
     args = parser.parse_args()
 
     frame = _load_recon_runs_main_rank()

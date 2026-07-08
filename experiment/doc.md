@@ -39,13 +39,13 @@ python -m experiment projects --verbose
 ```
 
 Outputs:
-- Multirun sweeps write parquet results under `multirun/<exp>/` with mode-specific subdirectories:
-  - `multirun/<exp>/benchmark/`: Non-NTDPL method results
-  - `multirun/<exp>/run/`: NTDPL method results
-  - Combined `runs.parquet` and `curves.parquet` files at `multirun/<exp>/`
-- Individual run outputs (logs, checkpoints) under `outputs/<exp>/<mode>/` (managed by Hydra)
-- Tables/figures are exported under `experiment/outputs/`
-- Some table commands also sync LaTeX inputs into `latex-zh/inputs/`
+- Multirun sweeps write parquet results under `artifacts/multirun/<exp>/` with mode-specific subdirectories:
+  - `artifacts/multirun/<exp>/benchmark/`: Non-NTDPL method results
+  - `artifacts/multirun/<exp>/run/`: NTDPL method results
+  - Combined `runs.parquet` and `curves.parquet` files at `artifacts/multirun/<exp>/`
+- Individual run outputs (logs, checkpoints) under `artifacts/outputs/<exp>/<mode>/` (managed by Hydra)
+- Tables/figures are exported under `artifacts/paper-outputs/`
+- Some table commands also sync LaTeX inputs into `papers/latex-zh/inputs/`
 
 ## Synthetic validation
 
@@ -67,9 +67,9 @@ Outputs:
 
 Experiments support three run modes via CLI commands:
 
-- **`benchmark`**: Runs non-NTDPL methods only (tucker, cp, tr, tt). Results stored in `multirun/<exp>/benchmark/`.
+- **`benchmark`**: Runs non-NTDPL methods only (tucker, cp, tr, tt). Results stored in `artifacts/multirun/<exp>/benchmark/`.
 - **`run`**: Runs both benchmark and NTDPL methods. Results stored in respective `benchmark/` and `run/` subdirectories. This is the typical full experiment run.
-- **`ntdpl`**: Runs NTDPL-specific experiments only. Results stored in `multirun/<exp>/run/`.
+- **`ntdpl`**: Runs NTDPL-specific experiments only. Results stored in `artifacts/multirun/<exp>/run/`.
 
 The runner automatically detects which methods are NTDPL and separates execution accordingly. This separation:
 - Prevents interference between different method groups
@@ -80,7 +80,7 @@ Results from both modes are combined when `collect.py` aggregates to parquet fil
 
 ### Postprocessing
 
-Postprocessing (plots/tables export under `experiment/outputs/` and LaTeX inputs sync where applicable) is:
+Postprocessing (plots/tables export under `artifacts/paper-outputs/` and LaTeX inputs sync where applicable) is:
 
 - **Automatic only for `run` mode** (i.e., when both benchmark and NTDPL are executed together).
 - **Manual for `benchmark` / `ntdpl`** runs via the dedicated command:

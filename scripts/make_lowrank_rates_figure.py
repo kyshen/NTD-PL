@@ -8,7 +8,7 @@ import pandas as pd
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-OUT_DIR = PROJECT_ROOT / "neurips" / "figures"
+OUT_DIR = PROJECT_ROOT / "papers" / "neurips" / "figures"
 
 COLORS = {
     "(12,12,3)": "#6C757D",
@@ -50,7 +50,7 @@ def _plot_panel(ax: plt.Axes, data: pd.DataFrame, protocol: str, metric: str, ti
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Plot CAVE low-rank core gains across missing rates.")
-    parser.add_argument("--paired-csv", default="neurips/tables/lowrank_core_cave_rates.paired.csv")
+    parser.add_argument("--paired-csv", default="papers/neurips/tables/lowrank_core_cave_rates.paired.csv")
     parser.add_argument("--stem", default="lowrank_core_cave_rates")
     args = parser.parse_args()
 

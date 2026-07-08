@@ -12,9 +12,9 @@ sys.path.insert(0, str(ROOT))
 from viz.style import PALETTE, apply_style, style_axes
 
 
-MAIN_RECON = ROOT / "experiment/outputs/cave-representation/recon_summary.csv"
-LOWRANK_RECON = ROOT / "neurips/tables/cave_reconstruction_lowrank.summary.csv"
-OUT_DIR = ROOT / "neurips/figures"
+MAIN_RECON = ROOT / "artifacts/paper-outputs/cave-representation/recon_summary.csv"
+LOWRANK_RECON = ROOT / "papers/neurips/tables/cave_reconstruction_lowrank.summary.csv"
+OUT_DIR = ROOT / "papers/neurips/figures"
 OUT_STEM = "cave_reconstruction_capacity"
 
 

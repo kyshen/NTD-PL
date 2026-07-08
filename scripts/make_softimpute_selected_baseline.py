@@ -7,8 +7,8 @@ import pandas as pd
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-TABLE_DIR = PROJECT_ROOT / "neurips" / "tables"
-FIGURE_DIR = PROJECT_ROOT / "neurips" / "figures"
+TABLE_DIR = PROJECT_ROOT / "papers" / "neurips" / "tables"
+FIGURE_DIR = PROJECT_ROOT / "papers" / "neurips" / "figures"
 INPUT = TABLE_DIR / "lowrank_core_cave_softimpute_selected.paired.csv"
 OUT_PREFIX = TABLE_DIR / "softimpute_selected_baseline"
 

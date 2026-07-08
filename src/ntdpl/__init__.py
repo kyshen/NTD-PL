@@ -30,8 +30,8 @@ core, factors, beta = ntdpl(
 )
 """
 
-from .core import ntdpl, init_ntdpl_factors
-from .core_optim import ntdpl_optimized
+from .core import ntdpl, ntdpl_optimized, init_ntdpl_factors
+from .links import ChebyshevLink, LinearSplineLink, PowerLink, RBFLink, ScalarLink, beta_update_link, make_link
 from .utils import (
     adam_init,
     adam_step,
@@ -57,12 +57,18 @@ __all__ = [
     "rmse_on_target",
     "beta_to_dict",
     "build_continuation_schedule",
+    "ScalarLink",
+    "PowerLink",
+    "ChebyshevLink",
+    "RBFLink",
+    "LinearSplineLink",
+    "make_link",
+    "beta_update_link",
     # Beta
     "beta_update",
     "beta_update_moments_normal_eq",
     "beta_update_ridge_lstsq",
     # Normalizer
     "normalize_tucker",
-    "normalize_tensor",
     "mode_scale_core",
 ]

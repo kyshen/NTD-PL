@@ -270,7 +270,7 @@ def main() -> None:
     parser.add_argument("--sample-size", type=int, default=120_000)
     parser.add_argument("--n-folds", type=int, default=3)
     parser.add_argument("--n-bins", type=int, default=32)
-    parser.add_argument("--out-prefix", default="neurips/tables/residual_collapse_diagnostic")
+    parser.add_argument("--out-prefix", default="papers/neurips/tables/residual_collapse_diagnostic")
     args = parser.parse_args()
 
     run_frame, merged, summary = build(

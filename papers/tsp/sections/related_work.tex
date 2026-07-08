@@ -1,0 +1,70 @@
+\section{Related Work}
+\label{sec:related_work}
+
+\subsection{Low-Rank Tensor Signal Models}
+
+Low-rank tensor decompositions are a standard language for multidimensional
+signal modeling. CP and Tucker models have been used for compression,
+denoising, source separation, completion, and data fusion across signal
+processing and machine learning \cite{Kolda2009Tensor,Cichocki2015SignalProcessing,
+Sidiropoulos2017TSP}. Tucker decomposition, in particular, represents a tensor
+by a small core and mode-wise factors \cite{DeLathauwer2000MLSVD}, making the
+multilinear rank explicit. Other structured formats, including tensor-train and
+tensor-ring decompositions \cite{oseledets2011,zhao2016tr}, control complexity
+through different network topologies. The present paper uses Tucker as the
+backbone because its mode-wise ranks give a direct way to distinguish latent
+signal rank from the effective rank of the measured tensor.
+
+Tensor completion methods exploit these low-dimensional structures to recover
+missing entries. Convex and nonconvex approaches include nuclear-norm inspired
+formulations, factorized Tucker or CP objectives, and practical algorithms for
+incomplete tensors \cite{Liu2013TensorCompletion,LiuMoitra2020TensorCompletion,
+yang2016iterative}. These methods usually model the measured tensor itself as
+low-rank. Our setting is different: the latent signal is low-rank, but an
+entrywise response can lift the measured tensor outside the same rank budget.
+Increasing Tucker rank can reduce the mismatch, but doing so changes every
+mode factor and grows the core. NTD-PL instead keeps the original backbone rank
+and adds a low-dimensional response tied to that backbone.
+
+\subsection{Generalized and Nonlinear Tensor Models}
+
+Several tensor models replace the Gaussian squared-loss view with generalized
+or nonlinear observation models. Generalized CP and probabilistic tensor
+factorizations model non-Gaussian observations through a chosen likelihood or
+link function \cite{hong2020generalized,schein2016bayesian}, while
+nonparametric Bayesian tensor models increase flexibility through latent
+function priors \cite{xu2011infinite}. Kernel, functional, and neural tensor
+methods further expand the model class by learning nonlinear feature maps or
+deep decoders \cite{Luo2024LRTFR,liu2017deepcp,saragadam2024deeptensor,
+ahn2024neural}. These approaches are valuable when the data require broad
+nonlinear expressivity, but they can make it harder to interpret how a fixed
+multilinear rank budget is being used.
+
+The dictionary-linked Tucker model uses a constrained scalar response. It
+assumes that the dominant residual left by a fixed Tucker backbone can be
+explained by a shared entrywise map, while preserving the interpretability of
+the Tucker ranks. This places the model between classical low-rank recovery and
+general nonlinear tensor factorization. The power-dictionary instance is
+expressive enough to approximate common smooth responses on a bounded signal
+range, while remaining structured enough to admit a rank-expansion analysis and
+a closed-form link update. Other finite scalar dictionaries could be substituted
+when calibration constraints suggest a different response basis, without
+replacing the Tucker backbone.
+
+\subsection{Imaging Recovery and Nonlinear Responses}
+
+Nonlinear responses arise naturally in imaging and sensing pipelines. Camera
+response curves, radiometric processing, saturation, and high-dynamic-range
+imaging motivate explicit response modeling in computational photography
+\cite{Debevec1997HDR,Grossberg2004CameraResponse}. Hyperspectral imaging adds
+additional sources of nonlinear behavior, including nonlinear mixing,
+reflectance effects, and sensor-dependent preprocessing
+\cite{BioucasDias2012HyperspectralUnmixing,Heylen2014NonlinearUnmixing}. At
+the same time, hyperspectral cubes are strongly correlated across spatial and
+spectral modes, making them natural testbeds for low-rank tensor recovery.
+
+Hyperspectral reconstruction and completion provide a signal recovery setting
+where fixed-rank Tucker mismatch is observable and measurable. The proposed
+link diagnostic estimates, before full nonlinear training, whether a frozen
+Tucker residual contains structure that a scalar response can remove. This
+makes the model selection criterion explicit and testable.

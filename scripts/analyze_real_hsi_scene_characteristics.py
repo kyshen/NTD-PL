@@ -128,7 +128,7 @@ def _local_variability_metrics(cube: np.ndarray) -> dict[str, float]:
 
 
 def _load_model_behavior() -> pd.DataFrame:
-    main = pd.read_csv("experiment/outputs/real-hsi-robustness/real_hsi_robustness_main_table.csv")
+    main = pd.read_csv("artifacts/paper-outputs/real-hsi-robustness/real_hsi_robustness_main_table.csv")
     main["Gain(%)"] = main["Gain(%)"].astype(float)
     main["Delta_NMSE(dB)"] = main["Delta_NMSE(dB)"].astype(float)
     pivot = (
@@ -171,7 +171,7 @@ def analyze() -> pd.DataFrame:
 
 
 def main() -> None:
-    out_dir = Path("experiment/outputs/real-hsi-robustness")
+    out_dir = Path("artifacts/paper-outputs/real-hsi-robustness")
     out_dir.mkdir(parents=True, exist_ok=True)
     frame = analyze()
     csv_path = out_dir / "real_hsi_scene_characteristics.csv"

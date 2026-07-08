@@ -55,7 +55,7 @@ def _sample_pixel_spectra(cube: np.ndarray) -> np.ndarray:
 
 
 def main() -> None:
-    out_dir = PROJECT_ROOT / "outputs" / "real_hsi_visualizations"
+    out_dir = PROJECT_ROOT / "artifacts" / "outputs" / "real_hsi_visualizations"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     fig, axes = plt.subplots(len(DATASETS), 2, figsize=(12, 16), constrained_layout=True)

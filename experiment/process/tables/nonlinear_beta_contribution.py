@@ -16,7 +16,7 @@ from ..registry import register_postprocessor
 
 ALPHA_REF = 0.25
 P_MAX_REF = 6
-NONLINEAR_ORDER = ("poly2", "poly3", "sin", "tanh")
+NONLINEAR_ORDER = ("poly2", "poly3", "tanh", "exp")
 
 
 def _factors_from_state(state: dict[str, object]) -> list[np.ndarray]:

@@ -1,0 +1,187 @@
+\section{Proofs}
+\label{app:proofs}
+
+\subsection{Proof of Proposition~\ref{prop:rank_expansion}}
+
+Let
+\[
+  S_{\mathbf{i}}
+  =
+  \sum_{r_1,\ldots,r_N}
+  X_{r_1,\ldots,r_N}
+  \prod_{n=1}^{N}A^{(n)}_{i_n,r_n}.
+\]
+Expanding $S_{\mathbf{i}}^p$ gives products of $p$ latent Tucker tuples. For
+each mode $n$, the resulting mode-dependent terms are all degree-$p$ monomials
+in the row $A^{(n)}_{i_n,:}$. These monomials are indexed by multi-indices
+$\alpha\in\mathbb{N}^{R_n}$ with $|\alpha|=p$, of which there are
+$\binom{R_n+p-1}{p}$. Collecting identical monomials yields a Tucker
+representation of $\cS^{\od p}$ whose mode-$n$ factor is the degree-$p$
+Veronese lift of $\bA^{(n)}$. This proves the stated rank bound.
+
+\subsection{Proof of Theorem~\ref{thm:tucker_separation}}
+
+We first record a standard fact about Veronese evaluations. Let
+\(D=\binom{R+p-1}{p}\). There exists a matrix \(\bA\in\R^{D\times R}\) whose
+degree-\(p\) Veronese feature matrix has rank \(D\). Indeed, the homogeneous
+degree-\(p\) monomials in \(R\) variables are linearly independent
+polynomials, so one can choose \(D\) evaluation points for which the square
+evaluation matrix is nonsingular. Consequently, for \(I\ge D\), a generic
+\(\bA\in\R^{I\times R}\) has a degree-\(p\) Veronese lift with full column
+rank \(D\).
+
+Choose generic factor matrices
+\(\bA^{(n)}=[a_1^{(n)},\ldots,a_R^{(n)}]\in\R^{I_n\times R}\) and define the
+CP-diagonal Tucker backbone
+\[
+  \cS =
+  \sum_{r=1}^{R} a_r^{(1)}\otimes\cdots\otimes a_r^{(N)} .
+\]
+For generic factors, each mode unfolding of \(\cS\) has rank \(R\), so the
+backbone has exact Tucker rank \((R,\ldots,R)\).
+
+Now set the degree-\(p\) link coefficient to one and all other coefficients to
+zero, so \(\cY=\cS^{\od p}\). Expanding entrywise gives
+\[
+  Y_{\mathbf{i}}
+  =
+  \left(
+  \sum_{r=1}^{R}\prod_{n=1}^{N} A^{(n)}_{i_n,r}
+  \right)^p
+  =
+  \sum_{|\alpha|=p}
+  c_\alpha
+  \prod_{n=1}^{N}
+  \prod_{r=1}^{R}
+  \left(A^{(n)}_{i_n,r}\right)^{\alpha_r},
+\]
+where \(c_\alpha=p!/(\alpha_1!\cdots\alpha_R!)>0\). Let
+\(\bB^{(n)}=\bA^{(n)\langle p\rangle}\in\R^{I_n\times D}\) be the Veronese
+lift. By the preceding full-rank fact, each \(\bB^{(n)}\) has column rank
+\(D\) for generic \(\bA^{(n)}\). The mode-\(n\) unfolding of \(\cY\) factors
+as \(\bB^{(n)}\) times a full-column-rank right factor built from the
+remaining lifted factors, with a nonsingular diagonal scaling by the positive
+coefficients \(c_\alpha\). Therefore every mode unfolding has rank \(D\). The
+exact standard Tucker rank of \(\cY\) is \((D,\ldots,D)\), while \(\cY\) is
+represented by the degree-\(p\) linked model using the rank-\((R,\ldots,R)\)
+backbone.
+
+\subsection{Proof of Corollary~\ref{cor:tied_lift_parameters}}
+
+By Proposition~\ref{prop:rank_expansion}, the degree-$p$ channel can be written
+as a Tucker tensor with ranks at most
+$D_n(p)=\binom{R_n+p-1}{p}$. A standalone Tucker parameterization has
+$\prod_n D_n(p)$ core entries and $\sum_n I_nD_n(p)$ factor entries. In
+contrast, the power-dictionary linked model reuses the latent core and factors of
+$\cS$ and adds only one scalar coefficient per channel. Summing degrees up to
+$Q$ adds $Q+1$ link coefficients, proving the stated comparison.
+
+\subsection{Proof of Theorem~\ref{thm:poly_generation}}
+
+If $g(s)=\sum_{p=0}^{P}\gamma_p s^p$ and $\cY=g(\cS^\star)$, choose the Tucker
+backbone of the power-dictionary linked model to be the Tucker representation of
+$\cS^\star$ and set $\beta_p=\gamma_p$ for all $p=0,\ldots,P$. Then
+$f_{\bbeta}(\cS^\star)=g(\cS^\star)=\cY$, giving exact representation with the
+same backbone rank.
+
+\subsection{Proof of Proposition~\ref{prop:response_approximation}}
+
+By the Weierstrass approximation theorem, for every $\epsilon>0$ there exists
+a polynomial $q(s)=\sum_{p=0}^{P}\beta_ps^p$ such that
+$\sup_{s\in[a,b]}|f(s)-q(s)|\le\epsilon$. Every entry of $\cS^\star$ lies in
+$[a,b]$, so each entrywise approximation error is bounded by $\epsilon$.
+Therefore
+\[
+  \norm{f(\cS^\star)-q(\cS^\star)}_F^2
+  =
+  \sum_{\mathbf{i}}
+  |f(S^\star_{\mathbf{i}})-q(S^\star_{\mathbf{i}})|^2
+  \le
+  M\epsilon^2,
+\]
+which gives the stated bound after taking square roots.
+
+\subsection{Proof of Proposition~\ref{prop:monotone_descent}}
+
+For a fixed Tucker backbone, Link Refresh solves the $\bbeta$-subproblem
+exactly, hence it cannot increase $\mathcal{F}_Q$. The subsequent backbone
+update is assumed to satisfy the sufficient decrease condition
+\eqref{eq:sufficient_decrease}, and therefore also cannot increase
+$\mathcal{F}_Q$. Combining the two stages gives monotone decrease over the
+outer iteration. Since $\mathcal{F}_Q$ is bounded below by zero when the
+regularization weights are nonnegative, summing
+\eqref{eq:sufficient_decrease} over $k$ gives
+\[
+  c\sum_{k=0}^{K}\norm{\theta^{k+1}-\theta^k}_2^2
+  \le
+  \mathcal{F}_Q(\theta^0)-\mathcal{F}_Q(\theta^{K+1})
+  \le
+  \mathcal{F}_Q(\theta^0).
+\]
+Letting $K\to\infty$ proves square summability of the steps.
+
+\subsection{Proof of Theorem~\ref{thm:stationary_convergence}}
+
+For fixed $Q$, the objective is a polynomial function of the Tucker parameters
+and link coefficients when the monomial basis is used. For any other fixed
+polynomial basis spanning the same space, it remains polynomial after a linear
+change of coefficients. The linear-spline dictionary is piecewise polynomial
+and semi-algebraic; standard RBF dictionaries are analytic and belong to the
+standard tame classes covered by KL convergence theory. With
+standard box or normalization constraints used to fix the Tucker gauge, the
+corresponding constrained objective satisfies the Kurdyka--Lojasiewicz
+property. Assumption~\ref{ass:optimization} gives sufficient decrease and a
+relative error bound. The standard KL convergence theorem for nonconvex descent
+sequences then implies finite length of the iterates and convergence to a
+critical point of $\mathcal{F}_Q$.
+
+\subsection{Proof of Theorem~\ref{thm:masked_generalization}}
+
+Fix \(0<\varepsilon\le B_\Theta\), and let
+\(\mathcal{N}_\varepsilon\) be an \(\varepsilon\)-net of \(\Theta\) in
+Euclidean norm. Since \(\Theta\) lies in a \(d\)-dimensional ball of radius
+\(B_\Theta\), it admits a net with
+\[
+  |\mathcal{N}_\varepsilon|
+  \le
+  \left(\frac{3B_\Theta}{\varepsilon}\right)^d .
+\]
+For any fixed \(\theta_0\in\mathcal{N}_\varepsilon\), the random variables
+\(\ell_{\mathbf{i}_t}(\theta_0)\) are independent and bounded in
+\([0,B_\ell]\). Hoeffding's inequality gives
+\[
+  \Pr\left(
+  \left|
+  \mathcal{L}(\theta_0)-\widehat{\mathcal{L}}_m(\theta_0)
+  \right|
+  \ge u
+  \right)
+  \le
+  2\exp\left(-\frac{2mu^2}{B_\ell^2}\right).
+\]
+A union bound over \(\mathcal{N}_\varepsilon\) shows that, with probability at
+least \(1-\delta\),
+\[
+  \max_{\theta_0\in\mathcal{N}_\varepsilon}
+  \left|
+  \mathcal{L}(\theta_0)-\widehat{\mathcal{L}}_m(\theta_0)
+  \right|
+  \le
+  B_\ell
+  \sqrt{
+  \frac{
+  d\log(3B_\Theta/\varepsilon)+\log(2/\delta)}
+  {2m}} .
+\]
+For an arbitrary \(\theta\in\Theta\), choose
+\(\theta_0\in\mathcal{N}_\varepsilon\) with
+\(\norm{\theta-\theta_0}_2\le\varepsilon\). The uniform Lipschitz assumption
+implies
+\[
+  |\mathcal{L}(\theta)-\mathcal{L}(\theta_0)|\le G\varepsilon,
+  \qquad
+  |\widehat{\mathcal{L}}_m(\theta)-\widehat{\mathcal{L}}_m(\theta_0)|
+  \le G\varepsilon .
+\]
+Combining these two approximation errors with the net bound and taking the
+supremum over \(\Theta\) gives the stated inequality.

@@ -21,7 +21,7 @@ from src.metrics import val_NMSE_dB, val_PSNR, val_RMSE, val_SAM, val_SSIM
 from src.types import LogCallback, Tensor
 
 
-OUT_PATH = PROJECT_ROOT / "neurips" / "tables" / "real_tensor_table6_sweep.csv"
+OUT_PATH = PROJECT_ROOT / "papers" / "neurips" / "tables" / "real_tensor_table6_sweep.csv"
 
 
 RANK_GRIDS: dict[str, list[tuple[int, ...]]] = {

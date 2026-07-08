@@ -16,7 +16,7 @@ from src.data.hsi import CAVEHSIData
 from src.filters.bias import BiasFilter
 
 
-OUT_DIR = PROJECT_ROOT / "neurips" / "figures"
+OUT_DIR = PROJECT_ROOT / "papers" / "neurips" / "figures"
 SCENE_ID = 2
 
 
@@ -86,7 +86,7 @@ def _render_case(*, protocol: str) -> None:
 
 
 def _load_completion_case(*, protocol: str) -> dict[str, object]:
-    runs = pd.read_csv(PROJECT_ROOT / "neurips" / "tables" / "lowrank_core_cave_rates.per_run.csv")
+    runs = pd.read_csv(PROJECT_ROOT / "papers" / "neurips" / "tables" / "lowrank_core_cave_rates.per_run.csv")
     case = {
         "item_id": SCENE_ID,
         "protocol": protocol,

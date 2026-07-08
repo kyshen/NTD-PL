@@ -101,7 +101,7 @@ def _rank_override(rank: tuple[int, int, int]) -> str:
 
 
 def _run_dirs(exp: str) -> list[Path]:
-    root = PROJECT_ROOT / "multirun" / exp
+    root = PROJECT_ROOT / "artifacts" / "multirun" / exp
     if not root.exists():
         return []
     return [path.parent.parent for path in root.rglob(".hydra/config.yaml")]
@@ -206,7 +206,7 @@ def _command(
         f"method={method}",
         _rank_override(rank),
         f"method.n_iter_max={n_iter_max}",
-        f"hydra.sweep.dir=multirun/{exp}/{exp_mode}/{run_slug}",
+        f"hydra.sweep.dir=artifacts/multirun/{exp}/{exp_mode}/{run_slug}",
         "hydra.sweep.subdir=.",
     ]
     if protocol == "block":
@@ -463,7 +463,7 @@ def main() -> None:
     parser.add_argument("--p-max", type=int, default=4)
     parser.add_argument("--max-parallel", type=int, default=1)
     parser.add_argument("--collect-only", action="store_true")
-    parser.add_argument("--out-prefix", default="neurips/tables/lowrank_core_sweep")
+    parser.add_argument("--out-prefix", default="papers/neurips/tables/lowrank_core_sweep")
     args = parser.parse_args()
 
     default_ranks = ((12, 12, 3), (16, 16, 3), (20, 20, 4), (24, 24, 4))

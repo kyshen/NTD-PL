@@ -12,10 +12,10 @@ sys.path.insert(0, str(ROOT))
 from viz.style import PALETTE, apply_style, style_axes
 
 
-TUCKER_SWEEP = ROOT / "neurips/tables/cave_tucker_rank_sweep.summary.csv"
-CAVE_RECON = ROOT / "experiment/outputs/cave-representation/recon_summary.csv"
-RANK_LIFT_COST = ROOT / "neurips/tables/rank_lift_cost.csv"
-OUT_DIR = ROOT / "neurips/figures"
+TUCKER_SWEEP = ROOT / "papers/neurips/tables/cave_tucker_rank_sweep.summary.csv"
+CAVE_RECON = ROOT / "artifacts/paper-outputs/cave-representation/recon_summary.csv"
+RANK_LIFT_COST = ROOT / "papers/neurips/tables/rank_lift_cost.csv"
+OUT_DIR = ROOT / "papers/neurips/figures"
 OUT_STEM = "rank_lift_efficiency"
 
 

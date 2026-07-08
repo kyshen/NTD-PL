@@ -77,7 +77,7 @@ def _parse_shape2(text: str) -> tuple[int, int]:
 
 
 def _run_dirs(exp: str) -> list[Path]:
-    root = PROJECT_ROOT / "multirun" / exp
+    root = PROJECT_ROOT / "artifacts" / "multirun" / exp
     if not root.exists():
         return []
     return [path.parent.parent for path in root.rglob(".hydra/config.yaml")]
@@ -162,7 +162,7 @@ def _command(
         f"method={method}",
         _rank_override(rank),
         f"method.n_iter_max={n_iter_max}",
-        f"hydra.sweep.dir=multirun/{exp}/{exp_mode}/{run_slug}",
+        f"hydra.sweep.dir=artifacts/multirun/{exp}/{exp_mode}/{run_slug}",
         "hydra.sweep.subdir=.",
     ]
     if method == "ntdpl":
@@ -308,7 +308,7 @@ def main() -> None:
     parser.add_argument("--p-max", type=int, default=4)
     parser.add_argument("--max-parallel", type=int, default=1)
     parser.add_argument("--collect-only", action="store_true")
-    parser.add_argument("--out-prefix", default="neurips/tables/kodak_completion")
+    parser.add_argument("--out-prefix", default="papers/neurips/tables/kodak_completion")
     args = parser.parse_args()
 
     image_ids = _parse_int_set(args.image_ids)

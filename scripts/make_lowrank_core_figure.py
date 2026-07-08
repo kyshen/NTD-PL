@@ -9,7 +9,7 @@ import pandas as pd
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-OUT_DIR = PROJECT_ROOT / "neurips" / "figures"
+OUT_DIR = PROJECT_ROOT / "papers" / "neurips" / "figures"
 
 COLORS = {
     "random": "#1E5A8A",
@@ -32,7 +32,7 @@ def _save(fig: plt.Figure, stem: str) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Plot paired low-rank core gains.")
-    parser.add_argument("--paired-csv", default="neurips/tables/lowrank_core_cave_seed0_mr05.paired.csv")
+    parser.add_argument("--paired-csv", default="papers/neurips/tables/lowrank_core_cave_seed0_mr05.paired.csv")
     parser.add_argument("--stem", default="lowrank_core_cave_seed0_mr05")
     args = parser.parse_args()
 

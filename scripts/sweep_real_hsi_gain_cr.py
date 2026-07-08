@@ -83,7 +83,7 @@ def _cpu_child_env() -> dict[str, str]:
 def _hydra_command(dataset_name: str, rank: tuple[int, int, int], method: str) -> list[str]:
     rank_slug = f"r{rank[0]}_{rank[1]}_{rank[2]}"
     dataset_shape = _shape(dataset_name)
-    hydra_root = f"multirun/real-hsi-robustness/gain_cr/{dataset_name}_{rank_slug}_{method}"
+    hydra_root = f"artifacts/multirun/real-hsi-robustness/gain_cr/{dataset_name}_{rank_slug}_{method}"
     command = [
         _project_python(PROJECT_ROOT),
         "run.py",

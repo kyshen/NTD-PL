@@ -37,7 +37,7 @@ def _normalize_cube(cube: np.ndarray) -> np.ndarray:
 
 
 def _load_project_gain() -> pd.DataFrame:
-    path = PROJECT_ROOT / "experiment/outputs/real-hsi-robustness/real_hsi_robustness_main_table_numeric.csv"
+    path = PROJECT_ROOT / "artifacts/paper-outputs/real-hsi-robustness/real_hsi_robustness_main_table_numeric.csv"
     frame = pd.read_csv(path)
     recon = (
         frame.loc[frame["task_name"].eq("decompose"), ["dataset", "gain_pct", "delta_nmse_db", "delta_sam"]]
@@ -165,7 +165,7 @@ def analyze() -> pd.DataFrame:
 
 
 def main() -> None:
-    out_dir = PROJECT_ROOT / "outputs" / "real_hsi_nonlinearity"
+    out_dir = PROJECT_ROOT / "artifacts" / "outputs" / "real_hsi_nonlinearity"
     out_dir.mkdir(parents=True, exist_ok=True)
     frame = analyze()
     csv_path = out_dir / "real_hsi_nonlinearity_metrics.csv"
