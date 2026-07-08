@@ -1,10 +1,12 @@
 \section{Dictionary-Linked Tucker Representation}
 \label{sec:model}
 
-We now specialize the nonlinear observation viewpoint to Tucker tensor
-recovery. The model separates the tensor before measurement from the tensor
-stored by the sensor or acquisition pipeline: the former is represented with a
-low Tucker rank, while the latter may be distorted by an entrywise response.
+We model the underlying signal with Tucker factors because multidimensional
+signals often have mode-specific correlations across space, spectrum, time, or
+view, and Tucker ranks provide an explicit budget for this multilinear
+structure. The nonlinear observation model then describes how this low-rank
+Tucker signal is transformed into the measured tensor by the sensor or
+acquisition pipeline.
 
 \subsection{Nonlinear Low-Rank Signal Model}
 \label{sec:problem}
