@@ -39,7 +39,15 @@ from src.types import LogCallback, Tensor
 
 DEFAULT_RUNS = PROJECT_ROOT / "artifacts" / "multirun" / "cave-representation" / "runs.parquet"
 DEFAULT_OUTDIR = PROJECT_ROOT / "artifacts" / "results" / "rank_inflation_spectrum"
-TENSOR_KINDS = ("measured", "tucker_fit", "ntdpl_signal", "ntdpl_prediction")
+TENSOR_KINDS = (
+    "measured",
+    "tucker_fit",
+    "ntdpl_signal",
+    "ntdpl_prediction",
+    "ntdpl_response_component",
+    "tucker_residual",
+    "ntdpl_residual",
+)
 ENERGY_THRESHOLDS = (0.95, 0.99, 0.995, 0.999)
 
 
