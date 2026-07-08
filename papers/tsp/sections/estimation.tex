@@ -118,19 +118,43 @@ columns are rescaled and the inverse scales are absorbed into the core. This
 fixes a numerical gauge without changing the represented signal $\cS$ or the
 objective value.
 
-\subsection{Alternating Recovery Scheme}
+\begin{algorithm}[!t]
+  \footnotesize
+  \caption{Alternating recovery for dictionary-linked Tucker models.}
+  \label{alg:alternating_recovery}
+  \begin{algorithmic}[1]
+    \REQUIRE measured tensor $\cY$, mask $\Omega$, Tucker ranks
+    $(R_1,\ldots,R_N)$, response dictionary $\{\psi_q\}$, regularization
+    weights, continuation schedule
+    \STATE Initialize $\cX$ and $\{\bA^{(n)}\}$ from a Tucker fit or a random
+    Tucker factorization.
+    \STATE Set the active dictionary to the identity response and initialize
+    $\bbeta=(0,1,0,\ldots,0)$.
+    \FOR{outer iterations $k=0,1,\ldots$}
+      \STATE Form the current Tucker signal
+      $\cS=\tucker{\cX}{\bA^{(1)},\ldots,\bA^{(N)}}$.
+      \STATE Build $\bPhi_{\Omega,Q}(\cS)$ on the observed entries.
+      \STATE Refresh $\bbeta$ by the ridge solution in
+      \eqref{eq:link_refresh_solution}.
+      \STATE Compute $\bG_{\cS}$ from \eqref{eq:latent_gradient}.
+      \STATE Update $\cX$ and $\{\bA^{(n)}\}$ by a descent step using
+      \eqref{eq:latent_gradient}--\eqref{eq:factor_gradient}.
+      \STATE Normalize factor columns and absorb inverse scales into $\cX$.
+      \IF{the continuation schedule activates a new dictionary channel}
+        \STATE Add the new response coefficient and initialize it at zero.
+      \ENDIF
+      \IF{the stopping criterion is met}
+        \STATE Stop.
+      \ENDIF
+    \ENDFOR
+    \ENSURE fitted Tucker signal $\cS$, response coefficients $\bbeta$, and
+    prediction $f_{\bbeta}(\cS)$
+  \end{algorithmic}
+\end{algorithm}
 
-One outer iteration consists of:
-\begin{enumerate}
-  \item fixing the current Tucker signal and refreshing $\bbeta$ by
-  \eqref{eq:link_refresh_solution};
-  \item updating $\cX$ and $\{\bA^{(n)}\}$ by a descent step using
-  \eqref{eq:latent_gradient}--\eqref{eq:factor_gradient};
-  \item normalizing the Tucker gauge and, when the dictionary is nested,
-  increasing the active dictionary size according to a continuation schedule.
-\end{enumerate}
-This procedure treats the response as part of the fitted representation: the
-Tucker update is computed through the current nonlinear measurement map.
+Algorithm~\ref{alg:alternating_recovery} treats the response as part of the
+fitted representation: the Tucker update is computed through the current
+nonlinear measurement map, rather than by post-processing a fixed Tucker fit.
 
 \subsection{Response Diagnostic}
 
