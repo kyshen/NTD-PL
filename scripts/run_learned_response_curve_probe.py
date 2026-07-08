@@ -234,7 +234,7 @@ def _random_tucker_signal(shape: tuple[int, int, int], rank: tuple[int, int, int
     return signal.astype(np.float32)
 
 
-def _response_function(name: str) -> Callable[[np.ndarray], np.ndarray]:
+def _raw_response_function(name: str) -> Callable[[np.ndarray], np.ndarray]:
     if name == "square":
         return lambda x: x**2
     if name == "poly23":
@@ -244,6 +244,48 @@ def _response_function(name: str) -> Callable[[np.ndarray], np.ndarray]:
     if name == "exp":
         return lambda x: np.expm1(0.7 * x) / 0.7
     raise ValueError(f"Unknown response {name!r}.")
+
+
+def _controlled_observation(
+    latent: np.ndarray,
+    response_name: str,
+    alpha: float,
+) -> tuple[np.ndarray, dict[str, float]]:
+    raw = _raw_response_function(response_name)(latent)
+    linear_coef = float(np.sum(raw * latent) / (np.sum(latent * latent) + 1e-8))
+    residual = raw - linear_coef * latent
+    target_norm = float(np.sqrt(np.prod(latent.shape)))
+    residual_norm = float(np.linalg.norm(residual))
+    if residual_norm < 1e-8:
+        mixed = latent.copy()
+        residual_scale = 0.0
+    else:
+        residual_scale = target_norm / residual_norm
+        mixed = np.sqrt(1.0 - alpha) * latent + np.sqrt(alpha) * residual_scale * residual
+    y_min = float(np.min(mixed))
+    y_span = max(float(np.max(mixed) - y_min), 1e-8)
+    y = (mixed - y_min) / y_span
+    residual_energy_fraction = float(np.mean((np.sqrt(alpha) * residual_scale * residual) ** 2) / max(np.mean(mixed**2), 1e-12))
+    return y.astype(np.float32), {
+        "alpha": float(alpha),
+        "linear_coef": linear_coef,
+        "residual_scale": float(residual_scale),
+        "output_min": y_min,
+        "output_span": y_span,
+        "residual_energy_fraction_before_output_normalization": residual_energy_fraction,
+    }
+
+
+def _controlled_curve_value(
+    values: np.ndarray,
+    response_name: str,
+    params: dict[str, float],
+) -> np.ndarray:
+    alpha = float(params["alpha"])
+    raw = _raw_response_function(response_name)(values)
+    residual = raw - float(params["linear_coef"]) * values
+    mixed = np.sqrt(1.0 - alpha) * values + np.sqrt(alpha) * float(params["residual_scale"]) * residual
+    return (mixed - float(params["output_min"])) / max(float(params["output_span"]), 1e-8)
 
 
 def _affine_align(source: np.ndarray, target: np.ndarray) -> tuple[float, float]:
@@ -263,11 +305,10 @@ def _controlled_one(
     n_iter_max: int,
     init_n_iter_max: int,
     grid_size: int,
+    alpha: float,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     true_signal = _random_tucker_signal(shape, rank, seed)
-    response = _response_function(response_name)
-    y = response(true_signal).astype(np.float32)
-    y = (y - y.min()) / max(float(y.max() - y.min()), 1e-8)
+    y, response_params = _controlled_observation(true_signal, response_name, alpha)
     signal, prediction, beta, fit_time = _fit_ntdpl(
         y,
         rank=rank,
@@ -279,7 +320,7 @@ def _controlled_one(
     grid = np.quantile(signal.reshape(-1), np.linspace(0.01, 0.99, grid_size)).astype(np.float32)
     learned = _poly_value(grid, beta)
     derivative = _poly_derivative(grid, beta)
-    true_on_learned = response(a * grid + b)
+    true_on_learned = _controlled_curve_value(a * grid + b, response_name, response_params)
     true_on_learned = (true_on_learned - true_on_learned.min()) / max(float(true_on_learned.max() - true_on_learned.min()), 1e-8)
     learned_norm = (learned - learned.min()) / max(float(learned.max() - learned.min()), 1e-8)
     curve_rmse = float(np.sqrt(np.mean((learned_norm - true_on_learned) ** 2)))
@@ -291,6 +332,7 @@ def _controlled_one(
         {
             "experiment": "controlled",
             "response": response_name,
+            "alpha": float(alpha),
             "seed": int(seed),
             "grid_index": int(i),
             "s": float(grid[i]),
@@ -307,6 +349,7 @@ def _controlled_one(
     summary = {
         "experiment": "controlled",
         "response": response_name,
+        "alpha": float(alpha),
         "seed": int(seed),
         "rank": str(rank),
         "p_max": int(p_max),
@@ -316,6 +359,7 @@ def _controlled_one(
         "latent_corr": latent_corr,
         "abs_latent_corr": abs(latent_corr),
         "beta": json.dumps([float(v) for v in beta.reshape(-1)]),
+        **response_params,
         **diag,
     }
     return summary, curve_rows
@@ -371,6 +415,7 @@ def run_controlled(args: argparse.Namespace) -> tuple[pd.DataFrame, pd.DataFrame
                 n_iter_max=args.n_iter_max,
                 init_n_iter_max=args.init_n_iter_max,
                 grid_size=args.grid_size,
+                alpha=args.alpha,
             )
             for response, seed in jobs
         ]
@@ -379,8 +424,8 @@ def run_controlled(args: argparse.Namespace) -> tuple[pd.DataFrame, pd.DataFrame
             summaries.append(summary)
             curves.extend(curve_rows)
     return (
-        pd.DataFrame(summaries).sort_values(["response", "seed"]),
-        pd.DataFrame(curves).sort_values(["response", "seed", "grid_index"]),
+        pd.DataFrame(summaries).sort_values(["response", "alpha", "seed"]),
+        pd.DataFrame(curves).sort_values(["response", "alpha", "seed", "grid_index"]),
     )
 
 
@@ -418,7 +463,7 @@ def _plot_controlled(summary: pd.DataFrame, curves: pd.DataFrame, outdir: Path) 
     fig, axes = plt.subplots(1, len(responses), figsize=(4.2 * len(responses), 3.7), squeeze=False)
     for ax, response in zip(axes[0], responses):
         subset = curves[curves["response"].eq(response)]
-        for _, run_curve in subset.groupby("seed"):
+        for _, run_curve in subset.groupby(["alpha", "seed"]):
             ax.plot(run_curve["s_norm"], run_curve["learned_f_norm_minmax"], color="#2d6cdf", alpha=0.35, linewidth=1.0)
         mean_curve = subset.groupby("grid_index", as_index=False)[["s_norm", "learned_f_norm_minmax", "true_f_aligned_norm"]].mean()
         ax.plot(mean_curve["s_norm"], mean_curve["learned_f_norm_minmax"], color="#111111", linewidth=2.0, label="learned")
@@ -446,6 +491,7 @@ def main() -> None:
     parser.add_argument("--controlled-shape", default="48,48,16")
     parser.add_argument("--responses", default="square,poly23,tanh,exp")
     parser.add_argument("--seeds", default="0-4")
+    parser.add_argument("--alpha", type=float, default=0.25)
     parser.add_argument("--p-max", type=int, default=6)
     parser.add_argument("--n-iter-max", type=int, default=180)
     parser.add_argument("--init-n-iter-max", type=int, default=50)
@@ -469,7 +515,7 @@ def main() -> None:
         _plot_controlled(controlled_summary, controlled_curves, outdir)
         print("\nControlled summary by response:")
         print(
-            controlled_summary.groupby("response")[
+            controlled_summary.groupby(["response", "alpha"])[
                 [
                     "prediction_rmse",
                     "curve_rmse_after_affine_latent_align",
