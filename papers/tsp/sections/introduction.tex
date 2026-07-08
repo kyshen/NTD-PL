@@ -84,7 +84,7 @@ between a small ridge-regression update for the response coefficients and
 gradient-based updates of the Tucker core and factors. To improve numerical stability,
 the implementation uses normalized features and continuation when the selected
 dictionary is nested.
-We also introduce a frozen-Tucker diagnostic that measures how much residual
+We also introduce a response diagnostic that measures how much residual
 energy can be removed by refitting only the response after a linear Tucker fit.
 This diagnostic is designed to answer a practical question before full
 nonlinear training: does this signal contain residual structure that is likely

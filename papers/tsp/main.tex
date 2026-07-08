@@ -27,11 +27,11 @@ dictionary-linked Tucker model for nonlinear low-rank tensor signal recovery.
 The model represents the underlying signal with a Tucker core and factors, and
 learns an entrywise response function with only a few extra coefficients. With
 a power dictionary, this response can increase the apparent Tucker rank of the
-measured tensor while reusing the same low-rank signal representation. The
+measured tensor without introducing a separate high-rank Tucker model. The
 finite-dictionary formulation also allows other response bases when prior
 knowledge is available. We analyze the induced rank expansion, response approximation,
 stationarity of the alternating estimator, and computational scaling. We also
-develop a frozen-Tucker diagnostic that predicts when the nonlinear response is
+develop a response diagnostic that predicts when the nonlinear response is
 likely to help.
 Experiments on controlled nonlinear tensors, hyperspectral reconstruction and
 completion, noisy reconstruction, and cross-domain diagnostics show that the

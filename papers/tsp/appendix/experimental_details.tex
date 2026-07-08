@@ -180,7 +180,7 @@ improves RMSE by 3.6--7.9\% and also improves SAM on all three cubes. The NMSE
 changes are positive as well, with gains of 0.32--0.72 dB. These results serve
 as a supplementary cross-dataset check beyond the CAVE acquisition setting.
 Additional low-diagnostic checks verify the expected operating regime: when the
-frozen-Tucker diagnostic is near zero, the learned response is not expected to
+response diagnostic is near zero, the learned response is not expected to
 provide a reliable improvement.
 
 \begin{table}[!t]
@@ -211,7 +211,7 @@ by the learned response.
 \subsection{Response Diagnostic Details}
 \label{app:diagnostic_details}
 
-The diagnostic $\Dlink$ is computed from a frozen Tucker fit. First, a
+The diagnostic $\Dlink$ is computed from a fixed Tucker fit. First, a
 matched-rank Tucker model is trained under the same mask and normalization as
 the main experiment. Second, the Tucker reconstruction is held fixed and
 the response coefficients are refit by the ridge update in
@@ -222,7 +222,7 @@ Tucker core and factors through the nonlinear response.
 
 The CAVE diagnostic table in the main text groups scenes into terciles by
 $\Dlink$ and compares the eventual held-out RMSE gain of full NTD-PL. We use
-the same frozen-Tucker computation for external checks and low-diagnostic
+the same fixed-Tucker computation for external checks and low-diagnostic
 regimes where the learned response is not expected to help.
 
 \subsection{Cross-Domain Diagnostic Data}
@@ -259,7 +259,7 @@ CBSD68 and CIFAR-10 images \cite{martin2001database,krizhevsky2009learning};
 object-view units include COIL-100 and smallNORB tensors
 \cite{nene1996coil100,LeCun2004SmallNORB}. Each unit is normalized
 independently, fitted by matched-rank Tucker and NTD-PL, and summarized by
-frozen-Tucker diagnostic yield versus the eventual RMSE gain. These
+response diagnostic yield versus the eventual RMSE gain. These
 experiments are diagnostic tensor-recovery checks. Their purpose is to test
 whether this response-based residual pattern appears beyond hyperspectral
 cubes.
@@ -289,7 +289,7 @@ sub-second to about 1 s per configuration. Full-resolution CAVE reconstruction
 took about 10--17 s per scene for matched-rank Tucker and 172--217 s per scene
 for NTD-PL in the main low-rank reconstruction sweep. CAVE random completion
 runs took about 0.9--18.6 s per scene/mask/seed, while structured completion
-runs were about 1.6--5.0 s. The frozen-Tucker CAVE response diagnostic itself
+runs were about 1.6--5.0 s. The CAVE response diagnostic itself
 took about 0.12--0.59 s per fitted refresh. Non-HSI diagnostic batches with
 6 CPU workers took about 77 s for CBSD68/CIFAR-10/COIL-100/smallNORB and about
 5--6 minutes for each action-video batch. Peak memory was not instrumented per
