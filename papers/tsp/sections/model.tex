@@ -1,11 +1,10 @@
 \section{Dictionary-Linked Tucker Representation}
 \label{sec:model}
 
-We first describe the nonlinear measurement model and then introduce the
-dictionary-linked Tucker representation used for recovery. The goal is not to
-define a new tensor task, but to make explicit a common source of model
-mismatch: the tensor that is compact before measurement may be observed
-after a nonlinear response.
+We now specialize the nonlinear observation viewpoint to Tucker tensor
+recovery. The model separates the tensor before measurement from the tensor
+stored by the sensor or acquisition pipeline: the former is represented with a
+low Tucker rank, while the latter may be distorted by an entrywise response.
 
 \subsection{Nonlinear Low-Rank Signal Model}
 \label{sec:problem}

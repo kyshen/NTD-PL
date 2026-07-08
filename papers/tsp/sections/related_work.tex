@@ -40,6 +40,12 @@ ahn2024neural}. These approaches are valuable when the data require broad
 nonlinear expressivity, but they can make it harder to interpret how a fixed
 multilinear rank budget is being used.
 
+There is also a matrix literature in which low-rank structure is observed
+through non-Gaussian losses or an unknown entrywise transfer function
+\cite{Udell2016GLRM,Ganti2015SingleIndex}. This viewpoint is close in spirit
+to our setting, but the present work focuses on multilinear Tucker structure,
+rank expansion under polynomial responses, and tensor recovery diagnostics.
+
 The dictionary-linked Tucker model uses a constrained entrywise response. It
 assumes that the dominant residual left by a fixed Tucker fit can be
 explained by a shared entrywise map, while preserving the interpretability of
@@ -59,8 +65,11 @@ imaging motivate explicit response modeling in computational photography
 \cite{Debevec1997HDR,Grossberg2004CameraResponse}. Hyperspectral imaging adds
 additional sources of nonlinear behavior, including nonlinear mixing,
 reflectance effects, and sensor-dependent preprocessing
-\cite{BioucasDias2012HyperspectralUnmixing,Heylen2014NonlinearUnmixing}. At
-the same time, hyperspectral cubes are strongly correlated across spatial and
+\cite{BioucasDias2012HyperspectralUnmixing,Altmann2012PostNonlinear,
+Heylen2014NonlinearUnmixing}. In particular, post-nonlinear mixing models use
+a nonlinear map after a lower-dimensional mixing step, which is an important
+precedent for modeling a structured signal before nonlinear observation. At the
+same time, hyperspectral cubes are strongly correlated across spatial and
 spectral modes, making them natural testbeds for low-rank tensor recovery.
 
 Hyperspectral reconstruction and completion provide a signal recovery setting

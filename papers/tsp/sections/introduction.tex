@@ -4,27 +4,32 @@
 \IEEEPARstart{M}{ultidimensional} signals often contain strong structure across
 space, spectrum, time, view, or acquisition mode. Low-rank tensor models
 exploit this structure by representing a signal through a small number of
-coupled low-dimensional factors. They have become standard tools for signal representation,
-denoising, completion, and recovery \cite{Kolda2009Tensor,Sidiropoulos2017TSP,
-Liu2013TensorCompletion,LiuMoitra2020TensorCompletion}. Tucker decomposition is
-especially useful in this setting because it separates a compact core from
-mode-wise factors and provides an explicit multilinear rank budget. In the
-classical Tucker model, however, the reconstructed tensor is fitted directly to
-the measured tensor. This amounts to assuming that the map from the underlying
-low-rank signal to the observed measurements is linear.
+coupled low-dimensional factors. They have become standard tools for signal
+representation, denoising, completion, and recovery
+\cite{Kolda2009Tensor,Sidiropoulos2017TSP,Liu2013TensorCompletion,
+LiuMoitra2020TensorCompletion}. Tucker decomposition is especially useful in
+this setting because it separates a compact core from mode-wise factors and
+provides an explicit multilinear rank budget.
 
-This linear measurement assumption is often an idealization. Imaging and
-sensing pipelines may include camera response curves, radiometric calibration
-effects, saturation, reflectance nonlinearities, or other response mechanisms
-between the underlying physical quantity and the stored measurement
+In many sensing problems, however, the structured quantity of interest is not
+recorded directly. Camera response curves, radiometric processing, saturation,
+reflectance effects, and post-nonlinear hyperspectral mixing are standard
+examples in which a physical signal is transformed before it is stored as data
 \cite{Debevec1997HDR,Grossberg2004CameraResponse,
-BioucasDias2012HyperspectralUnmixing,Heylen2014NonlinearUnmixing}. When such a
-response acts entrywise on an underlying low-rank tensor, the measured tensor need
-not remain low-rank in the same Tucker sense. An underlying low-rank signal can
-therefore appear to require a substantially larger multilinear rank after
-measurement. From a signal recovery perspective, this creates a model mismatch:
-the rank budget selected for the underlying signal may be appropriate, while the
-linear Tucker observation model is not.
+BioucasDias2012HyperspectralUnmixing,Altmann2012PostNonlinear,
+Heylen2014NonlinearUnmixing}. Related ideas also appear in generalized
+low-rank and single-index matrix models, where low-dimensional structure is
+observed through a non-Gaussian or nonlinear entrywise map
+\cite{Udell2016GLRM,Ganti2015SingleIndex}. These observation models share a
+simple lesson: a compact pre-measurement signal can look more complicated after
+the measurement process.
+
+For Tucker recovery, this distinction matters because an entrywise nonlinear
+response can inflate the apparent multilinear rank of the measured tensor. An
+underlying low-rank signal can therefore appear to require a substantially
+larger Tucker rank after measurement. From a signal recovery perspective, this
+creates a model mismatch: the rank budget selected for the underlying signal
+may be appropriate, while the linear Tucker observation model is not.
 
 One way to reduce this mismatch is to increase the Tucker rank. This is often
 effective, but it changes the entire multilinear representation: the core
