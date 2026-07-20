@@ -1,0 +1,9 @@
+$tsp_dir = '../tsp';
+$ENV{'BIBINPUTS'} = "$tsp_dir;" . ($ENV{'BIBINPUTS'} || '');
+$ENV{'BSTINPUTS'} = "$tsp_dir;" . ($ENV{'BSTINPUTS'} || '');
+
+$pdf_mode = 1;
+$interaction = 'nonstopmode';
+$synctex = 1;
+$out_dir = 'out';
+@default_files = ('main.tex');

@@ -1,7 +1,27 @@
 \section{Proofs}
-\label{app:proofs}
+\label{supp:proofs}
 
-\subsection{Proof of Proposition~\ref{prop:rank_inflation}}
+\subsection{Proof of Proposition~\ref{paper-prop:shared_pfold}}
+
+Substitute \eqref{paper-eq:shared_pfold_factors} into
+\eqref{paper-eq:pfold_tucker}. The products can be regrouped as
+\[
+\begin{aligned}
+  [\mathcal{T}_p(\cX)]_{\mathbf{i}}
+  &=
+  \prod_{\ell=1}^{p}
+  \left(
+  \sum_{\mathbf r^{(\ell)}}
+  X_{\mathbf r^{(\ell)}}
+  \prod_{n=1}^{N}A^{(n)}_{i_n,r_n^{(\ell)}}
+  \right) \\
+  &= S_{\mathbf i}^{p}.
+\end{aligned}
+\]
+Applying this identity entrywise gives
+$\mathcal{T}_p(\cX)=\cS^{\od p}$.
+
+\subsection{Proof of Proposition~\ref{paper-prop:rank_inflation}}
 
 Let
 \[
@@ -19,7 +39,7 @@ $\binom{R_n+p-1}{p}$. Collecting identical monomials yields a Tucker
 representation of $\cS^{\od p}$ whose mode-$n$ factor is the degree-$p$
 Veronese lift of $\bA^{(n)}$. This proves the stated rank bound.
 
-\subsection{Proof of Theorem~\ref{thm:tucker_separation}}
+\subsection{Proof of Theorem~\ref{paper-thm:tucker_separation}}
 
 We first record a standard fact about Veronese evaluations. Let
 \(D=\binom{R+p-1}{p}\). There exists a matrix \(\bA\in\R^{D\times R}\) whose
@@ -63,79 +83,81 @@ as \(\bB^{(n)}\) times a full-column-rank right factor built from the
 remaining lifted factors, with a nonsingular diagonal scaling by the positive
 coefficients \(c_\alpha\). Therefore every mode unfolding has rank \(D\). The
 exact standard Tucker rank of \(\cY\) is \((D,\ldots,D)\), while \(\cY\) is
-represented by the degree-\(p\) linked model using the rank-\((R,\ldots,R)\)
+represented by a degree-\(p\) NTD-PL model using the rank-\((R,\ldots,R)\)
 Tucker signal.
 
-\subsection{Proof of Corollary~\ref{cor:tied_lift_parameters}}
+\subsection{Proof of Corollary~\ref{paper-cor:tied_lift_parameters}}
 
-By Proposition~\ref{prop:rank_inflation}, the degree-$p$ channel can be written
-as a Tucker tensor with ranks at most
+The direct parameterization in \eqref{paper-eq:pfold_tucker} stores
+$I_nR_n^p$ entries in the mode-$n$ map. By
+Proposition~\ref{paper-prop:rank_inflation}, the shared degree-$p$ term can also
+be written as a Tucker tensor with ranks at most
 $D_n(p)=\binom{R_n+p-1}{p}$. A standalone Tucker parameterization has
 $\prod_n D_n(p)$ core entries and $\sum_n I_nD_n(p)$ factor entries. In
-contrast, the power-dictionary linked model reuses the core and factors of
-$\cS$ and adds only one response coefficient per channel. Summing degrees up to
-$Q$ adds $Q+1$ response coefficients, proving the stated comparison.
+contrast, NTD-PL with the power basis reuses the core and factors of
+$\cS$ and adds only one response coefficient per polynomial term. Summing degrees up to
+$P$ adds $P+1$ response coefficients, proving the stated comparison.
 
-\subsection{Proof of Proposition~\ref{prop:poly_generation}}
+\subsection{Proof of Proposition~\ref{paper-prop:poly_generation}}
 
 If $g(s)=\sum_{p=0}^{P}\gamma_p s^p$ and $\cY=g(\cS^\star)$, choose the
-Tucker component of the power-dictionary linked model to be the Tucker representation of
+Tucker component of NTD-PL to be the Tucker representation of
 $\cS^\star$ and set $\beta_p=\gamma_p$ for all $p=0,\ldots,P$. Then
 $f_{\bbeta}(\cS^\star)=g(\cS^\star)=\cY$, giving exact representation with the
 same Tucker rank.
 
-\subsection{Proof of Theorem~\ref{thm:response_approximation}}
+\subsection{Proof of Theorem~\ref{paper-thm:response_approximation}}
 
 By the Weierstrass approximation theorem, for every $\epsilon>0$ there exists
-a polynomial $q(s)=\sum_{p=0}^{P}\beta_ps^p$ such that
-$\sup_{s\in[a,b]}|f(s)-q(s)|\le\epsilon$. Every entry of $\cS^\star$ lies in
+a polynomial $\pi_P(s)=\sum_{p=0}^{P}\beta_ps^p$ such that
+$\sup_{s\in[a,b]}|f(s)-\pi_P(s)|\le\epsilon$. Every entry of $\cS^\star$ lies in
 $[a,b]$, so each entrywise approximation error is bounded by $\epsilon$.
 Therefore
 \[
-  \norm{f(\cS^\star)-q(\cS^\star)}_F^2
+  \norm{f(\cS^\star)-\pi_P(\cS^\star)}_F^2
   =
   \sum_{\mathbf{i}}
-  |f(S^\star_{\mathbf{i}})-q(S^\star_{\mathbf{i}})|^2
+  |f(S^\star_{\mathbf{i}})-\pi_P(S^\star_{\mathbf{i}})|^2
   \le
   M\epsilon^2,
 \]
 which gives the stated bound after taking square roots.
 
-\subsection{Proof of Proposition~\ref{prop:monotone_descent}}
+\subsection{Proof of Proposition~\ref{paper-prop:monotone_descent}}
 
 For a fixed Tucker signal, Response Refresh solves the $\bbeta$-subproblem
-exactly, hence it cannot increase $\mathcal{F}_Q$. The subsequent Tucker
+exactly, hence it cannot increase $\mathcal{F}_J$. The subsequent Tucker
 update is assumed to satisfy the sufficient decrease condition
-\eqref{eq:sufficient_decrease}, and therefore also cannot increase
-$\mathcal{F}_Q$. Combining the two stages gives monotone decrease over the
-outer iteration. Since $\mathcal{F}_Q$ is bounded below by zero when the
+\eqref{paper-eq:sufficient_decrease}, and therefore also cannot increase
+$\mathcal{F}_J$. Combining the two stages gives monotone decrease over the
+outer iteration. Since $\mathcal{F}_J$ is bounded below by zero when the
 regularization weights are nonnegative, summing
-\eqref{eq:sufficient_decrease} over $k$ gives
+\eqref{paper-eq:sufficient_decrease} over $k$ gives
 \[
   c\sum_{k=0}^{K}\norm{\theta^{k+1}-\theta^k}_2^2
   \le
-  \mathcal{F}_Q(\theta^0)-\mathcal{F}_Q(\theta^{K+1})
+  \mathcal{F}_J(\theta^0)-\mathcal{F}_J(\theta^{K+1})
   \le
-  \mathcal{F}_Q(\theta^0).
+  \mathcal{F}_J(\theta^0).
 \]
 Letting $K\to\infty$ proves square summability of the steps.
 
-\subsection{Proof of Theorem~\ref{thm:stationary_convergence}}
+\subsection{Proof of Theorem~\ref{paper-thm:stationary_convergence}}
 
-For fixed $Q$, the objective is a polynomial function of the Tucker parameters
+For fixed $J$, the objective is a polynomial function of the Tucker parameters
 and response coefficients when the monomial basis is used. For any other fixed
 polynomial basis spanning the same space, it remains polynomial after a linear
-change of coefficients. The linear-spline dictionary is piecewise polynomial
-and semi-algebraic; standard RBF dictionaries are analytic and belong to the
+change of coefficients. The linear-spline basis is piecewise polynomial and
+semi-algebraic; standard RBF bases are analytic and belong to the
 standard tame classes covered by KL convergence theory. With
 standard box or normalization constraints used to fix the Tucker gauge, the
 corresponding constrained objective satisfies the Kurdyka--Lojasiewicz
-property. Assumption~\ref{ass:optimization} gives sufficient decrease and a
+property. Assumption~\ref{paper-ass:optimization} gives sufficient decrease and a
 relative error bound. The standard KL convergence theorem for nonconvex descent
 sequences then implies finite length of the iterates and convergence to a
-critical point of $\mathcal{F}_Q$.
+critical point of $\mathcal{F}_J$.
 
-\subsection{Proof of Theorem~\ref{thm:masked_generalization}}
+\subsection{Proof of Theorem~\ref{thm:supp-masked-generalization}}
 
 Fix \(0<\varepsilon\le B_\Theta\), and let
 \(\mathcal{N}_\varepsilon\) be an \(\varepsilon\)-net of \(\Theta\) in

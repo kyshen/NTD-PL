@@ -1,0 +1,24 @@
+\input{../tsp/preamble}
+
+% Prefer supplementary-local assets, then fall back to the TSP paper assets.
+\graphicspath{{figures/}{../tsp/figures/}}
+
+% Import main-paper labels after the main paper has been compiled.
+\usepackage{xr}
+\IfFileExists{../tsp/main.aux}{\externaldocument[paper-]{../tsp/main}}{}
+
+% Keep supplementary counters visually distinct from those in the main paper.
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+\renewcommand{\theequation}{S\arabic{equation}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thealgorithm}{S\arabic{algorithm}}
+\renewcommand{\thetheorem}{S\arabic{theorem}}
+\renewcommand{\theproposition}{S\arabic{proposition}}
+\renewcommand{\thelemma}{S\arabic{lemma}}
+\renewcommand{\thecorollary}{S\arabic{corollary}}
+\renewcommand{\theassumption}{S\arabic{assumption}}
+\renewcommand{\thedefinition}{S\arabic{definition}}
+\renewcommand{\theremark}{S\arabic{remark}}

@@ -1,0 +1,17 @@
+seed,target,tucker_rmse,ntdpl_rmse,general_pfold_rmse
+0,separate p-fold maps,0.27647128,0.27644304,0
+1,separate p-fold maps,0.28626879,0.28594147,0
+2,separate p-fold maps,0.27303743,0.27290104,0
+3,separate p-fold maps,0.24998678,0.24984892,0
+4,separate p-fold maps,0.27358598,0.27356816,0
+5,separate p-fold maps,0.22454078,0.22445297,0
+6,separate p-fold maps,0.27833197,0.27825658,0
+7,separate p-fold maps,0.23217802,0.23199507,0
+0,shared factors,0.28708344,7.5099876e-05,0
+1,shared factors,0.27113418,2.2190823e-05,0
+2,shared factors,0.22258693,1.2659624e-05,0
+3,shared factors,0.23853097,4.4226674e-05,0
+4,shared factors,0.29178982,2.012703e-05,0
+5,shared factors,0.22295849,4.4257252e-05,0
+6,shared factors,0.28495661,3.6891492e-05,0
+7,shared factors,0.21889588,0.00021321154,0

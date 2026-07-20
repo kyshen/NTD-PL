@@ -1,0 +1,14 @@
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}l c c c c c c@{}}
+\toprule
+Method & \multicolumn{2}{c}{Low ($\approx13$k)} & \multicolumn{2}{c}{Medium ($\approx27$k)} & \multicolumn{2}{c}{High ($\approx42$k)} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+ & RMSE$\downarrow$ & NMSE(dB)$\downarrow$ & RMSE$\downarrow$ & NMSE(dB)$\downarrow$ & RMSE$\downarrow$ & NMSE(dB)$\downarrow$ \\
+\midrule
+CP & 0.0333 $\pm$ 0.0271 & -15.73 $\pm$ 5.05 & 0.0233 $\pm$ 0.0223 & -19.44 $\pm$ 5.79 & 0.0186 $\pm$ 0.0191 & \textbf{-21.69 $\pm$ 6.11} \\
+Tensor Train & 0.0437 $\pm$ 0.0292 & -12.98 $\pm$ 4.70 & 0.0376 $\pm$ 0.0279 & -14.53 $\pm$ 4.98 & 0.0334 $\pm$ 0.0266 & -15.72 $\pm$ 5.18 \\
+Tucker & 0.0330 $\pm$ 0.0265 & -15.76 $\pm$ 4.97 & 0.0248 $\pm$ 0.0219 & -18.58 $\pm$ 5.41 & 0.0208 $\pm$ 0.0184 & -20.16 $\pm$ 5.52 \\
+NTD-PL ($P=2$) & 0.0308 $\pm$ 0.0251 & -16.39 $\pm$ 4.78 & 0.0232 $\pm$ 0.0197 & -18.98 $\pm$ 5.05 & 0.0197 $\pm$ 0.0160 & -20.29 $\pm$ 4.98 \\
+NTD-PL ($P=4$) & 0.0296 $\pm$ 0.0250 & -16.86 $\pm$ 4.99 & 0.0221 $\pm$ 0.0195 & -19.52 $\pm$ 5.19 & 0.0189 $\pm$ 0.0157 & -20.73 $\pm$ 5.05 \\
+\textbf{NTD-PL ($P=6$)} & \textbf{0.0293 $\pm$ 0.0249} & \textbf{-16.96 $\pm$ 4.98} & \textbf{0.0219 $\pm$ 0.0193} & \textbf{-19.63 $\pm$ 5.17} & \textbf{0.0186 $\pm$ 0.0156} & -20.85 $\pm$ 5.03 \\
+\bottomrule
+\end{tabular*}

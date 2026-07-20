@@ -29,14 +29,14 @@ def _fit_gain_frame(root: Path, p_max: int) -> pd.DataFrame:
 def _scene_mechanism_frame(root: Path, p_max: int) -> pd.DataFrame:
     metrics = pd.read_csv(root / "spectrum_metrics.csv")
     response = metrics[
-        metrics["tensor_kind"].eq("ntdpl_response_component")
+        metrics["tensor_kind"].eq("ntdpl_nonlinear_response_component")
         & metrics["mode"].isin([1, 2])
     ]
     response_scene = response.groupby(["scene_id", "scene_name"], as_index=False).agg(
-        response_rank99_spatial=("rank_energy_990", "mean"),
-        response_rank999_spatial=("rank_energy_999", "mean"),
-        response_tail_spatial=("tail_energy_after_base_rank", "mean"),
-        response_entropy_spatial=("entropy_rank", "mean"),
+        nonlinear_rank99_spatial=("rank_energy_990", "mean"),
+        nonlinear_rank999_spatial=("rank_energy_999", "mean"),
+        nonlinear_tail_spatial=("tail_energy_after_base_rank", "mean"),
+        nonlinear_entropy_spatial=("entropy_rank", "mean"),
     )
 
     paired = pd.read_csv(root / "paired_rank_inflation.csv")
@@ -60,7 +60,7 @@ def _degree_summary(root: Path, p_max: int) -> dict[str, float | int]:
     metrics = pd.read_csv(root / "spectrum_metrics.csv")
     fit = _fit_gain_frame(root, p_max)
     response = metrics[
-        metrics["tensor_kind"].eq("ntdpl_response_component")
+        metrics["tensor_kind"].eq("ntdpl_nonlinear_response_component")
         & metrics["mode"].isin([1, 2])
     ]
     pred = metrics[
@@ -85,12 +85,12 @@ def _degree_summary(root: Path, p_max: int) -> dict[str, float | int]:
         "sam_gain_pct_mean": float(fit["SAM_gain_pct"].mean()),
         "sam_gain_pct_median": float(fit["SAM_gain_pct"].median()),
         "sam_wins": int((fit["SAM_gain_pct"] > 0.0).sum()),
-        "response_rank99_mean_spatial": float(response["rank_energy_990"].mean()),
-        "response_rank99_median_spatial": float(response["rank_energy_990"].median()),
-        "response_rank999_mean_spatial": float(response["rank_energy_999"].mean()),
-        "response_rank999_median_spatial": float(response["rank_energy_999"].median()),
-        "response_tail_after_base_mean_spatial": float(response["tail_energy_after_base_rank"].mean()),
-        "response_tail_after_base_median_spatial": float(response["tail_energy_after_base_rank"].median()),
+        "nonlinear_rank99_mean_spatial": float(response["rank_energy_990"].mean()),
+        "nonlinear_rank99_median_spatial": float(response["rank_energy_990"].median()),
+        "nonlinear_rank999_mean_spatial": float(response["rank_energy_999"].mean()),
+        "nonlinear_rank999_median_spatial": float(response["rank_energy_999"].median()),
+        "nonlinear_tail_after_base_mean_spatial": float(response["tail_energy_after_base_rank"].mean()),
+        "nonlinear_tail_after_base_median_spatial": float(response["tail_energy_after_base_rank"].median()),
         "prediction_rank999_lift_mean_spatial": float(
             (
                 paired["rank_energy_999_ntdpl_prediction"]
@@ -107,15 +107,18 @@ def _degree_summary(root: Path, p_max: int) -> dict[str, float | int]:
         "signal_rank99_median_spatial": float(signal["rank_energy_990"].median()),
         "prediction_rank99_median_spatial": float(pred["rank_energy_990"].median()),
         "measured_rank99_median_spatial": float(measured["rank_energy_990"].median()),
+        "signal_rank999_median_spatial": float(signal["rank_energy_999"].median()),
+        "prediction_rank999_median_spatial": float(pred["rank_energy_999"].median()),
+        "measured_rank999_median_spatial": float(measured["rank_energy_999"].median()),
     }
 
 
 def _correlation_summary(scene: pd.DataFrame) -> pd.DataFrame:
     features = [
-        "response_rank99_spatial",
-        "response_rank999_spatial",
-        "response_tail_spatial",
-        "response_entropy_spatial",
+        "nonlinear_rank99_spatial",
+        "nonlinear_rank999_spatial",
+        "nonlinear_tail_spatial",
+        "nonlinear_entropy_spatial",
         "pred_rank999_lift_spatial",
         "pred_tail_capture_spatial",
     ]
@@ -142,12 +145,12 @@ def _write_plots(summary: pd.DataFrame, scene: pd.DataFrame, outdir: Path) -> No
     ax2 = ax1.twinx()
     ax1.plot(summary["p_max"], summary["rmse_gain_pct_mean"], marker="o", color="#1f77b4", label="RMSE gain")
     ax1.plot(summary["p_max"], summary["sam_gain_pct_mean"], marker="s", color="#4c78a8", linestyle="--", label="SAM gain")
-    ax2.plot(summary["p_max"], summary["response_rank99_median_spatial"], marker="^", color="#d62728", label="response rank99")
-    ax2.plot(summary["p_max"], summary["response_rank999_median_spatial"], marker="v", color="#ff7f0e", label="response rank99.9")
+    ax2.plot(summary["p_max"], summary["nonlinear_rank99_median_spatial"], marker="^", color="#d62728", label="nonlinear rank99")
+    ax2.plot(summary["p_max"], summary["nonlinear_rank999_median_spatial"], marker="v", color="#ff7f0e", label="nonlinear rank99.9")
     ax1.set_xlabel("p_max")
     ax1.set_ylabel("mean gain (%)")
     ax2.set_ylabel("median spatial energy rank")
-    ax1.set_title("Degree sweep: gains and response-component rank")
+    ax1.set_title("Degree sweep: gains and nonlinear-response rank")
     ax1.grid(True, alpha=0.25)
     lines1, labels1 = ax1.get_legend_handles_labels()
     lines2, labels2 = ax2.get_legend_handles_labels()

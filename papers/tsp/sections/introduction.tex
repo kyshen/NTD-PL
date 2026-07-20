@@ -11,122 +11,124 @@ LiuMoitra2020TensorCompletion}. Tucker decomposition is especially useful in
 this setting because it separates a compact core from mode-wise factors and
 provides an explicit multilinear rank budget.
 
-In many sensing problems, however, the structured quantity of interest is not
-recorded directly. Camera response curves, radiometric processing, saturation,
-reflectance effects, and post-nonlinear hyperspectral mixing are standard
-examples in which a physical signal is transformed before it is stored as data
-\cite{Debevec1997HDR,Grossberg2004CameraResponse,
-BioucasDias2012HyperspectralUnmixing,Altmann2012PostNonlinear,
-Heylen2014NonlinearUnmixing}. Related ideas also appear in generalized
-low-rank and single-index matrix models, where low-dimensional structure is
-observed through a non-Gaussian or nonlinear entrywise map
-\cite{Udell2016GLRM,Ganti2015SingleIndex}. These observation models share a
-simple lesson: a compact pre-measurement signal can look more complicated after
-the measurement process.
+In many sensing pipelines, however, the structured signal and the recorded
+data are not on the same scale. Camera response curves, radiometric processing,
+and saturation are direct examples of nonlinear transformations before data
+storage \cite{Debevec1997HDR,Grossberg2004CameraResponse}. Post-nonlinear
+hyperspectral mixing provides a related precedent in which a lower-dimensional
+signal is transformed after a structured mixing stage
+\cite{BioucasDias2012HyperspectralUnmixing,Altmann2012PostNonlinear,
+Heylen2014NonlinearUnmixing}. These processes have different physical origins,
+but they motivate the same question: what happens when a compact tensor signal
+is observed after a nonlinear response? Related questions also arise in
+generalized low-rank and single-index matrix models
+\cite{Udell2016GLRM,Ganti2015SingleIndex}.
 
-For Tucker recovery, this distinction matters because an entrywise nonlinear
-response can inflate the apparent multilinear rank of the measured tensor. An
-underlying low-rank signal can therefore appear to require a substantially
-larger Tucker rank after measurement. From a signal recovery perspective, this
-creates a model mismatch: the rank budget selected for the underlying signal
-may be appropriate, while the linear Tucker observation model is not.
+For a fixed-rank Tucker model, this distinction matters because an entrywise
+nonlinear response can increase the apparent multilinear rank of the measured
+tensor. A low-rank signal before the response may therefore require a much
+larger Tucker rank if the measured tensor is modeled directly. This creates a
+specific mismatch: the selected rank can be suitable for the latent signal
+while a Tucker model with the same rank is insufficient for the measurements.
 
-One way to reduce this mismatch is to increase the Tucker rank. This is often
-effective, but it changes the entire multilinear representation: the core
-grows rapidly, each mode factor gains additional degrees of freedom, and the
-interpretation of a fixed rank budget for the underlying signal is lost. A second approach is to
-replace the multilinear model with a more flexible nonlinear tensor model, such
-as a kernel, Gaussian-process, generalized-link, or neural tensor decoder
-\cite{Luo2024LRTFR,saragadam2024deeptensor,ahn2024neural}. Such methods are
-powerful, but their flexibility can obscure the relation between the recovered
-signal and a chosen Tucker representation, and may introduce additional training and
-model-selection burdens.
+Increasing the Tucker rank can reduce this mismatch, but it changes the whole
+multilinear representation: the core grows rapidly and every mode factor gains
+additional degrees of freedom. More general functional, kernel, and neural
+tensor models can describe a broader range of nonlinear effects
+\cite{Luo2024LRTFR,saragadam2024deeptensor,ahn2024neural}. Our goal is a more
+structured model that keeps a clear Tucker rank budget while allowing
+higher-order interactions.
 
-This paper studies a narrower and more structured alternative. We assume that
-the underlying signal is well represented by a Tucker tensor, but that the
-measurements are generated from that underlying signal through an unknown
-entrywise response. We approximate this response in a finite dictionary of
-scalar functions and learn the response jointly with the Tucker core and
-factors. If
+We begin from the Tucker model itself. For fixed mode factors, standard Tucker
+maps the core linearly to the data tensor. We extend this map by introducing a
+\emph{$p$-fold Tucker term}, which combines $p$ copies of the core through
+higher-order mode maps. The case $p=1$ is standard Tucker, and a sum over
+several orders gives a \emph{Tucker polynomial}. This is a direct nonlinear
+extension of the core map, but the general form needs new mode maps at every
+order and quickly becomes large.
+
+The model becomes compact when the same Tucker factors are shared across all
+orders. Let
 \begin{equation}
   \cS =
   \tucker{\cX}{\bA^{(1)},\ldots,\bA^{(N)}}
 \end{equation}
-is the underlying Tucker signal, the measured tensor is modeled as
+be the Tucker tensor formed by the shared factors. Under this sharing, the
+degree-$p$ Tucker term is exactly $\cS^{\od p}$. The resulting model is
 \begin{equation}
   \widehat{\cY}
+  =
+  \sum_{p=0}^{P}\beta_p\cS^{\od p}
   =
   f_{\bbeta}(\cS),
   \label{eq:intro_ntdpl}
 \end{equation}
-where $f_{\bbeta}(s)=\sum_{q=0}^{Q}\beta_q\psi_q(s)$ for a chosen scalar
-dictionary $\{\psi_q\}_{q=0}^{Q}$. We call this a dictionary-linked Tucker
-model. It keeps the Tucker ranks fixed and adds only the response coefficients
-$\bbeta=(\beta_0,\ldots,\beta_Q)$. Different finite dictionaries can be used
-when response priors are available. In this paper, we use the simplest power dictionary
-$\psi_q(s)=s^q$, which gives the polynomial-linked model and makes the
-rank-inflation mechanism explicit. The model is therefore not an unrestricted
-nonlinear decoder and not a post-hoc calibration of a fixed Tucker fit. The
-underlying signal and the response are estimated together, so the Tucker core
-and factors are shaped by the nonlinear measurement model during recovery.
+which we call nonlinear Tucker decomposition with polynomial links (NTD-PL).
+Compared with the general Tucker polynomial, NTD-PL reuses one core and one set
+of factors and adds only the scalar coefficients
+$\bbeta=(\beta_0,\ldots,\beta_P)$.
 
-The key structural point is most explicit for the polynomial dictionary, where
-the response creates rank inflation tied to the same Tucker factors. The degree-$p$ term
-$\cS^{\od p}$ can be viewed as a Tucker tensor whose factors are polynomial
-feature lifts of the original factors. Thus higher-degree channels can increase
-the effective multilinear rank of the measured tensor, but they remain tied to
-one low-rank Tucker signal. More general dictionaries keep the same modeling
-principle: the additional expressivity must be explainable by one shared
-entrywise response acting on the underlying signal. This constraint is what makes
-the model useful in the intended regime and limited outside it. If the
-remaining residual is ordinary multilinear structure, increasing Tucker rank is
-the appropriate remedy; if the residual is coherent with a measurement
-response, the learned response can provide a compact correction.
+This derivation gives NTD-PL two complementary interpretations. It is the
+shared-factor form of the Tucker polynomial, and it is also a low-rank Tucker
+tensor followed by an entrywise polynomial response. The first view explains
+where the higher-order interactions come from. The second connects the model
+to nonlinear measurements. The same estimator can replace the powers by other
+finite sets of scalar basis functions when a different response basis is
+appropriate.
 
-We develop this idea for masked tensor signal recovery, covering both full
-reconstruction and tensor completion. The estimation procedure alternates
-between a small ridge-regression update for the response coefficients and
-gradient-based updates of the Tucker core and factors. To improve numerical stability,
-the implementation uses normalized features and continuation when the selected
-dictionary is nested.
-We also introduce a response diagnostic that measures how much residual
-energy can be removed by refitting only the response after a linear Tucker fit.
-This diagnostic is designed to answer a practical question before full
-nonlinear training: does this signal contain residual structure that is likely
-to benefit from a shared entrywise response?
+The Tucker parameters and response coefficients are estimated jointly from the
+observed entries of the measured tensor $\cY$. The objective fits available
+measurements and predicts missing entries while using $\cS$ as a compact latent
+representation. Without external calibration constraints, the decomposition
+into $\cS$ and $f_{\bbeta}$ need not identify a unique physical pre-response
+signal; the fitted pair is interpreted through its prediction of $\cY$.
 
-The resulting study is organized around the full signal-recovery pipeline:
-modeling, estimation, diagnosis, and validation. On the rank side, we
-characterize when an entrywise response creates efficient rank inflation and
-when increasing ordinary Tucker rank is the more direct explanation. On the
-estimation side, we use the special structure of the response update to keep the nonlinear
-part low-dimensional. On the experimental side, we evaluate both high- and
-low-diagnostic regimes to clarify the operating conditions of the model.
+Sharing the factors greatly reduces the parameter count, but it does not remove
+the high-order effect. Each $\cS^{\od p}$ has a Tucker representation whose
+factors contain degree-$p$ monomials of the shared factors. The measured tensor
+can therefore have higher effective rank while the latent Tucker ranks remain
+fixed. The model is useful when these shared higher-order terms explain a
+substantial part of the Tucker residual. If they do not, increasing the Tucker
+rank or changing the tensor prior is a more direct remedy.
+
+We fit the shared-factor model with a masked least-squares objective. The
+estimator alternates between a small ridge regression for the response
+coefficients and gradient-based updates of the Tucker core and factors. We also
+introduce a low-cost diagnostic: after fitting a linear Tucker model, we keep
+it fixed, refit only the response coefficients, and measure the residual
+reduction. A large reduction indicates that joint NTD-PL training is more
+likely to be useful.
 
 \subsection{Contributions}
 \label{subsec:contributions}
 
 The main contributions are summarized as follows.
 \begin{itemize}
-  \item We formulate nonlinear low-rank tensor recovery under an unknown
-  entrywise measurement response, separating the rank of the underlying signal from
-  the rank inflation observed after measurement.
+  \item We introduce the Tucker polynomial, which extends the linear core map
+  of Tucker decomposition with $p$-fold interactions. Sharing the mode factors
+  across orders yields NTD-PL, a compact model for nonlinear tensor
+  measurements.
 
-  \item We propose a dictionary-linked Tucker model that keeps the Tucker ranks
-  fixed while learning an entrywise response with a small number of
-  coefficients. The estimator is instantiated with a power dictionary, yielding
-  a compact polynomial response tied to the same Tucker core and factors.
+  \item We develop a masked alternating estimator for the shared-factor model,
+  with a closed-form ridge update for the response coefficients and descent
+  updates for the Tucker parameters. We also propose a diagnostic that measures
+  how much of a fixed Tucker residual can be removed by refitting only the
+  response.
 
-  \item We analyze the resulting model class and estimation procedure,
-  including induced rank inflation, parameter economy relative to explicit
-  higher-rank Tucker models, response approximation, descent properties, diagnostic
-  interpretation, and computational scaling.
+  \item We establish the relation between $p$-fold Tucker terms and NTD-PL,
+  analyze the induced rank inflation and parameter cost, prove approximation of
+  continuous responses, and study stationarity and computational scaling.
 
-  \item We evaluate the model on controlled nonlinear tensor signals and
-  hyperspectral recovery tasks, with rank-inflation comparisons,
-  noisy-observation robustness tests, and diagnostic stratification that
-  identifies when the nonlinear response is useful.
+  \item We evaluate controlled nonlinear measurements, CAVE
+  reconstruction and completion, noisy reconstruction, and cross-domain
+  diagnostics. Comparisons with matched-rank and higher-rank Tucker, CP, and TT
+  test accuracy and parameter use, while mechanism experiments connect the
+  gains to the measured rank increase and to the response diagnostic score.
 \end{itemize}
 
-The remainder of the paper develops the model, analysis, estimation algorithm,
-diagnostic score, and experimental validation in this order.
+Section~\ref{sec:related_work} reviews related tensor and nonlinear observation
+models. Section~\ref{sec:model} introduces the Tucker polynomial and derives
+NTD-PL, Section~\ref{sec:estimation} presents the estimator and diagnostic,
+Section~\ref{sec:theory} gives the analysis, and
+Section~\ref{sec:experiments} reports the experiments. Section~\ref{sec:conclusion}
+concludes the paper.

@@ -1,79 +1,97 @@
 \section{Related Work}
 \label{sec:related_work}
 
-\subsection{Low-Rank Tensor Signal Models}
+\subsection{Low-Rank Tensor Recovery}
 
-Low-rank tensor decompositions are a standard language for multidimensional
-signal modeling. CP and Tucker models have been used for compression,
-denoising, source separation, completion, and data fusion across signal
-processing and machine learning \cite{Kolda2009Tensor,Cichocki2015SignalProcessing,
-Sidiropoulos2017TSP}. Tucker decomposition, in particular, represents a tensor
-by a small core and mode-wise factors \cite{DeLathauwer2000MLSVD}, making the
-multilinear rank explicit. Other structured formats, including tensor-train and
-tensor-ring decompositions \cite{oseledets2011,zhao2016tr}, control complexity
-through different network topologies. The present paper uses Tucker because
-its mode-wise ranks give a direct way to distinguish the rank of the underlying
-signal from the effective rank of the measured tensor.
+CP and Tucker decompositions are widely used for compression, denoising,
+source separation, completion, and data fusion
+\cite{Kolda2009Tensor,Cichocki2015SignalProcessing,Sidiropoulos2017TSP}.
+Tucker decomposition represents a tensor by a core and mode-wise factors
+\cite{DeLathauwer2000MLSVD}, so its multilinear ranks directly specify the
+capacity assigned to each mode. Tensor-train and tensor-ring decompositions
+control complexity through different network structures
+\cite{oseledets2011,zhao2016tr}. These formats provide useful alternative
+low-rank priors, while Tucker is the focus here because its mode-wise ranks let
+us compare the rank of the latent tensor with the rank observed after a
+nonlinear response.
 
-Tensor completion methods exploit these low-dimensional structures to recover
-missing entries. Convex and nonconvex approaches include nuclear-norm inspired
-formulations, factorized Tucker or CP objectives, and practical algorithms for
-incomplete tensors \cite{Liu2013TensorCompletion,LiuMoitra2020TensorCompletion,
-yang2016iterative}. These methods usually model the measured tensor itself as
-low-rank. Our setting is different: the underlying signal is low-rank, but an
-entrywise response can lift the measured tensor outside the same rank budget.
-Increasing Tucker rank can reduce the mismatch, but doing so changes every
-mode factor and grows the core. NTD-PL instead keeps the original Tucker ranks
-and adds a response function with only a few extra coefficients.
+Tensor completion methods recover missing entries by constraining the tensor
+with convex surrogates or factorized low-rank models. Representative approaches
+include nuclear-norm-based formulations, Tucker or CP factorizations, and
+nonconvex algorithms for incomplete tensors
+\cite{Liu2013TensorCompletion,LiuMoitra2020TensorCompletion,yang2016iterative}.
+These methods generally place the low-rank constraint directly on the measured
+tensor. In our setting, the Tucker constraint is placed on a latent
+pre-response tensor, while the measured tensor can have a larger apparent
+rank. Increasing the Tucker rank remains an important baseline, but it adds
+parameters throughout the core and factors. NTD-PL instead tests whether the
+additional measured structure can be explained by a shared scalar response at
+the prescribed latent Tucker rank.
 
-\subsection{Generalized and Nonlinear Tensor Models}
+\subsection{Polynomial and Nonlinear Tensor Models}
 
-Several tensor models replace the Gaussian squared-loss view with generalized
-or nonlinear observation models. Generalized CP and probabilistic tensor
-factorizations model non-Gaussian observations through a chosen likelihood or
-link function \cite{hong2020generalized,schein2016bayesian}, while
-nonparametric Bayesian tensor models increase flexibility through latent
-function priors \cite{xu2011infinite}. Kernel, functional, and neural tensor
-methods further expand the model class by learning nonlinear feature maps or
-deep decoders \cite{Luo2024LRTFR,liu2017deepcp,saragadam2024deeptensor,
-ahn2024neural}. These approaches are valuable when the data require broad
-nonlinear expressivity, but they can make it harder to interpret how a fixed
-multilinear rank budget is being used.
+Polynomial predictors can be written with high-order coefficient tensors.
+Tensor factorizations have been used to compress these coefficients and avoid
+forming all polynomial features explicitly
+\cite{yang2015tensorMachines,novikov2016exponentialMachines}. These methods
+produce scalar predictions from vector inputs. The Tucker polynomial considered
+here has a different role: it maps a Tucker core to a tensor output, while the
+mode maps preserve the structure of each output dimension. NTD-PL is the
+shared-factor form of this model.
 
-There is also a matrix literature in which low-rank structure is observed
-through non-Gaussian losses or an unknown entrywise transfer function
-\cite{Udell2016GLRM,Ganti2015SingleIndex}. This viewpoint is close in spirit
-to our setting, but the present work focuses on multilinear Tucker structure,
-rank inflation under polynomial responses, and tensor recovery diagnostics.
+Generalized tensor factorizations combine low-rank structure with a prescribed
+observation distribution or link. Generalized CP models support a range of
+loss functions and data types, while probabilistic Tucker models use
+application-specific likelihoods for observations such as counts
+\cite{hong2020generalized,schein2016bayesian}. Nonparametric Bayesian tensor
+models provide another form of flexibility through latent-function priors
+\cite{xu2011infinite}. In these approaches, the observation model is typically
+chosen as part of the statistical formulation.
 
-The dictionary-linked Tucker model uses a constrained entrywise response. It
-assumes that the dominant residual left by a fixed Tucker fit can be
-explained by a shared entrywise map, while preserving the interpretability of
-the Tucker ranks. This places the model between classical low-rank recovery and
-general nonlinear tensor factorization. The power-dictionary instance is
-expressive enough to approximate common smooth responses on a bounded signal
-range, while remaining structured enough to admit a rank-inflation analysis and
-a closed-form response update. Other finite scalar dictionaries could be substituted
-when calibration constraints suggest a different response basis, without
-replacing the Tucker core and factors.
+Kernel, functional, and neural tensor models learn broader nonlinear feature
+maps or decoders
+\cite{Luo2024LRTFR,liu2017deepcp,saragadam2024deeptensor,ahn2024neural}.
+They are designed to capture nonlinear interactions that need not reduce to a
+single entrywise response. NTD-PL addresses a narrower case: one scalar
+function is shared across entries, and the input to that function is a Tucker
+tensor with explicitly prescribed ranks. This restriction retains a direct
+connection between the latent rank budget and the complexity added in the
+measured domain.
 
-\subsection{Imaging Recovery and Nonlinear Responses}
+The closest matrix analogue is low-rank estimation with a generalized loss or
+an unknown entrywise transfer function. Generalized low-rank models cover many
+data-dependent losses, and monotonic single-index matrix completion jointly
+estimates a low-rank matrix and an unknown monotone link
+\cite{Udell2016GLRM,Ganti2015SingleIndex}. The present work follows the same
+view for Tucker tensors: low-rank structure is modeled before an entrywise
+response. The Tucker polynomial supplies the higher-order tensor map, while
+sharing its factors yields a small response model that can be fitted and
+diagnosed efficiently.
 
-Nonlinear responses arise naturally in imaging and sensing pipelines. Camera
-response curves, radiometric processing, saturation, and high-dynamic-range
-imaging motivate explicit response modeling in computational photography
-\cite{Debevec1997HDR,Grossberg2004CameraResponse}. Hyperspectral imaging adds
-additional sources of nonlinear behavior, including nonlinear mixing,
-reflectance effects, and sensor-dependent preprocessing
+\subsection{Nonlinear Responses in Imaging}
+
+Imaging pipelines provide established examples of nonlinear measurement
+responses. Camera response functions map scene irradiance to recorded pixel
+values, and high-dynamic-range imaging often estimates or calibrates this map
+explicitly \cite{Debevec1997HDR,Grossberg2004CameraResponse}. These models
+motivate learning a low-dimensional response instead of absorbing all
+radiometric variation into the image representation.
+
+Hyperspectral imaging contains other forms of nonlinearity, especially in
+spectral mixing. Reviews of nonlinear unmixing and post-nonlinear mixing models
+describe settings in which a structured linear mixture is followed by a
+nonlinear transformation
 \cite{BioucasDias2012HyperspectralUnmixing,Altmann2012PostNonlinear,
-Heylen2014NonlinearUnmixing}. In particular, post-nonlinear mixing models use
-a nonlinear map after a lower-dimensional mixing step, which is an important
-precedent for modeling a structured signal before nonlinear observation. At the
-same time, hyperspectral cubes are strongly correlated across spatial and
-spectral modes, making them natural testbeds for low-rank tensor recovery.
+Heylen2014NonlinearUnmixing}. These physical mechanisms are not all equivalent
+to one global entrywise response. Their relevance here is the broader modeling
+precedent: a compact structured signal can be considered before a nonlinear
+observation stage.
 
-Hyperspectral reconstruction and completion provide a signal recovery setting
-where fixed-rank Tucker mismatch is observable and measurable. The proposed
-response diagnostic estimates, before full nonlinear training, whether a fixed
-Tucker residual contains structure that the entrywise response can remove. This
-makes the model selection criterion explicit and testable.
+Accordingly, NTD-PL is not presented as a complete physical model of a camera
+or hyperspectral sensor, and the real-data experiments do not claim to identify
+a unique calibration curve. Instead, we test whether a jointly learned shared
+response improves reconstruction and completion of the measured tensor at a
+fixed latent Tucker rank. Hyperspectral cubes are useful for this test because
+of their strong spatial and spectral correlations. The response diagnostic
+further measures, before joint fitting, whether a scalar response can reduce
+the residual of a Tucker model on a given tensor.

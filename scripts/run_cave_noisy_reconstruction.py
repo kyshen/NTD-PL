@@ -1,9 +1,22 @@
 from __future__ import annotations
 
 import argparse
+from concurrent.futures import ProcessPoolExecutor, as_completed
+import os
 from pathlib import Path
 import sys
 from typing import Any
+
+for _thread_key in (
+    "OMP_NUM_THREADS",
+    "MKL_NUM_THREADS",
+    "OPENBLAS_NUM_THREADS",
+    "NUMEXPR_NUM_THREADS",
+    "VECLIB_MAXIMUM_THREADS",
+    "BLIS_NUM_THREADS",
+    "TBB_NUM_THREADS",
+):
+    os.environ.setdefault(_thread_key, "1")
 
 import numpy as np
 import pandas as pd
@@ -75,6 +88,20 @@ def _run_one(
     return rows
 
 
+def _run_scene(
+    scene_id: int,
+    target_shape: tuple[int, int],
+    rank: tuple[int, int, int],
+    snrs: list[float | None],
+    n_iter_max: int,
+) -> list[dict[str, Any]]:
+    scene_name, clean = _load_cave_scene(scene_id, target_shape)
+    rows: list[dict[str, Any]] = []
+    for snr in snrs:
+        rows.extend(_run_one(scene_id, clean, scene_name, snr, target_shape, rank, n_iter_max))
+    return rows
+
+
 def _summarize(frame: pd.DataFrame) -> pd.DataFrame:
     summary = (
         frame.groupby(["snr", "snr_value", "method"], as_index=False)
@@ -126,12 +153,13 @@ def _to_latex(summary: pd.DataFrame) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run CAVE noisy full-reconstruction robustness.")
-    parser.add_argument("--scene-ids", default="1-5")
-    parser.add_argument("--target-shape", default="128,128")
+    parser.add_argument("--scene-ids", default="1-15")
+    parser.add_argument("--target-shape", default="512,512")
     parser.add_argument("--rank", default="12,12,6")
     parser.add_argument("--snr", default="clean,40,30,20,10")
     parser.add_argument("--n-iter-max", type=int, default=100)
-    parser.add_argument("--out-prefix", default="papers/tsp/tables/cave_noise_robustness")
+    parser.add_argument("--workers", type=int, default=min(12, os.cpu_count() or 1))
+    parser.add_argument("--out-prefix", default="papers/tsp-supplementary/tables/cave_noise_robustness")
     args = parser.parse_args()
 
     scene_ids = _parse_scene_ids(args.scene_ids)
@@ -146,20 +174,45 @@ def main() -> None:
         item = item.strip().lower()
         snrs.append(None if item == "clean" else float(item))
 
-    rows: list[dict[str, Any]] = []
-    for scene_id in scene_ids:
-        scene_name, clean = _load_cave_scene(scene_id, target_shape)
-        for snr in snrs:
-            rows.extend(_run_one(scene_id, clean, scene_name, snr, target_shape, rank, args.n_iter_max))
-            print(f"Finished scene {scene_id:02d}, SNR={_snr_label(snr)}")
-
-    frame = pd.DataFrame(rows)
-    summary = _summarize(frame)
     out_prefix = PROJECT_ROOT / args.out_prefix
     out_prefix.parent.mkdir(parents=True, exist_ok=True)
+    partial_path = out_prefix.with_suffix(".partial.csv")
+    rows: list[dict[str, Any]] = []
+    workers = max(1, min(int(args.workers), len(scene_ids)))
+    print(
+        f"Running {len(scene_ids)} full-size CAVE scenes at {target_shape} "
+        f"with {workers} workers.",
+        flush=True,
+    )
+    if workers == 1:
+        for scene_id in scene_ids:
+            rows.extend(_run_scene(scene_id, target_shape, rank, snrs, args.n_iter_max))
+            pd.DataFrame(rows).to_csv(partial_path, index=False)
+            print(f"Finished scene {scene_id:02d}", flush=True)
+    else:
+        with ProcessPoolExecutor(max_workers=workers) as executor:
+            futures = {
+                executor.submit(_run_scene, scene_id, target_shape, rank, snrs, args.n_iter_max): scene_id
+                for scene_id in scene_ids
+            }
+            for future in as_completed(futures):
+                scene_id = futures[future]
+                rows.extend(future.result())
+                pd.DataFrame(rows).to_csv(partial_path, index=False)
+                print(f"Finished scene {scene_id:02d} ({len(rows) // (2 * len(snrs))}/{len(scene_ids)})", flush=True)
+
+    method_order = {"Tucker": 0, "NTD-PL": 1}
+    frame = pd.DataFrame(rows)
+    frame["method_order"] = frame["method"].map(method_order)
+    frame = frame.sort_values(
+        ["scene_id", "snr_value", "method_order"],
+        ascending=[True, False, True],
+    ).drop(columns="method_order").reset_index(drop=True)
+    summary = _summarize(frame)
     frame.to_csv(out_prefix.with_suffix(".per_scene.csv"), index=False)
     summary.to_csv(out_prefix.with_suffix(".summary.csv"), index=False)
     out_prefix.with_suffix(".tex").write_text(_to_latex(summary), encoding="utf-8")
+    partial_path.unlink(missing_ok=True)
     print(summary.to_string(index=False))
 
 

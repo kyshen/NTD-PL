@@ -44,7 +44,7 @@ TENSOR_KINDS = (
     "tucker_fit",
     "ntdpl_signal",
     "ntdpl_prediction",
-    "ntdpl_response_component",
+    "ntdpl_nonlinear_response_component",
     "tucker_residual",
     "ntdpl_residual",
 )
@@ -167,6 +167,17 @@ def _state_tucker_signal(state: dict[str, Any]) -> np.ndarray:
     return np.asarray(tucker_to_tensor((core, factors)), dtype=np.float32)
 
 
+def _nonlinear_response_component(signal: np.ndarray, beta: np.ndarray) -> np.ndarray:
+    coeffs = np.asarray(beta, dtype=np.float32).reshape(-1)
+    values = np.asarray(signal, dtype=np.float32)
+    if coeffs.size <= 2:
+        return np.zeros_like(values)
+    high_order = np.full_like(values, coeffs[-1])
+    for q in range(coeffs.size - 2, 1, -1):
+        high_order = high_order * values + coeffs[q]
+    return high_order * values * values
+
+
 def _unfold(tensor: np.ndarray, mode: int) -> np.ndarray:
     moved = np.moveaxis(np.asarray(tensor, dtype=np.float64), mode, 0)
     return moved.reshape(moved.shape[0], -1)
@@ -231,7 +242,9 @@ def _scene_rows(scene_frame: pd.DataFrame, rank: tuple[int, int, int]) -> list[d
         "ntdpl_signal": _state_tucker_signal(ntdpl_state),
         "ntdpl_prediction": _state_reconstruction(ntdpl_state),
     }
-    tensors["ntdpl_response_component"] = tensors["ntdpl_prediction"] - tensors["ntdpl_signal"]
+    tensors["ntdpl_nonlinear_response_component"] = _nonlinear_response_component(
+        tensors["ntdpl_signal"], np.asarray(ntdpl_state["beta"], dtype=np.float32)
+    )
     tensors["tucker_residual"] = tensors["measured"] - tensors["tucker_fit"]
     tensors["ntdpl_residual"] = tensors["measured"] - tensors["ntdpl_prediction"]
 
@@ -345,7 +358,7 @@ def _direct_scene_rows(
         "tucker_fit": tucker_fit,
         "ntdpl_signal": ntdpl_signal,
         "ntdpl_prediction": ntdpl_prediction,
-        "ntdpl_response_component": ntdpl_prediction - ntdpl_signal,
+        "ntdpl_nonlinear_response_component": _nonlinear_response_component(ntdpl_signal, beta),
         "tucker_residual": measured - tucker_fit,
         "ntdpl_residual": measured - ntdpl_prediction,
     }

@@ -3,7 +3,7 @@
 \input{preamble}
 \input{macros}
 
-\title{Dictionary-Linked Tucker Models for Nonlinear Low-Rank Tensor Signal Recovery}
+\title{Nonlinear Tucker Decomposition with Polynomial Links: Rank Inflation and Tensor Recovery}
 
 \author{First~Author,
         Second~Author,
@@ -13,31 +13,31 @@
 }
 
 \markboth{IEEE Transactions on Signal Processing,~Vol.~XX, No.~XX, 2026}%
-{First Author \MakeLowercase{\textit{et al.}}: Dictionary-Linked Tucker Models}
+{First Author \MakeLowercase{\textit{et al.}}: NTD-PL: Rank Inflation and Tensor Recovery}
 
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-Many multidimensional signals are compactly represented by low-rank tensor
-models, but nonlinear measurement responses can make an underlying low-rank
-signal appear higher-rank in the observed domain. This paper studies a
-dictionary-linked Tucker model for nonlinear low-rank tensor signal recovery.
-The model represents the underlying signal with a Tucker core and factors, and
-learns an entrywise response function with only a few extra coefficients. With
-a power dictionary, this response can increase the apparent Tucker rank of the
-measured tensor without introducing a separate high-rank Tucker model. The
-finite-dictionary formulation also allows other response bases when prior
-knowledge is available. We analyze the induced rank inflation, response approximation,
-stationarity of the alternating estimator, and computational scaling. We also
-develop a response diagnostic that predicts when the nonlinear response is
-likely to help.
-Experiments on controlled nonlinear tensors, hyperspectral reconstruction and
-completion, noisy reconstruction, and cross-domain diagnostics show that the
-learned response improves recovery when the residual follows a common
-entrywise response pattern. Low-diagnostic regimes clarify the operating
-conditions of the model.
+Many multidimensional signals admit compact low-rank tensor representations,
+but nonlinear measurements can make a low-rank signal appear to have a higher
+Tucker rank after observation. We first introduce a Tucker polynomial model,
+which extends the linear map from a Tucker core to the data tensor with
+higher-order interactions. Its general form learns new mode maps for each
+polynomial order. Sharing the same Tucker factors across orders yields NTD-PL,
+a compact form that is exactly a low-rank Tucker tensor followed by an
+entrywise polynomial response. The same estimator also supports other finite
+response bases. We analyze the resulting rank inflation, parameter cost,
+approximation of continuous responses, stationarity under standard descent
+conditions, and computational scaling. We also introduce a low-cost diagnostic that tests
+how much of a Tucker residual can be removed by refitting only the response.
+Experiments on controlled data, CAVE hyperspectral reconstruction and
+completion, noisy measurements, and several non-hyperspectral datasets show
+consistent improvements over matched-rank Tucker and competitive low-rank
+tensor baselines. Larger gains occur when the learned response increases the
+effective rank of the fitted tensor and when a response-only refit removes more
+of the Tucker residual.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -53,13 +53,8 @@ nonlinear measurements, tensor completion, hyperspectral imaging.
 \input{sections/experiments}
 \input{sections/conclusion}
 
-\appendices
-\input{appendix/model_details}
-\input{appendix/proofs}
-\input{appendix/experimental_details}
-
 \section*{Acknowledgment}
-The authors would like to thank ...
+thank
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,references}

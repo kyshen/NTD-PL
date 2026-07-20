@@ -10,7 +10,7 @@ import pandas as pd
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 RESULTS = PROJECT_ROOT / "artifacts" / "results"
 TSP_FIGURES = PROJECT_ROOT / "papers" / "tsp" / "figures"
-TSP_TABLES = PROJECT_ROOT / "papers" / "tsp" / "tables"
+SUPP_TABLES = PROJECT_ROOT / "papers" / "tsp-supplementary" / "tables"
 
 BLUE = "#2F6FBB"
 GREEN = "#2A9D8F"
@@ -24,6 +24,8 @@ GRID = "#D8DEE6"
 def _set_style() -> None:
     plt.rcParams.update(
         {
+            "font.family": "STIXGeneral",
+            "mathtext.fontset": "stix",
             "font.size": 8.5,
             "axes.titlesize": 9.2,
             "axes.labelsize": 8.7,
@@ -42,10 +44,10 @@ def _set_style() -> None:
     )
 
 
-def _save(fig: plt.Figure, stem: str) -> None:
-    TSP_FIGURES.mkdir(parents=True, exist_ok=True)
-    fig.savefig(TSP_FIGURES / f"{stem}.pdf")
-    fig.savefig(TSP_FIGURES / f"{stem}.png", dpi=240)
+def _save(fig: plt.Figure, stem: str, out_dir: Path = TSP_FIGURES) -> None:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    fig.savefig(out_dir / f"{stem}.pdf")
+    fig.savefig(out_dir / f"{stem}.png", dpi=240)
     plt.close(fig)
 
 
@@ -100,46 +102,13 @@ def make_rank_inflation() -> None:
     scene = pd.read_csv(root / "degree_sweep_scene_mechanism.csv")
     corr = pd.read_csv(root / "degree_sweep_correlations.csv")
 
-    fig, axes = plt.subplots(1, 2, figsize=(7.1, 2.65))
-    ax = axes[0]
-    ax2 = ax.twinx()
-    ax.plot(summary["p_max"], summary["rmse_gain_pct_mean"], marker="o", color=BLUE, label="RMSE gain")
-    ax.plot(summary["p_max"], summary["sam_gain_pct_mean"], marker="s", color=GREEN, label="SAM gain")
-    ax2.plot(summary["p_max"], summary["response_rank999_median_spatial"], marker="^", color=ORANGE, label="response rank")
-    ax.set_xlabel("maximum degree $P$")
-    ax.set_ylabel("mean gain (%)")
-    ax2.set_ylabel("median response rank")
-    ax.set_title("Degree increases rank inflation")
-    ax.grid(axis="y", color=GRID, linewidth=0.55)
-    ax.set_xticks(summary["p_max"])
-    lines1, labels1 = ax.get_legend_handles_labels()
-    lines2, labels2 = ax2.get_legend_handles_labels()
-    ax.legend(lines1 + lines2, labels1 + labels2, loc="upper left", frameon=False)
-
-    ax = axes[1]
-    scatter = ax.scatter(
-        scene["pred_tail_capture_spatial"],
-        scene["RMSE_gain_pct"],
-        c=scene["p_max"],
-        cmap="viridis",
-        s=28,
-        edgecolor="white",
-        linewidth=0.45,
-    )
-    ax.set_xlabel("prediction tail capture")
-    ax.set_ylabel("RMSE gain (%)")
-    ax.set_title("Tail capture tracks gain")
-    ax.grid(color=GRID, linewidth=0.55)
-    colorbar = fig.colorbar(scatter, ax=ax, fraction=0.05, pad=0.02)
-    colorbar.set_label("$P$")
-    fig.tight_layout(w_pad=1.0)
-    _save(fig, "mechanism_rank_inflation")
+    make_rank_inflation_bar(summary, "mechanism_rank_inflation")
 
     table = summary[
         [
             "p_max",
             "rmse_gain_pct_mean",
-            "response_rank999_median_spatial",
+            "nonlinear_rank999_median_spatial",
             "prediction_rank999_lift_median_spatial",
             "prediction_tail_capture_median_spatial",
         ]
@@ -150,16 +119,60 @@ def make_rank_inflation() -> None:
         [
             ("P", "$P$", 0),
             ("rmse_gain_pct_mean", "RMSE gain (\\%)", 2),
-            ("response_rank999_median_spatial", "Resp. rank", 1),
-            ("prediction_rank999_lift_median_spatial", "Pred. lift", 1),
+            ("nonlinear_rank999_median_spatial", "Nonlin. rank", 1),
+            ("prediction_rank999_lift_median_spatial", "Rank inc.", 1),
             ("prediction_tail_capture_median_spatial", "Tail cap.", 3),
         ],
-        "Rank-inflation summary on full-size CAVE scenes at rank $(12,12,4)$. Gains are relative to matched-rank Tucker.",
+        "Rank-inflation summary on CAVE scenes at rank $(12,12,4)$. Gains are relative to matched-rank Tucker.",
         "tab:rank-inflation-mechanism",
-        TSP_TABLES / "mechanism_rank_inflation.tex",
+        SUPP_TABLES / "mechanism_rank_inflation.tex",
     )
     corr_top = corr[corr["target"].eq("RMSE_gain_pct")].sort_values("spearman_r", ascending=False).head(4)
-    corr_top.to_csv(TSP_TABLES / "mechanism_rank_inflation_correlations.csv", index=False)
+    corr_top.to_csv(SUPP_TABLES / "mechanism_rank_inflation_correlations.csv", index=False)
+
+
+def make_rank_inflation_bar(summary: pd.DataFrame, stem: str) -> None:
+    frame = summary.sort_values("p_max").copy()
+    p_values = frame["p_max"].to_numpy(dtype=int)
+    gains = frame["rmse_gain_pct_mean"].to_numpy(dtype=float)
+    ranks = frame["nonlinear_rank999_median_spatial"].to_numpy(dtype=float)
+    lifts = frame["prediction_rank999_lift_median_spatial"].to_numpy(dtype=float)
+
+    y = np.arange(len(frame))
+    fig, ax = plt.subplots(1, 1, figsize=(3.42, 1.75))
+    colors = ["#AEB5BD" if p == 1 else BLUE for p in p_values]
+    ax.barh(y, gains, color=colors, height=0.48, alpha=0.94, edgecolor="none", zorder=3)
+    ax.scatter(gains, y, s=17, color=DARK, zorder=4)
+
+    for idx, (gain, rank, lift) in enumerate(zip(gains, ranks, lifts)):
+        label = rf"$r_{{\mathrm{{nl}}}}$ {rank:.1f}"
+        if lift > 0:
+            label += rf", rank $+{lift:.1f}$"
+        x_text = max(gain + 0.18, 0.33)
+        ax.text(
+            x_text,
+            idx,
+            label,
+            va="center",
+            ha="left",
+            fontsize=7.0,
+            color=DARK,
+        )
+
+    ax.set_yticks(y, [rf"$P={p}$" for p in p_values])
+    ax.invert_yaxis()
+    ax.set_xlabel("RMSE gain over Tucker (%)")
+    ax.set_xlim(0, max(gains) * 1.44)
+    ax.set_xticks([0, 2, 4, 6, 8, 10, 12])
+    ax.grid(axis="x", color=GRID, linewidth=0.55)
+    ax.yaxis.grid(False)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_linewidth(0.7)
+    ax.spines["bottom"].set_linewidth(0.7)
+    ax.tick_params(length=2.5, width=0.6)
+    fig.tight_layout(pad=0.25)
+    _save(fig, stem)
 
 
 def make_response_curve() -> None:
@@ -189,54 +202,60 @@ def make_response_curve() -> None:
     )
     rmse_p1 = float(degree.loc[degree["p_max"].eq(1), "rmse_mean"].iloc[0])
     degree["rmse_gain_vs_p1_pct"] = 100.0 * (rmse_p1 - degree["rmse_mean"]) / rmse_p1
-    degree.to_csv(TSP_TABLES / "mechanism_response_curve_summary.csv", index=False)
+    degree.to_csv(SUPP_TABLES / "mechanism_response_curve_summary.csv", index=False)
 
-    fig, axes = plt.subplots(1, 2, figsize=(7.1, 2.75))
-    ax = axes[0]
-    high = curve[curve["p_max"].eq(6)]
-    for _, group in high.groupby("scene_id"):
-        ax.plot(group["s_norm"], group["f_norm"], color=BLUE, alpha=0.20, linewidth=0.75)
-    mean_curve = high.groupby("grid_index", as_index=False)[["s_norm", "f_norm"]].mean()
-    ax.plot(mean_curve["s_norm"], mean_curve["f_norm"], color=DARK, linewidth=1.9, label="mean")
-    ax.plot([0, 1], [0, 1], color=GRAY, linestyle="--", linewidth=1.0, label="linear")
-    ax.set_xlabel("latent percentile scale")
-    ax.set_ylabel("response percentile scale")
-    ax.set_title("Learned response curves")
-    ax.grid(color=GRID, linewidth=0.55)
-    ax.legend(frameon=False, loc="upper left")
-
-    ax = axes[1]
-    ax.plot(degree["p_max"], degree["nonlinear_mean"], marker="o", color=ORANGE, label="nonlinear deviation")
-    ax2 = ax.twinx()
-    ax2.plot(degree["p_max"], degree["rmse_gain_vs_p1_pct"], marker="s", color=BLUE, label="RMSE gain")
-    ax.set_xlabel("maximum degree $P$")
-    ax.set_ylabel("nonlinear deviation")
-    ax2.set_ylabel("gain over $P=1$ (%)")
-    ax.set_title("Curve shape stabilizes")
-    ax.set_xticks(degree["p_max"])
-    ax.grid(axis="y", color=GRID, linewidth=0.55)
-    lines1, labels1 = ax.get_legend_handles_labels()
-    lines2, labels2 = ax2.get_legend_handles_labels()
-    ax.legend(lines1 + lines2, labels1 + labels2, loc="upper left", frameon=False)
-    fig.tight_layout(w_pad=1.0)
-    _save(fig, "mechanism_learned_response")
-
-    tex = degree.rename(columns={"p_max": "P"})[
-        ["P", "rmse_gain_vs_p1_pct", "nonlinear_mean", "monotone_mean", "curvature_mean"]
-    ]
-    _latex_table(
-        tex,
-        [
-            ("P", "$P$", 0),
-            ("rmse_gain_vs_p1_pct", "Gain vs. $P=1$ (\\%)", 2),
-            ("nonlinear_mean", "Nonlin.", 3),
-            ("monotone_mean", "Mono.", 3),
-            ("curvature_mean", "Curv.", 2),
-        ],
-        "Learned-response summary on full-size CAVE scenes at rank $(12,12,4)$.",
-        "tab:learned-response-mechanism",
-        TSP_TABLES / "mechanism_learned_response.tex",
+    mean_curve = (
+        curve.groupby(["p_max", "grid_index"], as_index=False)[["s_norm", "f_norm"]]
+        .mean()
+        .sort_values(["p_max", "grid_index"])
     )
+    colors = {1: GRAY, 2: GREEN, 4: ORANGE, 6: BLUE}
+    fig, axes = plt.subplots(1, 4, figsize=(7.05, 1.46), sharex=True, sharey=True)
+    for ax, p in zip(axes, [1, 2, 4, 6]):
+        scene_curves = curve[curve["p_max"].eq(p)]
+        for _, group in scene_curves.groupby("scene_id"):
+            ax.plot(
+                group["s_norm"],
+                group["f_norm"],
+                color=colors[p],
+                alpha=0.13 if p > 1 else 0.10,
+                linewidth=0.52,
+            )
+        m = mean_curve[mean_curve["p_max"].eq(p)]
+        ax.plot(m["s_norm"], m["f_norm"], color=DARK, linewidth=1.65, solid_capstyle="round")
+        ax.plot([0, 1], [0, 1], color=GRAY, linestyle="--", linewidth=0.72)
+        row = degree[degree["p_max"].eq(p)].iloc[0]
+        ax.set_title(rf"$P={p}$, gain {row['rmse_gain_vs_p1_pct']:.1f}%", fontsize=8.0)
+        ax.text(
+            0.04,
+            0.94,
+            rf"Curv. {row['curvature_mean']:.2f}",
+            transform=ax.transAxes,
+            ha="left",
+            va="top",
+            fontsize=7.0,
+            color=DARK,
+            bbox={
+                "boxstyle": "round,pad=0.12",
+                "facecolor": "white",
+                "edgecolor": GRID,
+                "linewidth": 0.35,
+                "alpha": 0.86,
+            },
+            zorder=10,
+        )
+        ax.set_xlim(0, 1)
+        ax.set_ylim(-0.035, 1.035)
+        ax.set_xticks([0, 0.5, 1.0])
+        ax.set_yticks([0, 0.5, 1.0])
+        ax.grid(color=GRID, linewidth=0.42)
+        ax.tick_params(length=2.5, width=0.6)
+        if ax is not axes[0]:
+            ax.tick_params(labelleft=False)
+    axes[0].set_ylabel(r"$f(s)$", labelpad=1.5)
+    fig.supxlabel(r"$s$", y=0.01, fontsize=8.2)
+    fig.subplots_adjust(left=0.055, right=0.995, bottom=0.25, top=0.82, wspace=0.18)
+    _save(fig, "mechanism_learned_response")
 
 
 def make_error_regime() -> None:
@@ -247,36 +266,64 @@ def make_error_regime() -> None:
     regime = pd.read_csv(root / "summary_spectral_regime.csv")
     inter = pd.read_csv(root / "summary_intensity_spectral.csv")
 
-    fig, axes = plt.subplots(1, 3, figsize=(7.25, 2.55), gridspec_kw={"width_ratios": [1.0, 1.0, 1.08]})
+    fig = plt.figure(figsize=(3.42, 2.48))
+    grid = fig.add_gridspec(
+        2,
+        2,
+        height_ratios=[0.58, 0.92],
+        hspace=0.52,
+        wspace=0.34,
+    )
+    axes = [
+        fig.add_subplot(grid[0, 0]),
+        fig.add_subplot(grid[0, 1], sharey=fig.axes[0]),
+        fig.add_subplot(grid[1, :]),
+    ]
+
     ax = axes[0]
-    ax.plot(quantile["bin_index"], quantile["pooled_rmse_gain_pct"], marker="o", color=BLUE)
-    ax.axhline(0.0, color=GRAY, linewidth=0.8)
+    ax.plot(
+        quantile["bin_index"],
+        quantile["pooled_rmse_gain_pct"],
+        marker="o",
+        markersize=3.4,
+        color=BLUE,
+    )
+    ax.axhline(0.0, color=GRAY, linewidth=0.75)
     ax.set_xlabel("intensity decile")
-    ax.set_ylabel("RMSE gain (%)")
-    ax.set_title("Gain by intensity")
-    ax.grid(axis="y", color=GRID, linewidth=0.55)
+    ax.set_ylabel("gain (%)")
+    ax.set_xticks([0, 4, 8])
+    ax.grid(axis="y", color=GRID, linewidth=0.5)
 
     ax = axes[1]
-    ax.plot(band["band_index"], band["pooled_rmse_gain_pct"], color=GREEN, marker="o", markersize=2.8)
-    ax.axhline(0.0, color=GRAY, linewidth=0.8)
-    ax.set_xlabel("spectral band")
-    ax.set_title("Gain by wavelength")
-    ax.grid(axis="y", color=GRID, linewidth=0.55)
+    wavelength = 400 + 10 * band["band_index"]
+    ax.plot(
+        wavelength,
+        band["pooled_rmse_gain_pct"],
+        marker="o",
+        markersize=2.5,
+        color=GREEN,
+    )
+    ax.axhline(0.0, color=GRAY, linewidth=0.75)
+    ax.set_xlabel("wavelength (nm)")
+    ax.set_xticks([400, 550, 700])
+    ax.grid(axis="y", color=GRID, linewidth=0.5)
+    ax.tick_params(labelleft=False)
 
     ax = axes[2]
     pivot = inter.pivot(index="quantile_bin_index", columns="regime", values="pooled_rmse_gain_pct")
+    pivot = pivot[[col for col in ["blue_400_500", "green_510_600", "red_610_700"] if col in pivot.columns]]
     finite = pivot.values[np.isfinite(pivot.values)]
     vmax = max(abs(float(np.nanpercentile(finite, 5))), abs(float(np.nanpercentile(finite, 95))), 1e-6) if finite.size else 1.0
     im = ax.imshow(pivot.values, cmap="RdBu", vmin=-vmax, vmax=vmax, aspect="auto")
-    labels = [col.replace("_", " ") for col in pivot.columns]
-    ax.set_xticks(np.arange(len(labels)), labels=labels, rotation=28, ha="right")
+    labels = ["450", "555", "655"][: len(pivot.columns)]
+    ax.set_xticks(np.arange(len(labels)), labels=labels)
     ax.set_yticks(np.arange(len(pivot.index)), labels=pivot.index)
-    ax.set_xlabel("spectral regime")
-    ax.set_title("Joint regimes")
-    colorbar = fig.colorbar(im, ax=ax, fraction=0.052, pad=0.02)
+    ax.set_xlabel("wavelength (nm)")
+    ax.set_ylabel("intensity decile")
+    colorbar = fig.colorbar(im, ax=ax, fraction=0.045, pad=0.025)
     colorbar.set_label("gain (%)")
-    fig.tight_layout(w_pad=0.8)
-    _save(fig, "mechanism_error_regime")
+    fig.subplots_adjust(left=0.16, right=0.91, top=0.985, bottom=0.12)
+    _save(fig, "mechanism_error_regime", TSP_FIGURES)
 
     o = {
         "RMSE gain": float(overall["rmse_gain_pct"].mean()),
@@ -285,7 +332,7 @@ def make_error_regime() -> None:
         "High-intensity contribution": float(quantile.loc[quantile["bin_index"].eq(9), "mse_reduction_contribution_pct"].iloc[0]),
         "Red contribution": float(regime.loc[regime["regime"].str.contains("red"), "mse_reduction_contribution_pct"].iloc[0]),
     }
-    pd.DataFrame([o]).to_csv(TSP_TABLES / "mechanism_error_regime_overview.csv", index=False)
+    pd.DataFrame([o]).to_csv(SUPP_TABLES / "mechanism_error_regime_overview.csv", index=False)
 
     regime_tex = regime.copy()
     regime_tex["regime_label"] = regime_tex["regime"].map(
@@ -303,20 +350,20 @@ def make_error_regime() -> None:
             ("scene_median_gain_pct", "Median gain (\\%)", 2),
             ("mse_reduction_contribution_pct", "MSE contrib. (\\%)", 1),
         ],
-        "Spectral-regime error analysis on full-size CAVE scenes at rank $(12,12,4)$.",
+        "Spectral-regime error analysis on CAVE scenes at rank $(12,12,4)$.",
         "tab:error-regime-mechanism",
-        TSP_TABLES / "mechanism_error_regime.tex",
+        SUPP_TABLES / "mechanism_error_regime.tex",
     )
 
 
 def main() -> None:
     _set_style()
-    TSP_TABLES.mkdir(parents=True, exist_ok=True)
+    SUPP_TABLES.mkdir(parents=True, exist_ok=True)
     make_rank_inflation()
     make_response_curve()
     make_error_regime()
     print(f"Wrote figures to {TSP_FIGURES}")
-    print(f"Wrote tables to {TSP_TABLES}")
+    print(f"Wrote supplementary tables to {SUPP_TABLES}")
 
 
 if __name__ == "__main__":

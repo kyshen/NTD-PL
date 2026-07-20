@@ -14,12 +14,12 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from viz.style import PALETTE, apply_style, style_axes
 
-OUT_STEM = PROJECT_ROOT / "papers" / "neurips" / "figures" / "nonhsi_dlink_scatter_3domain"
+OUT_STEM = PROJECT_ROOT / "papers" / "tsp" / "figures" / "nonhsi_dlink_scatter_3domain"
 
 SOURCES = [
-    PROJECT_ROOT / "results" / "nonhsi_dlink_diagnostic" / "20260507_000000_full68" / "per_unit_results.csv",
-    PROJECT_ROOT / "results" / "phase1_crossdomain_dlink" / "20260507_120000_kth_full240" / "per_unit_results.csv",
-    PROJECT_ROOT / "results" / "phase1_crossdomain_dlink" / "20260507_123000_ucf101_full240" / "per_unit_results.csv",
+    PROJECT_ROOT / "artifacts" / "results" / "nonhsi_dlink_diagnostic" / "20260507_000000_full68" / "per_unit_results.csv",
+    PROJECT_ROOT / "artifacts" / "results" / "phase1_crossdomain_dlink" / "20260507_120000_kth_full240" / "per_unit_results.csv",
+    PROJECT_ROOT / "artifacts" / "results" / "phase1_crossdomain_dlink" / "20260507_123000_ucf101_full240" / "per_unit_results.csv",
 ]
 
 PANELS = [
@@ -88,9 +88,19 @@ def draw_fit(ax: plt.Axes, panel: pd.DataFrame, color: str) -> None:
 def main() -> None:
     frame = load_frame()
     apply_style("double_column")
-    plt.rcParams.update({"axes.titlesize": 11.0, "axes.labelsize": 9.2})
+    plt.rcParams.update(
+        {
+            "axes.titlesize": 9.0,
+            "axes.labelsize": 8.0,
+            "xtick.labelsize": 7.0,
+            "ytick.labelsize": 7.0,
+            "legend.fontsize": 7.0,
+            "pdf.fonttype": 42,
+            "ps.fonttype": 42,
+        }
+    )
 
-    fig, axes = plt.subplots(2, 3, figsize=(6.95, 3.0), sharex=False, constrained_layout=False)
+    fig, axes = plt.subplots(2, 3, figsize=(6.95, 2.55), sharex=False, constrained_layout=False)
 
     for index, (domain, dataset) in enumerate(PANELS):
         row, col = divmod(index, 3)
@@ -101,7 +111,7 @@ def main() -> None:
         ax.scatter(
             panel["d_link_db"],
             panel["rmse_gain_pct"],
-            s=20,
+            s=14,
             marker=MARKERS[dataset],
             color=color,
             edgecolors="white",
@@ -124,7 +134,7 @@ def main() -> None:
             transform=ax.transAxes,
             ha="left",
             va="top",
-            fontsize=8.0,
+            fontsize=6.9,
             fontweight="semibold",
             color=PALETTE.text,
             bbox={
@@ -138,7 +148,7 @@ def main() -> None:
         )
 
     OUT_STEM.parent.mkdir(parents=True, exist_ok=True)
-    fig.subplots_adjust(left=0.075, right=0.995, bottom=0.16, top=0.90, wspace=0.28, hspace=0.35)
+    fig.subplots_adjust(left=0.070, right=0.995, bottom=0.17, top=0.88, wspace=0.25, hspace=0.32)
     fig.savefig(OUT_STEM.with_suffix(".pdf"))
     fig.savefig(OUT_STEM.with_suffix(".png"), dpi=300)
     plt.close(fig)

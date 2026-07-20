@@ -1,0 +1,385 @@
+\section{Additional Experimental Details}
+\label{supp:experiments}
+
+\subsection{Controlled Nonlinear Tensors}
+\label{supp:controlled-details}
+
+The controlled tensors in Fig.~\ref{paper-fig:controlled-alpha} have size
+$10\times10\times10$ and Tucker rank $(4,4,4)$. For each of ten seeds, all
+entries of the core and factors are drawn independently from $\mathcal{N}(0,1)$.
+Suppressing the seed index, we form
+\begin{equation}
+  \cS=\tucker{\cX}{\bA^{(1)},\bA^{(2)},\bA^{(3)}}.
+  \label{eq:supp-controlled-signal}
+\end{equation}
+We then rescale $\cS$ to unit root-mean-square value, keeping the same notation.
+The nonlinear panels apply one of the following scalar functions entrywise:
+\begin{equation}
+  g(s) \in
+  \left\{
+  s^2+s^3,\;
+  \tanh(\kappa_{\tanh}s),\;
+  \frac{e^{\kappa_{\exp}s}-1}{\kappa_{\exp}}
+  \right\}.
+  \label{eq:supp-controlled-responses}
+\end{equation}
+Writing $q=q_{0.9}(|\cS|)+10^{-8}$, where $q_{0.9}$ is the empirical
+90th percentile, we set $\kappa_{\tanh}=1.5/q$ and $\kappa_{\exp}=1/q$.
+
+To isolate the nonlinear part, we remove the component of $g(\cS)$
+parallel to $\cS$:
+\begin{equation}
+  \cR=g(\cS)
+  -\frac{\inner{g(\cS)}{\cS}}
+  {\norm{\cS}_F^2+10^{-8}}\cS.
+  \label{eq:supp-controlled-residual}
+\end{equation}
+No intercept is included in this projection. We also rescale $\cR$ to unit
+root-mean-square value, again keeping the same notation. Consequently,
+$\cS$ and $\cR$ are orthogonal and have the same energy. The clean
+nonlinear measurement is
+\begin{equation}
+  \cY_{\alpha}^{\mathrm{clean}}
+  =\sqrt{1-\alpha}\,\cS
+  +\sqrt{\alpha}\,\cR.
+  \label{eq:supp-controlled-mixture}
+\end{equation}
+We use $\alpha\in\{0.10,0.15,\ldots,0.40\}$, so $\alpha$ is exactly the energy
+fraction assigned to the nonlinear residual. The identity panel instead uses
+$\cY_{\alpha}^{\mathrm{clean}}=\cS$ for every $\alpha$.
+
+Finally,
+\begin{equation}
+  \cY_{\alpha}=\cY_{\alpha}^{\mathrm{clean}}+\cE,
+  \qquad
+  E_{\mathbf i}\sim\mathcal{N}(0,10^{-3}),
+  \label{eq:supp-controlled-noise}
+\end{equation}
+which gives 30~dB SNR because every clean tensor has unit root-mean-square
+value. Signal seeds are $0,\ldots,9$; noise seeds are deterministically derived
+from the signal seed, response, and $\alpha$ in the released experiment script.
+
+All $1000$ entries are used for both fitting and evaluation. Tucker uses rank
+$(4,4,4)$, SVD initialization, at most 1000 HOOI iterations, and tolerance
+$10^{-4}$. The matched parameter choices are CP rank 6 and TT rank
+$(1,3,3,1)$. CP uses random initialization with the corresponding signal seed,
+at most 1000 ALS
+iterations, and tolerance $10^{-8}$; TT uses the standard TT-SVD. NTD-PL uses
+Tucker rank $(4,4,4)$ and $P=6$ in the $\alpha$ sweep. It starts from a Tucker
+fit with at most 50 iterations and then runs 1000 Adam iterations with core and
+factor learning rates $10^{-4}$ and $3\times10^{-4}$. The core, factor, and
+response regularization weights are all $10^{-6}$, the
+response coefficients are refreshed every five iterations, and polynomial
+degrees are activated by continuation. These settings give 184, 186, 150,
+and 191 parameters for Tucker, CP, TT, and NTD-PL, respectively.
+
+Figure~\ref{fig:supp-controlled-degree} fixes $\alpha=0.25$ and refits NTD-PL
+for every $P\in\{1,\ldots,6\}$ using the same ten seeds. Figure~\ref{fig:supp-controlled-traces}
+also fixes $\alpha=0.25$ and $P=6$; its curves are the mean RMSE over the ten
+seeds, with shaded bands showing one standard deviation.
+
+\begin{figure*}[!t]
+  \centering
+  \includegraphics[width=0.82\textwidth]{figures/controlled_nonlinear_pmax_heatmap.pdf}
+  \caption{Degree-dependent controlled gains under the same 30~dB noisy
+  generator as Fig.~\ref{paper-fig:controlled-alpha}. Entries report the RMSE
+  reduction of NTD-PL relative to matched-rank Tucker. The identity response
+  \(s\) is a linear control; gains appear when the active polynomial degree can
+  approximate the nonlinear response.}
+  \label{fig:supp-controlled-degree}
+\end{figure*}
+
+\begin{figure*}[!t]
+  \centering
+  \includegraphics[width=0.92\textwidth]{figures/controlled_nonlinear_step_strip.pdf}
+  \caption{NTD-PL optimization traces at $\alpha=0.25$ and $P=6$. Curves show
+  mean RMSE over ten seeds and shaded bands show one standard deviation.
+  Vertical markers indicate the activation of degrees 2--6 at iterations 167,
+  333, 500, 667, and 833.}
+  \label{fig:supp-controlled-traces}
+\end{figure*}
+
+\subsection{Metrics and Normalization}
+\label{supp:metrics}
+
+For a test index set $\Gamma$, the RMSE is
+\begin{equation}
+  \mathrm{RMSE}
+  =
+  \left(
+  |\Gamma|^{-1}
+  \sum_{\mathbf{i}\in\Gamma}
+  (Y_{\mathbf{i}}-\widehat{Y}_{\mathbf{i}})^2
+  \right)^{1/2}.
+\end{equation}
+For completion, $\Gamma$ contains the entries hidden during fitting. For
+reconstruction, $\Gamma$ contains all tensor entries. We also report
+\begin{equation}
+  \begin{aligned}
+    \mathrm{NMSE}
+    &=
+    \frac{
+      \sum_{\mathbf i\in\Gamma}
+      (Y_{\mathbf i}-\widehat Y_{\mathbf i})^2
+    }{
+      \sum_{\mathbf i\in\Gamma}Y_{\mathbf i}^2
+    },\\
+    \mathrm{NMSE(dB)}
+    &=10\log_{10}(\mathrm{NMSE}).
+  \end{aligned}
+\end{equation}
+Table~\ref{paper-tab:cave-main-baselines} computes NMSE(dB) separately for
+each CAVE scene and then reports the mean and standard deviation over the 15
+scene values. Spectral angle mapper
+is computed pixelwise on spectral vectors,
+\begin{equation}
+  \mathrm{SAM}(\mathbf{y},\widehat{\mathbf{y}})
+  =
+  \arccos
+  \frac{\inner{\mathbf{y}}{\widehat{\mathbf{y}}}}
+  {\norm{\mathbf{y}}_2\norm{\widehat{\mathbf{y}}}_2+\epsilon},
+\end{equation}
+and then averaged over valid pixels. The small $\epsilon$ is used only to
+avoid division by zero for empty or near-empty spectra. Before fitting, each
+hyperspectral cube is divided by its maximum entry. All compared methods use
+the same normalized cube and the same train/test masks.
+
+\subsection{Hyperspectral Protocol}
+\label{supp:hsi-protocol}
+
+The CAVE multispectral image database \cite{cave_multispectral_database,
+yasuma2010gapc} is used for the primary hyperspectral experiments. Reconstruction
+uses all entries for fitting and evaluation. In the noise-robustness experiment,
+Gaussian noise is added before fitting and metrics are computed against the
+clean cube. Completion samples observation masks at the requested missing rates
+and evaluates RMSE* and SAM* on the entries hidden during fitting. Tucker and
+NTD-PL use identical Tucker ranks;
+the default NTD-PL instance adds only the polynomial response coefficients and the
+associated training schedule.
+The reconstruction comparison in
+Table~\ref{paper-tab:cave-main-baselines} uses Tucker ranks \((12,12,4)\),
+\((24,24,4)\), and \((36,36,4)\), corresponding to approximately 13k, 27k,
+and 42k parameters. At these budgets, the matched CP ranks are 12, 26, and 40,
+and the TT ranks are \((1,5,5,1)\), \((1,7,7,1)\), and \((1,9,9,1)\),
+respectively. At every budget, NTD-PL is refitted independently for
+\(P=2,4,\) and \(6\).
+
+The completion experiment uses Tucker rank \((33,33,4)\), \(P=4\), and 300
+optimization iterations for both methods at missing rates \(0.1\), \(0.3\),
+\(0.5\), and \(0.7\).
+
+The noise-robustness evaluation uses all 15 CAVE scenes at their native
+$512\times512\times31$ size with rank $(12,12,6)$ and \(P=4\). Gaussian noise is added
+after global max normalization at SNR levels $40$, $30$, $20$, and $10$ dB;
+the clean case uses the same protocol without added noise. The clean evaluation
+tensor is shared by Tucker and NTD-PL for each scene, and both methods use 100
+optimization iterations. Across the tested noise levels, NTD-PL reduces RMSE
+by 6.16--6.20\% and SAM by 4.79--5.82\% relative to matched-rank Tucker.
+
+\begin{table*}[!t]
+  \centering
+  \caption{CAVE reconstruction with observation noise over all 15
+  scenes. Models are fitted to clean or noisy tensors, and metrics are computed
+  against the clean tensor; gains are relative error reductions over
+  matched-rank Tucker.}
+  \label{tab:supp-cave-noise-robustness}
+  \scriptsize
+  \input{tables/cave_noise_robustness.tex}
+\end{table*}
+
+External hyperspectral experiments use Jasper Ridge
+\((100\times100\times198)\), Samson \((95\times95\times156)\), and Urban
+\((307\times307\times162)\) after the same global normalization. Their Tucker
+ranks are \((11,11,43)\), \((10,10,35)\), and \((43,43,47)\), respectively.
+NTD-PL uses \(P=4\), and both methods use 300 optimization iterations.
+Table~\ref{tab:supp-external-hsi-reconstruction} reports the
+corresponding reconstruction results. At the same Tucker rank, NTD-PL
+improves RMSE by 3.6--7.9\% and also improves SAM on all three cubes. The NMSE
+changes are positive as well, with gains of 0.32--0.72 dB. These results serve
+as a supplementary cross-dataset check beyond the CAVE acquisition setting.
+
+\begin{table}[!t]
+  \centering
+  \caption{External hyperspectral reconstruction. NTD-PL uses the same Tucker
+  rank as the Tucker baseline and adds only the polynomial response
+  coefficients.}
+  \label{tab:supp-external-hsi-reconstruction}
+  \scriptsize
+  \resizebox{\linewidth}{!}{\input{tables/external_hsi_reconstruction.tex}}
+\end{table}
+
+The higher-rank Tucker comparison in Table~\ref{paper-tab:rank-lift-tucker} searches over
+higher Tucker ranks and reports the first Tucker model whose RMSE matches the
+lower-rank NTD-PL reference with \(P=6\). Its purpose is to quantify the parameter increase
+required by increasing ordinary Tucker rank when the residual can be explained
+by the learned response.
+
+\subsection{Mechanism Analysis Details}
+\label{supp:mechanism-details}
+
+The mechanism analysis in Figs.~\ref{paper-fig:mechanism-rank-inflation} and
+\ref{paper-fig:mechanism-response} uses the \(512\times512\times31\) CAVE scenes at
+rank $(12,12,4)$ and
+sweeps the maximum power degree \(P\). The rank-inflation summary in
+Table~\ref{tab:rank-inflation-mechanism} reports the degree-wise gain,
+nonlinear-response rank, effective-rank increase, and tail capture.
+Figure~\ref{paper-fig:error-regime} in the main paper visualizes the
+observed-domain error regimes, and Table~\ref{tab:error-regime-mechanism}
+reports the spectral breakdown.
+
+For the rank-inflation calculation, we fit a separate Tucker baseline and
+NTD-PL model for each scene and each \(P\in\{2,3,4,5,6\}\), using all entries of
+the globally max-normalized cube. The Tucker rank is \((12,12,4)\), the random
+seed is 0, and the NTD-PL runs use Tucker initialization, the power basis,
+degree continuation, and 120 optimization iterations. If \(\widehat{\cS}\) is
+the tensor reconstructed from the NTD-PL Tucker parameters and \(\widehat{\cY}\)
+is its response-linked prediction, the nonlinear response component is
+\[
+ \widehat{\cR}_{\mathrm{nl}}
+ =\widehat{\cY}-\widehat\beta_0\mathbf{1}
+ -\widehat\beta_1\widehat{\cS}
+ =\sum_{p=2}^{P}\widehat\beta_p\widehat{\cS}^{\od p}.
+\]
+For a tensor \(\mathcal{Z}\) and mode \(n\), define
+\[
+ r_{.999}(\mathcal{Z};n)=\min\left\{k:
+ \frac{\sum_{j=1}^{k}\sigma_j^2(\mathcal{Z}_{(n)})}
+ {\sum_j\sigma_j^2(\mathcal{Z}_{(n)})}\geq 0.999\right\},
+\]
+where \(\mathcal{Z}_{(n)}\) is the mode-\(n\) unfolding. Fig.~\ref{paper-fig:mechanism-rank-inflation}
+uses modes 1 and 2 and reports the median over the 30 scene--mode values for
+each annotation. The effective-rank increase is computed as
+\(r_{.999}(\widehat{\cY};n)-r_{.999}(\widehat{\cS};n)\).
+The RMSE gain is computed per scene as
+\[
+ g_{\mathrm{RMSE}}=100\,
+ \frac{\mathrm{RMSE}_{\mathrm{Tucker}}-
+ \mathrm{RMSE}_{\mathrm{NTD\text{-}PL}}}
+ {\mathrm{RMSE}_{\mathrm{Tucker}}},
+\]
+then averaged over scenes.
+For the reported tail-capture correlation, tail energy is the fraction of
+unfolding energy after the prescribed spatial Tucker rank 12. We divide the
+prediction tail energy by the corresponding measured-tensor tail energy,
+average modes 1 and 2 within each scene, and compute Spearman correlation with
+RMSE gain over all 75 scene--degree pairs.
+
+For the response-curve calculation, we refit NTD-PL independently for each
+scene and each degree with the same rank, normalization, seed, and power
+basis; these runs use 180 optimization iterations. For the fitted signal
+values \(s_i\), we evaluate \(f_{\bbeta}(s_i)\) at 101 empirical quantiles from
+the 1st to the 99th percentile. Each scene curve is endpoint-normalized as
+\[
+ x_i=\frac{s_i-s_{.01}}{s_{.99}-s_{.01}},\qquad
+ y_i=\frac{f_{\bbeta}(s_i)-f_{\bbeta}(s_{.01})}
+ {f_{\bbeta}(s_{.99})-f_{\bbeta}(s_{.01})}.
+\]
+The plotted dark curve is the pointwise mean over the 15 scene curves. To
+compute the curvature label, let \(\Delta s_i=s_{i+1}-s_i\) and
+\(d_i=(f_{\bbeta}(s_{i+1})-f_{\bbeta}(s_i))/\Delta s_i\). For each scene we use
+\[
+ \mathrm{Curv.}=
+ \frac{1}{q_{.95}(|d|)}
+ \frac{1}{m-2}\sum_{i=1}^{m-2}
+ \left|\frac{d_{i+1}-d_i}
+ {0.5(\Delta s_i+\Delta s_{i+1})}\right|,
+\]
+where \(m=101\) and \(q_{.95}(|d|)\) is the 95th percentile of the absolute
+local slopes. The value shown in each panel is averaged over scenes. The gain
+in each panel is relative to the mean RMSE at \(P=1\).
+
+\input{tables/mechanism_rank_inflation.tex}
+
+\input{tables/mechanism_error_regime.tex}
+
+\subsection{Response Diagnostic Details}
+\label{supp:diagnostic-details}
+
+The diagnostic $\Dlink$ is computed from a fixed Tucker fit. First, a
+matched-rank Tucker model is trained under the same mask and normalization as
+the main experiment. Second, the Tucker reconstruction is held fixed and
+the response coefficients are refit by the ridge update in
+\eqref{paper-eq:link_refresh_solution}. The diagnostic is the residual-energy
+ratio before and after this response-only fit, reported in dB as defined in
+\eqref{paper-eq:dlink}. This
+procedure is cheaper than joint NTD-PL training because it does not update the
+Tucker core and factors through the nonlinear response.
+
+For the CAVE diagnostic row, each scene is treated as one reconstruction task.
+For the remaining rows, each image, object,
+or video clip is treated as one independent tensor unit. In all cases,
+\(\Dlink\) is computed before joint NTD-PL training. Units are sorted by
+\(\Dlink\) within each dataset and divided into three groups of nearly equal
+size; the table reports the mean diagnostic value and the eventual RMSE
+reduction in each group.
+
+\subsection{Cross-Domain Diagnostic Data}
+\label{supp:cross-domain-details}
+
+Table~\ref{tab:supp-cross-domain-preprocessing} summarizes the tensor units and
+preprocessing used for the natural-image
+\cite{martin2001database,krizhevsky2009learning}, object-view
+\cite{nene1996coil100,LeCun2004SmallNORB}, and action-video
+\cite{Schuldt2004KTHActions,Soomro2012UCF101} diagnostics.
+
+\begin{table*}[!t]
+  \centering
+  \caption{Cross-domain data construction and preprocessing for the response
+  diagnostic.}
+  \label{tab:supp-cross-domain-preprocessing}
+  \scriptsize
+  \renewcommand{\arraystretch}{1.05}
+  \setlength{\tabcolsep}{3.0pt}
+  \input{tables/cross_domain_preprocessing.tex}
+\end{table*}
+
+\begin{table}[!t]
+  \centering
+  \caption{Dataset-level response diagnostic statistics. Each low, middle, or
+  high entry reports mean \(\Dlink\) (dB) / mean NTD-PL RMSE gain (\%) after sorting
+  units by \(\Dlink\) within each dataset.}
+  \label{tab:supp-response-diagnostic-stats}
+  \scriptsize
+  \renewcommand{\arraystretch}{1.10}
+  \setlength{\tabcolsep}{2.5pt}
+  \begin{tabular}{@{}l r r c c c@{}}
+  \toprule
+  Dataset & Units & \(\rho_s\)
+    & \multicolumn{3}{c}{Mean \(\Dlink\) (dB) / RMSE gain (\%)} \\
+  \cmidrule(lr){4-6}
+  & & & Low & Middle & High \\
+  \midrule
+  CAVE & 15 & 0.81 & 0.060 / 5.65 & 0.108 / 11.68 & 0.230 / 16.19 \\
+  CBSD68 & 68 & 0.85 & 0.025 / 4.17 & 0.095 / 8.40 & 0.293 / 14.60 \\
+  CIFAR-10 & 1000 & 0.93 & $-0.001$ / $-0.01$ & 0.009 / 2.59 & 0.041 / 7.85 \\
+  COIL-100 & 100 & 0.93 & 0.080 / 2.77 & 0.210 / 5.46 & 0.439 / 9.14 \\
+  smallNORB & 25 & 0.95 & 0.134 / 6.92 & 0.267 / 9.91 & 0.541 / 14.16 \\
+  KTH-Action & 240 & 0.88 & 0.049 / 2.74 & 0.108 / 4.27 & 0.274 / 10.87 \\
+  UCF101 & 240 & 0.89 & 0.024 / 1.44 & 0.064 / 2.97 & 0.176 / 5.89 \\
+  \bottomrule
+  \end{tabular}
+\end{table}
+
+Each tensor unit is max-normalized and fitted independently; no cross-unit
+tensor is formed. Diagnostic groups are assigned from \(\Dlink\), not from the
+eventual NTD-PL gain.
+
+\subsection{Compute Resources}
+\label{supp:compute-resources}
+
+The runs use a CPU-only NumPy/SciPy/TensorLy implementation under Python 3.13
+and Windows 11. Timings were collected on 32 GB workstations with an Intel Core
+i5-13400F or i7-14700F processor. Independent jobs were parallelized with
+BLAS/OpenMP threads capped per worker; no GPU kernels were used. The
+CAVE noise sweep used 12 workers on the i7-14700F system.
+
+Controlled synthetic jobs took less than 1 s per configuration. For
+CAVE reconstruction, Tucker took 10--17 s and NTD-PL 172--217 s per scene;
+random completion took 168--258 s and 463--1019 s, respectively, per scene and
+mask configuration. The CAVE response diagnostic took 7.0--9.6 s per scene.
+With 6 workers, the non-HSI image/object batch took about 77 s and each
+action-video batch took 5--6 min. The noise sweep required
+9.7--32.6 s per Tucker fit and 61.0--167.7 s per NTD-PL fit; its 150 fits
+completed in about 21 min. Peak memory was not instrumented, but all runs
+completed within 32 GB RAM.
+

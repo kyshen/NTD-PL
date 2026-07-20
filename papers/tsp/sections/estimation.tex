@@ -1,12 +1,17 @@
 \section{Estimation Algorithm and Response Diagnostic}
 \label{sec:estimation}
 
+We estimate the shared-factor model in
+\eqref{eq:finite_response_tucker}. The general Tucker polynomial in
+\eqref{eq:tucker_polynomial} motivates the construction, but its separate
+high-order mode maps are not part of the estimator.
+
 Let $m=|\Omega|$ and let
 $\theta=(\cX,\{\bA^{(n)}\}_{n=1}^{N},\bbeta)$ collect all trainable
-parameters. For an active response dictionary of size $Q+1$, we minimize
+parameters. For an active response basis with $J+1$ functions, we minimize
 \begin{equation}
 \begin{aligned}
-  \mathcal{F}_Q(\theta)
+  \mathcal{F}_J(\theta)
   =
   \frac{1}{2|\Omega|}
   \norm{\Omega \od \left(\cY - f_{\bbeta}(\cS)\right)}_F^2
@@ -20,13 +25,14 @@ parameters. For an active response dictionary of size $Q+1$, we minimize
 \end{aligned}
   \label{eq:estimation_objective}
 \end{equation}
-where $f_{\bbeta}(s)=\sum_{q=0}^{Q}\beta_q\psi_q(s)$ and
-$\{\psi_q\}_{q=0}^{Q}$ is the selected response dictionary. The monomial
-basis $\psi_q(s)=s^q$ gives \eqref{eq:polynomial_linked_tucker}; in
+where $f_{\bbeta}(s)=\sum_{j=0}^{J}\beta_j\psi_j(s)$ and
+$\{\psi_j\}_{j=0}^{J}$ is the selected response basis. For the power basis,
+$J=P$ and its $p$th function is $\psi_p(s)=s^p$, which gives
+\eqref{eq:polynomial_linked_tucker}; in
 implementation, the same polynomial space may be represented by centered,
 Chebyshev, or otherwise conditioned bases. Non-polynomial choices such as RBF
-or spline dictionaries use the same objective as long as the response remains
-linear in $\bbeta$. The experiments use the monomial power dictionary. The
+or spline bases use the same objective as long as the response remains linear
+in $\bbeta$. The experiments use the monomial power basis. The
 estimation alternates between an exact small response-coefficient update and a
 descent step for the Tucker core and factors.
 
@@ -34,19 +40,19 @@ descent step for the Tucker core and factors.
 
 Fix the current Tucker signal $\cS$ and list the observed entries as
 $y_\Omega\in\R^m$ and $s_\Omega\in\R^m$. Define the feature matrix
-$\bPhi_{\Omega,Q}(\cS)\in\R^{m\times(Q+1)}$ by
+$\bPhi_{\Omega,J}(\cS)\in\R^{m\times(J+1)}$ by
 \begin{equation}
-  [\bPhi_{\Omega,Q}(\cS)]_{j,q}=\psi_q([s_\Omega]_j),
-  \qquad
-  q=0,\ldots,Q.
+  [\bPhi_{\Omega,J}(\cS)]_{t,j}=\psi_j([s_\Omega]_t).
 \end{equation}
+Here $t=1,\ldots,m$ indexes the observed entries and
+$j=0,\ldots,J$ indexes the basis functions.
 The response update is the ridge regression
 \begin{equation}
   \bbeta^+
   =
-  \argmin_{\bbeta\in\R^{Q+1}}
+  \argmin_{\bbeta\in\R^{J+1}}
   \frac{1}{2m}
-  \norm{y_\Omega-\bPhi_{\Omega,Q}(\cS)\bbeta}_2^2
+  \norm{y_\Omega-\bPhi_{\Omega,J}(\cS)\bbeta}_2^2
   +
   \frac{\lambda_\beta}{2}\norm{\bbeta}_2^2,
   \label{eq:link_refresh_problem}
@@ -56,16 +62,16 @@ with closed-form solution
   \bbeta^+
   =
   \left(
-  \frac{1}{m}\bPhi_{\Omega,Q}^{T}\bPhi_{\Omega,Q}
+  \frac{1}{m}\bPhi_{\Omega,J}^{T}\bPhi_{\Omega,J}
   +\lambda_\beta \bI
   \right)^{-1}
-  \frac{1}{m}\bPhi_{\Omega,Q}^{T}y_\Omega.
+  \frac{1}{m}\bPhi_{\Omega,J}^{T}y_\Omega.
   \label{eq:link_refresh_solution}
 \end{equation}
-This step solves only a $(Q+1)\times(Q+1)$ system. It is therefore cheap
+This step solves only a $(J+1)\times(J+1)$ system. It is therefore cheap
 relative to reconstructing or differentiating through the Tucker tensor, and
 because it solves the $\bbeta$-subproblem exactly, it never increases
-$\mathcal{F}_Q$ for the current Tucker signal.
+$\mathcal{F}_J$ for the current Tucker signal.
 
 \subsection{Descent for the Tucker Parameters}
 
@@ -83,14 +89,14 @@ is
 \end{equation}
 The Tucker gradients are standard reverse contractions:
 \begin{align}
-  \nabla_{\cX}\mathcal{F}_Q
+  \nabla_{\cX}\mathcal{F}_J
   &=
   \bG_{\cS}
   \times_1 (\bA^{(1)})^T
   \cdots
   \times_N (\bA^{(N)})^T
   +\lambda_X\cX, \\
-  \nabla_{\bA^{(n)}}\mathcal{F}_Q
+  \nabla_{\bA^{(n)}}\mathcal{F}_J
   &=
   [\bG_{\cS}]_{(n)}
   \bZ_n^T
@@ -101,48 +107,49 @@ The Tucker gradients are standard reverse contractions:
 where
 $\bZ_n=(\bA^{(N)}\otimes\cdots\otimes\bA^{(n+1)}\otimes
 \bA^{(n-1)}\otimes\cdots\otimes\bA^{(1)})\cX_{(n)}^T$.
-The Tucker update can use a line-search gradient step, a block coordinate
-gradient step, or an adaptive first-order implementation, provided the step
-satisfies the sufficient decrease condition used in Section~\ref{sec:theory}.
+For the convergence result in Section~\ref{sec:theory}, the Tucker update is
+taken to satisfy a sufficient decrease condition, as with a line-search or
+suitable block-coordinate step. The experiments use Adam as a practical
+first-order solver.
 
-\subsection{Dictionary Continuation and Normalization}
+\subsection{Response-Basis Continuation and Normalization}
 
-Large or high-order response dictionaries can amplify Tucker scale ambiguity. For
-nested dictionaries, such as the power or Chebyshev bases, we use continuation:
+Large or high-order response bases can amplify Tucker scale ambiguity. For
+nested bases, such as the power or Chebyshev bases, we use continuation:
 training starts with the Tucker-compatible identity response and activates
-additional channels gradually. When a new channel is introduced, its coefficient
+additional basis functions gradually. When a new function is introduced, its coefficient
 is initialized at zero, so the prediction is unchanged at the moment of
-activation. Non-nested dictionaries such as RBF and spline bases are trained with
-the full selected dictionary from the start. After Tucker updates, factor
+activation. Non-nested bases such as RBF and spline bases are trained with all
+selected basis functions from the start. After Tucker updates, factor
 columns are rescaled and the inverse scales are absorbed into the core. This
 fixes a numerical gauge without changing the represented signal $\cS$ or the
-objective value. It does not make the Tucker factors identifiable in a strict
+data-fitting term. It does not make the Tucker factors identifiable in a strict
 statistical sense; it only keeps the Tucker parameterization and response
 coefficients on stable numerical scales during training.
 
 \begin{algorithm}[!t]
   \footnotesize
-  \caption{Alternating recovery for dictionary-linked Tucker models.}
+  \caption{Alternating recovery for NTD-PL and other finite response bases.}
   \label{alg:alternating_recovery}
   \begin{algorithmic}[1]
     \REQUIRE measured tensor $\cY$, mask $\Omega$, Tucker ranks
-    $(R_1,\ldots,R_N)$, response dictionary $\{\psi_q\}$, regularization
+    $(R_1,\ldots,R_N)$, response basis $\{\psi_j\}$, regularization
     weights, continuation schedule
     \STATE Initialize $\cX$ and $\{\bA^{(n)}\}$ from a Tucker fit or a random
     Tucker factorization.
-    \STATE Set the active dictionary to the identity response and initialize
+    \STATE Set the active basis to the identity response and initialize
     $\bbeta=(0,1,0,\ldots,0)$.
     \FOR{outer iterations $k=0,1,\ldots$}
       \STATE Form the current Tucker signal
       $\cS=\tucker{\cX}{\bA^{(1)},\ldots,\bA^{(N)}}$.
-      \STATE Build $\bPhi_{\Omega,Q}(\cS)$ on the observed entries.
+      \STATE Build $\bPhi_{\Omega,J}(\cS)$ on the observed entries.
       \STATE Refresh $\bbeta$ by the ridge solution in
       \eqref{eq:link_refresh_solution}.
       \STATE Compute $\bG_{\cS}$ from \eqref{eq:latent_gradient}.
       \STATE Update $\cX$ and $\{\bA^{(n)}\}$ by a descent step using
       \eqref{eq:latent_gradient}--\eqref{eq:factor_gradient}.
       \STATE Normalize factor columns and absorb inverse scales into $\cX$.
-      \IF{the continuation schedule activates a new dictionary channel}
+      \IF{the continuation schedule activates a new basis function}
         \STATE Add the new response coefficient and initialize it at zero.
       \ENDIF
       \IF{the stopping criterion is met}
@@ -160,29 +167,34 @@ nonlinear measurement map, rather than by post-processing a fixed Tucker fit.
 
 \subsection{Response Diagnostic}
 
-The diagnostic measures whether the residual of a linear Tucker fit is
-coherent with an entrywise response. Let $\cS_T$ be a fitted Tucker reconstruction
-and let $\bbeta_T=(0,1,0,\ldots,0)$ denote the identity response. We define
-the diagnostic as
+The diagnostic measures how much the residual of a linear Tucker fit decreases
+when only the entrywise response is refit. Let $\cS_T$ be a fitted Tucker
+reconstruction, and let $\bbeta_T=(0,1,0,\ldots,0)$ denote the identity response
+in the degree-$J$ basis. We first compute
 \begin{align}
-  E_{\mathrm{lin}}
-  &=
-  \norm{y_\Omega-\bPhi_{\Omega,1}(\cS_T)\bbeta_T}_2^2, \\
-  E_{\mathrm{link}}
-  &=
-  \min_{\bbeta}
-  \left[
-  \norm{y_\Omega-\bPhi_{\Omega,Q}(\cS_T)\bbeta}_2^2
-  +m\lambda_\beta\norm{\bbeta}_2^2
-  \right], \\
+  \widehat{\bbeta}_{\mathrm{resp}}
+  =\argmin_{\bbeta}\;
+  \norm{y_\Omega-\bPhi_{\Omega,J}(\cS_T)\bbeta}_2^2
+  +m\lambda_\beta\norm{\bbeta}_2^2.
+  \label{eq:diagnostic-response-fit}
+\end{align}
+The residual energies before and after this response-only fit are
+\begin{align}
+  R_T
+  &=\norm{y_\Omega-\bPhi_{\Omega,J}(\cS_T)\bbeta_T}_2^2, \\
+  R_{\mathrm{resp}}
+  &=\norm{y_\Omega-\bPhi_{\Omega,J}(\cS_T)
+  \widehat{\bbeta}_{\mathrm{resp}}}_2^2.
+\end{align}
+We report their ratio on a decibel scale:
+\begin{align}
   \Dlink
   &=
-  \frac{E_{\mathrm{lin}}-E_{\mathrm{link}}}{E_{\mathrm{lin}}}.
+  10\log_{10}\!\left(\frac{R_T}{R_{\mathrm{resp}}}\right)\ \mathrm{dB}.
   \label{eq:dlink}
 \end{align}
-Large $\Dlink$ means that refitting only the response coefficients can already
-remove substantial residual energy without changing the Tucker fit. We use this
-score as a model-selection and interpretation tool: high diagnostic yield
-suggests that the nonlinear response is aligned with the residual structure,
-whereas low diagnostic yield suggests that increasing multilinear rank or
-changing the tensor prior may be more appropriate.
+A large positive $\Dlink$ means that refitting only the response coefficients
+substantially reduces the residual without changing the Tucker fit. We use this
+score as a model-selection and interpretation tool: a small or nonpositive score
+suggests that increasing multilinear rank or changing the tensor prior may be
+more appropriate.

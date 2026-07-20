@@ -1,92 +1,149 @@
 \section{Experiments}
 \label{sec:experiments}
 
-The experiments evaluate the proposed model through three connected questions.
-First, does the learned response behave as predicted on controlled nonlinear
-measurements?
-Second, under the same Tucker rank, does the learned response improve
-real tensor reconstruction and completion consistently across scenes, with
-separate stress tests for missing entries and observation noise? Third, can a
-low-cost diagnostic indicate when the response model is appropriate? These questions
-match the modeling claim: NTD-PL is expected to be most beneficial when a
-matched-rank Tucker model leaves residual structure consistent with a shared
-entrywise response. Unless stated otherwise, percentage gains denote relative
-error reduction from Tucker to NTD-PL. The main real-data evidence is based on
-all CAVE scenes under matched Tucker rank; noisy reconstruction and
-cross-domain diagnostics are used to test robustness and operating conditions.
+\subsection{Experimental Questions and Protocol}
 
-\subsection{Controlled Nonlinear Tensor Recovery}
+The experiments are organized around three questions. First, can the linked
+model recover tensors whose observations contain a nonlinear response?
+Second, under the same Tucker rank, does this response improve real
+hyperspectral reconstruction and completion? Third, when the model helps, do
+the gains follow the mechanism predicted by the analysis, and can this regime
+be detected before fitting NTD-PL?
 
-The controlled experiment isolates the measurement-response mechanism without
-missing entries or observation noise. We start from an underlying Tucker signal
-$\cS^\star$ of known rank and generate the measured tensor by adding a
-nonlinear response component that is orthogonal to the constant and linear
-channels. Let $\bar{\cS}$ denote the normalized underlying signal and let
-$\bar{\cR}$ denote the normalized nonlinear residual after this projection. The
-clean measurement is generated as
+Tucker is the primary baseline because a comparison at the same Tucker rank
+directly isolates the effect of the learned scalar response. We also compare
+with CP and tensor train (TT) using similar parameter counts. These methods
+provide broader low-rank tensor baselines and show whether the
+improvement extends beyond one Tucker implementation.
+
+For reconstruction, RMSE and SAM are computed on all tensor entries. For
+completion, RMSE* and SAM* are computed only on entries hidden during fitting.
+Hyperspectral cubes are globally normalized, and lower RMSE and SAM are better.
+The primary real dataset is the CAVE multispectral image database
+\cite{cave_multispectral_database,yasuma2010gapc}. All CAVE experiments use
+all 15 scenes, each of size \(512\times512\times31\);
+Fig.~\ref{fig:cave-scenes} shows their RGB previews. We also
+include supplementary checks on external hyperspectral cubes and on
+non-hyperspectral tensor data, including natural images, object-view tensors,
+and action videos, to test whether the same response-based pattern appears
+beyond the CAVE acquisition setting. Additional robustness, dataset, and
+protocol details are provided in the supplementary material.
+
+\begin{figure}[!t]
+  \centering
+  \includegraphics[width=\columnwidth]{figures/cave_scene_montage.pdf}
+  \caption{CAVE scenes used in the hyperspectral recovery experiments. Each
+  tile shows the database-provided RGB preview of a \(512\times512\)
+  multispectral cube.}
+  \label{fig:cave-scenes}
+\end{figure}
+
+\subsection{Controlled Recovery Under Nonlinear Measurements}
+\label{sec:exp-controlled}
+
+The controlled experiment tests the basic mechanism in a setting where the
+ground-truth Tucker structure is known. We start from an underlying Tucker
+signal \(\cS^\star\) of known rank and observe every tensor entry. For nonlinear
+responses, we add a response component that is
+orthogonal to the underlying Tucker signal. Let \(\bar{\cS}\) denote the
+normalized underlying signal and let \(\bar{\cR}\) denote the normalized
+nonlinear residual after this projection. The noisy measurement is generated
+as
 \begin{equation}
   \cY_\alpha =
-  \mathrm{scale}_{[0,1]}
-  \left(
   \sqrt{1-\alpha}\,\bar{\cS}
   +
   \sqrt{\alpha}\,\bar{\cR}
-  \right),
+  + \cE,
 \end{equation}
-where $\alpha$ controls nonlinear residual energy after the constant and linear
-response components have been removed. This construction keeps the intended Tucker rank fixed while making
-the measured tensor increasingly mismatched to a linear Tucker observation
-model.
+where \(\alpha\) controls the energy assigned to the nonlinear residual, and
+\(\cE\) is additive Gaussian noise. The identity panel directly uses
+\(\bar{\cS}\) for every \(\alpha\), so it is a repeated noisy linear control. This
+construction keeps the intended Tucker rank fixed while making the measured
+tensor increasingly mismatched to a linear Tucker observation model.
 
-Figure~\ref{fig:controlled-alpha} shows the expected transition. When
-$\alpha$ is small, the measured tensor is close to the underlying Tucker signal and
-NTD-PL stays close to matched-rank Tucker. As the nonlinear residual energy
-increases, the learned response explains a growing part of the residual and the
-gap widens across all four target responses: $s^2$, $s^2+s^3$,
-$\tanh(\kappa s)$, and $(e^{\kappa s}-1)/\kappa$. The
-degree-dependent behavior is reported in
-Appendix~\ref{app:controlled_details}.
+Figure~\ref{fig:controlled-alpha} shows the expected transition. We use 10
+random seeds, Tucker rank \((4,4,4)\), and additive Gaussian noise at 30 dB SNR
+for all panels. In the identity-control panel, Tucker and NTD-PL are nearly
+identical, with mean RMSE about \(0.029\) for both methods across the sweep.
+Thus the linked response does not create a spurious advantage when the
+measurement is already linear.
 
-All experiments in the main text use the power dictionary because it is
-compact, interpretable, and directly supports the rank-inflation analysis in
-Section~\ref{sec:theory}. Appendix~\ref{app:controlled_details} adds
-controlled details, including a linear-response case in which high-order
-channels remain inactive. These full-observation experiments serve as mechanism
-checks; masked recovery and real tensor recovery are evaluated in the following
-subsections.
+The behavior changes once a nonlinear residual is present. As \(\alpha\)
+increases, matched-rank Tucker must fit a measured tensor whose apparent rank
+has grown, while NTD-PL can reuse the same Tucker signal through a learned
+scalar response. The gap is therefore small in the nearly linear regime and
+widens for stronger nonlinear measurements; for example, in the
+\(\tanh(\kappa s)\) panel at \(\alpha=0.4\), Tucker reaches RMSE \(0.338\)
+whereas NTD-PL remains near \(0.124\). This pattern is the desired mechanism
+check: the advantage appears when the observation departs from a linear Tucker
+measurement map, not because the model has extra coefficients.
+Degree-dependent controls and optimization traces are reported in the
+supplementary material.
 
 \begin{figure*}[!t]
   \centering
   \includegraphics[width=0.92\textwidth]{figures/controlled_nonlinear_alpha_grid.pdf}
-  \caption{Controlled nonlinear residual sweep for four target responses. The
-  parameter $\alpha$ controls nonlinear residual energy after removing constant
-  and linear components. NTD-PL remains close to Tucker in the nearly linear
-  regime and separates as the nonlinear component grows.}
+  \caption{Controlled noisy recovery under identity and nonlinear responses.
+  All panels use additive Gaussian noise at 30 dB SNR and 10 random seeds. For
+  the nonlinear panels, \(\alpha\) controls the energy of the component
+  orthogonal to the underlying Tucker signal; the identity panel \(s\) serves
+  as a repeated linear control.}
   \label{fig:controlled-alpha}
 \end{figure*}
 
-\subsection{Hyperspectral Tensor Recovery}
+\subsection{Real Hyperspectral Recovery on CAVE}
+\label{sec:exp-cave}
 
-We next evaluate whether the same linked Tucker representation improves
-real spectral-spatial tensors. Unless otherwise stated, hyperspectral cubes are
-globally normalized, the Tucker rank is fixed across Tucker and
-NTD-PL, and completion metrics are computed only on held-out entries. We report
-root mean square error (RMSE) and spectral angle mapper (SAM); lower values are
-better for both.
+We next test whether NTD-PL improves real
+spectral-spatial tensors.
 
-\subsubsection{CAVE Reconstruction and Completion}
+Reconstruction first tests whether the learned response improves accuracy at a
+fixed Tucker rank. We compare NTD-PL with Tucker, CP, and TT at similar
+parameter counts.
+Table~\ref{tab:cave-main-baselines} compares the methods at approximately 13k,
+27k, and 42k parameters. The CP and TT ranks are adjusted at each budget, and
+NTD-PL is reported for \(P=2,4,6\). Increasing \(P\) consistently lowers both
+RMSE and NMSE at every budget, with a larger improvement from \(P=2\) to
+\(P=4\) and a smaller refinement from \(P=4\) to \(P=6\). Thus the same
+degree-saturation pattern holds across model capacities rather than only at one
+selected rank.
 
-We first use the CAVE multispectral image database \cite{cave_multispectral_database,
-yasuma2010gapc}, which provides full spectral-spatial scenes and therefore
-supports both full-observation reconstruction and masked completion. Full
-reconstruction tests whether the learned response adds a compact correction at a
-fixed Tucker rank. Across the tested ranks, NTD-PL consistently improves
-matched-rank Tucker in both RMSE and SAM when averaged over all 15 scenes, with
-larger gains at lower ranks and smaller gains as the Tucker rank grows; the
-full capacity curves are reported in Appendix~\ref{app:hsi_protocol}. This is
-the expected behavior of a fixed-rank nonlinear correction: if ordinary multilinear
-rank is already high enough to absorb the nonlinear response, the marginal
-value of the response should decrease.
+NTD-PL with \(P=6\) gives the lowest mean RMSE at all three budgets. Relative
+to the strongest alternative at each budget, its RMSE reduction is 11.1\% at
+13k and 6.1\% at 27k; at 42k it is essentially tied with CP and remains below
+Tucker. The NMSE results have the same ordering at the low and medium budgets,
+whereas CP has the best high-budget NMSE. RMSE and NMSE are averaged
+scene-wise, but NMSE first normalizes each scene by its own energy, so their
+order need not coincide. The narrowing gap is expected: as the base tensor rank
+grows, ordinary low-rank models can absorb more of the measured structure and
+the marginal value of the response decreases.
+
+\begin{table*}[!b]
+  \centering
+  \caption{CAVE reconstruction across matched parameter budgets and
+  response degrees. Entries are mean \(\pm\) standard deviation over 15 scenes.}
+  \label{tab:cave-main-baselines}
+  \footnotesize
+  \input{tables/cave_main_baselines.tex}
+\end{table*}
+
+Across the tested Tucker ranks, NTD-PL also consistently improves matched-rank
+Tucker in both RMSE and SAM, with larger gains at lower ranks and smaller gains
+as the Tucker rank grows. This is the expected behavior of a fixed-rank
+nonlinear correction: if ordinary multilinear rank is already high enough to
+absorb the nonlinear response, the marginal value of the response should
+decrease.
+
+\begin{table}[!t]
+  \centering
+  \caption{Tucker rank needed to match NTD-PL RMSE on CAVE reconstruction.
+  NTD-PL uses \(P=6\). The parameter column shows NTD-PL \(\to\) Tucker;
+  SAM is reported as NTD-PL/Tucker.}
+  \label{tab:rank-lift-tucker}
+  \scriptsize
+  \input{tables/rank_lift_tucker_full_sweep.tex}
+\end{table}
 
 Table~\ref{tab:rank-lift-tucker} asks a complementary capacity question: how
 much ordinary Tucker rank is needed to match a lower-rank NTD-PL model? Across
@@ -96,179 +153,145 @@ rank-inflation interpretation in Section~\ref{sec:theory}: the power response
 reuses the same low-rank Tucker signal to express structured nonlinear
 residuals with a small number of response coefficients.
 
-We then add observation noise only to the full-reconstruction setting. The
-model is fitted to clean or noisy full CAVE cubes and evaluated against the
-corresponding clean cube. This separates radiometric robustness from missing
-entry recovery. Across clean observations and Gaussian noise levels down to
-10 dB, NTD-PL maintains positive RMSE and SAM gains over matched-rank Tucker;
-the full table is reported in Appendix~\ref{app:hsi_protocol}.
+Completion then tests whether this fixed-rank benefit transfers to entries not
+used for fitting. Table~\ref{tab:cave-completion-main} reports CAVE
+completion under random masks using all 15 scenes. At the same Tucker rank,
+NTD-PL improves RMSE* by
+12.5--17.7\% and SAM* by 13.4--29.3\% across the tested missing
+rates. Additional observation-noise results are reported in
+the supplementary material.
 
-\begin{table*}[!t]
+\begin{table}[!t]
   \centering
-  \caption{Higher-rank Tucker comparison on CAVE reconstruction. For each
-  NTD-PL Tucker rank, we report the first higher-rank Tucker model matching
-  NTD-PL RMSE and the additional parameter cost.}
-  \label{tab:rank-lift-tucker}
-  \scriptsize
-  \input{tables/rank_lift_tucker_full_sweep.tex}
-\end{table*}
-
-Held-out completion tests whether the fixed-rank benefit transfers to
-unobserved entries without introducing observation noise. Table~\ref{tab:cave-completion-main}
-reports CAVE completion under random masks using all 15 scenes and three mask
-seeds per scene. At the same Tucker rank, NTD-PL improves missing-entry RMSE
-by 12.5--17.7\% and missing-entry SAM by 13.4--29.3\% across the tested missing
-rates. The gains are stable across mask density, and paired scene-level
-summaries are reported in Appendix~\ref{app:hsi_protocol}.
-
-\begin{table*}[!t]
-  \centering
-  \caption{CAVE random-missing completion at matched Tucker rank. Metrics are
-  evaluated only on held-out entries; gains are relative improvements over
-  matched-rank Tucker.}
+  \caption{CAVE completion under random masks at Tucker rank \((33,33,4)\)
+  and \(P=4\). RMSE* and SAM* are averaged over the entries hidden during fitting.}
   \label{tab:cave-completion-main}
   \scriptsize
   \input{tables/cave_completion_main.tex}
-\end{table*}
+\end{table}
 
-\subsection{Rank-Inflation Evidence}
-\label{sec:exp-rank-inflation}
+\subsection{Mechanism: Rank Inflation and Learned Response}
+\label{sec:exp-mechanism}
 
-The reconstruction and completion tables show that the linked model improves
-standard accuracy metrics. We next ask whether this improvement is accompanied
-by the rank-inflation behavior predicted by the analysis. For this mechanism
-view, we use the full CAVE scenes at their native $512\times512$ spatial
-resolution and fix the Tucker rank to $(12,12,4)$ for both Tucker and NTD-PL.
-We sweep the maximum power degree $P$ and compute the spatial-mode spectra of
-the learned Tucker signal, the final prediction, and the response component
-$f_{\bbeta}(\cS)-\cS$.
+The Tucker polynomial view says that higher degrees add interactions among the
+same core coordinates, while the shared-factor form expresses those terms as
+powers of one Tucker tensor. We examine this mechanism by varying the maximum
+degree \(P\) on the CAVE scenes while keeping the Tucker rank at
+\((12,12,4)\). This lets us track the rank added by the higher-order terms and
+the learned scalar map \(s\mapsto f_{\bbeta}(s)\).
 
-Figure~\ref{fig:mechanism-rank-inflation} shows two complementary summaries.
-Increasing $P$ raises both the reconstruction gain and the effective rank of
-the response component, while the learned Tucker signal itself remains at the
-prescribed rank. Moreover, the fraction of the measured tensor's spatial tail
-energy captured by the NTD-PL prediction is strongly aligned with the RMSE
-gain across scenes and degrees. The Spearman correlation between spatial tail
-capture and RMSE gain is $0.94$ in this sweep. Table~\ref{tab:rank-inflation-mechanism}
-reports the corresponding degree-wise summary.
+For each scene and each \(P\in\{2,3,4,5,6\}\), we fit a matched-rank Tucker
+model and an NTD-PL model using all entries of the normalized cube. Let \(\widehat{\cS}\)
+be the Tucker signal reconstructed from the NTD-PL core and factors, and let
+\(\widehat{\cY}\) be its fitted prediction after the scalar response. We isolate
+the nonlinear response component
+\(\widehat{\cR}_{\mathrm{nl}}=\widehat{\cY}-\widehat\beta_0\mathbf{1}
+-\widehat\beta_1\widehat{\cS}
+\) and compute singular-value spectra of its mode-1 and
+mode-2 unfoldings. The rank reported in
+Fig.~\ref{fig:mechanism-rank-inflation} is the number of singular values needed
+to capture 99.9\% of squared singular-value energy; it is therefore an
+energy-based effective rank, rather than the exact algebraic rank. The bars
+show the mean RMSE reduction of NTD-PL relative to matched-rank Tucker across
+the 15 scenes, while the annotations show the median nonlinear-response rank
+and the median effective-rank increase over \(\widehat{\cS}\), respectively.
 
-\begin{figure*}[!t]
+\begin{figure}[!t]
   \centering
-  \includegraphics[width=0.92\textwidth]{figures/mechanism_rank_inflation.pdf}
-  \caption{Rank-inflation evidence on full-size CAVE reconstruction at Tucker
-  rank $(12,12,4)$. Left: increasing the polynomial degree raises the
-  response-component rank and reconstruction gain. Right: scene-level tail
-  capture by the NTD-PL prediction tracks RMSE gain.}
+  \includegraphics[width=\columnwidth]{figures/mechanism_rank_inflation.pdf}
+  \caption{Rank-inflation evidence on CAVE reconstruction at Tucker
+  rank \((12,12,4)\). Bars show the mean RMSE reduction relative to
+  matched-rank Tucker. Labels report \(r_{\mathrm{nl}}\), the median
+  99.9\%-energy rank of the nonlinear response component, and, when positive,
+  the median effective-rank increase over the NTD-PL Tucker signal.}
   \label{fig:mechanism-rank-inflation}
-\end{figure*}
+\end{figure}
 
-\input{tables/mechanism_rank_inflation.tex}
-
-\subsection{Learned Response Curves}
-\label{sec:exp-learned-response}
-
-The previous experiment measures rank inflation in the tensor domain. We now
-look directly at the learned scalar response. For each full-size CAVE scene, we
-fit NTD-PL at rank $(12,12,4)$ and evaluate the learned map
-$s\mapsto f_{\bbeta}(s)$ on percentiles of the learned Tucker signal. Because
-Tucker factors have scale and sign gauges, each curve is plotted after endpoint
-normalization on the central percentile range; the curve shape, rather than the
-absolute latent scale, is the object of interest.
-
-Figure~\ref{fig:mechanism-learned-response} shows that the learned response is
-not an arbitrary high-degree oscillation. The mean curve is consistently
-nonlinear and mostly monotone, and the shape changes little after moderate
-degree. The numerical summary in Table~\ref{tab:learned-response-mechanism}
-matches this visual pattern: moving from $P=1$ to $P=4$ increases both the
-nonlinear deviation from the best affine fit and the RMSE gain, while the
-additional change from $P=4$ to $P=6$ is smaller. This provides a direct
-response-level view of the same mechanism: the model does not replace the
-low-rank signal by a separate high-rank tensor, but learns a shared scalar
-calibration of that signal.
+Figure~\ref{fig:mechanism-rank-inflation} shows the rank-inflation trend. At
+\(P=2\), the nonlinear component already has nonzero effective rank, but its
+energy is not yet sufficient to increase the median rank of the final
+prediction. A median rank increase of \(2.0\) appears at \(P=3\), then
+increases gradually to \(5.0\) at \(P=6\), while the mean RMSE gain rises from
+2.82\% to 8.79\%. The largest change occurs between \(P=2\) and \(P=4\);
+higher degrees provide smaller refinements, while the learned Tucker signal
+remains at the prescribed rank. Across scenes and degrees, spatial tail capture
+by the NTD-PL prediction has Spearman correlation \(0.86\) with RMSE gain,
+indicating that the improvement is tied to how much high-rank residual
+structure the response accounts for.
 
 \begin{figure*}[!t]
   \centering
   \includegraphics[width=0.92\textwidth]{figures/mechanism_learned_response.pdf}
-  \caption{Learned response curves on full-size CAVE reconstruction at Tucker
-  rank $(12,12,4)$. Left: endpoint-normalized response curves for $P=6$; thin
-  lines are scenes and the thick line is their mean. Right: nonlinear deviation
-  and gain over the linear response increase with degree and then stabilize.}
-  \label{fig:mechanism-learned-response}
+  \caption{Learned scalar response curves on CAVE reconstruction. Curves are
+  evaluated on the 1st--99th percentile range of the learned Tucker signal and
+  normalized by their endpoint values. Thin curves are scene-level fits and the
+  dark curve is their pointwise mean. The title reports mean RMSE reduction
+  relative to \(P=1\); ``Curv.'' is the normalized mean absolute curvature
+  averaged across scenes.}
+  \label{fig:mechanism-response}
 \end{figure*}
 
-\input{tables/mechanism_learned_response.tex}
+Figure~\ref{fig:mechanism-response} shows the corresponding learned response
+curves. For each scene and each \(P\), we evaluate the fitted polynomial at 101
+empirical quantiles between the 1st and 99th percentiles of the learned Tucker
+signal. Each curve is then normalized by its endpoint values, so both axes run
+from 0 to 1 and the dashed diagonal is the identity response. Thin curves show
+individual scenes and the dark curve is their pointwise mean. The title gain is
+the mean RMSE reduction relative to the \(P=1\) model. The \(P=1\) model is
+linear by construction. Allowing \(P=2\) and
+\(P=4\) bends the shared response away from the identity map and yields most of
+the gain; \(P=6\) mainly refines the same shape. Detailed mechanism tables are
+given in the supplementary material.
 
-\subsection{Spectral-Regime Error Analysis}
-\label{sec:exp-error-regime}
+\subsection{Operating Regimes and Diagnostics}
+\label{sec:exp-diagnostics}
 
-Finally, we ask where the reconstruction error is reduced in the observed
-tensor. Entries are grouped by their normalized observed value and by spectral
-band. This is an observed-domain analysis: the intensity bins are bins of
-entries of the normalized measured tensor, not bins of RGB brightness or
-spatial pixel averages. The analysis connects the learned response curve to
-observable error behavior by showing which response ranges receive the largest
-correction.
+The previous experiments explain why NTD-PL helps when the Tucker residual is
+response-like. We finally ask whether this condition can be detected before
+joint NTD-PL training, and where the gain appears when the model is useful.
 
-Figure~\ref{fig:mechanism-error-regime} shows that the gain is not spread
-uniformly over the cube. The largest relative improvements occur in low-to-mid
-intensity deciles, whereas one high-intensity decile is nearly neutral. At the
-same time, the highest-intensity decile contributes a large share of the total
-MSE reduction because its baseline error energy is large. The spectral view
-shows stronger gains in the green-to-red regimes than at the shortest
-wavelengths. Table~\ref{tab:error-regime-mechanism} gives the regime-level
-summary: the 510--600 nm and 610--700 nm regimes account for most of the MSE
-reduction in this full-size CAVE setting. These patterns support the response
-interpretation from another angle: NTD-PL changes the effective calibration of
-specific intensity and spectral regimes rather than applying a uniform
-improvement everywhere.
+On CAVE reconstruction, the error reduction is not uniform over the cube. When
+entries are grouped by normalized observed value and spectral regime, the
+largest gains occur in middle intensity deciles and the 510--700 nm regimes,
+while a few low-yield bins remain near zero. This supports the same
+operating-regime view: the response is useful when the Tucker residual has
+coherent structure in the observed domain rather than unstructured noise.
+Figure~\ref{fig:error-regime} visualizes the marginal and joint regimes; the
+supplementary material reports the corresponding numerical table.
 
-\begin{figure*}[!t]
+\begin{figure}[!b]
   \centering
-  \includegraphics[width=0.96\textwidth]{figures/mechanism_error_regime.pdf}
-  \caption{Observed-domain error regimes on full-size CAVE reconstruction at
-  Tucker rank $(12,12,4)$ and $P=6$. Left: RMSE gain by normalized-intensity
-  decile. Middle: gain by spectral band. Right: joint intensity--spectral
-  regimes. Positive values indicate lower error for NTD-PL than Tucker.}
-  \label{fig:mechanism-error-regime}
-\end{figure*}
-
-\input{tables/mechanism_error_regime.tex}
-
-\subsection{Diagnostics and Operating Regimes}
-
-The diagnostic $\Dlink$ is computed by fitting a Tucker model and measuring
-the residual reduction obtained by refitting only the response coefficients.
-It is therefore substantially cheaper than full NTD-PL training and is used
-here as a model-selection signal for the proposed recovery model.
-Table~\ref{tab:cave-link-yield-summary} groups CAVE completion scenes
-by diagnostic tercile. Higher $\Dlink$ corresponds to larger held-out RMSE gains
-at every missing rate, while the low-diagnostic group has little or negative
-average gain. The Spearman correlations, 0.829--0.889, show that the diagnostic
-is strongly aligned with the eventual benefit of the full model.
-
-\begin{table}[!t]
-  \centering
-  \caption{CAVE completion diagnostic. Scenes are grouped by $\Dlink$ tercile;
-  entries are mean NTD-PL RMSE gains over matched-rank Tucker.}
-  \label{tab:cave-link-yield-summary}
-  \scriptsize
-  \input{tables/ntdpl_polycal_diagnostic.tex}
-\end{table}
-
-Figure~\ref{fig:nonhsi-link-scatter} evaluates the same diagnostic beyond
-hyperspectral data. Each point is an independently fitted tensor unit, and the
-horizontal axis is $\Dlink$ measured before full NTD-PL training. Object-view
-tensors show the clearest separation, action-video tensors follow the same
-trend, and natural images occupy a lower-yield but still positive regime. These
-results reinforce the main interpretation: NTD-PL is most effective when the
-Tucker residual contains structure that is shared across entries through the
-same response function.
+  \includegraphics[width=\columnwidth]{figures/mechanism_error_regime.pdf}
+  \caption{CAVE error-regime analysis at rank \((12,12,4)\). Top: marginal
+  RMSE gains by observed intensity and wavelength. Bottom: joint
+  intensity--spectral bins. Positive values indicate lower RMSE than
+  matched-rank Tucker.}
+  \label{fig:error-regime}
+\end{figure}
 
 \begin{figure*}[!t]
   \centering
   \includegraphics[width=0.86\textwidth]{figures/nonhsi_dlink_scatter_3domain.pdf}
   \caption{Cross-domain response diagnostic. Each point plots the diagnostic
-  $\Dlink$ against the RMSE gain of full NTD-PL over Tucker. Larger
-  diagnostic yield predicts larger benefit from the learned response.}
+  \(\Dlink\) (dB) against the RMSE gain of NTD-PL over Tucker. Larger
+  diagnostic scores predict larger benefits from the learned response.}
   \label{fig:nonhsi-link-scatter}
 \end{figure*}
+
+The diagnostic \(\Dlink\) is computed by fitting a Tucker model and measuring,
+in dB, the residual-energy reduction obtained by refitting only the response coefficients. It
+is therefore substantially cheaper than joint NTD-PL training and is used here
+as a model-selection signal.
+
+On CAVE reconstruction, treating each scene as one tensor unit gives a similar
+trend: high-\(\Dlink\) scenes have larger eventual
+NTD-PL gains than low-\(\Dlink\) scenes. The CAVE row is reported together
+with the cross-domain diagnostic statistics in the supplementary material.
+
+Figure~\ref{fig:nonhsi-link-scatter} evaluates the same diagnostic beyond
+hyperspectral data. Each point is an independently fitted tensor unit, and the
+horizontal axis is \(\Dlink\) measured before joint NTD-PL training. Object-view
+tensors show the clearest separation, action-video tensors follow the same
+trend, and natural images occupy a lower-yield but still positive regime. These
+results close the loop: NTD-PL is most effective when a matched-rank Tucker fit
+leaves residual structure that can be reduced by a shared entrywise response.

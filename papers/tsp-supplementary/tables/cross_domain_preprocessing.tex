@@ -1,0 +1,54 @@
+\begin{tabular}{@{}l r p{1.05in} p{3.05in} c c@{}}
+\toprule
+Dataset & Units & Tensor unit & Selection and preprocessing & Tensor size & Tucker rank \\
+\midrule
+CAVE
+& 15
+& one scene
+& All 15 scenes at their native spatial and spectral resolution.
+& $512\times512\times31$
+& $(24,24,4)$ \\
+
+CBSD68
+& 68
+& one RGB image
+& All 68 images; each image is resized to $96\times96$.
+& $96\times96\times3$
+& $(32,32,3)$ \\
+
+CIFAR-10
+& 1000
+& one RGB image
+& Class-balanced subset of the 10,000 test images; native resolution is retained.
+& $32\times32\times3$
+& $(20,20,3)$ \\
+
+COIL-100
+& 100
+& one object-view tensor
+& All 100 objects; 36 azimuths from $0^\circ$ to $350^\circ$ in $10^\circ$ steps; each view is resized from $128\times128$ to $48\times48$.
+& $36\times48\times48\times3$
+& $(8,12,12,2)$ \\
+
+smallNORB
+& 25
+& one instance-view tensor
+& Training instances at elevation 4 and lighting 0; all 18 azimuths and both stereo views; images are resized from $96\times96$ to $64\times64$.
+& $18\times64\times64\times2$
+& $(12,24,24,2)$ \\
+
+KTH-Action
+& 240
+& one annotated segment
+& 240 of 2391 annotated action segments; 24 frames are sampled from each segment and resized to $72\times96$ RGB.
+& $24\times72\times96\times3$
+& $(12,18,18,3)$ \\
+
+UCF101
+& 240
+& one video clip
+& 240 of 10,055 training clips; 24 frames are sampled from each clip and resized to $72\times96$ RGB.
+& $24\times72\times96\times3$
+& $(12,18,18,3)$ \\
+\bottomrule
+\end{tabular}

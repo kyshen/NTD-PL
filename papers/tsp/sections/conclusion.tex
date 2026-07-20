@@ -2,33 +2,27 @@
 \label{sec:conclusion}
 \enlargethispage{2pt}
 
-This paper developed dictionary-linked Tucker models for nonlinear low-rank
-tensor signal recovery. The central idea is to keep the Tucker rank budget tied
-to the underlying signal while modeling the measured tensor through a learned
-entrywise response. The power-dictionary instance produces a compact
-rank inflation: polynomial channels can increase the effective rank of the
-observation while reusing the same Tucker core and factors.
-Other finite scalar dictionaries can be used in the same formulation when
-application-specific response priors are available, but the paper uses the
-power dictionary as the default response basis.
+This paper introduced the Tucker polynomial, which extends the linear map from
+a Tucker core to the data tensor with $p$-fold interactions. Sharing the mode
+factors across polynomial orders yields NTD-PL. This compact form reuses one
+core and one set of factors, and it is also a low-rank Tucker tensor followed by
+an entrywise polynomial response. Other finite scalar response bases can be used
+with the same estimator when different response bases are appropriate.
 
-The analysis formalized this mechanism through rank inflation, response
-generation, response approximation, and nonconvex descent results. The
-estimator combines a small ridge update for the response coefficients with
-gradient-based Tucker updates through the current nonlinear response. The
-response diagnostic checks whether a signal is likely to benefit from the
-response before full nonlinear training.
+The analysis established the relation between the general $p$-fold terms and
+their shared-factor form, quantified the resulting rank and parameter cost, and
+studied response approximation, nonconvex descent, and computational scaling.
+The estimator combines a small ridge update for the response coefficients with
+gradient-based Tucker updates. The diagnostic measures how much of a fixed
+Tucker residual can be removed before joint NTD-PL training.
 
-Experiments support the operating regime of the model. Controlled tensors verify
-that gains appear when the residual is nonlinear and the active polynomial
-degree is expressive enough. Hyperspectral reconstruction and completion show
-that, at matched Tucker rank, the learned response can improve both RMSE and spectral angle
-metrics, and higher-rank Tucker comparisons show that similar RMSE can require
-substantially larger ordinary Tucker models. Noisy-observation experiments show
-that the improvement remains positive under perturbed measurements. Diagnostic
-stratification further clarifies the operating regime: when the residual is not
-well explained by a shared entrywise response, increasing rank or changing the
-tensor prior is more appropriate.
+Controlled experiments show that NTD-PL remains close to Tucker for linear
+measurements and separates as nonlinear energy increases. Hyperspectral
+reconstruction and completion show improvements in RMSE and spectral angle at
+matched Tucker rank, while higher-rank Tucker comparisons quantify the extra
+parameters needed to reach similar RMSE. The mechanism experiments connect the
+gain to the effective-rank increase after the response, and the cross-domain
+results show that larger diagnostic scores are followed by larger NTD-PL gains.
 
 Several directions remain open. Monotone splines or physics-informed response
 families may be preferable when calibration constraints are known. Sharper
